@@ -8,3 +8,7 @@ function note_pos_to_x(_pos, _side) {
         return global.resolutionH/2 + (2.5-_pos)*150;
     }
 }
+
+function array_top(array) {
+    return array[array_length(array)-1];
+}

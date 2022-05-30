@@ -30,3 +30,11 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     .align(fa_left, fa_middle)
     .transform(0.7, 0.7)
     .draw(global.resolutionW*0.021, global.resolutionH - targetLineBelow + 34);
+
+// Debug
+    
+    scribble("Music Position: " + string(sfmod_channel_get_position(channel, sampleRate)) +
+    "\nNow Time: " + string(nowTime))
+    .starting_format("fDynamix20", c_white)
+    .align(fa_center, fa_top)
+    .draw(global.resolutionW/2, 30);

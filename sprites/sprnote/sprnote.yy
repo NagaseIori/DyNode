@@ -7,7 +7,7 @@
   "edgeFiltering": false,
   "collisionTolerance": 0,
   "bbox_left": 0,
-  "bbox_right": 44,
+  "bbox_right": 43,
   "bbox_top": 0,
   "bbox_bottom": 27,
   "origin": 4,
@@ -15,7 +15,7 @@
   "collisionKind": 1,
   "type": 0,
   "swfPrecision": 2.525,
-  "width": 45,
+  "width": 44,
   "height": 28,
   "textureGroupId": {
     "name": "Default",
@@ -71,7 +71,7 @@
   "nineSlice": {
     "left": 22,
     "top": 0,
-    "right": 22,
+    "right": 21,
     "bottom": 0,
     "guideColour": [
       4294902015,

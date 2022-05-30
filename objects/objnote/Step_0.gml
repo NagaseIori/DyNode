@@ -1,10 +1,19 @@
 
-x = round(note_pos_to_x(position, side));
-y = round(y)
+x = note_pos_to_x(position, side);
+y = global.resolutionH
+    - (objMain.playbackSpeed * (offset - objMain.nowOffset) + objMain.targetLineBelow);
 
-pWidth = width * 300 - 30;
+if(y<-100 || y>global.resolutionH) visible = false;
+else visible = true;
 
-image_xscale = pWidth / originalWidth;
-image_alpha = lerp(image_alpha, animTargetA, animSpeed * global.fpsAdjust);
-
-state();
+if(visible) {
+    pWidth = width * 300 - 30;
+    pWidth = max(pWidth, originalWidth);
+    
+    image_xscale = pWidth / originalWidth;
+    image_alpha = lerp(image_alpha, animTargetA, animSpeed * global.fpsAdjust);
+    
+    
+    state();
+}
+    

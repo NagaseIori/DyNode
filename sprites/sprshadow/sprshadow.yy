@@ -8,7 +8,7 @@
   "collisionTolerance": 0,
   "bbox_left": 0,
   "bbox_right": 540,
-  "bbox_top": 0,
+  "bbox_top": 25,
   "bbox_bottom": 903,
   "origin": 9,
   "bboxMode": 0,
