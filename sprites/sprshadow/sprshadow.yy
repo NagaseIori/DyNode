@@ -56,7 +56,7 @@
     "backdropXOffset": 0.0,
     "backdropYOffset": 0.0,
     "xorigin": 270,
-    "yorigin": 800,
+    "yorigin": 805,
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprShadow","path":"sprites/sprShadow/sprShadow.yy",},
@@ -69,9 +69,9 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"7a87040a-0885-4436-8abb-1a24d0b45afb","tags":[],"resourceType":"GMImageLayer",},
   ],
   "nineSlice": {
-    "left": 0,
+    "left": 100,
     "top": 0,
-    "right": 0,
+    "right": 100,
     "bottom": 0,
     "guideColour": [
       4294902015,
@@ -81,7 +81,7 @@
     ],
     "highlightColour": 1728023040,
     "highlightStyle": 0,
-    "enabled": false,
+    "enabled": true,
     "tileMode": [
       0,
       0,
