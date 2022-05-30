@@ -1,6 +1,20 @@
 {
   "resources": [
-    {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
+    {"id":{"name":"sprNote","path":"sprites/sprNote/sprNote.yy",},"order":7,},
+    {"id":{"name":"sprParticleA","path":"sprites/sprParticleA/sprParticleA.yy",},"order":9,},
+    {"id":{"name":"sprShadow","path":"sprites/sprShadow/sprShadow.yy",},"order":6,},
+    {"id":{"name":"rMain","path":"rooms/rMain/rMain.yy",},"order":1,},
+    {"id":{"name":"sprHoldEdge","path":"sprites/sprHoldEdge/sprHoldEdge.yy",},"order":8,},
+    {"id":{"name":"sprParticleW","path":"sprites/sprParticleW/sprParticleW.yy",},"order":11,},
+    {"id":{"name":"sprPauseBar","path":"sprites/sprPauseBar/sprPauseBar.yy",},"order":12,},
+    {"id":{"name":"sprMixer","path":"sprites/sprMixer/sprMixer.yy",},"order":5,},
+    {"id":{"name":"sprMIXshadow","path":"sprites/sprMIXshadow/sprMIXshadow.yy",},"order":1,},
+    {"id":{"name":"sprNumber","path":"sprites/sprNumber/sprNumber.yy",},"order":3,},
+    {"id":{"name":"sprRed","path":"sprites/sprRed/sprRed.yy",},"order":0,},
+    {"id":{"name":"sprMainAssets","path":"sprites/sprMainAssets/sprMainAssets.yy",},"order":4,},
+    {"id":{"name":"sprHold","path":"sprites/sprHold/sprHold.yy",},"order":2,},
+    {"id":{"name":"sprParticleB","path":"sprites/sprParticleB/sprParticleB.yy",},"order":10,},
+    {"id":{"name":"rInit","path":"rooms/rInit/rInit.yy",},"order":0,},
   ],
   "Options": [
     {"name":"Linux","path":"options/linux/options_linux.yy",},
@@ -16,7 +30,8 @@
     "children": [],
   },
   "RoomOrderNodes": [
-    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"roomId":{"name":"rInit","path":"rooms/rInit/rInit.yy",},},
+    {"roomId":{"name":"rMain","path":"rooms/rMain/rMain.yy",},},
   ],
   "Folders": [
     {"folderPath":"folders/Sprites.yy","order":1,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},
