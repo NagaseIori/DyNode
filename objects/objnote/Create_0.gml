@@ -142,11 +142,11 @@ depth = 100;
 
     _debug_draw = function() {
         if(debug_mode) {
-            scribble(stateString+" "+string(nid)+"\n"+string(position)).starting_format("fDynamix20", c_white)
-            .align(fa_left, fa_middle)
-            .draw(round(x + pWidth/2), y);
+            // scribble(stateString+" "+string(nid)+"\n"+string(position)).starting_format("fDynamix20", c_white)
+            // .align(fa_left, fa_middle)
+            // .draw(round(x + pWidth/2), y);
             
-            draw_set_color(c_red);
-            draw_line(x - pWidth/2, y, x + pWidth/2, y);
+            // draw_set_color(c_red);
+            // draw_line(x - pWidth/2, y, x + pWidth/2, y);
         }
     }

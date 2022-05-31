@@ -34,9 +34,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
 // Draw Note Particles
 
-    gpu_set_blendmode(bm_add);
-        part_system_drawit(partSysNote);
-    gpu_set_blendmode(bm_normal);
+    part_system_drawit(partSysNote);
 
 // Debug
     
