@@ -7,3 +7,6 @@ if(keyboard_check_pressed(vk_f2))
     map_load();
 if(keyboard_check_pressed(vk_f3))
     music_load();
+
+if(keyboard_check_pressed(ord("F")))
+    window_set_fullscreen(!window_get_fullscreen());

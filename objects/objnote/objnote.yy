@@ -1,16 +1,15 @@
 {
-  "name": "objNote",
   "spriteId": {
     "name": "sprNote",
     "path": "sprites/sprNote/sprNote.yy",
   },
-  "spriteMaskId": null,
-  "visible": true,
   "solid": false,
-  "persistent": false,
-  "physicsObject": false,
+  "visible": true,
   "managed": true,
+  "spriteMaskId": null,
+  "persistent": false,
   "parentObjectId": null,
+  "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
   "physicsGroup": 1,
@@ -34,6 +33,7 @@
     "path": "folders/Objects.yy",
   },
   "resourceVersion": "1.0",
+  "name": "objNote",
   "tags": [],
   "resourceType": "GMObject",
 }

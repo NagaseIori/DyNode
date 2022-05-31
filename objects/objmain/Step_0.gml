@@ -13,7 +13,6 @@ _position_update();
         if(nowPlaying) {
             nowTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
                 * global.fpsAdjust;
-            sfmod_channel_set_position(nowTime, channel, sampleRate);
         }
         else {
             animTargetOffset += (_timchange * adtimeSpeed 
@@ -22,7 +21,7 @@ _position_update();
         }
     }
 
-// Time Correction
+// Time Operation
 
     if(nowPlaying)
         nowTime += delta_time / 1000;
@@ -40,12 +39,16 @@ _position_update();
             channelPaused = false;
         }
         
-        if(nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
-            nowTime = _cor_tim;
-        }
+        // if(nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
+        //     nowTime = _cor_tim;
+        // }
         if(_cor_tim >= musicLength && nowPlaying) {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
+        }
+        
+        if(nowPlaying && (_timchange!=0 || _timscr!=0)) {
+            sfmod_channel_set_position(nowTime, channel, sampleRate);
         }
         
         nowTime = min(nowTime, musicLength);
@@ -59,6 +62,10 @@ _position_update();
     }
     else {
         nowOffset = lerp(nowOffset, animTargetOffset, animSpeed * global.fpsAdjust);
+        
+        if(abs(nowOffset - animTargetOffset) < 0.01)
+            nowOffset = animTargetOffset; // Speeeed up
+        
         nowTime = (nowOffset - chartOffset) / chartBarPerMin * 60 * 1000;
     }
 

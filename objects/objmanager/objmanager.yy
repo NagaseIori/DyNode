@@ -1,16 +1,15 @@
 {
-  "name": "objManager",
   "spriteId": {
     "name": "sprManager",
     "path": "sprites/sprManager/sprManager.yy",
   },
-  "spriteMaskId": null,
-  "visible": false,
   "solid": false,
-  "persistent": true,
-  "physicsObject": false,
+  "visible": false,
   "managed": true,
+  "spriteMaskId": null,
+  "persistent": true,
   "parentObjectId": null,
+  "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
   "physicsGroup": 1,
@@ -33,6 +32,7 @@
     "path": "folders/Objects.yy",
   },
   "resourceVersion": "1.0",
+  "name": "objManager",
   "tags": [],
   "resourceType": "GMObject",
 }

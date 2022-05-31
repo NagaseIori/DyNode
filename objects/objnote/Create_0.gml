@@ -14,7 +14,6 @@ pWidth = (width * 300 - 30)*2; // Width In Pixels
 originalWidth = sprite_get_width(sprite_index);
 
 shadow = objShadow;
-shadowFlag = true;
 
 animSpeed = 0.3;
 animTargetA = 0;
@@ -22,15 +21,34 @@ image_alpha = 0;
 
 partNumber = 40;
 
+_create_shadow = function () {
+    // Create Shadow
+    var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
+    var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
+    _inst.nowWidth = pWidth;
+    _inst.visible = true;
+    
+    // Burst Particles
+    var _num = partNumber;
+    with(objMain) {
+        // _parttype_noted_init(partTypeNoteDL, _scl);
+        // _parttype_noted_init(partTypeNoteDR, _scl);
+        
+        part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
+        part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+    }
+}
+
 // State Machines
 
     // State Fade in
     stateIn = function () {
-        shadowFlag = false;
         stateString = "IN";
         animTargetA = 1.0;
-        if(offset <= objMain.nowOffset) {
+        if(offset <= min(objMain.nowOffset, objMain.animTargetOffset)) {
             state = stateOut;
+            _create_shadow();
+            state();
         }
         if(image_alpha > 0.98) {
             state = stateNormal;
@@ -40,43 +58,18 @@ partNumber = 40;
     
     // State Normal
     stateNormal = function() {
-        shadowFlag = false;
         stateString = "NM";
         
-        if(debug_mode) {
-            if(keyboard_check_pressed(vk_f1))
-                state = stateOut;
-        }
-        
-        if(offset <= objMain.nowOffset) {
+        if(offset <= min(objMain.nowOffset, objMain.animTargetOffset)) {
             state = stateOut;
+            _create_shadow();
+            state();
         }
     }
     
     // State Targeted
     stateOut = function() {
         stateString = "OUT";
-        
-        if(!shadowFlag) {
-            // Only create shadow once
-            shadowFlag = true;
-            
-            // Create Shadow
-            var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
-            var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
-            _inst.nowWidth = pWidth;
-            _inst.visible = true;
-            
-            // Burst Particles
-            var _num = partNumber;
-            with(objMain) {
-                // _parttype_noted_init(partTypeNoteDL, _scl);
-                // _parttype_noted_init(partTypeNoteDR, _scl);
-                
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
-            }
-        }
         
         image_alpha = 0.0;
         animTargetA = 0.0;
@@ -90,6 +83,7 @@ partNumber = 40;
             }
             else 
                 state = stateIn;
+            state();
         }
             
         if(debug_mode) {
