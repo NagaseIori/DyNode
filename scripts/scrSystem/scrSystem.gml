@@ -40,6 +40,11 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side) {
             _obj = objChain;
             break;
         case "HOLD":
+            _obj = objHold;
+            break;
+        case "SUB":
+            _obj = objHoldSub;
+            break;
         default:
             return;
     }
@@ -48,10 +53,21 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side) {
     _inst.side = real(_side);
     _inst.offset = real(_time);
     _inst.position = real(_position);
-    _inst.nid = real(_id);
-    _inst.sid = real(_subid);
+    _inst.nid = _id;
+    _inst.sid = _subid;
     
     _inst.position += _inst.width/2;
+    with(objMain) {
+        if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
+            show_error_async("Duplicate Note ID " + _id + " in side " 
+                + string(_side), false);
+            return true;
+        }
+        
+        chartNotesMap[_inst.side][? _id] = _inst;
+    }
+    
+    return 0;
 }
 
 function map_load_xml(_file) {
@@ -104,9 +120,10 @@ function map_load_xml(_file) {
                         break;
                     case "CMapNoteAsset":
                         _in_assets --;
-                        build_note(_note_id, _note_type, _note_time,
+                        var _err = build_note(_note_id, _note_type, _note_time,
                             _note_position, _note_width, _note_subid,
                             _in_left + _in_right*2);
+                        if(_err) return;
                         break;
                 }
                 break;

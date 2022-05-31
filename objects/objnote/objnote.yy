@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sprNote",
-    "path": "sprites/sprNote/sprNote.yy",
+    "name": "sprNote2",
+    "path": "sprites/sprNote2/sprNote2.yy",
   },
   "solid": false,
   "visible": true,
@@ -29,8 +29,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "MNotes",
+    "path": "folders/Objects/MNotes.yy",
   },
   "resourceVersion": "1.0",
   "name": "objNote",

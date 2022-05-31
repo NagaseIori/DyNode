@@ -39,6 +39,7 @@ _position_update();
             channelPaused = false;
         }
         
+        // Actually no need for every frame time adjust
         // if(nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
         //     nowTime = _cor_tim;
         // }
@@ -63,7 +64,7 @@ _position_update();
     else {
         nowOffset = lerp(nowOffset, animTargetOffset, animSpeed * global.fpsAdjust);
         
-        if(abs(nowOffset - animTargetOffset) < 0.01)
+        if(abs(nowOffset - animTargetOffset) < 0.001)
             nowOffset = animTargetOffset; // Speeeed up
         
         nowTime = (nowOffset - chartOffset) / chartBarPerMin * 60 * 1000;

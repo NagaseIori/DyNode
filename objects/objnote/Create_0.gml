@@ -1,56 +1,84 @@
 
-depth = 0;
+depth = 100;
 
 // In-Variables
 
-width = 2.0;
-position = 2.5;
-side = 0;
-offset = 0;
-nid = -1; // Note id
-sid = -1; // Sub id
-
-pWidth = (width * 300 - 30)*2; // Width In Pixels
-originalWidth = sprite_get_width(sprite_index);
-
-shadow = objShadow;
-
-animSpeed = 0.3;
-animTargetA = 0;
-image_alpha = 0;
-
-partNumber = 40;
-
-_create_shadow = function () {
-    // Create Shadow
-    var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
-    var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
-    _inst.nowWidth = pWidth;
-    _inst.visible = true;
+    width = 2.0;
+    position = 2.5;
+    side = 0;
+    offset = 0;
+    nid = -1; // Note id
+    sid = -1; // Sub id
     
-    // Burst Particles
-    var _num = partNumber;
-    with(objMain) {
-        // _parttype_noted_init(partTypeNoteDL, _scl);
-        // _parttype_noted_init(partTypeNoteDR, _scl);
-        
-        part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-        part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+    // For Hold
+    lastOffset = 0;
+    lastAlphaL = 0.4;
+    lastAlphaR = 1.0;
+    lastAlpha = lastAlphaL;
+    
+    pWidth = (width * 300 - 30)*2; // Width In Pixels
+    originalWidth = sprite_get_width(sprite_index);
+    
+    shadow = objShadow;
+    
+    animSpeed = 0.3;
+    animTargetA = 0;
+    animTargetLstA = lastAlpha;
+    image_alpha = 0;
+    
+    partNumber = 40;
+    partNumberLast = 3;
+    
+    // Correction Values
+    lFromLeft = 5;
+    rFromRight = 5;
+
+// In-Functions
+
+    _burst_particle = function(_num) {
+        // Burst Particles
+        var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
+        with(objMain) {
+            // _parttype_noted_init(partTypeNoteDL, _scl);
+            // _parttype_noted_init(partTypeNoteDR, _scl);
+            
+            part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
+            part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+        }
     }
-}
+
+    _create_shadow = function () {
+        // Create Shadow
+        var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
+        var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
+        _inst.nowWidth = pWidth;
+        _inst.visible = true;
+        
+        _burst_particle(partNumber);
+    }
 
 // State Machines
 
     // State Fade in
     stateIn = function () {
+        
         stateString = "IN";
         animTargetA = 1.0;
-        if(offset <= min(objMain.nowOffset, objMain.animTargetOffset)) {
-            state = stateOut;
+        animTargetLstA = lastAlphaL;
+        
+        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
+        if(offset <= _limOffset) {
             _create_shadow();
+            state = stateLast;
             state();
         }
-        if(image_alpha > 0.98) {
+        // If is using ad to adjust time then speed the things hell up
+        if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
+            image_alpha = 1;
+            animTargetA = 1;
+            state = stateNormal;
+        }
+        else if(image_alpha > 0.98) {
             state = stateNormal;
             image_alpha = 1;
         }
@@ -58,11 +86,30 @@ _create_shadow = function () {
     
     // State Normal
     stateNormal = function() {
+        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
         stateString = "NM";
         
-        if(offset <= min(objMain.nowOffset, objMain.animTargetOffset)) {
-            state = stateOut;
+        if(offset <= _limOffset) {
             _create_shadow();
+            state = stateLast;
+            state();
+        }
+    }
+    
+    // State Last (For Hold)
+    stateLast = function () {
+        stateString = "LST";
+        animTargetLstA = lastAlphaR;
+        
+        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
+        if(offset + lastOffset <= _limOffset) {
+            state = stateOut;
+            state();
+        }
+        else _burst_particle(partNumberLast);
+        
+        if(offset > objMain.nowOffset) {
+            state = stateIn;
             state();
         }
     }
@@ -73,8 +120,9 @@ _create_shadow = function () {
         
         image_alpha = 0.0;
         animTargetA = 0.0;
+        animTargetLstA = lastAlphaL;
         
-        if(offset > objMain.nowOffset) {
+        if(offset + lastOffset> objMain.nowOffset) {
             // If is using ad to adjust time then speed the things hell up
             if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
                 image_alpha = 1;
@@ -85,12 +133,20 @@ _create_shadow = function () {
                 state = stateIn;
             state();
         }
-            
-        if(debug_mode) {
-            if(keyboard_check_pressed(vk_f1))
-                state = stateIn;
-        }
     }
 
-state = stateOut;
-stateString = " ";
+    state = stateOut;
+    stateString = " ";
+
+// Debug Draw Function
+
+    _debug_draw = function() {
+        if(debug_mode) {
+            scribble(stateString+" "+string(nid)+"\n"+string(position)).starting_format("fDynamix20", c_white)
+            .align(fa_left, fa_middle)
+            .draw(round(x + pWidth/2), y);
+            
+            draw_set_color(c_red);
+            draw_line(x - pWidth/2, y, x + pWidth/2, y);
+        }
+    }

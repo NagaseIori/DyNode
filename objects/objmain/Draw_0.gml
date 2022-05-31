@@ -2,6 +2,20 @@
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
+// Draw Bottom
+
+    // Draw Bg
+    draw_set_color(c_black);
+    draw_set_alpha(1.0);
+    draw_rectangle(0, _nh - targetLineBelow, _nw, _nh, false);
+    
+    // Draw Title
+
+    scribble(chartTitle).starting_format("fDynamix48", c_white)
+    .align(fa_left, fa_middle)
+    .transform(0.7, 0.7)
+    .draw(global.resolutionW*0.021, global.resolutionH - targetLineBelow + 34);
+
 // Draw targetline
 
     draw_set_color(c_white);
@@ -23,13 +37,6 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     gpu_set_blendmode(bm_add);
         part_system_drawit(partSysNote);
     gpu_set_blendmode(bm_normal);
-
-// Draw Title
-
-    scribble(chartTitle).starting_format("fDynamix48", c_white)
-    .align(fa_left, fa_middle)
-    .transform(0.7, 0.7)
-    .draw(global.resolutionW*0.021, global.resolutionH - targetLineBelow + 34);
 
 // Debug
     

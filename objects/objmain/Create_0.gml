@@ -51,6 +51,10 @@ chartID = "";
 chartMusicFile = "";
 chartFile = "";
 
+chartNotesMap = array_create(3);
+for(var i=0; i<3; i++)
+    chartNotesMap[i] = ds_map_create();
+
 // Playview Properties
 
 nowOffset = 0;
