@@ -30,49 +30,69 @@
 
 // Target Line
 
-targetLineBelow = 137*global.resolutionH/1080;
-targetLineBeside = 112*global.resolutionW/1920;
-targetLineBelowH = 8;
-targetLineBesideW = 6;
-
-_position_update = function () {
     targetLineBelow = 137*global.resolutionH/1080;
     targetLineBeside = 112*global.resolutionW/1920;
-}
+    targetLineBelowH = 8;
+    targetLineBesideW = 6;
+    
+    _position_update = function () {
+        targetLineBelow = 137*global.resolutionH/1080;
+        targetLineBeside = 112*global.resolutionW/1920;
+    }
+
+// Top Progress Bar
+
+    topBarH = 5*global.resolutionH/1080;
+    topBarMouseH = 20*global.resolutionH/1080;
+    topBarMousePressed = false;
+    topBarMouseLastX = 0;
+    topBarIndicatorA = 0;
+    animTargetTopBarIndicatorA = 0;
 
 // Chart Properties
 
-chartTitle = "Last Train at 25 O'Clock"
-chartBeatPerMin = 180;
-chartBarPerMin = 180/4;
-chartOffset = 0;
-chartDifficulty = "CASUAL";
-chartLeftType = "MIXER";
-chartRightType = "MULTI";
-chartID = "";
-chartMusicFile = "";
-chartFile = "";
-
-chartNotesMap = array_create(3);
-for(var i=0; i<3; i++)
-    chartNotesMap[i] = ds_map_create();
+    chartTitle = "Last Train at 25 O'Clock"
+    chartBeatPerMin = 180;
+    chartBarPerMin = 180/4;
+    chartOffset = 0;
+    chartDifficulty = "CASUAL";
+    chartLeftType = "MIXER";
+    chartRightType = "MULTI";
+    chartID = "";
+    chartMusicFile = "";
+    chartFile = "";
+    
+    chartNotesMap = array_create(3);
+    for(var i=0; i<3; i++)
+        chartNotesMap[i] = ds_map_create();
 
 // Playview Properties
 
-nowOffset = 0;
-nowTime = 0;
-nowPlaying = false;
-playbackSpeed = 1600.0;
-adtimeSpeed = 200.0; // Use AD to Adjust Time ms per frame
-scrolltimeSpeed = 400.0; // Use mouse scroll to Adjust Time ms per frame
-
-animSpeed = 0.3;
-animTargetOffset = chartOffset;
+    nowOffset = 0;
+    nowTime = 0;
+    nowPlaying = false;
+    playbackSpeed = 1600.0;
+    adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
+    scrolltimeSpeed = 300.0; // Use mouse scroll to Adjust Time ms per frame
+    
+    animSpeed = 0.3;
+    animTargetOffset = chartOffset;
+    
+    musicProgress = 0.0;
 
 // FMODGMS Related
 
-channel = FMODGMS_Chan_CreateChannel();
-music = undefined;
-sampleRate = 0;
-channelPaused = false; // Only used for time correction
-musicLength = 0;
+    channel = FMODGMS_Chan_CreateChannel();
+    music = undefined;
+    sampleRate = 0;
+    channelPaused = false; // Only used for time correction
+    musicLength = 0;
+
+// In-Functions
+
+    _offset_to_time = function (offset) {
+        return (offset - chartOffset) / chartBarPerMin * 60 * 1000;
+    }
+    _time_to_offset = function (time) {
+        return time / 60000 * chartBarPerMin + chartOffset;
+    }

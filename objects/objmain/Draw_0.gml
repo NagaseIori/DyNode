@@ -2,6 +2,16 @@
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
+// Draw Top Progress Bar
+
+    draw_set_color(c_white); draw_set_alpha(topBarIndicatorA);
+    draw_rectangle(0, 0, _nw, topBarMouseH, false);
+    if(musicProgress > 0) {
+        var _topBarW = _nw * musicProgress;
+        draw_set_color(c_white); draw_set_alpha(1.0);
+        draw_rectangle(0, 0, _topBarW, topBarH, false);
+    }
+
 // Draw Bottom
 
     // Draw Bg

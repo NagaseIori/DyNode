@@ -119,8 +119,9 @@ depth = 100;
             state = stateLast;
             state();
         }
-        // If is using ad to adjust time then speed the things hell up
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
+        // If is using adm to adjust time then speed the things hell up
+        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+            objMain.topBarMousePressed) {
             image_alpha = 1;
             animTargetA = 1;
             state = stateNormal;
@@ -180,7 +181,8 @@ depth = 100;
         
         if(offset + lastOffset> objMain.nowOffset && !_outbound_check(x, y, side)) {
             // If is using ad to adjust time then speed the things hell up
-            if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
+            if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+                objMain.topBarMousePressed) {
                 image_alpha = 1;
                 animTargetA = 1;
                 state = stateNormal;

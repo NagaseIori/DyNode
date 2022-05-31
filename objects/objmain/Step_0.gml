@@ -23,11 +23,15 @@ _position_update();
 
 // Time Operation
 
-    if(nowPlaying)
+    if(nowPlaying && !(_timchange != 0 || _timscr != 0)) {
         nowTime += delta_time / 1000;
+    }
+        
         
     if(music != undefined) {
         var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
+        
+        // Play music at chart's beginning
         if(nowTime < 0) {
             FMODGMS_Chan_PauseChannel(channel);
             sfmod_channel_set_position(0, channel, sampleRate);
@@ -39,26 +43,74 @@ _position_update();
             channelPaused = false;
         }
         
+        // Top Bar Adjust Part
+        
+            if(mouse_y <= topBarMouseH && mouse_y > 0)
+                animTargetTopBarIndicatorA = 0.3;
+            else
+                animTargetTopBarIndicatorA = 0;
+            
+            topBarIndicatorA = lerp(topBarIndicatorA, 
+                animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
+                
+        
+            if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH) {
+                topBarMousePressed = true;
+                topBarMouseLastX = -5;
+            }
+                
+            
+            if(topBarMousePressed) {
+                if(mouse_check_button_released(mb_left))
+                    topBarMousePressed = false;
+                else {
+                    if(nowPlaying) {
+                        if(abs(topBarMouseLastX - mouse_x) >= 2) {
+                            musicProgress = mouse_x / global.resolutionW;
+                            nowTime = musicProgress * musicLength;
+                            sfmod_channel_set_position(nowTime, channel, sampleRate);
+                        }
+                        topBarMouseLastX = mouse_x;
+                    }
+                    else {
+                        musicProgress = mouse_x / global.resolutionW;
+                        animTargetOffset =
+                            _time_to_offset(musicProgress * musicLength);
+                    }
+                }
+            }
+        
         // Actually no need for every frame time adjust
         // if(nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
         //     nowTime = _cor_tim;
         // }
+        
+        
+        // If music ends then pause
         if(_cor_tim >= musicLength && nowPlaying) {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
         }
         
+        // If there are modifications then sync music with time
         if(nowPlaying && (_timchange!=0 || _timscr!=0)) {
             sfmod_channel_set_position(nowTime, channel, sampleRate);
         }
         
-        nowTime = min(nowTime, musicLength);
+        // nowTime = min(nowTime, musicLength);
+        
+        musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
+        
+    }
+    
+    else {
+        musicProgress = 0;
     }
 
 // Update and Sync Time & Offset
 
     if(nowPlaying) {
-        nowOffset = nowTime / 60000 * chartBarPerMin + chartOffset;
+        nowOffset = _time_to_offset(nowTime);
         animTargetOffset = nowOffset;
     }
     else {
@@ -67,7 +119,7 @@ _position_update();
         if(abs(nowOffset - animTargetOffset) < 0.001)
             nowOffset = animTargetOffset; // Speeeed up
         
-        nowTime = (nowOffset - chartOffset) / chartBarPerMin * 60 * 1000;
+        nowTime = _offset_to_time(nowOffset);
     }
 
 // Keyboard Pause & Resume
