@@ -26,12 +26,7 @@ else {
 
 
 if(visible || image_alpha>0) {
-    pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
-    pWidth = max(pWidth, originalWidth);
-    
-    image_xscale = pWidth / originalWidth;
     image_alpha = lerp(image_alpha, animTargetA, animSpeed * global.fpsAdjust);
-    image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
     lastAlpha = lerp(lastAlpha, animTargetLstA, animSpeed * global.fpsAdjust);
 }
 

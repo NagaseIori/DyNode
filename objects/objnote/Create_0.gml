@@ -37,6 +37,14 @@ depth = 100;
 
 // In-Functions
 
+    _prop_init = function () {
+        pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
+        pWidth = max(pWidth, originalWidth);
+        image_xscale = pWidth / originalWidth;
+        image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
+    }
+    _prop_init();
+
     _burst_particle = function(_num, _force = false) {
         if(!objMain.nowPlaying && !_force)
             return;

@@ -60,6 +60,8 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side) {
     _inst.sid = _subid;
     
     _inst.position += _inst.width/2;
+    
+    with(_inst) _prop_init();
     with(objMain) {
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
