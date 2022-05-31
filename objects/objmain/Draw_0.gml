@@ -39,7 +39,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 // Debug
     
     scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +
-    "\nNow Time: " + string(nowTime))
+    "\nNow Time: " + string(nowTime)+"\nFPS: "+string(fps))
     .starting_format("fDynamix20", c_white)
     .align(fa_center, fa_top)
     .draw(global.resolutionW/2, 30);

@@ -12,6 +12,8 @@ function map_load() {
     // Cleanup.
     instance_destroy(objNote);
     instance_destroy(objChain);
+    instance_destroy(objHold);
+    instance_destroy(objHoldSub);
     instance_destroy(objMain);
     instance_create_depth(0, 0, 0, objMain);
     
@@ -29,8 +31,9 @@ function map_load() {
 
 function build_note(_id, _type, _time, _position, _width, _subid, _side) {
     
-    if(_side > 0)
-        return;
+    // if(_side > 0)
+    //     return;
+    // show_debug_message("BUILD NOTE:"+string(_side)+" "+_id);
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":

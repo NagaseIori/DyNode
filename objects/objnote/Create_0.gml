@@ -1,4 +1,5 @@
 
+visible = false;
 depth = 100;
 
 // In-Variables
@@ -21,12 +22,13 @@ depth = 100;
     
     shadow = objShadow;
     
-    animSpeed = 0.3;
+    animSpeed = 0.4;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
     image_alpha = 0;
     
-    partNumber = 40;
+    // Particles Number
+    partNumber = 20;
     partNumberLast = 3;
     
     // Correction Values
@@ -35,26 +37,63 @@ depth = 100;
 
 // In-Functions
 
-    _burst_particle = function(_num) {
+    _burst_particle = function(_num, _force = false) {
+        if(!objMain.nowPlaying && !_force)
+            return;
+        
         // Burst Particles
-        var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
+        var _x, _y;
+        if(side == 0) {
+            _x = x;
+            _y = global.resolutionH - objMain.targetLineBelow;
+        }
+        else {
+            _x = side == 1 ? objMain.targetLineBeside : 
+                             global.resolutionW - objMain.targetLineBeside;
+            _y = y;
+        }
+        var _ang = image_angle;
         with(objMain) {
-            // _parttype_noted_init(partTypeNoteDL, _scl);
-            // _parttype_noted_init(partTypeNoteDR, _scl);
+            _parttype_noted_init(partTypeNoteDL, 1, _ang);
+            _parttype_noted_init(partTypeNoteDR, 1, _ang+180);
             
             part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
             part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
         }
     }
 
-    _create_shadow = function () {
+    _create_shadow = function (_force = false) {
+        if(!objMain.nowPlaying && !_force)
+            return;
+        
         // Create Shadow
-        var _x = x, _y = global.resolutionH - objMain.targetLineBelow;
+        var _x, _y;
+        if(side == 0) {
+            _x = x;
+            _y = global.resolutionH - objMain.targetLineBelow;
+        }
+        else {
+            _x = side == 1 ? objMain.targetLineBeside : 
+                             global.resolutionW - objMain.targetLineBeside;
+            _y = y;
+        }
         var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
+        _inst.image_angle = image_angle;
         
         _burst_particle(partNumber);
+    }
+    
+    _outbound_check = function (_x, _y, _side) {
+        if(_side == 0 && _y < -100)
+            return true;
+        else if(_side == 1 && _x >= global.resolutionW / 2)
+            return true;
+        else if(_side == 2 && _x <= global.resolutionW / 2)
+            return true;
+        else
+            return false;
     }
 
 // State Machines
@@ -82,6 +121,11 @@ depth = 100;
             state = stateNormal;
             image_alpha = 1;
         }
+        
+        if(_outbound_check(x, y, side)) {
+            state = stateOut;
+            state();
+        }
     }
     
     // State Normal
@@ -94,9 +138,13 @@ depth = 100;
             state = stateLast;
             state();
         }
+        if(_outbound_check(x, y, side)) {
+            state = stateOut;
+            state();
+        }
     }
     
-    // State Last (For Hold)
+    // State Last
     stateLast = function () {
         stateString = "LST";
         animTargetLstA = lastAlphaR;
@@ -104,9 +152,10 @@ depth = 100;
         var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
         if(offset + lastOffset <= _limOffset) {
             state = stateOut;
+            image_alpha = lastOffset == 0 ? 0 : image_alpha;
             state();
         }
-        else _burst_particle(partNumberLast);
+        else _burst_particle(partNumberLast, true);
         
         if(offset > objMain.nowOffset) {
             state = stateIn;
@@ -118,11 +167,10 @@ depth = 100;
     stateOut = function() {
         stateString = "OUT";
         
-        image_alpha = 0.0;
         animTargetA = 0.0;
         animTargetLstA = lastAlphaL;
         
-        if(offset + lastOffset> objMain.nowOffset) {
+        if(offset + lastOffset> objMain.nowOffset && !_outbound_check(x, y, side)) {
             // If is using ad to adjust time then speed the things hell up
             if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
                 image_alpha = 1;
@@ -136,7 +184,7 @@ depth = 100;
     }
 
     state = stateOut;
-    stateString = " ";
+    stateString = "OUT";
 
 // Debug Draw Function
 
@@ -148,5 +196,8 @@ depth = 100;
             
             // draw_set_color(c_red);
             // draw_line(x - pWidth/2, y, x + pWidth/2, y);
+            
+            // draw_set_color(c_red);
+            // draw_circle(x, y, 5, 0);
         }
     }

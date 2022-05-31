@@ -14,3 +14,7 @@ pHeight = originalHeight; // Height in Pixels base on sprHoldEdge
     uFromTop = 13; 
     lFromLeft = 12;
     rFromRight = 12;
+
+// Surfaces
+    
+    surf_temp = -1;

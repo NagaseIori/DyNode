@@ -6,7 +6,7 @@
     part_system_automatic_draw(partSysNote, false);
 
     // PartType
-    _parttype_noted_init = function(_pt, _scl = 1.0) {
+    _parttype_noted_init = function(_pt, _scl = 1.0, _ang = 0.0) {
         part_type_sprite(_pt, sprParticleW, false, true, false);
         part_type_alpha3(_pt, 0.3, 0.3*0.6, 0);
         part_type_speed(_pt, _scl * 3 * global.fpsAdjust
@@ -19,13 +19,13 @@
         part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
         part_type_life(_pt, room_speed*0.3, room_speed*0.5);
         part_type_blend(_pt, true);
+        part_type_direction(_pt, _ang, _ang, 0, 0);
     }
     
     partTypeNoteDL = part_type_create();
     _parttype_noted_init(partTypeNoteDL);
     partTypeNoteDR = part_type_create();
-    _parttype_noted_init(partTypeNoteDR);
-    part_type_direction(partTypeNoteDR, 180, 180, 0, 0);
+    _parttype_noted_init(partTypeNoteDR, 1, 180);
     
 
 // Target Line
@@ -62,9 +62,9 @@ for(var i=0; i<3; i++)
 nowOffset = 0;
 nowTime = 0;
 nowPlaying = false;
-playbackSpeed = 1000.0;
+playbackSpeed = 1600.0;
 adtimeSpeed = 200.0; // Use AD to Adjust Time ms per frame
-scrolltimeSpeed = 750.0; // Use mouse scroll to Adjust Time ms per frame
+scrolltimeSpeed = 400.0; // Use mouse scroll to Adjust Time ms per frame
 
 animSpeed = 0.3;
 animTargetOffset = chartOffset;
