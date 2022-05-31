@@ -48,8 +48,12 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
 // Debug
     
-    scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +
-    "\nNow Time: " + string(nowTime)+"\nFPS: "+string(fps) + " / "+string(fps_real))
-    .starting_format("fDynamix20", c_white)
-    .align(fa_center, fa_top)
-    .draw(global.resolutionW/2, 30);
+    // scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +
+    // "\nNow Time: " + string(nowTime)+"\nFPS: "+string(fps) + " / "+string(fps_real))
+    // .starting_format("fDynamix20", c_white)
+    // .align(fa_center, fa_top)
+    // .draw(global.resolutionW/2, 30);
+    draw_set_font(fDynamix20);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_top);
+    draw_text(global.resolutionW/2, 30, "FPS: "+string(fps) + " / "+string(fps_real));

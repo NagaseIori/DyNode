@@ -166,6 +166,7 @@
     {"id":{"name":"rInit","path":"rooms/rInit/rInit.yy",},"order":0,},
     {"id":{"name":"scrUtil","path":"scripts/scrUtil/scrUtil.yy",},"order":3,},
     {"id":{"name":"scrSystem","path":"scripts/scrSystem/scrSystem.yy",},"order":2,},
+    {"id":{"name":"scrNote","path":"scripts/scrNote/scrNote.yy",},"order":4,},
   ],
   "Options": [
     {"name":"Linux","path":"options/linux/options_linux.yy",},
@@ -221,7 +222,7 @@
     {"folderPath":"folders/Scripts/DerpXml/Internal.yy","order":2,"resourceVersion":"1.0","name":"Internal","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/DerpXml/Read.yy","order":3,"resourceVersion":"1.0","name":"Read","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/DerpXml/Write.yy","order":4,"resourceVersion":"1.0","name":"Write","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Scripts/FMODGMS.yy","order":4,"resourceVersion":"1.0","name":"FMODGMS","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts/FMODGMS.yy","order":5,"resourceVersion":"1.0","name":"FMODGMS","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects/MNotes.yy","order":6,"resourceVersion":"1.0","name":"MNotes","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [

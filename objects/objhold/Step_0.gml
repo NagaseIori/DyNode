@@ -2,7 +2,7 @@
 // Inherit the parent event
 event_inherited();
 
-if(sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)) {
+if(visible && sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)) {
     var _inst = objMain.chartNotesMap[side][? sid]
     pHeight = objMain.playbackSpeed * (_inst.offset - max(offset, objMain.nowOffset))
         + dFromBottom + uFromTop;
@@ -12,7 +12,4 @@ if(sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)) {
     lastOffset = max(lastOffset, 0.0001);
     
     image_yscale = pHeight / originalHeight;
-}
-else {
-    visible = false;
 }

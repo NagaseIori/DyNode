@@ -93,16 +93,16 @@ depth = 100;
         _burst_particle(partNumber);
     }
     
-    _outbound_check = function (_x, _y, _side) {
-        if(_side == 0 && _y < -100)
-            return true;
-        else if(_side == 1 && _x >= global.resolutionW / 2)
-            return true;
-        else if(_side == 2 && _x <= global.resolutionW / 2)
-            return true;
-        else
-            return false;
-    }
+    // _outbound_check = function (_x, _y, _side) {
+    //     if(_side == 0 && _y < -100)
+    //         return true;
+    //     else if(_side == 1 && _x >= global.resolutionW / 2)
+    //         return true;
+    //     else if(_side == 2 && _x <= global.resolutionW / 2)
+    //         return true;
+    //     else
+    //         return false;
+    // }
 
 // State Machines
 
