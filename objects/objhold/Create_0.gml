@@ -3,6 +3,8 @@
 // Inherit the parent event
 event_inherited();
 
+noteType = 2;
+
 depth *= 2;
 
 originalHeight = sprite_get_height(sprHoldEdge);

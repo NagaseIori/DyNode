@@ -1,9 +1,36 @@
 
 _position_update();
 
-// Music Speed Adjust
+// Chart Properties Update
 
+    chartNotesCount = array_length(chartNotesArray)
+
+    while(chartNotesArrayAt < chartNotesCount &&
+        chartNotesArray[chartNotesArrayAt].offset <= nowOffset)
+        chartNotesArrayAt ++;
     
+    while(chartNotesArrayAt > 0 &&
+        chartNotesArray[chartNotesArrayAt-1].offset > nowOffset)
+        chartNotesArrayAt --;
+    
+// Scoreboard Update
+
+    if(nowCombo != chartNotesArrayAt) {
+        var _hit = nowCombo < chartNotesArrayAt;
+        var _val;
+        nowCombo = chartNotesArrayAt;
+        _val = 1000000*nowCombo/chartNotesCount;
+        with(scbLeft) {
+            _update_score(_val, _hit);
+        }
+        _val = nowCombo;
+        with(scbRight) {
+            _update_score(_val, _hit, true);
+        }
+    }
+    
+
+// Music Speed Adjust
     
     var _muspdchange = keyboard_check_pressed(ord("W")) - keyboard_check_pressed(ord("S"));
     if(_muspdchange != 0) {

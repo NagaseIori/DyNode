@@ -13,6 +13,14 @@ function map_init() {
         .align(fa_left, fa_middle)
         .transform(0.7, 0.7);
         titleElement.build(true);
+        
+        // Sort Notes Array base on time
+        var _f = function(_a, _b) {
+            return _a.offset < _b.offset;
+        }
+        // show_debug_message("ARRAY LENGTH:"+string(array_length(chartNotesArray)));
+        // show_debug_message("ARRAY:"+string(chartNotesArray));
+        array_sort_f(chartNotesArray, _f);
     }
     
 }
@@ -27,10 +35,6 @@ function map_load() {
     if(_file == "") return;
     
     // Cleanup.
-    instance_destroy(objNote);
-    instance_destroy(objChain);
-    instance_destroy(objHold);
-    instance_destroy(objHoldSub);
     instance_destroy(objMain);
     instance_create_depth(0, 0, 0, objMain);
     
@@ -82,12 +86,12 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side) {
     
     with(_inst) _prop_init();
     with(objMain) {
+        array_push(chartNotesArray, _inst);
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
             return true;
         }
-        
         chartNotesMap[_inst.side][? _id] = _inst;
     }
     

@@ -10,6 +10,7 @@ depth = 100;
     offset = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
+    noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Hold
     lastOffset = 0;
@@ -27,7 +28,7 @@ depth = 100;
     
     // Particles Number
     partNumber = 20;
-    partNumberLast = 3;
+    partNumberLast = 6;
     
     // Correction Values
     lFromLeft = 5;
@@ -43,7 +44,8 @@ depth = 100;
     }
     _prop_init();
 
-    _burst_particle = function(_num, _force = false) {
+    _burst_particle = function(_num, _type, _force = false) {
+        
         if(!objMain.nowPlaying && !_force)
             return;
         
@@ -60,11 +62,18 @@ depth = 100;
         }
         var _ang = image_angle;
         with(objMain) {
-            _parttype_noted_init(partTypeNoteDL, 1, _ang);
-            _parttype_noted_init(partTypeNoteDR, 1, _ang+180);
-            
-            part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-            part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+            if(_type == 0) {
+                _parttype_noted_init(partTypeNoteDL, 1, _ang);
+                _parttype_noted_init(partTypeNoteDR, 1, _ang+180);
+                
+                part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
+                part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+            }
+            else if(_type == 1) {
+                _parttype_hold_init(partTypeHold, 1, _ang);
+                
+                part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
+            }
         }
     }
 
@@ -91,7 +100,7 @@ depth = 100;
         _inst.visible = true;
         _inst.image_angle = image_angle;
         
-        _burst_particle(partNumber);
+        _burst_particle(partNumber, 0);
     }
     
     // _outbound_check = function (_x, _y, _side) {
@@ -165,7 +174,7 @@ depth = 100;
             image_alpha = lastOffset == 0 ? 0 : image_alpha;
             state();
         }
-        else _burst_particle(partNumberLast, true);
+        else _burst_particle(ceil(partNumberLast * global.fpsAdjust), 1, true);
         
         if(offset > objMain.nowOffset) {
             state = stateIn;
