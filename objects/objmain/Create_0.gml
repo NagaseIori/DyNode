@@ -49,6 +49,14 @@
     topBarIndicatorA = 0;
     animTargetTopBarIndicatorA = 0;
 
+// Mixer
+    
+    mixerXL = global.resolutionH/2;
+    mixerXR = global.resolutionH/2;
+    mixerNextXL = global.resolutionH/2;
+    mixerNextXR = global.resolutionH/2;
+    mixerSpeed = 0.2;
+
 // Chart Properties
 
     chartTitle = "Last Train at 25 O'Clock"

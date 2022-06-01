@@ -114,7 +114,8 @@ _position_update();
         animTargetOffset = nowOffset;
     }
     else {
-        nowOffset = lerp(nowOffset, animTargetOffset, animSpeed * global.fpsAdjust);
+        nowOffset = lerp_lim(nowOffset, animTargetOffset, animSpeed * global.fpsAdjust,
+                        10 * global.fpsAdjust);
         
         if(abs(nowOffset - animTargetOffset) < 0.001)
             nowOffset = animTargetOffset; // Speeeed up

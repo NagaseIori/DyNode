@@ -12,3 +12,11 @@ function note_pos_to_x(_pos, _side) {
 function array_top(array) {
     return array[array_length(array)-1];
 }
+
+function lerp_lim(from, to, amount, limit) {
+    var _delta = lerp(from, to, amount)-from;
+    
+    _delta = min(abs(_delta), limit) * sign(_delta);
+    
+    return from+_delta;
+}
