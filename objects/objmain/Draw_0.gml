@@ -51,7 +51,11 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // .starting_format("fDynamix20", c_white)
     // .align(fa_center, fa_top)
     // .draw(global.resolutionW/2, 30);
+    
+    var _debug_str = "";
+    _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
+    _debug_str += "DSPD: " + string(playbackSpeed);
     draw_set_font(fDynamix20);
     draw_set_halign(fa_center);
     draw_set_valign(fa_top);
-    draw_text(global.resolutionW/2, 30, "FPS: "+string(fps) + " / "+string(fps_real));
+    draw_text(global.resolutionW/2, 30, _debug_str);

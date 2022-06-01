@@ -45,7 +45,7 @@ _position_update();
         
         // Top Bar Adjust Part
         
-            if(mouse_y <= topBarMouseH && mouse_y > 0)
+            if((mouse_y <= topBarMouseH && mouse_y > 0) || topBarMousePressed)
                 animTargetTopBarIndicatorA = 0.3;
             else
                 animTargetTopBarIndicatorA = 0;
