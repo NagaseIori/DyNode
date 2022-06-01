@@ -1,6 +1,18 @@
 
 _position_update();
 
+// Music Speed Adjust
+
+    
+    
+    var _muspdchange = keyboard_check_pressed(ord("W")) - keyboard_check_pressed(ord("S"));
+    if(_muspdchange != 0) {
+        musicSpeed += 0.1 * _muspdchange;
+        musicSpeed = max(musicSpeed, 0.1);
+        // FMODGMS_Chan_Set_Frequency(channel, sampleRate * musicSpeed);
+        FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
+    }
+
 // Keyboard Time Adjust
 
     var _spdchange = keyboard_check_pressed(ord("E")) - keyboard_check_pressed(ord("Q"));
@@ -24,7 +36,7 @@ _position_update();
 // Time Operation
 
     if(nowPlaying && !(_timchange != 0 || _timscr != 0)) {
-        nowTime += delta_time / 1000;
+        nowTime += delta_time * musicSpeed / 1000;
     }
         
         

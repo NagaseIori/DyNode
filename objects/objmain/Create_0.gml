@@ -86,6 +86,7 @@
     animTargetOffset = chartOffset;
     
     musicProgress = 0.0;
+    musicSpeed = 1.0;
 
 // FMODGMS Related
 
