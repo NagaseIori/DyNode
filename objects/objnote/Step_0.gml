@@ -21,6 +21,17 @@ else {
             visible = false;
     else
         visible = true;
+    
+    if(visible) {
+        var _nside = side-1, _noff = offset, _nx = y, _nid = id;
+        
+        with(objMain) {
+            if(mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].offset) {
+                mixerNextNote[_nside] = _nid;
+                mixerNextX[_nside] = _nx;
+            }
+        }
+    }
 }
 
 

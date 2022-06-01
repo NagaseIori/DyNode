@@ -164,10 +164,10 @@ function map_load_xml(_file) {
                         objMain.chartOffset = real(_val);
                         break;
                     case "m_leftRegion":
-                        objMain.chartLeftType = _val;
+                        objMain.chartSideType[0] = _val;
                         break;
                     case "m_rightRegion":
-                        objMain.chartRightType = _val;
+                        objMain.chartSideType[1] = _val;
                         break;
                     case "m_mapID":
                         objMain.chartID = _val;

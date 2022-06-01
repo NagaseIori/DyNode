@@ -44,6 +44,15 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
     part_system_drawit(partSysNote);
 
+// Draw Mixer
+
+    for(var i=0; i<2; i++) {
+        if(chartSideType[i] == "MIXER") {
+                draw_sprite(sprMixer, 0,
+                    i*_nw + (i? -1:1) * targetLineBeside, mixerX[i]);
+            }
+    }
+
 // Debug
     
     // scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +

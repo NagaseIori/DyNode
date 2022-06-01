@@ -1,8 +1,6 @@
 
 animLast ++;
 
-nowScaleX = (nowWidth + extraWidth) / originalWidth;
-
 animState = animcurve_channel_evaluate(animCurvChan, animLast/animTime);
 image_xscale = lerp(nowScaleX, nowScaleX * animTargetX, 1-animState);
 image_yscale = lerp(1, animTargetY, 1-animState);

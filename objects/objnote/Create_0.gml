@@ -20,8 +20,6 @@ depth = 100;
     pWidth = (width * 300 - 30)*2; // Width In Pixels
     originalWidth = sprite_get_width(sprite_index);
     
-    shadow = objShadow;
-    
     animSpeed = 0.4;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
@@ -85,7 +83,10 @@ depth = 100;
                              global.resolutionW - objMain.targetLineBeside;
             _y = y;
         }
-        var _inst = instance_create_depth(_x, _y, depth, shadow), _scl = 1;
+        var _shadow = objShadow;
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER")
+            _shadow = objShadowMIX;
+        var _inst = instance_create_depth(_x, _y, depth, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
         _inst.image_angle = image_angle;

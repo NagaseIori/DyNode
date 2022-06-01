@@ -51,11 +51,11 @@
 
 // Mixer
     
-    mixerXL = global.resolutionH/2;
-    mixerXR = global.resolutionH/2;
-    mixerNextXL = global.resolutionH/2;
-    mixerNextXR = global.resolutionH/2;
-    mixerSpeed = 0.2;
+    mixerX = array_create(2, global.resolutionH/2);
+    mixerNextX = array_create(2, note_pos_to_x(2.5, 1));
+    mixerSpeed = 0.5;
+    mixerMaxSpeed = 250; // px per frame
+    mixerNextNote = [-1, -1]
 
 // Chart Properties
 
@@ -64,8 +64,7 @@
     chartBarPerMin = 180/4;
     chartOffset = 0;
     chartDifficulty = "CASUAL";
-    chartLeftType = "MIXER";
-    chartRightType = "MULTI";
+    chartSideType = ["MIXER", "MULTI"];
     chartID = "";
     chartMusicFile = "";
     chartFile = "";
