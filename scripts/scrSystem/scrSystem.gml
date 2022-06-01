@@ -1,5 +1,22 @@
 
 
+// After loading map, map_init is called to init objMain again.
+function map_init() {
+        
+    with(objMain) {
+        // Reset to beginning
+        nowOffset = _time_to_offset(0);
+        animTargetOffset = nowOffset;
+        
+        // Pre-cache Title Element
+        titleElement = scribble(chartTitle).starting_format("fDynamix48", c_white)
+        .align(fa_left, fa_middle)
+        .transform(0.7, 0.7);
+        titleElement.build(true);
+    }
+    
+}
+
 function map_load() {
     
     
@@ -25,6 +42,8 @@ function map_load() {
     
     if(filename_ext(_file) == ".xml")
         map_load_xml(_file);
+    
+    map_init();
     
     show_debug_message("Load sucessfully.");
 }

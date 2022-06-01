@@ -88,6 +88,10 @@
     channelPaused = false; // Only used for time correction
     musicLength = 0;
 
+// Scribble Related
+
+    titleElement = undefined;
+
 // In-Functions
 
     _offset_to_time = function (offset) {
@@ -96,3 +100,7 @@
     _time_to_offset = function (time) {
         return time / 60000 * chartBarPerMin + chartOffset;
     }
+
+// Init
+
+    map_init();

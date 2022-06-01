@@ -21,9 +21,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
     // Draw Title
 
-    scribble(chartTitle).starting_format("fDynamix48", c_white)
-    .align(fa_left, fa_middle)
-    .transform(0.7, 0.7)
+    titleElement
     .draw(global.resolutionW*0.021, global.resolutionH - targetLineBelow + 34);
 
 // Draw targetline
