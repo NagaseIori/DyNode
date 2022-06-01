@@ -113,6 +113,10 @@ _position_update();
         
         musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
         
+        nowTime = clamp(nowTime, 0, musicLength);
+        
+        animTargetOffset = clamp(animTargetOffset, _time_to_offset(0),
+                            _time_to_offset(musicLength));
     }
     
     else {
