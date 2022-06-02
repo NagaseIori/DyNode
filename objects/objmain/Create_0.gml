@@ -36,7 +36,8 @@
             part_type_speed(_pt, _scl * 3 * global.fpsAdjust
                             , _scl * 10 * global.fpsAdjust,
                             _scl * -0.1 * global.fpsAdjust, 0);
-            part_type_color2(_pt, c_green, c_aqua);
+            part_type_color2(_pt, 0x16925a, 0xeade80);
+            // part_type_color2(_pt, 0x89ffff, 0xffffe5)
             part_type_size(_pt, 0.8, 1.2, -0.02 * global.fpsAdjust, 0);
             // part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
@@ -46,9 +47,14 @@
         }
         partTypeHold = part_type_create();
         _parttype_hold_init(partTypeHold);
-
         
+    // Part Emitter
     
+        partEmitHold = part_emitter_create(partSysNote);
+        _partemit_hold_init = function(_pe, _x1, _y1, _x2, _y2) {
+            part_emitter_region(partSysNote, _pe, _x1, _y1, _x2, _y2, 
+                ps_shape_line, ps_distr_linear);
+        }
 
 // Target Line
 

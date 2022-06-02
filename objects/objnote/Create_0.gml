@@ -27,8 +27,8 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 20;
-    partNumberLast = 6;
+    partNumber = 40;
+    partNumberLast = 1;
     
     // Correction Values
     lFromLeft = 5;
@@ -50,17 +50,25 @@ depth = 100;
             return;
         
         // Burst Particles
-        var _x, _y;
+        var _x, _y, _x1, _x2, _y1, _y2;
         if(side == 0) {
             _x = x;
+            _x1 = x - pWidth / 2;
+            _x2 = x + pWidth / 2;
             _y = global.resolutionH - objMain.targetLineBelow;
+            _y1 = _y;
+            _y2 = _y;
         }
         else {
             _x = side == 1 ? objMain.targetLineBeside : 
                              global.resolutionW - objMain.targetLineBeside;
+            _x1 = _x;
+            _x2 = _x;
             _y = y;
+            _y1 = y - pWidth / 2;
+            _y2 = y + pWidth / 2; 
         }
-        var _ang = image_angle;
+        var _ang = image_angle, _scl = image_xscale;
         with(objMain) {
             if(_type == 0) {
                 _parttype_noted_init(partTypeNoteDL, 1, _ang);
@@ -71,8 +79,9 @@ depth = 100;
             }
             else if(_type == 1) {
                 _parttype_hold_init(partTypeHold, 1, _ang);
-                
-                part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
+                _partemit_hold_init(partEmitHold, _x1, _x2, _y1, _y2);
+                // part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
+                part_emitter_burst(partSysNote, partEmitHold, partTypeHold, _num);
             }
         }
     }
@@ -174,7 +183,7 @@ depth = 100;
             image_alpha = lastOffset == 0 ? 0 : image_alpha;
             state();
         }
-        else _burst_particle(ceil(partNumberLast * global.fpsAdjust), 1, true);
+        else _burst_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
         
         if(offset > objMain.nowOffset) {
             state = stateIn;

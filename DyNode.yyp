@@ -118,6 +118,7 @@
     {"id":{"name":"DerpXmlExample_ReadOther","path":"scripts/DerpXmlExample_ReadOther/DerpXmlExample_ReadOther.yy",},"order":2,},
     {"id":{"name":"scribble_font_bake_shadow","path":"scripts/scribble_font_bake_shadow/scribble_font_bake_shadow.yy",},"order":4,},
     {"id":{"name":"DerpXmlWrite_Config","path":"scripts/DerpXmlWrite_Config/DerpXmlWrite_Config.yy",},"order":3,},
+    {"id":{"name":"sprHoldR2","path":"sprites/sprHoldR2/sprHoldR2.yy",},"order":23,},
     {"id":{"name":"FMODGMS_Util_BeatsToSamples","path":"scripts/FMODGMS_Util_BeatsToSamples/FMODGMS_Util_BeatsToSamples.yy",},"order":4,},
     {"id":{"name":"scribble_fallback_font","path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},"order":12,},
     {"id":{"name":"scribble_external_sound_exists","path":"scripts/scribble_external_sound_exists/scribble_external_sound_exists.yy",},"order":1,},
