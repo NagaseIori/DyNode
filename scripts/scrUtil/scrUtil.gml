@@ -44,10 +44,11 @@ function lerp_a(from, to, amount) {
     return lerp(from, to, amount * global.fpsAdjust);
 }
 
-function create_scoreboard(_x, _y, _dep, _dig, _align) {
+function create_scoreboard(_x, _y, _dep, _dig, _align, _lim) {
     var _inst = instance_create_depth(_x, _y, _dep, objScoreBoard);
     _inst.align = _align;
     _inst.preZero = _dig;
+    _inst.scoreLimit = _lim;
     return _inst;
 }
 

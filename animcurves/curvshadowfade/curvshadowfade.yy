@@ -1,5 +1,4 @@
 {
-  "name": "curvShadowFade",
   "function": 2,
   "channels": [
     {"colour":4290799884,"visible":true,"points":[
@@ -13,6 +12,7 @@
     "path": "folders/Animation Curves.yy",
   },
   "resourceVersion": "1.2",
+  "name": "curvShadowFade",
   "tags": [],
   "resourceType": "GMAnimCurve",
 }

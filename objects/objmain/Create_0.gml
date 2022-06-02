@@ -152,9 +152,9 @@
 
     scbDepth = 1000;
     scbLeft = create_scoreboard(resor_to_x(0.29), resor_to_y(0.54),
-        scbDepth, 7, fa_middle);
+        scbDepth, 7, fa_middle, 0);
     scbRight = create_scoreboard(resor_to_x(0.88), resor_to_y(0.54),
-        scbDepth, 0, fa_right);
+        scbDepth, 0, fa_right, 3);
 
 // Perfect Indicator Related
 
