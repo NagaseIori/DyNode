@@ -104,7 +104,6 @@
     {"id":{"name":"sprPauseBar","path":"sprites/sprPauseBar/sprPauseBar.yy",},"order":12,},
     {"id":{"name":"scribble_typists_add_event","path":"scripts/scribble_typists_add_event/scribble_typists_add_event.yy",},"order":7,},
     {"id":{"name":"DerpXml_ThrowError","path":"scripts/DerpXml_ThrowError/DerpXml_ThrowError.yy",},"order":0,},
-    {"id":{"name":"objBackground","path":"objects/objBackground/objBackground.yy",},"order":8,},
     {"id":{"name":"__scribble_config_behaviours","path":"scripts/__scribble_config_behaviours/__scribble_config_behaviours.yy",},"order":0,},
     {"id":{"name":"sprScoreBoard","path":"sprites/sprScoreBoard/sprScoreBoard.yy",},"order":20,},
     {"id":{"name":"instance_create","path":"scripts/instance_create/instance_create.yy",},"order":0,},

@@ -1,5 +1,8 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "sprPerfect",
+    "path": "sprites/sprPerfect/sprPerfect.yy",
+  },
   "solid": false,
   "visible": true,
   "managed": true,
