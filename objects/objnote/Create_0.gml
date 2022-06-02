@@ -190,9 +190,10 @@ depth = 100;
         animTargetLstA = lastAlphaL;
         
         if(offset + lastOffset> objMain.nowOffset && !_outbound_check(x, y, side)) {
-            // If is using ad to adjust time then speed the things hell up
+            // In Some situations no need for fading in
             if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
-                objMain.topBarMousePressed) {
+                objMain.topBarMousePressed ||
+                (side == 0 && objMain.nowPlaying)) {
                 image_alpha = 1;
                 animTargetA = 1;
                 state = stateNormal;
