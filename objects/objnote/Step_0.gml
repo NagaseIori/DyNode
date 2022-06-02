@@ -38,8 +38,10 @@ else {
 
 
 if(visible || image_alpha>0) {
-    image_alpha = lerp(image_alpha, animTargetA, animSpeed * global.fpsAdjust);
-    lastAlpha = lerp(lastAlpha, animTargetLstA, animSpeed * global.fpsAdjust);
+    image_alpha = lerp_a(image_alpha, animTargetA,
+        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
+    lastAlpha = lerp_a(lastAlpha, animTargetLstA,
+        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
 }
 
 if(visible)
