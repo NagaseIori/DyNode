@@ -103,7 +103,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
     var _debug_str = "";
     _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
-    _debug_str += "DSPD: " + string(playbackSpeed)+"\n";
+    _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
     _debug_str += "MSPD: " + string(musicSpeed)+"\n";
     draw_set_font(fDynamix20);
     draw_set_halign(fa_center);

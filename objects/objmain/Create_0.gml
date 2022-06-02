@@ -128,6 +128,7 @@
     
     animSpeed = 0.3;
     animTargetOffset = chartOffset;
+    animTargetPlaybackSpeed = 1600.0;
     
     musicProgress = 0.0;
     musicSpeed = 1.0;
