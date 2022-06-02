@@ -255,8 +255,16 @@ function image_load() {
     var _nspr = compress_sprite(_spr, _scl, true);
     
     with(objMain) {
+        if(bgImageSpr != -1)
+            sprite_delete(bgImageSpr);
+        
         bgImageFile = _file;
         bgImageSpr = _nspr;
+        
+        // Bottom reset
+        
+        surface_free_f(bottomBgSurf);
+        bottomBgSurf = -1;
     }
     
     sprite_delete(_spr);
