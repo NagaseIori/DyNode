@@ -21,13 +21,40 @@ function map_init() {
         // show_debug_message("ARRAY LENGTH:"+string(array_length(chartNotesArray)));
         // show_debug_message("ARRAY:"+string(chartNotesArray));
         array_sort_f(chartNotesArray, _f);
+        
+        // Get the chart's difficulty
+        
+        var _diff = "";
+        switch string_char_at(chartID, string_length(chartID)) {
+            case "C":
+                _diff = 0;
+                break;
+            case "N":
+                _diff = 1;
+                break;
+            case "H":
+                _diff = 2;
+                break;
+            case "M":
+                _diff = 3;
+                break;
+            case "G":
+                _diff = 4;
+                break;
+            case "T":
+                _diff = 5;
+                break;
+            default:
+                _diff = 0;
+        }
+        chartDifficulty = _diff;
     }
     
 }
 
 function map_load() {
     var _file = "";
-    _file = get_open_filename_ext("XML Files|*.xml", "example.xml", 
+    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
         program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
@@ -200,11 +227,13 @@ function map_load_xml(_file) {
                 break;
         }
     }
+    
+    DerpXmlRead_CloseFile();
 }
 
 function music_load() {
     var _file = "";
-    _file = get_open_filename_ext("Music Files|*.mp3;*.flac;*.wav;*.ogg", "", 
+    _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
         program_directory, "Load Music File 加载音乐文件");
         
     if(_file == "") return;
@@ -222,6 +251,9 @@ function music_load() {
         music = FMODGMS_Snd_LoadSound(_file);
         FMODGMS_Snd_PlaySound(music, channel);
         if(!nowPlaying) FMODGMS_Chan_PauseChannel(channel);
+        else {
+            nowTime = _time_to_offset(0);
+        }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
         musicLength = FMODGMS_Util_SamplesToSeconds(musicLength, sampleRate) * 1000;
@@ -232,7 +264,7 @@ function music_load() {
 
 function image_load() {
     var _file = "";
-    _file = get_open_filename_ext("Image Files|*.jpg;*.png|JPG Files|*.jpg|PNG Files|*.png", "",
+    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
         program_directory, "Load Background File 加载背景图片");
         
     if(_file == "") return;

@@ -17,6 +17,8 @@ global.fpsAdjust = BASE_FPS / room_speed;
 global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 
+global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
+global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 
 // Set GUI Resolution
 

@@ -102,7 +102,7 @@
     chartBeatPerMin = 180;
     chartBarPerMin = 180/4;
     chartOffset = 0;
-    chartDifficulty = "CASUAL";
+    chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";
     chartMusicFile = "";
