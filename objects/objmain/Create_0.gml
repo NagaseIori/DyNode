@@ -132,14 +132,14 @@
     musicSpeed = 1.0;
     
     // Bottom
-        bottomDim = 0.85;
+        bottomDim = 0.75;
         bottomBgSurf = -1;
         bottomBgSurfPing = -1;
         bottomBgBlurAmount = 20;
         bottomBgBlurSigma = 10;
     
     // Background
-        bgDim = 0.75;
+        bgDim = 0.65;
         
         // Image
         bgImageFile = "";

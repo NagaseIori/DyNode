@@ -248,8 +248,8 @@ function image_load() {
         return;
     }
     
-    var _wscl = sprite_get_width(_spr) / global.resolutionW;
-    var _hscl = sprite_get_height(_spr) / global.resolutionH;
+    var _wscl = global.resolutionW / sprite_get_width(_spr);
+    var _hscl = global.resolutionH / sprite_get_height(_spr);
     var _scl = max(_wscl, _hscl); // Centre & keep ratios
     
     var _nspr = compress_sprite(_spr, _scl, true);
