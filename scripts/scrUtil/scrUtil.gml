@@ -44,6 +44,29 @@ function create_scoreboard(_x, _y, _dep, _dig, _align) {
     return _inst;
 }
 
+// Compress sprite using better scaling
+function compress_sprite(_spr, _scale, _center = false){
+	var _w = sprite_get_width(_spr);
+	var _h = sprite_get_height(_spr);
+	_w = ceil(_w*_scale);
+	_h = ceil(_h*_scale);
+	
+	var _surf = surface_create(_w, _h);
+	draw_clear_alpha(c_black, 0);
+	surface_set_target(_surf);
+    	better_scaling_draw_sprite(_spr, 0, 0, 0, _scale, _scale, 0, c_white, 1, 1);
+    	
+    	var _xorig = _center ? _w / 2 : 0;
+    	var _yorig = _center ? _h / 2 : 0;
+    	var _rspr = sprite_create_from_surface(_surf, 0, 0, _w, _h, 0, 0,
+    	    _xorig, _yorig);
+	surface_reset_target();
+	surface_free(_surf);
+	
+	return _rspr; 
+}
+
+// Array Fast Unstable Sort
 function array_sort_f(array, compare) {
     var length = array_length(array);
     if(length == 0) return;
@@ -103,4 +126,9 @@ function array_sort_f(array, compare) {
             }
         } until (lb >= ub);
     } until (stack_pos == 0);
+}
+
+function surface_free_f(_surf) {
+    if(surface_exists(_surf))
+        surface_free(_surf);
 }

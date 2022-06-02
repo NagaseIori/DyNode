@@ -1,4 +1,7 @@
 
+surface_free_f(bottomBgSurf);
+surface_free_f(bottomBgSurfPing);
+
 instance_destroy(objNote);
 instance_destroy(objChain);
 instance_destroy(objHold);
@@ -11,6 +14,8 @@ part_system_destroy(partSysNote);
 part_type_destroy(partTypeNoteDL);
 part_type_destroy(partTypeNoteDR);
 
+if(bgImageSpr != -1)
+    sprite_delete(bgImageSpr);
 
 for(var i=0; i<3; i++)
     ds_map_destroy(chartNotesMap[i]);

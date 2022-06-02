@@ -1,4 +1,14 @@
 
+// Shaders
+
+    shaderBlur = shd_gaussian_blur_2pass;
+    u_size = shader_get_uniform(shaderBlur, "size");
+    u_blur_vector = shader_get_uniform(shaderBlur, "blur_vector");
+
+// Make Background Invisible
+
+    layer_set_visible(layer_get_id("Background"), false);
+
 // Particles
 
     // PartSys
@@ -120,6 +130,21 @@
     
     musicProgress = 0.0;
     musicSpeed = 1.0;
+    
+    // Bottom
+        bottomDim = 0.85;
+        bottomBgSurf = -1;
+        bottomBgSurfPing = -1;
+        bottomBgBlurAmount = 20;
+        bottomBgBlurSigma = 10;
+    
+    // Background
+        bgDim = 0.75;
+        
+        // Image
+        bgImageFile = "";
+        bgImageSpr = -1;
+        
 
 // Scoreboard Related
 

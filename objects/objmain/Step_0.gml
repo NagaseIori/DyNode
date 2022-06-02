@@ -1,6 +1,13 @@
 
 _position_update();
 
+// Functions Control
+    
+    if(keyboard_check_pressed(vk_f3))
+        music_load();
+    if(keyboard_check_pressed(vk_f4))
+        image_load();
+
 // Chart Properties Update
 
     chartNotesCount = array_length(chartNotesArray)

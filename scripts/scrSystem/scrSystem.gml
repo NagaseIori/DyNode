@@ -26,11 +26,9 @@ function map_init() {
 }
 
 function map_load() {
-    
-    
     var _file = "";
     _file = get_open_filename_ext("XML Files|*.xml", "example.xml", 
-        program_directory, "Load Dynamix Chart File");
+        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
     
@@ -53,10 +51,6 @@ function map_load() {
 }
 
 function build_note(_id, _type, _time, _position, _width, _subid, _side) {
-    
-    // if(_side > 0)
-    //     return;
-    // show_debug_message("BUILD NOTE:"+string(_side)+" "+_id);
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -211,7 +205,7 @@ function map_load_xml(_file) {
 function music_load() {
     var _file = "";
     _file = get_open_filename_ext("Music Files|*.mp3;*.flac;*.wav;*.ogg", "", 
-        program_directory, "Load Music File");
+        program_directory, "Load Music File 加载音乐文件");
         
     if(_file == "") return;
     
@@ -234,6 +228,38 @@ function music_load() {
     }
     
     show_debug_message("Load sucessfully.");
+}
+
+function image_load() {
+    var _file = "";
+    _file = get_open_filename_ext("Image Files|*.jpg;*.png|JPG Files|*.jpg|PNG Files|*.png", "",
+        program_directory, "Load Background File 加载背景图片");
+        
+    if(_file == "") return;
+    
+    if(!file_exists(_file)) {
+        show_error("Image file " + _file + " doesnt exist.\n图片文件不存在。", false);
+        return;
+    }
+    
+    var _spr = sprite_add(_file, 1, 0, 0, 0, 0);
+    if(_spr < 0) {
+        show_error("Loading image file " + _file + " failed.\n图片文件读取失败。", false);
+        return;
+    }
+    
+    var _wscl = sprite_get_width(_spr) / global.resolutionW;
+    var _hscl = sprite_get_height(_spr) / global.resolutionH;
+    var _scl = max(_wscl, _hscl); // Centre & keep ratios
+    
+    var _nspr = compress_sprite(_spr, _scl, true);
+    
+    with(objMain) {
+        bgImageFile = _file;
+        bgImageSpr = _nspr;
+    }
+    
+    sprite_delete(_spr);
 }
 
 function sfmod_channel_get_position(channel, spr) {
