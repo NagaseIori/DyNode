@@ -51,7 +51,7 @@ _position_update();
         FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
     }
 
-// Keyboard Time Adjust
+// Keyboard Time & Speed Adjust
 
     var _spdchange = keyboard_check_pressed(ord("E")) - keyboard_check_pressed(ord("Q"));
     playbackSpeed += 100.0 * _spdchange;

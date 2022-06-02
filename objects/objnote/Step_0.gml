@@ -3,7 +3,8 @@
 if(side == 0) {
     x = note_pos_to_x(position, side);
     y = global.resolutionH
-        - (objMain.playbackSpeed * (offset - objMain.nowOffset) + objMain.targetLineBelow);
+        - (objMain.playbackSpeed * 
+            time_to_offset(offset - objMain.nowOffset) + objMain.targetLineBelow);
     if(state == stateOut && image_alpha == 0)
             visible = false;
     else
@@ -15,7 +16,7 @@ else {
     x = global.resolutionW / 2
         + (side == 1?-1:1) * 
         (global.resolutionW / 2 - 
-        (objMain.playbackSpeed * (offset - objMain.nowOffset)) 
+        (objMain.playbackSpeed * time_to_offset(offset - objMain.nowOffset)) 
         - objMain.targetLineBeside);
     if(state == stateOut && image_alpha == 0)
             visible = false;

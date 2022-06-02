@@ -1,4 +1,11 @@
 
+function time_to_offset(time) {
+    return time * 60 / objMain.chartBarPerMin;
+}
+
+function offset_to_time(offset) {
+    return offset * objMain.chartBarPerMin / 60;
+}
 
 function note_pos_to_x(_pos, _side) {
     if(_side == 0) {

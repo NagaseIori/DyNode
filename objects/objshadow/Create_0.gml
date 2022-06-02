@@ -16,4 +16,4 @@ extraWidth = 250;
 
 nowScaleX = 1;
 
-alphaMul = 0.75;
+alphaMul = 1.0;
