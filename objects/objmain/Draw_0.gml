@@ -59,6 +59,23 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         draw_set_alpha(1.0);
     }
     
+    // Draw Mods
+    
+    var _nxx = resor_to_x((1920 - 80 - 30) / 1920), _nww = 180;
+    for(var i = 0; i < 8; i++) {
+        draw_sprite_ext(
+            i==0?sprBottomSignBlue:sprBottomSignBlack,
+            0,
+            _nxx - i * _nww / 2,
+            (i & 1) == 0? _nh : _nh - targetLineBelow,
+            1,
+            1,
+            (i & 1) == 0? 180 : 0,
+            c_white,
+            1
+            );
+    }
+    
     // Draw Title
 
     titleElement
