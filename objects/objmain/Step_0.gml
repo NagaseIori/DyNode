@@ -17,6 +17,10 @@ _position_update();
 
     if(nowCombo != chartNotesArrayAt) {
         var _hit = nowCombo < chartNotesArrayAt;
+        if(_hit) {
+            with(objPerfectIndc)
+                _hitit();
+        }
         var _val;
         nowCombo = chartNotesArrayAt;
         _val = 1000000*nowCombo/chartNotesCount;

@@ -93,8 +93,8 @@
     "resourceType": "GMNineSliceData",
   },
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Notes",
+    "path": "folders/Sprites/Notes.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprNote",

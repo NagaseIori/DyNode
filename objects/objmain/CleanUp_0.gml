@@ -4,6 +4,7 @@ instance_destroy(objChain);
 instance_destroy(objHold);
 instance_destroy(objHoldSub);
 instance_destroy(objScoreBoard);
+instance_destroy(objPerfectIndc);
 
 part_emitter_destroy_all(partSysNote);
 part_system_destroy(partSysNote);

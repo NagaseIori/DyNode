@@ -124,10 +124,18 @@
 // Scoreboard Related
 
     scbDepth = 1000;
-    scbLeft = create_scoreboard(global.resolutionW * 0.29,
-                global.resolutionH * 0.54, scbDepth, 7, fa_middle);
-    scbRight = create_scoreboard(global.resolutionW * 0.88,
-                global.resolutionH * 0.54, scbDepth, 0, fa_right);
+    scbLeft = create_scoreboard(resor_to_x(0.29), resor_to_y(0.54),
+        scbDepth, 7, fa_middle);
+    scbRight = create_scoreboard(resor_to_x(0.88), resor_to_y(0.54),
+        scbDepth, 0, fa_right);
+
+// Perfect Indicator Related
+
+    perfDepth = 1000;
+    perfLeft = instance_create_depth(resor_to_x(0.262), resor_to_y(0.635), 
+        perfDepth, objPerfectIndc);
+    perfRight = instance_create_depth(resor_to_x(0.748), resor_to_y(0.635), 
+        perfDepth, objPerfectIndc);   
 
 // FMODGMS Related
 

@@ -9,6 +9,13 @@ function note_pos_to_x(_pos, _side) {
     }
 }
 
+function resor_to_x(ratio) {
+    return global.resolutionW * ratio;
+}
+function resor_to_y(ratio) {
+    return global.resolutionH * ratio;
+}
+
 function array_top(array) {
     return array[array_length(array)-1];
 }
