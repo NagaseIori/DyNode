@@ -13,6 +13,7 @@
 
     // PartSys
     partSysNote = part_system_create();
+    partAlphaMul = 0.75;
     part_system_automatic_draw(partSysNote, false);
 
     // PartType
@@ -20,7 +21,7 @@
         // Note
         _parttype_noted_init = function(_pt, _scl = 1.0, _ang = 0.0) {
             part_type_sprite(_pt, sprParticleW, false, true, false);
-            part_type_alpha3(_pt, 0.3, 0.3*0.6, 0);
+            part_type_alpha3(_pt, 0.3 * partAlphaMul, 0.3 * 0.6 * partAlphaMul, 0);
             part_type_speed(_pt, _scl * 3 * global.fpsAdjust
                             , _scl * 25 * global.fpsAdjust,
                             _scl * -0.25 * global.fpsAdjust, 0);
@@ -42,7 +43,7 @@
         // Hold
         _parttype_hold_init = function(_pt, _scl = 1.0, _ang = 0.0) {
             part_type_sprite(_pt, sprParticleW, false, true, false);
-            part_type_alpha3(_pt, 0.3, 0.3*0.6, 0);
+            part_type_alpha3(_pt, 0.3 * partAlphaMul, 0.3 * 0.6 * partAlphaMul, 0);
             part_type_speed(_pt, _scl * 3 * global.fpsAdjust
                             , _scl * 10 * global.fpsAdjust,
                             _scl * -0.1 * global.fpsAdjust, 0);

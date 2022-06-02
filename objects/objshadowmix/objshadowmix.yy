@@ -1,11 +1,11 @@
 {
+  "managed": true,
   "spriteId": {
     "name": "sprMIXshadow",
     "path": "sprites/sprMIXshadow/sprMIXshadow.yy",
   },
   "solid": false,
   "visible": true,
-  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {

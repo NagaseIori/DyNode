@@ -15,3 +15,5 @@ nowWidth = 1;
 extraWidth = 250;
 
 nowScaleX = 1;
+
+alphaMul = 0.75;
