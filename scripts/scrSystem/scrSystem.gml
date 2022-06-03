@@ -4,6 +4,9 @@
 function map_init() {
         
     with(objMain) {
+        // Get Time Offset
+        chartTimeOffset = offset_to_ctime(chartOffset);
+        
         // Reset to beginning
         nowOffset = _time_to_offset(0);
         animTargetOffset = nowOffset;

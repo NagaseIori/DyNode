@@ -44,6 +44,7 @@
     chartBeatPerMin = 180;
     chartBarPerMin = 180/4;
     chartOffset = 0;
+    chartTimeOffset = 0;
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";

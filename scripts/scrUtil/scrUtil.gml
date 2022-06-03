@@ -34,6 +34,20 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 	    return offset * 60000 / objMain.chartBarPerMin;
 	}
 	
+	function offset_to_time(offset) {
+        return (offset - objMain.chartOffset) / objMain.chartBarPerMin * 60 * 1000;
+    }
+    function time_to_offset(time) {
+        return time / 60000 * objMain.chartBarPerMin + objMain.chartOffset;
+    }
+	
+	function time_to_ctime(time) {
+		offset_to_ctime(time_to_offset(time));
+	}
+	function ctime_to_time(ctime) {
+		offset_to_time(ctime_to_offset(ctime));
+	}
+	
 	function bpm_to_mspb(bpm) {
 		return 60 * 1000 / bpm;
 	}
