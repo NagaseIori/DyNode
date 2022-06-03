@@ -1,4 +1,5 @@
 
+var _music_resync_request = false;
 _position_update();
 
 // Functions Control
@@ -67,6 +68,7 @@ _position_update();
         if(nowPlaying) {
             nowTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
                 * global.fpsAdjust;
+            _music_resync_request = true;
         }
         else {
             animTargetTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
@@ -79,7 +81,7 @@ _position_update();
     if(nowPlaying && !(_timchange != 0 || _timscr != 0)) {
         nowTime += delta_time * musicSpeed / 1000;
     }
-        
+    
         
     if(music != undefined) {
         var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
@@ -122,7 +124,7 @@ _position_update();
                             musicProgress = mouse_x / global.resolutionW;
                             nowMusicTime = musicProgress * musicLength;
                             nowTime = mtime_to_time(musicProgress * musicLength);
-                            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+                            _music_resync_request = true;
                         }
                         topBarMouseLastX = mouse_x;
                     }
@@ -144,11 +146,6 @@ _position_update();
         if(_cor_tim >= musicLength && nowPlaying) {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
-        }
-        
-        // If there are modifications then sync music with time
-        if(nowPlaying && (_timchange!=0 || _timscr!=0)) {
-            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
         }
         
         // nowMusicTime = min(nowMusicTime, musicLength);
@@ -175,6 +172,10 @@ _position_update();
             nowTime = animTargetTime; // Speeeed up
     }
     nowMusicTime = time_to_mtime(nowTime);
+    
+    if(_music_resync_request) {
+        sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+    }
 
 // Keyboard Pause & Resume
 
