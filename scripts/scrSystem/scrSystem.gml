@@ -4,19 +4,23 @@
 function map_init(_skipnote = false) {
         
     with(objMain) {
-        // By default set chart's bpm
+        // By default set chart's bpm from bar
         chartBeatPerMin = chartBarPerMin * 4;
+        
+        // Get Time Offset
+        chartTimeOffset = bar_to_ctime(chartBarOffset);
+        var _offset = chartTimeOffset;
         
         // Fix every note's time
         if(!_skipnote)
         if(instance_exists(objNote)) {
             with(objNote) {
                 time = bar_to_ctime(bar);
+                time = time_to_mtime(time);
             }
         }
         
-        // Get Time Offset
-        chartTimeOffset = bar_to_ctime(chartBarOffset);
+        chartTimeOffset = 0;
         
         // Reset to beginning
         nowTime = mtime_to_time(0);
@@ -64,8 +68,9 @@ function map_init(_skipnote = false) {
         chartDifficulty = _diff;
         
         // Initialize Timing Points
+        timing_point_reset();
         timing_point_add(
-            chartTimeOffset, bpm_to_mspb(chartBeatPerMin), 4);
+            _offset, bpm_to_mspb(chartBeatPerMin), 4);
     }
     
 }

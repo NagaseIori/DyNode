@@ -159,10 +159,19 @@ _position_update();
     else {
         musicProgress = 0;
     }
+    
+// Time Jump
+
+    if(keyboard_check_pressed(ord("L")))
+        animTargetTime = chartNotesArray[chartNotesArrayAt].time;
+    if(keyboard_check_pressed(ord("K")) && chartNotesArrayAt>0)
+        animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;
 
 // Update and Sync Time & musicTime
 
     if(nowPlaying) {
+        if(music != undefined)
+            nowTime = clamp(nowTime, mtime_to_time(0), mtime_to_time(musicLength));
         animTargetTime = nowTime;
     }
     else {

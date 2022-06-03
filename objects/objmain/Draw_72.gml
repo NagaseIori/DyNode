@@ -1,4 +1,4 @@
-/// @description Draw the Background
+/// @description Draw the Background & Beat Lines
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
