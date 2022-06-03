@@ -25,27 +25,20 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
 
-#region TIME & OFFSET & BPM
-	function ctime_to_offset(time) {
+#region TIME & BAR & BPM
+	function ctime_to_bar(time) {
 	    return time * objMain.chartBarPerMin / 60000;
 	}
 	
-	function offset_to_ctime(offset) {
+	function bar_to_ctime(offset) {
 	    return offset * 60000 / objMain.chartBarPerMin;
 	}
 	
-	function offset_to_time(offset) {
-        return (offset - objMain.chartOffset) / objMain.chartBarPerMin * 60 * 1000;
-    }
-    function time_to_offset(time) {
-        return time / 60000 * objMain.chartBarPerMin + objMain.chartOffset;
-    }
-	
-	function time_to_ctime(time) {
-		offset_to_ctime(time_to_offset(time));
+	function mtime_to_time(mtime) {
+		return mtime + objMain.chartTimeOffset;
 	}
-	function ctime_to_time(ctime) {
-		offset_to_time(ctime_to_offset(ctime));
+	function time_to_mtime(time) {
+		return time - objMain.chartTimeOffset;
 	}
 	
 	function bpm_to_mspb(bpm) {

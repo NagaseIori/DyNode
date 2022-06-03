@@ -43,7 +43,7 @@
     chartTitle = "Last Train at 25 O'Clock"
     chartBeatPerMin = 180;
     chartBarPerMin = 180/4;
-    chartOffset = 0;
+    chartBarOffset = 0;
     chartTimeOffset = 0;
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
@@ -63,7 +63,8 @@
     themeColor = 0xFFFF00;
     themeColor = 0xc5b7ff; // Sakura pink ❤
 
-    nowOffset = 0;
+    nowBar = 0;
+    nowMusicTime = 0;
     nowTime = 0;
     nowPlaying = false;
     nowScore = 0;
@@ -73,7 +74,7 @@
     scrolltimeSpeed = 300.0; // Use mouse scroll to Adjust Time ms per frame
     
     animSpeed = 0.3;
-    animTargetOffset = chartOffset;
+    animTargetTime = 0;
     animTargetPlaybackSpeed = playbackSpeed;
     
     musicProgress = 0.0;
@@ -189,15 +190,6 @@
 
     titleElement = undefined;
 
-// In-Functions
-
-    _offset_to_time = function (offset) {
-        return (offset - chartOffset) / chartBarPerMin * 60 * 1000;
-    }
-    _time_to_offset = function (time) {
-        return time / 60000 * chartBarPerMin + chartOffset;
-    }
-
 // Init
 
-    map_init();
+    map_init(true);

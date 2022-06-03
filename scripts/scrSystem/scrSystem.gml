@@ -1,15 +1,26 @@
 
 
 // After loading map, map_init is called to init objMain again.
-function map_init() {
+function map_init(_skipnote = false) {
         
     with(objMain) {
+        // By default set chart's bpm
+        chartBeatPerMin = chartBarPerMin * 4;
+        
+        // Fix every note's time
+        if(!_skipnote)
+        if(instance_exists(objNote)) {
+            with(objNote) {
+                time = bar_to_ctime(bar);
+            }
+        }
+        
         // Get Time Offset
-        chartTimeOffset = offset_to_ctime(chartOffset);
+        chartTimeOffset = bar_to_ctime(chartBarOffset);
         
         // Reset to beginning
-        nowOffset = _time_to_offset(0);
-        animTargetOffset = nowOffset;
+        nowTime = mtime_to_time(0);
+        animTargetTime = nowTime;
         
         // Pre-cache Title Element
         titleElement = scribble(chartTitle).starting_format("fDynamix48", c_white)
@@ -19,7 +30,7 @@ function map_init() {
         
         // Sort Notes Array base on time
         var _f = function(_a, _b) {
-            return _a.offset < _b.offset;
+            return _a.time < _b.time;
         }
         // show_debug_message("ARRAY LENGTH:"+string(array_length(chartNotesArray)));
         // show_debug_message("ARRAY:"+string(chartNotesArray));
@@ -54,7 +65,7 @@ function map_init() {
         
         // Initialize Timing Points
         timing_point_add(
-            offset_to_ctime(chartOffset), bpm_to_mspb(chartBarPerMin * 4), 4)
+            chartTimeOffset, bpm_to_mspb(chartBeatPerMin), 4);
     }
     
 }
@@ -84,7 +95,7 @@ function map_load() {
     show_debug_message("Load sucessfully.");
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side) {
+function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -105,7 +116,8 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side) {
     var _inst = instance_create_depth(0, 0, 0, _obj);
     _inst.width = real(_width);
     _inst.side = real(_side);
-    _inst.offset = real(_time);
+    // _inst.offset = real(_time);
+    _inst.bar = real(_bar);
     _inst.position = real(_position);
     _inst.nid = _id;
     _inst.sid = _subid;
@@ -193,7 +205,7 @@ function map_load_xml(_file) {
                         objMain.chartBarPerMin = real(_val);
                         break;
                     case "m_timeOffset":
-                        objMain.chartOffset = real(_val);
+                        objMain.chartBarOffset = real(_val);
                         break;
                     case "m_leftRegion":
                         objMain.chartSideType[0] = _val;
@@ -259,7 +271,7 @@ function music_load() {
         FMODGMS_Snd_PlaySound(music, channel);
         if(!nowPlaying) FMODGMS_Chan_PauseChannel(channel);
         else {
-            nowTime = _time_to_offset(0);
+            nowTime = chartTimeOffset;
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
