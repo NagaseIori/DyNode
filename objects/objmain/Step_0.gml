@@ -7,6 +7,8 @@ _position_update();
         music_load();
     if(keyboard_check_pressed(vk_f4))
         image_load();
+    if(keyboard_check_pressed(ord("P")))
+        hideScoreboard = !hideScoreboard;
 
 // Chart Properties Update
 
@@ -152,8 +154,6 @@ _position_update();
         // nowMusicTime = min(nowMusicTime, musicLength);
         
         musicProgress = clamp(nowMusicTime, 0, musicLength) / musicLength;
-        
-        nowMusicTime = clamp(nowMusicTime, 0, musicLength);
         
         animTargetTime = clamp(animTargetTime, mtime_to_time(0),
                             mtime_to_time(musicLength));

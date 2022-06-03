@@ -13,3 +13,10 @@ else if(nowTime < lastTime + animLastTime) {
 else {
     alpha = 0;
 }
+
+if(objMain.hideScoreboard)
+    animTargetAlphaMul = 0;
+else
+    animTargetAlphaMul = 1;
+
+alphaMul = lerp_a(alphaMul, animTargetAlphaMul, animSpeed);

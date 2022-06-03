@@ -80,6 +80,8 @@
     musicProgress = 0.0;
     musicSpeed = 1.0;
     
+    hideScoreboard = false;
+    
     // Bottom
         bottomDim = 0.75;
         bottomBgSurf = -1;

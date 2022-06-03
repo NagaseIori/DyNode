@@ -7,7 +7,7 @@ if(debug_mode) {
         _update_score(animTargetScore-1)
 }
 
-if(int64(nowScore) <= scoreLimit)
+if(int64(nowScore) <= scoreLimit || objMain.hideScoreboard)
     animTargetAlpha = 0;
 else
     animTargetAlpha = 1;
