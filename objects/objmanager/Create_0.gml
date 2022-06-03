@@ -20,6 +20,10 @@ global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 
+// Generate Temp Sprite
+
+global.sprLazer = generate_lazer_sprite(2000);
+
 // Set GUI Resolution
 
 display_set_gui_size(global.resolutionW, global.resolutionH);

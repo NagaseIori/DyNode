@@ -1,27 +1,56 @@
 
-function time_to_offset(time) {
-    return time * 60 / objMain.chartBarPerMin;
+function generate_lazer_sprite(_height) {
+	var _spr = -1;
+	var _surf = surface_create(1, _height);
+	
+	draw_set_color(c_white);
+	draw_set_alpha(1.0);
+	shader_set(shd_lazer);
+		surface_set_target(_surf);
+			draw_surface(_surf, 0, 0);
+		surface_reset_target();
+	shader_reset();
+	
+	_spr = sprite_create_from_surface(_surf, 0, 0, 1, _height, 0, 0, 0, _height);
+	
+	surface_free(_surf);
+	
+	return _spr;
+}
+function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
+	var _xscl = w / sprite_get_width(sprite);
+	var _yscl = h / sprite_get_height(sprite);
+	// better_scaling_draw_sprite(
+	// 	sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha, 1);
+	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
 
-function offset_to_time(offset) {
-    return offset * objMain.chartBarPerMin / 60;
-}
+#region TIME & OFFSET
+	function time_to_offset(time) {
+	    return time * 60 / objMain.chartBarPerMin;
+	}
+	
+	function offset_to_time(offset) {
+	    return offset * objMain.chartBarPerMin / 60;
+	}
+#endregion
 
-function note_pos_to_x(_pos, _side) {
-    if(_side == 0) {
-        return global.resolutionW/2 + (_pos-2.5)*300;
-    }
-    else {
-        return global.resolutionH/2 + (2.5-_pos)*150;
-    }
-}
-
-function resor_to_x(ratio) {
-    return global.resolutionW * ratio;
-}
-function resor_to_y(ratio) {
-    return global.resolutionH * ratio;
-}
+#region POSITION TRANSFORM
+	function note_pos_to_x(_pos, _side) {
+	    if(_side == 0) {
+	        return global.resolutionW/2 + (_pos-2.5)*300;
+	    }
+	    else {
+	        return global.resolutionH/2 + (2.5-_pos)*150;
+	    }
+	}
+	function resor_to_x(ratio) {
+	    return global.resolutionW * ratio;
+	}
+	function resor_to_y(ratio) {
+	    return global.resolutionH * ratio;
+	}
+#endregion
 
 function array_top(array) {
     return array[array_length(array)-1];

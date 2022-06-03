@@ -16,3 +16,10 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     else {
         draw_clear(c_black);
     }
+
+// Draw Faint Color
+
+    draw_sprite_stretched_exxt(
+        global.sprLazer, 0,
+        0, _nh - targetLineBelow, _nw, global.resolutionH/2,
+        0, themeColor, 0.5);

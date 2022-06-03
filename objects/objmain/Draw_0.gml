@@ -2,17 +2,6 @@
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
-// Draw Top Progress Bar
-
-    draw_set_color(c_white); draw_set_alpha(topBarIndicatorA);
-    draw_rectangle(0, 0, _nw, topBarMouseH, false);
-    if(musicProgress > 0) {
-        var _topBarW = _nw * musicProgress;
-        draw_set_color(c_white); draw_set_alpha(1.0);
-        draw_rectangle(0, 0, _topBarW, topBarH, false);
-    }
-    draw_set_alpha(1.0);
-
 // Draw Bottom
 
     // Draw Bg
@@ -88,6 +77,43 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
 // Draw targetline
 
+    var _sprlazer = global.sprLazer;
+    // gpu_set_blendmode(bm_add);
+    // Light Below
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        0, _nh - targetLineBelow,
+        _nw, targetLineBelowH/2 + 25,
+        0, themeColor, 1.0);
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        0, _nh - targetLineBelow + 1,
+        _nw, -(targetLineBelowH/2 + 25),
+        0, themeColor, 1.0);
+    // Light Left
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        targetLineBeside, _nh - targetLineBelow,
+        _nh - targetLineBelow, targetLineBesideW/2 + 25,
+        90, themeColor, 1.0);
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        targetLineBeside + 1, _nh - targetLineBelow,
+        _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
+        90, themeColor, 1.0);
+    // Light Right
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        _nw - targetLineBeside, _nh - targetLineBelow,
+        _nh - targetLineBelow, targetLineBesideW/2 + 25,
+        90, themeColor, 1.0);
+    draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        _nw - targetLineBeside + 1, _nh - targetLineBelow,
+        _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
+        90, themeColor, 1.0);
+    // gpu_set_blendmode(bm_normal);
+    
     draw_set_color(c_white);
     draw_set_alpha(1.0);
     // Line Below
@@ -101,6 +127,22 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     draw_rectangle(_nw - targetLineBeside - targetLineBesideW/2, 0, 
                     _nw - targetLineBeside + targetLineBesideW/2,
                     _nh - targetLineBelow, false);
+    
+// Draw Top Progress Bar
+
+    
+    
+    draw_set_color(c_white); draw_set_alpha(topBarIndicatorA);
+    draw_rectangle(0, 0, _nw, topBarMouseH, false);
+    if(musicProgress > 0) {
+        var _topBarW = round(_nw * musicProgress);
+        draw_sprite_stretched_exxt(
+        _sprlazer, 0,
+        0, topBarH, _topBarW+1, -26, 0, themeColor, 1.0);
+        draw_set_color(c_white); draw_set_alpha(1.0);
+        draw_rectangle(0, 0, _topBarW, topBarH, false);
+    }
+    draw_set_alpha(1.0);
 
 // Draw Note Particles
 
