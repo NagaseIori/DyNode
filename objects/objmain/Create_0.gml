@@ -43,7 +43,8 @@
     chartTitle = "Last Train at 25 O'Clock"
     chartBeatPerMin = 180;
     chartBarPerMin = 180/4;
-    chartOffset = 0;
+    chartBarOffset = 0;
+    chartTimeOffset = 0;
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";
@@ -62,18 +63,19 @@
     themeColor = 0xFFFF00;
     themeColor = 0xc5b7ff; // Sakura pink ❤
 
-    nowOffset = 0;
+    nowBar = 0;
+    nowMusicTime = 0;
     nowTime = 0;
     nowPlaying = false;
     nowScore = 0;
     nowCombo = 0;
-    playbackSpeed = 1600.0;
+    playbackSpeed = 1.6;
     adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
     scrolltimeSpeed = 300.0; // Use mouse scroll to Adjust Time ms per frame
     
     animSpeed = 0.3;
-    animTargetOffset = chartOffset;
-    animTargetPlaybackSpeed = 1600.0;
+    animTargetTime = 0;
+    animTargetPlaybackSpeed = playbackSpeed;
     
     musicProgress = 0.0;
     musicSpeed = 1.0;
@@ -167,6 +169,15 @@
     perfRight = instance_create_depth(resor_to_x(0.748), resor_to_y(0.635), 
         perfDepth, objPerfectIndc);   
 
+// Editor
+
+    // Timings
+    timingPoints = [];
+    
+    // Beatlines
+    beatlineSurf = -1;
+    beatlineColors = [0x3643f4, 0xb0279c, 0xf39621];
+
 // FMODGMS Related
 
     channel = FMODGMS_Chan_CreateChannel();
@@ -179,15 +190,6 @@
 
     titleElement = undefined;
 
-// In-Functions
-
-    _offset_to_time = function (offset) {
-        return (offset - chartOffset) / chartBarPerMin * 60 * 1000;
-    }
-    _time_to_offset = function (time) {
-        return time / 60000 * chartBarPerMin + chartOffset;
-    }
-
 // Init
 
-    map_init();
+    map_init(true);

@@ -4,7 +4,7 @@ if(side == 0) {
     x = note_pos_to_x(position, side);
     y = global.resolutionH
         - (objMain.playbackSpeed * 
-            time_to_offset(offset - objMain.nowOffset) + objMain.targetLineBelow);
+            (time - objMain.nowTime) + objMain.targetLineBelow);
     if(state == stateOut && image_alpha == 0)
             visible = false;
     else
@@ -16,7 +16,7 @@ else {
     x = global.resolutionW / 2
         + (side == 1?-1:1) * 
         (global.resolutionW / 2 - 
-        (objMain.playbackSpeed * time_to_offset(offset - objMain.nowOffset)) 
+        (objMain.playbackSpeed * (time - objMain.nowTime)) 
         - objMain.targetLineBeside);
     if(state == stateOut && image_alpha == 0)
             visible = false;
@@ -24,10 +24,10 @@ else {
         visible = true;
     
     if(visible) {
-        var _nside = side-1, _noff = offset, _nx = y, _nid = id;
+        var _nside = side-1, _noff = time, _nx = y, _nid = id;
         
         with(objMain) {
-            if(mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].offset) {
+            if(mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].time) {
                 mixerNextNote[_nside] = _nid;
                 mixerNextX[_nside] = _nx;
             }
@@ -47,7 +47,7 @@ if(visible || image_alpha>0) {
 if(visible)
     state();
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
-    if(offset + lastOffset > objMain.nowOffset && !_outbound_check(x, y, side)) {
+    if(time + lastTime > objMain.nowTime && !_outbound_check(x, y, side)) {
         // If is using ad to adjust time then speed the things hell up
         if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
             image_alpha = 1;

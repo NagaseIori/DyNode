@@ -25,13 +25,27 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
 
-#region TIME & OFFSET
-	function time_to_offset(time) {
-	    return time * 60 / objMain.chartBarPerMin;
+#region TIME & BAR & BPM
+	function ctime_to_bar(time) {
+	    return time * objMain.chartBarPerMin / 60000;
 	}
 	
-	function offset_to_time(offset) {
-	    return offset * objMain.chartBarPerMin / 60;
+	function bar_to_ctime(offset) {
+	    return offset * 60000 / objMain.chartBarPerMin;
+	}
+	
+	function mtime_to_time(mtime) {
+		return mtime + objMain.chartTimeOffset;
+	}
+	function time_to_mtime(time) {
+		return time - objMain.chartTimeOffset;
+	}
+	
+	function bpm_to_mspb(bpm) {
+		return 60 * 1000 / bpm;
+	}
+	function mspb_to_bpm(mspb) {
+		return 60 * 1000 / mspb;
 	}
 #endregion
 
@@ -163,6 +177,12 @@ function array_sort_f(array, compare) {
             }
         } until (lb >= ub);
     } until (stack_pos == 0);
+}
+
+function surface_checkate(_surf, _w, _h) {
+	if(!surface_exists(_surf))
+		return surface_create(_w, _h);
+	return _surf;
 }
 
 function surface_free_f(_surf) {

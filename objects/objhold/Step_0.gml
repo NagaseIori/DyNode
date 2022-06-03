@@ -4,12 +4,12 @@ event_inherited();
 
 if(visible && sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)) {
     var _inst = objMain.chartNotesMap[side][? sid]
-    pHeight = objMain.playbackSpeed * time_to_offset(_inst.offset - max(offset, objMain.nowOffset))
+    pHeight = objMain.playbackSpeed * (_inst.time - max(time, objMain.nowTime))
         + dFromBottom + uFromTop;
     pHeight = max(pHeight, originalHeight);
     
-    lastOffset = _inst.offset - offset;
-    lastOffset = max(lastOffset, 0.0001);
+    lastTime = _inst.time - time;
+    lastTime = max(lastTime, 0.0001);
     
     image_yscale = pHeight / originalHeight;
 }

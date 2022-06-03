@@ -7,13 +7,15 @@ depth = 100;
     width = 2.0;
     position = 2.5;
     side = 0;
-    offset = 0;
+    // offset = 0;
+    bar = 0;
+    time = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Hold
-    lastOffset = 0;
+    lastTime = 0;
     lastAlphaL = 0.4;
     lastAlphaR = 1.0;
     lastAlpha = lastAlphaL;
@@ -123,8 +125,8 @@ depth = 100;
         animTargetA = 1.0;
         animTargetLstA = lastAlphaL;
         
-        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
-        if(offset <= _limOffset) {
+        var _limTime = min(objMain.nowTime, objMain.animTargetTime);
+        if(time <= _limTime) {
             _create_shadow();
             state = stateLast;
             state();
@@ -149,10 +151,10 @@ depth = 100;
     
     // State Normal
     stateNormal = function() {
-        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
         stateString = "NM";
         
-        if(offset <= _limOffset) {
+        var _limTime = min(objMain.nowTime, objMain.animTargetTime);
+        if(time <= _limTime) {
             _create_shadow();
             state = stateLast;
             state();
@@ -168,15 +170,15 @@ depth = 100;
         stateString = "LST";
         animTargetLstA = lastAlphaR;
         
-        var _limOffset = min(objMain.nowOffset, objMain.animTargetOffset);
-        if(offset + lastOffset <= _limOffset) {
+        var _limTime = min(objMain.nowTime, objMain.animTargetTime);
+        if(time + lastTime <= _limTime) {
             state = stateOut;
-            image_alpha = lastOffset == 0 ? 0 : image_alpha;
+            image_alpha = lastTime == 0 ? 0 : image_alpha;
             state();
         }
         else _burst_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
         
-        if(offset > objMain.nowOffset) {
+        if(time > objMain.nowTime) {
             state = stateIn;
             state();
         }
@@ -189,7 +191,7 @@ depth = 100;
         animTargetA = 0.0;
         animTargetLstA = lastAlphaL;
         
-        if(offset + lastOffset> objMain.nowOffset && !_outbound_check(x, y, side)) {
+        if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
             // In Some situations no need for fading in
             if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
                 objMain.topBarMousePressed ||

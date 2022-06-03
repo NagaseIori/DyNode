@@ -13,11 +13,11 @@ _position_update();
     chartNotesCount = array_length(chartNotesArray)
 
     while(chartNotesArrayAt < chartNotesCount &&
-        chartNotesArray[chartNotesArrayAt].offset <= nowOffset)
+        chartNotesArray[chartNotesArrayAt].time <= nowTime)
         chartNotesArrayAt ++;
     
     while(chartNotesArrayAt > 0 &&
-        chartNotesArray[chartNotesArrayAt-1].offset > nowOffset)
+        chartNotesArray[chartNotesArrayAt-1].time > nowTime)
         chartNotesArrayAt --;
     
 // Scoreboard Update
@@ -54,7 +54,7 @@ _position_update();
 // Keyboard Time & Speed Adjust
 
     var _spdchange = keyboard_check_pressed(ord("E")) - keyboard_check_pressed(ord("Q"));
-    animTargetPlaybackSpeed += 100.0 * _spdchange;
+    animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     playbackSpeed = lerp_a(playbackSpeed, animTargetPlaybackSpeed, animSpeed);
     
@@ -67,9 +67,8 @@ _position_update();
                 * global.fpsAdjust;
         }
         else {
-            animTargetOffset += (_timchange * adtimeSpeed 
-                + _timscr * scrolltimeSpeed) * global.fpsAdjust / 1000 / 60
-                * chartBarPerMin;
+            animTargetTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
+                * global.fpsAdjust;
         }
     }
 
@@ -84,14 +83,14 @@ _position_update();
         var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
         
         // Play music at chart's beginning
-        if(nowTime < 0) {
+        if(nowMusicTime < 0) {
             FMODGMS_Chan_PauseChannel(channel);
             sfmod_channel_set_position(0, channel, sampleRate);
             channelPaused = true;
         }
         else if(nowPlaying && channelPaused) {
             FMODGMS_Chan_ResumeChannel(channel);
-            sfmod_channel_set_position(nowTime, channel, sampleRate);
+            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
             channelPaused = false;
         }
         
@@ -119,22 +118,23 @@ _position_update();
                     if(nowPlaying) {
                         if(abs(topBarMouseLastX - mouse_x) >= 2) {
                             musicProgress = mouse_x / global.resolutionW;
-                            nowTime = musicProgress * musicLength;
-                            sfmod_channel_set_position(nowTime, channel, sampleRate);
+                            nowMusicTime = musicProgress * musicLength;
+                            nowTime = mtime_to_time(musicProgress * musicLength);
+                            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
                         }
                         topBarMouseLastX = mouse_x;
                     }
                     else {
                         musicProgress = mouse_x / global.resolutionW;
-                        animTargetOffset =
-                            _time_to_offset(musicProgress * musicLength);
+                        animTargetTime =
+                            mtime_to_time(musicProgress * musicLength);
                     }
                 }
             }
         
         // Actually no need for every frame time adjust
-        // if(nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
-        //     nowTime = _cor_tim;
+        // if(nowMusicTime >= 0 && abs(_cor_tim - nowMusicTime) > MAXIMUM_DELAY_OF_SOUND) {
+        //     nowMusicTime = _cor_tim;
         // }
         
         
@@ -146,38 +146,35 @@ _position_update();
         
         // If there are modifications then sync music with time
         if(nowPlaying && (_timchange!=0 || _timscr!=0)) {
-            sfmod_channel_set_position(nowTime, channel, sampleRate);
+            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
         }
         
-        // nowTime = min(nowTime, musicLength);
+        // nowMusicTime = min(nowMusicTime, musicLength);
         
-        musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
+        musicProgress = clamp(nowMusicTime, 0, musicLength) / musicLength;
         
-        nowTime = clamp(nowTime, 0, musicLength);
+        nowMusicTime = clamp(nowMusicTime, 0, musicLength);
         
-        animTargetOffset = clamp(animTargetOffset, _time_to_offset(0),
-                            _time_to_offset(musicLength));
+        animTargetTime = clamp(animTargetTime, mtime_to_time(0),
+                            mtime_to_time(musicLength));
     }
     
     else {
         musicProgress = 0;
     }
 
-// Update and Sync Time & Offset
+// Update and Sync Time & musicTime
 
     if(nowPlaying) {
-        nowOffset = _time_to_offset(nowTime);
-        animTargetOffset = nowOffset;
+        animTargetTime = nowTime;
     }
     else {
-        nowOffset = lerp_lim(nowOffset, animTargetOffset, animSpeed * global.fpsAdjust,
-                        10 * global.fpsAdjust);
+        nowTime = lerp_lim_a(nowTime, animTargetTime, animSpeed, 10000);
         
-        if(abs(nowOffset - animTargetOffset) < 0.001)
-            nowOffset = animTargetOffset; // Speeeed up
-        
-        nowTime = _offset_to_time(nowOffset);
+        if(abs(nowTime - animTargetTime) < 1)
+            nowTime = animTargetTime; // Speeeed up
     }
+    nowMusicTime = time_to_mtime(nowTime);
 
 // Keyboard Pause & Resume
 
@@ -185,7 +182,7 @@ _position_update();
         nowPlaying = !nowPlaying;
         if(nowPlaying) {
             FMODGMS_Chan_ResumeChannel(channel);
-            sfmod_channel_set_position(nowTime, channel, sampleRate);
+            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
