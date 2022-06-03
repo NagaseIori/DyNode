@@ -48,6 +48,10 @@ function map_init() {
                 _diff = 0;
         }
         chartDifficulty = _diff;
+        
+        // Initialize Timing Points
+        timing_point_add(
+            offset_to_ctime(chartOffset), bpm_to_mspb(chartBarPerMin * 4), 4)
     }
     
 }

@@ -4,7 +4,7 @@ event_inherited();
 
 if(visible && sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)) {
     var _inst = objMain.chartNotesMap[side][? sid]
-    pHeight = objMain.playbackSpeed * time_to_offset(_inst.offset - max(offset, objMain.nowOffset))
+    pHeight = objMain.playbackSpeed * offset_to_ctime(_inst.offset - max(offset, objMain.nowOffset))
         + dFromBottom + uFromTop;
     pHeight = max(pHeight, originalHeight);
     

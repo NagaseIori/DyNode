@@ -67,13 +67,13 @@
     nowPlaying = false;
     nowScore = 0;
     nowCombo = 0;
-    playbackSpeed = 1600.0;
+    playbackSpeed = 1.6;
     adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
     scrolltimeSpeed = 300.0; // Use mouse scroll to Adjust Time ms per frame
     
     animSpeed = 0.3;
     animTargetOffset = chartOffset;
-    animTargetPlaybackSpeed = 1600.0;
+    animTargetPlaybackSpeed = playbackSpeed;
     
     musicProgress = 0.0;
     musicSpeed = 1.0;
@@ -166,6 +166,15 @@
         perfDepth, objPerfectIndc);
     perfRight = instance_create_depth(resor_to_x(0.748), resor_to_y(0.635), 
         perfDepth, objPerfectIndc);   
+
+// Editor
+
+    // Timings
+    timingPoints = [];
+    
+    // Beatlines
+    beatlineSurf = -1;
+    beatlineColors = [0x3643f4, 0xb0279c, 0xf39621];
 
 // FMODGMS Related
 
