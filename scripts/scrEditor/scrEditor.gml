@@ -9,8 +9,10 @@ function timing_point_sort() {
 
 function timing_point_add(_t, _l, _b) {
     with(objEditor) {
+        // show_debug_message("ADD A TIMING POINT. FROM " + string(array_length(timingPoints)))
         array_push(timingPoints, new sTimingPoint(_t, _l, _b));
         timing_point_sort();
+        // show_debug_message("TO " + string(array_length(timingPoints)))
     }
 }
 
