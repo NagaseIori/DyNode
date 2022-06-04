@@ -1,4 +1,6 @@
 /// @description 
+// visible = false;
+
 // Timings
 timingPoints = [];
 

@@ -103,6 +103,13 @@
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
+        bgFaintAlpha = 0.5;
+        animTargetBgFaintAlpha = 0.5; 
+        animSpeedFaint = 0.1;
+        
+        _faint_hit = function() {
+            bgFaintAlpha = 0.7;
+        }
 
 #endregion
 

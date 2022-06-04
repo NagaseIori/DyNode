@@ -198,3 +198,7 @@ _position_update();
             FMODGMS_Chan_PauseChannel(channel);
         }
     }
+
+// Bg Animation
+
+    bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
