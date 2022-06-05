@@ -1,2 +1,2 @@
 # DyNode
-Yet another Dynamix chart editor.
+Yet another Dynamix chart tool.
