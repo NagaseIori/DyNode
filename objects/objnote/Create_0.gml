@@ -5,6 +5,7 @@ depth = 100;
 // In-Variables
 
     width = 2.0;
+    origWidth = width; // For editor
     position = 2.5;
     side = 0;
     // offset = 0;
@@ -206,12 +207,33 @@ depth = 100;
         }
     }
     
-    // State attached to cursor
-    stateAttach = function() {
-        animTargetA = 0.5;
-        x = mouse_x;
-        y = !objEditor.editorGridYEnabled?mouse_y:objEditor.editorGridYMousePos;
-    }
+    // Editors
+        // State attached to cursor
+        stateAttach = function() {
+            animTargetA = 0.5;
+            x = mouse_x;
+            y = !objEditor.editorGridYEnabled?mouse_y:objEditor.editorGridYMousePos;
+            position = x_to_note_pos(x, side);
+            time = y_to_note_time(y, side);
+            if(mouse_check_button_pressed(mb_left)) {
+                state = stateDrop;
+                origWidth = width;
+            }
+                
+        }
+        
+        // State Dropping down
+        stateDrop = function() {
+            animTargetA = 1;
+            width = origWidth + 2.5 * mouse_get_delta_lx() / 300;
+            width = max(width, 0.01);
+            _prop_init();
+            
+            if(mouse_check_button_released(mb_left)) {
+                build_note(random_id(6), noteType, time, position, width, -1, side, false);
+                instance_destroy();
+            }
+        }
 
     state = stateOut;
     stateString = "OUT";

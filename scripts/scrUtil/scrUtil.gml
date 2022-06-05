@@ -58,6 +58,16 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 	        return global.resolutionH/2 + (2.5-_pos)*150;
 	    }
 	}
+	function x_to_note_pos(_x, _side) {
+		if(_side == 0) {
+			return (_x - global.resolutionW / 2) / 300 + 2.5;
+		}
+	}
+	function y_to_note_time(_y, _side) {
+		if(_side == 0) {
+			return (global.resolutionH - objMain.targetLineBelow - _y) / objMain.playbackSpeed + objMain.nowTime;
+		}
+	}
 	function resor_to_x(ratio) {
 	    return global.resolutionW * ratio;
 	}
@@ -93,6 +103,15 @@ function create_scoreboard(_x, _y, _dep, _dig, _align, _lim) {
     _inst.preZero = _dig;
     _inst.scoreLimit = _lim;
     return _inst;
+}
+
+function random_id(_length) {
+	var chrset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var _ret = "", _l = string_length(chrset);
+	repeat(_length) {
+		_ret += string_char_at(chrset, irandom_range(1, _l));
+	}
+	return _ret;
 }
 
 // Compress sprite using better scaling

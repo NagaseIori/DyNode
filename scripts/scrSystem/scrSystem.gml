@@ -1,4 +1,10 @@
 
+function note_all_sort() {
+    var _f = function(_a, _b) {
+        return _a.time < _b.time;
+    }
+    array_sort_f(objMain.chartNotesArray, _f);
+}
 
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
@@ -33,12 +39,7 @@ function map_init(_skipnote = false) {
         titleElement.build(true);
         
         // Sort Notes Array base on time
-        var _f = function(_a, _b) {
-            return _a.time < _b.time;
-        }
-        // show_debug_message("ARRAY LENGTH:"+string(array_length(chartNotesArray)));
-        // show_debug_message("ARRAY:"+string(chartNotesArray));
-        array_sort_f(chartNotesArray, _f);
+        note_all_sort();
         
         // Get the chart's difficulty
         
@@ -100,19 +101,23 @@ function map_load() {
     show_debug_message("Load sucessfully.");
 }
 
-function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
+        case 0:
             _obj = objNote;
             break;
         case "CHAIN":
+        case 1:
             _obj = objChain;
             break;
         case "HOLD":
+        case 2:
             _obj = objHold;
             break;
         case "SUB":
+        case 3:
             _obj = objHoldSub;
             break;
         default:
@@ -122,12 +127,16 @@ function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
     _inst.width = real(_width);
     _inst.side = real(_side);
     // _inst.offset = real(_time);
-    _inst.bar = real(_bar);
+    if(_fromxml)
+        _inst.bar = real(_time);
+    else
+        _inst.time = _time;
     _inst.position = real(_position);
     _inst.nid = _id;
     _inst.sid = _subid;
     
-    _inst.position += _inst.width/2;
+    if(_fromxml)
+        _inst.position += _inst.width/2;
     
     with(_inst) _prop_init();
     with(objMain) {
@@ -138,6 +147,9 @@ function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
             return true;
         }
         chartNotesMap[_inst.side][? _id] = _inst;
+        
+        if(!_fromxml)
+            note_all_sort();
     }
     
     return 0;
