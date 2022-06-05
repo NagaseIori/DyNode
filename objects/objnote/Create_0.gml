@@ -205,6 +205,13 @@ depth = 100;
             state();
         }
     }
+    
+    // State attached to cursor
+    stateAttach = function() {
+        animTargetA = 0.5;
+        x = mouse_x;
+        y = !objEditor.editorGridYEnabled?mouse_y:objEditor.editorGridYMousePos;
+    }
 
     state = stateOut;
     stateString = "OUT";

@@ -25,3 +25,15 @@ function timing_point_reset() {
         timingPoints = [];
     }
 }
+
+function note_build_attach(_width) {
+    var _inst = instance_create_depth(mouse_x, mouse_y, 
+                depth, objNote);
+    with(_inst) {
+        state = stateAttach;
+        width = _width;
+        _prop_init();
+    }
+    
+    return _inst;
+}

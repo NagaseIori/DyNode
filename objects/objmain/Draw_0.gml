@@ -156,21 +156,3 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
                     i*_nw + (i? -1:1) * targetLineBeside, mixerX[i]);
             }
     }
-
-// Debug
-    
-    // scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +
-    // "\nNow Time: " + string(nowTime)+"\nFPS: "+string(fps) + " / "+string(fps_real))
-    // .starting_format("fDynamix20", c_white)
-    // .align(fa_center, fa_top)
-    // .draw(global.resolutionW/2, 30);
-    
-    var _debug_str = "";
-    _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
-    _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
-    _debug_str += "MSPD: " + string(musicSpeed)+"\n";
-    _debug_str += "TIME: " + string(nowTime)+"\n";
-    draw_set_font(fDynamix20);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_top);
-    draw_text(global.resolutionW/2, 30, _debug_str);
