@@ -3,6 +3,10 @@ function editor_set_width_default(_width) {
     objEditor.editorDefaultWidth = _width;
 }
 
+function editor_get_editmode() {
+    return objEditor.editorMode;
+}
+
 function timing_point_sort() {
     var _f = function(_a, _b) {
         return _a.time < _b.time;

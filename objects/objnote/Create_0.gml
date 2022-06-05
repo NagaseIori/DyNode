@@ -24,6 +24,10 @@ depth = 100;
     pWidth = (width * 300 - 30)*2; // Width In Pixels
     originalWidth = sprite_get_width(sprite_index);
     
+    // For edit
+    selected = false;
+    selBlendColor = c_white;
+    
     animSpeed = 0.4;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
@@ -164,6 +168,17 @@ depth = 100;
             state = stateOut;
             state();
         }
+        
+        if(editor_get_editmode() != 4) selected = false;
+        if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
+            if(mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom)) {
+                selected = true;
+            }
+            else {
+                selected = false;
+            }
+        }
+        
     }
     
     // State Last
@@ -234,6 +249,11 @@ depth = 100;
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
+        }
+        
+        // State Selected
+        stateSelected = function() {
+            
         }
 
     state = stateOut;

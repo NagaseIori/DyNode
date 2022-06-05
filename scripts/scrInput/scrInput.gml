@@ -15,3 +15,7 @@ function mouse_get_delta_lx() {
 function mouse_get_delta_ly() {
     return mouse_y - objInput.last_mouse_pressedl_y;
 }
+
+function mouse_inbound(x1, y1, x2, y2) {
+    return mouse_x>=x1 && mouse_x <=x2 && mouse_y>=y1 && mouse_y<=y2;
+}
