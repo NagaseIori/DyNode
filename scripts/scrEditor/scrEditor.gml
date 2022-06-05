@@ -1,4 +1,7 @@
 
+function editor_set_width_default(_width) {
+    objEditor.editorDefaultWidth = _width;
+}
 
 function timing_point_sort() {
     var _f = function(_a, _b) {

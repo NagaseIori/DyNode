@@ -230,6 +230,7 @@ depth = 100;
             _prop_init();
             
             if(mouse_check_button_released(mb_left)) {
+                editor_set_width_default(width);
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
