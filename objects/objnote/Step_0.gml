@@ -2,9 +2,7 @@
 // Down Side
 if(side == 0) {
     x = note_pos_to_x(position, side);
-    y = global.resolutionH
-        - (objMain.playbackSpeed * 
-            (time - objMain.nowTime) + objMain.targetLineBelow);
+    y = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
             visible = false;
     else
@@ -13,11 +11,7 @@ if(side == 0) {
 // LR Side
 else {
     y = note_pos_to_x(position, side);
-    x = global.resolutionW / 2
-        + (side == 1?-1:1) * 
-        (global.resolutionW / 2 - 
-        (objMain.playbackSpeed * (time - objMain.nowTime)) 
-        - objMain.targetLineBeside);
+    x = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
             visible = false;
     else

@@ -5,7 +5,7 @@
     u_size = shader_get_uniform(shaderBlur, "size");
     u_blur_vector = shader_get_uniform(shaderBlur, "blur_vector");
 
-// Make Background Invisible
+// Make Original Background Layer Invisible
 
     layer_set_visible(layer_get_id("Background"), false);
 

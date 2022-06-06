@@ -109,7 +109,7 @@ _position_update();
                 animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
                 
         
-            if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH) {
+            if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH && mouse_y > 0) {
                 topBarMousePressed = true;
                 topBarMouseLastX = -5;
             }

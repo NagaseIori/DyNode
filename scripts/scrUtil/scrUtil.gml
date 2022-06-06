@@ -67,10 +67,17 @@ function y_to_note_time(_y, _side) {
 	if(_side == 0) {
 		return (global.resolutionH - objMain.targetLineBelow - _y) / objMain.playbackSpeed + objMain.nowTime;
 	}
+	else {
+		
+	}
 }
 function note_time_to_y(_time, _side) {
 	if(_side == 0) {
 		return global.resolutionH - objMain.targetLineBelow - (_time - objMain.nowTime) * objMain.playbackSpeed;
+	}
+	else {
+		return global.resolutionW / 2 + (_side == 1?-1:1) *  (global.resolutionW / 2 - 
+			(objMain.playbackSpeed * (_time - objMain.nowTime)) - objMain.targetLineBeside);
 	}
 }
 function resor_to_x(ratio) {

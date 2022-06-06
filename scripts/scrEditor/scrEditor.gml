@@ -34,9 +34,9 @@ function editor_snap_to_grid_y(_y, _side) {
             var _ry = note_time_to_y(_rt, _side);
             var _rby = note_time_to_y(_rbt, _side);
             
-            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt < _nexttime)
+            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt <= _nexttime)
                 _ret = _ry;
-            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt < _nexttime)
+            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt <= _nexttime)
                 _ret = _rby;
         }
     }
