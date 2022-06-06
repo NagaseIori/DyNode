@@ -4,7 +4,7 @@ if(side == 0) {
     x = note_pos_to_x(position, side);
     y = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-            visible = false;
+        visible = false;
     else
         visible = true;
 }
@@ -13,7 +13,7 @@ else {
     y = note_pos_to_x(position, side);
     x = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-            visible = false;
+        visible = false;
     else
         visible = true;
     
@@ -41,9 +41,11 @@ if(visible || image_alpha>0) {
 if(visible)
     state();
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
-    if(time + lastTime > objMain.nowTime && !_outbound_check(x, y, side)) {
-        // If is using ad to adjust time then speed the things hell up
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
+    if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
+        // In Some situations no need for fading in
+        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+            objMain.topBarMousePressed ||
+            (side == 0 && objMain.nowPlaying)) {
             image_alpha = 1;
             animTargetA = 1;
             state = stateNormal;
@@ -51,6 +53,12 @@ else if(stateString == "OUT") {   // stateMachine is slow --- in VM
         else 
             state = stateIn;
         state();
-        visible = true;
     }
 }
+
+// Add selection blend
+
+if(state == stateSelected)
+    image_blend = c_aqua;
+else
+    image_blend = c_white;

@@ -88,6 +88,10 @@ function resor_to_y(ratio) {
 }
 #endregion
 
+function pos_inbound(xo, yo, x1, y1, x2, y2) {
+	return xo >= x1 && xo <= x2 && yo >= y1 && yo <= y2;
+}
+
 function array_top(array) {
     return array[array_length(array)-1];
 }

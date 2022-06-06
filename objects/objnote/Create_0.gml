@@ -5,7 +5,6 @@ depth = 100;
 // In-Variables
 
     width = 2.0;
-    origWidth = width; // For editor
     position = 2.5;
     side = 0;
     // offset = 0;
@@ -14,6 +13,15 @@ depth = 100;
     nid = -1; // Note id
     sid = -1; // Sub id
     noteType = 0; // 0 Note 1 Chain 2 Hold
+    
+    // For Editor
+    origWidth = width;
+    origTime = time;
+    origPosition = position;
+    origY = y;
+    origX = x;
+    isDragging = false;
+    mouseDetectRange = 20; // in Pixels
     
     // For Hold
     lastTime = 0;
@@ -169,13 +177,11 @@ depth = 100;
             state();
         }
         
-        if(editor_get_editmode() != 4) selected = false;
-        if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
-            if(mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom)) {
-                selected = true;
-            }
-            else {
-                selected = false;
+        // now only deal with one side
+        if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4 && side == 0) {
+            if(mouse_square_inbound(x, y, mouseDetectRange)) {
+                state = stateSelected;
+                state();
             }
         }
         
@@ -253,16 +259,50 @@ depth = 100;
         
         // State Selected
         stateSelected = function() {
-            
+            if(editor_get_editmode() != 4)
+                state = stateNormal;
+            if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
+                if(!mouse_square_inbound(x, y, mouseDetectRange)) {
+                    state = stateNormal;
+                }
+            }
+            if(mouse_ishold_l() && mouse_square_inbound_last_l(x, y, mouseDetectRange)) {
+                if(!isDragging) {
+                    isDragging = true;
+                    origY = y;
+                    origX = x;
+                }
+            }
+            if(mouse_check_button_released(mb_left)) {
+                if(isDragging) {
+                    isDragging = false;
+                    note_all_sort();
+                }
+            }
+            if(isDragging) {
+                y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                x = origX + mouse_get_delta_last_x_l();
+                position = x_to_note_pos(x, side);
+                time = y_to_note_time(y, side);
+            }
         }
 
     state = stateOut;
     stateString = "OUT";
 
-// Debug Draw Function
+// Draw Function
 
     _debug_draw = function() {
         if(debug_mode) {
-            
+            // draw_set_color(c_red);
+            draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
+        }
+    }
+    
+    _editor_draw = function() {
+        if(visible && editor_get_editmode() == 4) {
+            draw_set_color(c_blue);
+            draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
+                x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
         }
     }

@@ -51,4 +51,5 @@ else {
         image_xscale, image_yscale, image_angle, image_blend, image_alpha);
 }
 
+_editor_draw();
 _debug_draw();

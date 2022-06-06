@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sprNote2",
-    "path": "sprites/sprNote2/sprNote2.yy",
+    "name": "sprNote",
+    "path": "sprites/sprNote/sprNote.yy",
   },
   "solid": false,
   "visible": true,
