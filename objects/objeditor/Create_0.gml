@@ -8,11 +8,9 @@ editorSide = 0; // 0 down 1 left 2 right
 editorNoteAttaching = -999; // instance that attached to cursor now
 editorDefaultWidth = 1.0;
 
-    // Grid Magnet
+    // Grid Settings
     editorGridXEnabled = true;
     editorGridYEnabled = true;
-    editorGridXMousePos = 0;
-    editorGridYMousePos = 0;
 
 // Timings
 timingPoints = [];

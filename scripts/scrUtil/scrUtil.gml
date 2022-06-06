@@ -26,54 +26,59 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 }
 
 #region TIME & BAR & BPM
-	function ctime_to_bar(time) {
-	    return time * objMain.chartBarPerMin / 60000;
-	}
-	
-	function bar_to_ctime(offset) {
-	    return offset * 60000 / objMain.chartBarPerMin;
-	}
-	
-	function mtime_to_time(mtime) {
-		return mtime + objMain.chartTimeOffset;
-	}
-	function time_to_mtime(time) {
-		return time - objMain.chartTimeOffset;
-	}
-	
-	function bpm_to_mspb(bpm) {
-		return 60 * 1000 / bpm;
-	}
-	function mspb_to_bpm(mspb) {
-		return 60 * 1000 / mspb;
-	}
+function ctime_to_bar(time) {
+    return time * objMain.chartBarPerMin / 60000;
+}
+
+function bar_to_ctime(offset) {
+    return offset * 60000 / objMain.chartBarPerMin;
+}
+
+function mtime_to_time(mtime) {
+	return mtime + objMain.chartTimeOffset;
+}
+function time_to_mtime(time) {
+	return time - objMain.chartTimeOffset;
+}
+
+function bpm_to_mspb(bpm) {
+	return 60 * 1000 / bpm;
+}
+function mspb_to_bpm(mspb) {
+	return 60 * 1000 / mspb;
+}
 #endregion
 
 #region POSITION TRANSFORM
-	function note_pos_to_x(_pos, _side) {
-	    if(_side == 0) {
-	        return global.resolutionW/2 + (_pos-2.5)*300;
-	    }
-	    else {
-	        return global.resolutionH/2 + (2.5-_pos)*150;
-	    }
+function note_pos_to_x(_pos, _side) {
+    if(_side == 0) {
+        return global.resolutionW/2 + (_pos-2.5)*300;
+    }
+    else {
+        return global.resolutionH/2 + (2.5-_pos)*150;
+    }
+}
+function x_to_note_pos(_x, _side) {
+	if(_side == 0) {
+		return (_x - global.resolutionW / 2) / 300 + 2.5;
 	}
-	function x_to_note_pos(_x, _side) {
-		if(_side == 0) {
-			return (_x - global.resolutionW / 2) / 300 + 2.5;
-		}
+}
+function y_to_note_time(_y, _side) {
+	if(_side == 0) {
+		return (global.resolutionH - objMain.targetLineBelow - _y) / objMain.playbackSpeed + objMain.nowTime;
 	}
-	function y_to_note_time(_y, _side) {
-		if(_side == 0) {
-			return (global.resolutionH - objMain.targetLineBelow - _y) / objMain.playbackSpeed + objMain.nowTime;
-		}
+}
+function note_time_to_y(_time, _side) {
+	if(_side == 0) {
+		return global.resolutionH - objMain.targetLineBelow - (_time - objMain.nowTime) * objMain.playbackSpeed;
 	}
-	function resor_to_x(ratio) {
-	    return global.resolutionW * ratio;
-	}
-	function resor_to_y(ratio) {
-	    return global.resolutionH * ratio;
-	}
+}
+function resor_to_x(ratio) {
+    return global.resolutionW * ratio;
+}
+function resor_to_y(ratio) {
+    return global.resolutionH * ratio;
+}
 #endregion
 
 function array_top(array) {

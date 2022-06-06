@@ -227,7 +227,7 @@ depth = 100;
         stateAttach = function() {
             animTargetA = 0.5;
             x = mouse_x;
-            y = !objEditor.editorGridYEnabled?mouse_y:objEditor.editorGridYMousePos;
+            y = editor_snap_to_grid_y(mouse_y, side);
             position = x_to_note_pos(x, side);
             time = y_to_note_time(y, side);
             if(mouse_check_button_pressed(mb_left)) {

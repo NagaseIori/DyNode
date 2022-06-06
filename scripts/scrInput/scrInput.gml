@@ -19,3 +19,8 @@ function mouse_get_delta_ly() {
 function mouse_inbound(x1, y1, x2, y2) {
     return mouse_x>=x1 && mouse_x <=x2 && mouse_y>=y1 && mouse_y<=y2;
 }
+function mouse_linbound(x1, y1, x2, y2) {
+    var _nx = objInput.last_mouse_pressedl_x;
+    var _ny = objInput.last_mouse_pressedl_y;
+    return _nx>=x1 && _nx<=x2 && _ny>=y1 && _ny<=y2;
+}

@@ -21,8 +21,6 @@ switch editorMode {
         break;
 }
 
-editorGridYMousePos = mouse_y; // Reset grid position
-
 #region Beatlines
 
     if(keyboard_check_pressed(ord("T"))) {
@@ -74,7 +72,6 @@ editorGridYMousePos = mouse_y; // Reset grid position
     
     var _nowhard = false, _noww, _nowl;
     var _ny;
-    var _nowdiv = 1 / beatlineDivs[beatlineNowMode] * _nowtp.beatLength * playbackSpeed / 2;
     
     // if(abs(_nowbeats * _nowtp.beatLength + _nowtime - nowTime) <= 10 && objMain.nowPlaying)
     //     with(objMain) _faint_hit();
@@ -95,9 +92,6 @@ editorGridYMousePos = mouse_y; // Reset grid position
                         draw_set_color(beatlineColors[j]);
                         draw_set_alpha(beatlineAlpha[0]);
                         draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
-                        
-                        if(abs(mouse_y - _ny) < _nowdiv)
-                            editorGridYMousePos = _ny;
                     }
                 }
             }
@@ -106,7 +100,6 @@ editorGridYMousePos = mouse_y; // Reset grid position
         if(_nowat == _pointscount) break;
         _nowtime = _nexttime;
         _nexttime = (_nowat + 1 == _pointscount ? objMain.musicLength:timingPoints[_nowat+1].time);
-        _nowdiv = 1 / beatlineDivs[beatlineNowMode] * _nowtp.beatLength * playbackSpeed / 2;
         _nowbeats = 0;
     }
     
