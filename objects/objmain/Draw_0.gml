@@ -78,7 +78,6 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 // Draw targetline
 
     var _sprlazer = global.sprLazer;
-    // gpu_set_blendmode(bm_add);
     // Light Below
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
@@ -112,10 +111,8 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         _nw - targetLineBeside + 1, _nh - targetLineBelow,
         _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
         90, themeColor, 1.0);
-    // gpu_set_blendmode(bm_normal);
     
-    draw_set_color(c_white);
-    draw_set_alpha(1.0);
+    draw_set_color_alpha(c_white, 1.0);
     // Line Below
     draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
                     _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
@@ -131,8 +128,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 // Draw Top Progress Bar
 
     
-    
-    draw_set_color(c_white); draw_set_alpha(topBarIndicatorA);
+    draw_set_color_alpha(c_white, topBarIndicatorA);
     draw_rectangle(0, 0, _nw, topBarMouseH, false);
     if(musicProgress > 0) {
         var _topBarW = round(_nw * musicProgress);

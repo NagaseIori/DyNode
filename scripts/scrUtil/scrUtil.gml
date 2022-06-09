@@ -17,6 +17,8 @@ function generate_lazer_sprite(_height) {
 	
 	return _spr;
 }
+
+#region DRAW
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);
 	var _yscl = h / sprite_get_height(sprite);
@@ -24,6 +26,12 @@ function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha)
 	// 	sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha, 1);
 	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
+
+function draw_set_color_alpha(color, alpha) {
+	draw_set_color(color);
+	draw_set_alpha(alpha);
+}
+#endregion
 
 #region TIME & BAR & BPM
 function ctime_to_bar(time) {

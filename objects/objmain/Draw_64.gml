@@ -12,4 +12,5 @@ if(instance_exists(editor))
 draw_set_font(fDynamix20);
 draw_set_halign(fa_center);
 draw_set_valign(fa_top);
+draw_set_color(c_white);
 draw_text(global.resolutionW/2, 30, _debug_str);

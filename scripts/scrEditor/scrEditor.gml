@@ -44,6 +44,7 @@ function editor_snap_to_grid_y(_y, _side) {
     return _ret;
 }
 
+// Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
         return _a.time < _b.time;
@@ -51,6 +52,7 @@ function timing_point_sort() {
     array_sort_f(objEditor.timingPoints, _f);
 }
 
+// Add a timing point to "timingPoints" array
 function timing_point_add(_t, _l, _b) {
     with(objEditor) {
         // show_debug_message("ADD A TIMING POINT. FROM " + string(array_length(timingPoints)))
@@ -60,6 +62,7 @@ function timing_point_add(_t, _l, _b) {
     }
 }
 
+// Reset the "timingPoints" array
 function timing_point_reset() {
     with(objEditor) {
         var _l = array_length(timingPoints);
@@ -70,9 +73,13 @@ function timing_point_reset() {
     }
 }
 
-function note_build_attach(_width) {
+function note_build_attach(_type, _width) {
+    var _obj = [objNote, objChain, objHold];
+    _obj = _obj[_type];
+    
     var _inst = instance_create_depth(mouse_x, mouse_y, 
-                depth, objNote);
+                depth, _obj);
+    
     with(_inst) {
         state = stateAttach;
         width = _width;

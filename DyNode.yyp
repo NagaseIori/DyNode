@@ -103,6 +103,7 @@
     {"id":{"name":"__scribble_gen_10_set_padding_flags","path":"scripts/__scribble_gen_10_set_padding_flags/__scribble_gen_10_set_padding_flags.yy",},"order":1,},
     {"id":{"name":"__scribble_class_typist","path":"scripts/__scribble_class_typist/__scribble_class_typist.yy",},"order":5,},
     {"id":{"name":"sprEditor","path":"sprites/sprEditor/sprEditor.yy",},"order":31,},
+    {"id":{"name":"sprHoldEdge2","path":"sprites/sprHoldEdge2/sprHoldEdge2.yy",},"order":10,},
     {"id":{"name":"DerpXml","path":"extensions/DerpXml/DerpXml.yy",},"order":0,},
     {"id":{"name":"scribble_super_glyph_delete","path":"scripts/scribble_super_glyph_delete/scribble_super_glyph_delete.yy",},"order":4,},
     {"id":{"name":"__scribble_gen_6_build_lines","path":"scripts/__scribble_gen_6_build_lines/__scribble_gen_6_build_lines.yy",},"order":6,},
@@ -275,7 +276,7 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2022.5.0.8",
+    "IDEVersion": "2022.5.1.14",
   },
   "resourceVersion": "1.5",
   "name": "DyNode",

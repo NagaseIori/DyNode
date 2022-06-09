@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sprHoldEdge",
-    "path": "sprites/sprHoldEdge/sprHoldEdge.yy",
+    "name": "sprHoldEdge2",
+    "path": "sprites/sprHoldEdge2/sprHoldEdge2.yy",
   },
   "solid": false,
   "visible": true,

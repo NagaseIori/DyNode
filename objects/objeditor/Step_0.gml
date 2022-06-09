@@ -1,25 +1,36 @@
+/// @description Update Editor
 
-if(keyboard_check_pressed(ord("Z")))
-    editorGridYEnabled = !editorGridYEnabled;
+#region Input Checks
 
-if(keyboard_check_pressed(ord("1")))
-    editorMode = 1;
-if(keyboard_check_pressed(ord("4")))
-    editorMode = 4;
-
-switch editorMode {
-    case 1:
-        if(!instance_exists(editorNoteAttaching)) {
-            editorNoteAttaching = note_build_attach(editorDefaultWidth);
+    if(keyboard_check_pressed(ord("Z")))
+        editorGridYEnabled = !editorGridYEnabled;
+    
+    // Editor Mode Switch
+    for(var i=1; i<=4; i++)
+        if(keyboard_check_pressed(ord(string(i)))) {
+            if(editorMode != i) {
+                if(instance_exists(editorNoteAttaching))
+                    instance_destroy(editorNoteAttaching);
+            }
+            editorMode = i;
         }
-        break;
-    case 4:
-    default:
-        if(instance_exists(editorNoteAttaching)) {
-            instance_destroy(editorNoteAttaching);
-        }
-        break;
-}
+
+    switch editorMode {
+        case 1:
+            if(!instance_exists(editorNoteAttaching))
+                editorNoteAttaching = note_build_attach(0, editorDefaultWidth);
+            break;
+        case 2:
+            if(!instance_exists(editorNoteAttaching))
+                editorNoteAttaching = note_build_attach(1, editorDefaultWidth);
+            break;
+        case 3:
+        case 4:
+        default:
+            break;
+    }
+
+#endregion
 
 #region Beatlines
 

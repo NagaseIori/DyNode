@@ -34,7 +34,7 @@ depth = 100;
     
     // For edit
     selected = false;
-    selBlendColor = c_white;
+    selBlendColor = 0x4fd5ff;
     
     animSpeed = 0.4;
     animTargetA = 0;
@@ -127,6 +127,16 @@ depth = 100;
         _burst_particle(partNumber, 0);
     }
     
+    _mouse_inbound_check = function (_mode = 0) {
+        switch _mode {
+            case 0:
+                return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
+            case 1:
+                return mouse_inbound_last_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
+        }
+        
+    }
+    
     // _outbound_check was moved to scrNote
 
 // State Machines
@@ -179,9 +189,8 @@ depth = 100;
         
         // now only deal with one side
         if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4 && side == 0) {
-            if(mouse_square_inbound(x, y, mouseDetectRange)) {
-                state = stateSelected;
-                state();
+            if(_mouse_inbound_check()) {
+                objEditor.editorSelectSingleTarget = id;
             }
         }
         
@@ -246,7 +255,7 @@ depth = 100;
         // State Dropping down
         stateDrop = function() {
             animTargetA = 1;
-            width = origWidth + 2.5 * mouse_get_delta_lx() / 300;
+            width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
             width = max(width, 0.01);
             _prop_init();
             
@@ -259,14 +268,18 @@ depth = 100;
         
         // State Selected
         stateSelected = function() {
+            
+            // If Single Select Then Occupy
+            objEditor.editorSelectSingleOccupied = true;
+            
             if(editor_get_editmode() != 4)
                 state = stateNormal;
             if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
-                if(!mouse_square_inbound(x, y, mouseDetectRange)) {
+                if(!_mouse_inbound_check()) {
                     state = stateNormal;
                 }
             }
-            if(mouse_ishold_l() && mouse_square_inbound_last_l(x, y, mouseDetectRange)) {
+            if(mouse_ishold_l() && _mouse_inbound_check(1)) {
                 if(!isDragging) {
                     isDragging = true;
                     origY = y;
@@ -295,13 +308,14 @@ depth = 100;
     _debug_draw = function() {
         if(debug_mode) {
             // draw_set_color(c_red);
+            draw_set_color_alpha(c_white, 1.0);
             draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
         }
     }
     
     _editor_draw = function() {
         if(visible && editor_get_editmode() == 4) {
-            draw_set_color(c_blue);
+            draw_set_color_alpha(c_blue, 1);
             draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
                 x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
         }

@@ -59,6 +59,6 @@ else if(stateString == "OUT") {   // stateMachine is slow --- in VM
 // Add selection blend
 
 if(state == stateSelected)
-    image_blend = c_aqua;
+    image_blend = selBlendColor;
 else
     image_blend = c_white;
