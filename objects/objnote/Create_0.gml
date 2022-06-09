@@ -189,9 +189,13 @@ depth = 100;
         
         // now only deal with one side
         if(editor_get_editmode() == 4 && side == 0) {
-            if((mouse_check_button_pressed(mb_left) &&_mouse_inbound_check())
+            if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
                 objEditor.editorSelectSingleTarget = id;
+            }
+            
+            if(_mouse_inbound_check()) {
+                objEditor.editorSelectSingleTargetInbound = id;
             }
         }
         
@@ -345,7 +349,14 @@ depth = 100;
     
     _editor_draw = function() {
         if(visible && editor_get_editmode() == 4) {
-            draw_set_color_alpha(c_blue, 1);
+            var _col = c_blue;
+            
+            if(!objEditor.editorSelectSingleOccupied && objEditor.editorSelectSingleTargetInbound == id)
+                _col = c_white;
+            if(state == stateSelected)
+                _col = c_white;
+            
+            draw_set_color_alpha(_col, 1);
             draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
                 x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
         }

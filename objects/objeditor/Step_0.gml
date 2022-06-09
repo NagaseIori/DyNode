@@ -5,6 +5,11 @@
     if(keyboard_check_pressed(ord("Z")))
         editorGridYEnabled = !editorGridYEnabled;
     
+    // Editor Side Switch
+    
+    editorSide += keyboard_check_pressed(vk_up);
+    if(editorSide == 3) editorSide = 0;
+    
     // Editor Mode Switch
     for(var i=1; i<=4; i++)
         if(keyboard_check_pressed(ord(string(i)))) {
