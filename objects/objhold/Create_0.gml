@@ -3,7 +3,9 @@
 // Inherit the parent event
 event_inherited();
 
+sinst = -1;
 noteType = 2;
+edgeScaleY = 1;
 
 depth *= 2;
 

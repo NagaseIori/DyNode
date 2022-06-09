@@ -42,13 +42,13 @@ if(side == 0) {
     draw_sprite_ext(sprHoldEdge, image_number,
         _nx - pWidth/2,
         _ny + dFromBottom, 
-        image_xscale, image_yscale, image_angle, image_blend, image_alpha);
+        image_xscale, edgeScaleY, image_angle, image_blend, image_alpha);
 }
 else {
     draw_sprite_ext(sprHoldEdge, image_number,
         _nx + dFromBottom * (side == 1? -1: 1),
         _ny + pWidth/2 * (side == 1? -1: 1), 
-        image_xscale, image_yscale, image_angle, image_blend, image_alpha);
+        image_xscale, edgeScaleY, image_angle, image_blend, image_alpha);
 }
 
 _editor_draw();

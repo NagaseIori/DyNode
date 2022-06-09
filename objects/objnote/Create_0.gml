@@ -188,8 +188,9 @@ depth = 100;
         }
         
         // now only deal with one side
-        if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4 && side == 0) {
-            if(_mouse_inbound_check()) {
+        if(editor_get_editmode() == 4 && side == 0) {
+            if((mouse_check_button_pressed(mb_left) &&_mouse_inbound_check())
+                || (mouse_ishold_l() && _mouse_inbound_check(1))) {
                 objEditor.editorSelectSingleTarget = id;
             }
         }
@@ -254,15 +255,44 @@ depth = 100;
         
         // State Dropping down
         stateDrop = function() {
-            animTargetA = 1;
+            animTargetA = 0.8;
             width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
             width = max(width, 0.01);
             _prop_init();
             
             if(mouse_check_button_released(mb_left)) {
+                if(noteType == 2) {
+                    var _time = time;
+                    state = stateAttachSub;
+                    sinst = instance_create_depth(x, y, depth, objHoldSub);
+                    sinst.dummy = true;
+                    sinst.time = time;
+                    return;
+                }
+                
                 editor_set_width_default(width);
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
+            }
+        }
+        
+        stateAttachSub = function () {
+            sinst.time = y_to_note_time(editor_snap_to_grid_y(mouse_y, side), side);
+            if(mouse_check_button_pressed(mb_left)) {
+                state = stateDropSub;
+                origWidth = width;
+            }
+        }
+        
+        stateDropSub = function () {
+            animTargetA = 1.0;
+            if(mouse_check_button_released(mb_left)) {
+                var _subid = random_id(6);
+                build_note(_subid, 3, sinst.time, position, width, -1, side, false);
+                build_note(random_id(6), 2, time, position, width, _subid, side, false);
+                instance_destroy(sinst);
+                instance_destroy();
+                sinst = -1;
             }
         }
         

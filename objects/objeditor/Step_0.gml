@@ -25,6 +25,10 @@
                 editorNoteAttaching = note_build_attach(1, editorDefaultWidth);
             break;
         case 3:
+            if(!instance_exists(editorNoteAttaching))
+                editorNoteAttaching = note_build_attach(2, editorDefaultWidth);
+            break;
+            
         case 4:
         default:
             break;
