@@ -12,6 +12,9 @@ depth *= 2;
 originalHeight = sprite_get_height(sprHoldEdge);
 pHeight = originalHeight; // Height in Pixels base on sprHoldEdge
 
+sprite = sprHoldEdge;
+_prop_init();
+
 // Correction Value
 
     dFromBottom = 26;

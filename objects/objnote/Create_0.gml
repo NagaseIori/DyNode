@@ -4,6 +4,7 @@ depth = 100;
 
 // In-Variables
 
+    sprite = sprNote2;
     width = 2.0;
     position = 2.5;
     side = 0;
@@ -30,7 +31,7 @@ depth = 100;
     lastAlpha = lastAlphaL;
     
     pWidth = (width * 300 - 30)*2; // Width In Pixels
-    originalWidth = sprite_get_width(sprite_index);
+    originalWidth = sprite_get_width(sprite);
     
     // For edit
     selected = false;
@@ -52,6 +53,7 @@ depth = 100;
 // In-Functions
 
     _prop_init = function () {
+        originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth);
         image_xscale = pWidth / originalWidth;
@@ -188,7 +190,7 @@ depth = 100;
         }
         
         // now only deal with one side
-        if(editor_get_editmode() == 4 && side == 0) {
+        if(editor_get_editmode() == 4 && side == editor_get_editside()) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
                 objEditor.editorSelectSingleTarget = id;

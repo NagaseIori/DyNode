@@ -60,6 +60,8 @@ beatlineHardWidth = 8;
 beatlineWidth = 3;
 beatlineHardLength = global.resolutionW * 0.9;
 beatlineLength = global.resolutionW * 0.75;
+beatlineHardHeight = (global.resolutionH - objMain.targetLineBeside) * 0.95;
+beatlineHeight = (global.resolutionH - objMain.targetLineBeside) * 0.90;
 beatlineAlpha = [0, 0, 0];
 
 animSpeed = 0.4;

@@ -7,6 +7,10 @@ function editor_get_editmode() {
     return objEditor.editorMode;
 }
 
+function editor_get_editside() {
+    return objEditor.editorSide;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;
     
@@ -55,10 +59,8 @@ function timing_point_sort() {
 // Add a timing point to "timingPoints" array
 function timing_point_add(_t, _l, _b) {
     with(objEditor) {
-        // show_debug_message("ADD A TIMING POINT. FROM " + string(array_length(timingPoints)))
         array_push(timingPoints, new sTimingPoint(_t, _l, _b));
         timing_point_sort();
-        // show_debug_message("TO " + string(array_length(timingPoints)))
     }
 }
 
