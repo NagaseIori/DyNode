@@ -6,6 +6,10 @@ if(visible && (sinst != -1 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[
     if(sinst == -1)
         sinst = objMain.chartNotesMap[side][? sid]
     
+    // Being destroyed
+    if(!instance_exists(sinst))
+        return;
+    
     // Sync the properties
     sinst.position = position;
     sinst.width = width;

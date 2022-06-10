@@ -264,7 +264,7 @@ depth = 100;
             }
             
             
-            if(mouse_check_button_pressed(mb_left)) {
+            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)) {
                 state = stateDrop;
                 origWidth = width;
             }
@@ -358,8 +358,10 @@ depth = 100;
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
                 }
-                
             }
+            
+            if(keyboard_check_pressed(vk_delete) && noteType != 3)
+                note_delete(nid);
         }
 
     state = stateOut;

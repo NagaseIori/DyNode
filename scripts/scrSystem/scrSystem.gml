@@ -151,8 +151,22 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         if(!_fromxml)
             note_all_sort();
     }
-    
-    return 0;
+}
+
+function note_delete(_id) {
+    with(objMain) {
+        var l=array_length(chartNotesArray);
+        for(var i=0; i<l; i++)
+            if(chartNotesArray[i].nid == _id) {
+                var _insta = chartNotesArray[i];
+                array_delete(chartNotesArray, i, 1);
+                if(_insta.sid != -1)
+                    note_delete(_insta.sid);
+                instance_destroy(_insta);
+                break;
+            }
+    }
+    note_all_sort();
 }
 
 function map_load_xml(_file) {
