@@ -4,20 +4,20 @@ if(side == 0) {
     x = note_pos_to_x(position, side);
     y = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-        visible = false;
+        drawVisible = false;
     else
-        visible = true;
+        drawVisible = true;
 }
 // LR Side
 else {
     y = note_pos_to_x(position, side);
     x = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-        visible = false;
+        drawVisible = false;
     else
-        visible = true;
+        drawVisible = true;
     
-    if(visible) {
+    if(drawVisible) {
         var _nside = side-1, _noff = time, _nx = y, _nid = id;
         
         with(objMain) {
@@ -31,14 +31,14 @@ else {
 
 
 
-if(visible || image_alpha>0) {
+if(drawVisible || image_alpha>0) {
     image_alpha = lerp_a(image_alpha, animTargetA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
 }
 
-if(visible)
+if(drawVisible)
     state();
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
     if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {

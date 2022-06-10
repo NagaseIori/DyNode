@@ -1,4 +1,5 @@
 
+if(!drawVisible) return;
 // Get Position
     
     var _nx, _ny;
@@ -50,6 +51,3 @@ else {
         _ny + pWidth/2 * (side == 1? -1: 1), 
         image_xscale, edgeScaleY, image_angle, image_blend, image_alpha);
 }
-
-_editor_draw();
-_debug_draw();

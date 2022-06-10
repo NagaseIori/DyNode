@@ -70,13 +70,17 @@ function x_to_note_pos(_x, _side) {
 	if(_side == 0) {
 		return (_x - global.resolutionW / 2) / 300 + 2.5;
 	}
+	else {
+		return 2.5 - (_x - global.resolutionH / 2) / 150;
+	}
 }
 function y_to_note_time(_y, _side) {
 	if(_side == 0) {
 		return (global.resolutionH - objMain.targetLineBelow - _y) / objMain.playbackSpeed + objMain.nowTime;
 	}
 	else {
-		
+		_y = _side == 1? _y: global.resolutionW - _y;
+		return (_y - objMain.targetLineBeside) / objMain.playbackSpeed + objMain.nowTime;
 	}
 }
 function note_time_to_y(_time, _side) {

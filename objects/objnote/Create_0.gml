@@ -1,5 +1,5 @@
 
-visible = false;
+drawVisible = false;
 depth = 100;
 
 // In-Variables
@@ -123,7 +123,7 @@ depth = 100;
             _shadow = objShadowMIX;
         var _inst = instance_create_depth(_x, _y, 1, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
-        _inst.visible = true;
+        _inst.drawVisible = true;
         _inst.image_angle = image_angle;
         
         _burst_particle(partNumber, 0);
@@ -189,7 +189,7 @@ depth = 100;
             state();
         }
         
-        // now only deal with one side
+        // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside()) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
@@ -247,11 +247,23 @@ depth = 100;
     // Editors
         // State attached to cursor
         stateAttach = function() {
+            stateString = "ATCH";
             animTargetA = 0.5;
-            x = mouse_x;
-            y = editor_snap_to_grid_y(mouse_y, side);
-            position = x_to_note_pos(x, side);
-            time = y_to_note_time(y, side);
+            
+            if(side == 0) {
+                x = mouse_x;
+                y = editor_snap_to_grid_y(mouse_y, side);
+                position = x_to_note_pos(x, side);
+                time = y_to_note_time(y, side);
+            }
+            else {
+                y = mouse_y;
+                x = editor_snap_to_grid_y(mouse_x, side);
+                position = x_to_note_pos(y, side);
+                time = y_to_note_time(x, side);
+            }
+            
+            
             if(mouse_check_button_pressed(mb_left)) {
                 state = stateDrop;
                 origWidth = width;
@@ -261,12 +273,17 @@ depth = 100;
         
         // State Dropping down
         stateDrop = function() {
+            stateString = "DROP";
             animTargetA = 0.8;
-            width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+            if(side == 0)
+                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+            else
+                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
             width = max(width, 0.01);
             _prop_init();
             
             if(mouse_check_button_released(mb_left)) {
+                editor_set_width_default(width);
                 if(noteType == 2) {
                     var _time = time;
                     state = stateAttachSub;
@@ -275,15 +292,14 @@ depth = 100;
                     sinst.time = time;
                     return;
                 }
-                
-                editor_set_width_default(width);
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
         }
         
         stateAttachSub = function () {
-            sinst.time = y_to_note_time(editor_snap_to_grid_y(mouse_y, side), side);
+            stateString = "ATCHS";
+            sinst.time = y_to_note_time(editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side), side);
             if(mouse_check_button_pressed(mb_left)) {
                 state = stateDropSub;
                 origWidth = width;
@@ -291,6 +307,7 @@ depth = 100;
         }
         
         stateDropSub = function () {
+            stateString = "DROPS";
             animTargetA = 1.0;
             if(mouse_check_button_released(mb_left)) {
                 var _subid = random_id(6);
@@ -304,7 +321,7 @@ depth = 100;
         
         // State Selected
         stateSelected = function() {
-            
+            stateString = "SEL";
             // If Single Select Then Occupy
             objEditor.editorSelectSingleOccupied = true;
             
@@ -329,37 +346,21 @@ depth = 100;
                 }
             }
             if(isDragging) {
-                y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
-                x = origX + mouse_get_delta_last_x_l();
-                position = x_to_note_pos(x, side);
-                time = y_to_note_time(y, side);
+                if(side == 0) {
+                    y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                    x = origX + mouse_get_delta_last_x_l();
+                    position = x_to_note_pos(x, side);
+                    time = y_to_note_time(y, side);
+                }
+                else {
+                    x = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
+                    y = origY + mouse_get_delta_last_y_l();
+                    position = x_to_note_pos(y, side);
+                    time = y_to_note_time(x, side);
+                }
+                
             }
         }
 
     state = stateOut;
     stateString = "OUT";
-
-// Draw Function
-
-    _debug_draw = function() {
-        if(debug_mode) {
-            // draw_set_color(c_red);
-            draw_set_color_alpha(c_white, 1.0);
-            draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
-        }
-    }
-    
-    _editor_draw = function() {
-        if(visible && editor_get_editmode() == 4) {
-            var _col = c_blue;
-            
-            if(!objEditor.editorSelectSingleOccupied && objEditor.editorSelectSingleTargetInbound == id)
-                _col = c_white;
-            if(state == stateSelected)
-                _col = c_white;
-            
-            draw_set_color_alpha(_col, 1);
-            draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
-                x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
-        }
-    }
