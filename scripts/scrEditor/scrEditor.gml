@@ -107,6 +107,8 @@ function timing_point_load_from_osz() {
                     if(_mspb > 0)
                         timing_point_add(_time, _mspb, _meter);
                     break;
+				default:
+					break;
             }
         }
     }
