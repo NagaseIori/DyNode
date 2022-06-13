@@ -5,9 +5,11 @@
     u_size = shader_get_uniform(shaderBlur, "size");
     u_blur_vector = shader_get_uniform(shaderBlur, "blur_vector");
 
-// Make Background Invisible
+// Make Original Background Layer Invisible
 
     layer_set_visible(layer_get_id("Background"), false);
+
+#region Layouts Init
 
 // Target Line
 
@@ -30,7 +32,9 @@
     topBarIndicatorA = 0;
     animTargetTopBarIndicatorA = 0;
 
-// Mixer
+#endregion
+
+#region Mixer
     
     mixerX = array_create(2, global.resolutionH/2);
     mixerNextX = array_create(2, note_pos_to_x(2.5, 1));
@@ -38,7 +42,9 @@
     mixerMaxSpeed = 250; // px per frame
     mixerNextNote = [-1, -1]
 
-// Chart Properties
+#endregion
+
+#region Chart Properties
 
     chartTitle = "Last Train at 25 O'Clock"
     chartBeatPerMin = 180;
@@ -58,7 +64,9 @@
     for(var i=0; i<3; i++)
         chartNotesMap[i] = ds_map_create();
 
-// Playview Properties
+#endregion
+
+#region Playview Properties
 
     themeColor = 0xFFFF00;
     themeColor = 0xc5b7ff; // Sakura pink ❤
@@ -80,6 +88,8 @@
     musicProgress = 0.0;
     musicSpeed = 1.0;
     
+    hideScoreboard = false;
+    
     // Bottom
         bottomDim = 0.75;
         bottomBgSurf = -1;
@@ -93,8 +103,17 @@
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
+        bgFaintAlpha = 0.5;
+        animTargetBgFaintAlpha = 0.5; 
+        animSpeedFaint = 0.1;
         
-// Particles
+        _faint_hit = function() {
+            bgFaintAlpha = 0.7;
+        }
+
+#endregion
+
+#region Particles Init
 
     // PartSys
     partSysNote = part_system_create();
@@ -152,8 +171,9 @@
                 ps_shape_line, ps_distr_linear);
         }
 
+#endregion
 
-// Scoreboard Related
+#region Scoreboard Init
 
     scbDepth = 1000;
     scbLeft = create_scoreboard(resor_to_x(0.29), resor_to_y(0.54),
@@ -161,22 +181,23 @@
     scbRight = create_scoreboard(resor_to_x(0.88), resor_to_y(0.54),
         scbDepth, 0, fa_right, 3);
 
-// Perfect Indicator Related
+#endregion
+
+#region Perfect Indicator Init
 
     perfDepth = 1000;
     perfLeft = instance_create_depth(resor_to_x(0.262), resor_to_y(0.635), 
         perfDepth, objPerfectIndc);
     perfRight = instance_create_depth(resor_to_x(0.748), resor_to_y(0.635), 
-        perfDepth, objPerfectIndc);   
+        perfDepth, objPerfectIndc);
+        
+#endregion
 
-// Editor
+#region Editor Init
 
-    // Timings
-    timingPoints = [];
-    
-    // Beatlines
-    beatlineSurf = -1;
-    beatlineColors = [0x3643f4, 0xb0279c, 0xf39621];
+    editor = instance_create_depth(0, 0, -10000, objEditor);
+
+#endregion
 
 // FMODGMS Related
 

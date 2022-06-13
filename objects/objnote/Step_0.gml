@@ -2,28 +2,22 @@
 // Down Side
 if(side == 0) {
     x = note_pos_to_x(position, side);
-    y = global.resolutionH
-        - (objMain.playbackSpeed * 
-            (time - objMain.nowTime) + objMain.targetLineBelow);
+    y = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-            visible = false;
+        drawVisible = false;
     else
-        visible = true;
+        drawVisible = true;
 }
 // LR Side
 else {
     y = note_pos_to_x(position, side);
-    x = global.resolutionW / 2
-        + (side == 1?-1:1) * 
-        (global.resolutionW / 2 - 
-        (objMain.playbackSpeed * (time - objMain.nowTime)) 
-        - objMain.targetLineBeside);
+    x = note_time_to_y(time, side);
     if(state == stateOut && image_alpha == 0)
-            visible = false;
+        drawVisible = false;
     else
-        visible = true;
+        drawVisible = true;
     
-    if(visible) {
+    if(drawVisible) {
         var _nside = side-1, _noff = time, _nx = y, _nid = id;
         
         with(objMain) {
@@ -37,19 +31,21 @@ else {
 
 
 
-if(visible || image_alpha>0) {
+if(drawVisible || image_alpha>0) {
     image_alpha = lerp_a(image_alpha, animTargetA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
 }
 
-if(visible)
+if(drawVisible)
     state();
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
-    if(time + lastTime > objMain.nowTime && !_outbound_check(x, y, side)) {
-        // If is using ad to adjust time then speed the things hell up
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D"))) {
+    if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
+        // In Some situations no need for fading in
+        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+            objMain.topBarMousePressed ||
+            (side == 0 && objMain.nowPlaying)) {
             image_alpha = 1;
             animTargetA = 1;
             state = stateNormal;
@@ -57,6 +53,12 @@ else if(stateString == "OUT") {   // stateMachine is slow --- in VM
         else 
             state = stateIn;
         state();
-        visible = true;
     }
 }
+
+// Add selection blend
+
+if(state == stateSelected)
+    image_blend = selBlendColor;
+else
+    image_blend = c_white;

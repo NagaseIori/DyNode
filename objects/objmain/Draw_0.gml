@@ -78,7 +78,6 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 // Draw targetline
 
     var _sprlazer = global.sprLazer;
-    // gpu_set_blendmode(bm_add);
     // Light Below
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
@@ -112,10 +111,8 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         _nw - targetLineBeside + 1, _nh - targetLineBelow,
         _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
         90, themeColor, 1.0);
-    // gpu_set_blendmode(bm_normal);
     
-    draw_set_color(c_white);
-    draw_set_alpha(1.0);
+    draw_set_color_alpha(c_white, 1.0);
     // Line Below
     draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
                     _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
@@ -131,8 +128,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 // Draw Top Progress Bar
 
     
-    
-    draw_set_color(c_white); draw_set_alpha(topBarIndicatorA);
+    draw_set_color_alpha(c_white, topBarIndicatorA);
     draw_rectangle(0, 0, _nw, topBarMouseH, false);
     if(musicProgress > 0) {
         var _topBarW = round(_nw * musicProgress);
@@ -156,20 +152,3 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
                     i*_nw + (i? -1:1) * targetLineBeside, mixerX[i]);
             }
     }
-
-// Debug
-    
-    // scribble("Music to Chart Delay: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) +
-    // "\nNow Time: " + string(nowTime)+"\nFPS: "+string(fps) + " / "+string(fps_real))
-    // .starting_format("fDynamix20", c_white)
-    // .align(fa_center, fa_top)
-    // .draw(global.resolutionW/2, 30);
-    
-    var _debug_str = "";
-    _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
-    _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
-    _debug_str += "MSPD: " + string(musicSpeed)+"\n";
-    draw_set_font(fDynamix20);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_top);
-    draw_text(global.resolutionW/2, 30, _debug_str);

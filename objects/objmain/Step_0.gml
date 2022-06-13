@@ -1,4 +1,5 @@
 
+var _music_resync_request = false;
 _position_update();
 
 // Functions Control
@@ -7,6 +8,8 @@ _position_update();
         music_load();
     if(keyboard_check_pressed(vk_f4))
         image_load();
+    if(keyboard_check_pressed(ord("P")))
+        hideScoreboard = !hideScoreboard;
 
 // Chart Properties Update
 
@@ -65,6 +68,7 @@ _position_update();
         if(nowPlaying) {
             nowTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
                 * global.fpsAdjust;
+            _music_resync_request = true;
         }
         else {
             animTargetTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
@@ -77,7 +81,7 @@ _position_update();
     if(nowPlaying && !(_timchange != 0 || _timscr != 0)) {
         nowTime += delta_time * musicSpeed / 1000;
     }
-        
+    
         
     if(music != undefined) {
         var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
@@ -105,7 +109,7 @@ _position_update();
                 animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
                 
         
-            if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH) {
+            if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH && mouse_y > 0) {
                 topBarMousePressed = true;
                 topBarMouseLastX = -5;
             }
@@ -120,7 +124,7 @@ _position_update();
                             musicProgress = mouse_x / global.resolutionW;
                             nowMusicTime = musicProgress * musicLength;
                             nowTime = mtime_to_time(musicProgress * musicLength);
-                            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+                            _music_resync_request = true;
                         }
                         topBarMouseLastX = mouse_x;
                     }
@@ -144,16 +148,9 @@ _position_update();
             nowPlaying = false;
         }
         
-        // If there are modifications then sync music with time
-        if(nowPlaying && (_timchange!=0 || _timscr!=0)) {
-            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
-        }
-        
         // nowMusicTime = min(nowMusicTime, musicLength);
         
         musicProgress = clamp(nowMusicTime, 0, musicLength) / musicLength;
-        
-        nowMusicTime = clamp(nowMusicTime, 0, musicLength);
         
         animTargetTime = clamp(animTargetTime, mtime_to_time(0),
                             mtime_to_time(musicLength));
@@ -162,10 +159,19 @@ _position_update();
     else {
         musicProgress = 0;
     }
+    
+// Time Jump
+
+    if(keyboard_check_pressed(ord("L")))
+        animTargetTime = chartNotesArray[chartNotesArrayAt].time;
+    if(keyboard_check_pressed(ord("K")) && chartNotesArrayAt>0)
+        animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;
 
 // Update and Sync Time & musicTime
 
     if(nowPlaying) {
+        if(music != undefined)
+            nowTime = clamp(nowTime, mtime_to_time(0), mtime_to_time(musicLength));
         animTargetTime = nowTime;
     }
     else {
@@ -175,6 +181,10 @@ _position_update();
             nowTime = animTargetTime; // Speeeed up
     }
     nowMusicTime = time_to_mtime(nowTime);
+    
+    if(_music_resync_request) {
+        sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+    }
 
 // Keyboard Pause & Resume
 
@@ -188,3 +198,7 @@ _position_update();
             FMODGMS_Chan_PauseChannel(channel);
         }
     }
+
+// Bg Animation
+
+    bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);

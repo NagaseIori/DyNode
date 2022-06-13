@@ -50,6 +50,10 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Initialize(32);
+
+// Input Initialization
+
+instance_create(x, y, objInput);
     
 // In-Variables
 

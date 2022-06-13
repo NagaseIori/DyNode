@@ -1,9 +1,10 @@
 
-visible = false;
+drawVisible = false;
 depth = 100;
 
 // In-Variables
 
+    sprite = sprNote2;
     width = 2.0;
     position = 2.5;
     side = 0;
@@ -14,6 +15,15 @@ depth = 100;
     sid = -1; // Sub id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
+    // For Editor
+    origWidth = width;
+    origTime = time;
+    origPosition = position;
+    origY = y;
+    origX = x;
+    isDragging = false;
+    mouseDetectRange = 20; // in Pixels
+    
     // For Hold
     lastTime = 0;
     lastAlphaL = 0.4;
@@ -21,7 +31,11 @@ depth = 100;
     lastAlpha = lastAlphaL;
     
     pWidth = (width * 300 - 30)*2; // Width In Pixels
-    originalWidth = sprite_get_width(sprite_index);
+    originalWidth = sprite_get_width(sprite);
+    
+    // For edit
+    selected = false;
+    selBlendColor = 0x4fd5ff;
     
     animSpeed = 0.4;
     animTargetA = 0;
@@ -29,7 +43,7 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 40;
+    partNumber = 80;
     partNumberLast = 1;
     
     // Correction Values
@@ -39,6 +53,7 @@ depth = 100;
 // In-Functions
 
     _prop_init = function () {
+        originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth);
         image_xscale = pWidth / originalWidth;
@@ -114,6 +129,16 @@ depth = 100;
         _burst_particle(partNumber, 0);
     }
     
+    _mouse_inbound_check = function (_mode = 0) {
+        switch _mode {
+            case 0:
+                return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
+            case 1:
+                return mouse_inbound_last_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
+        }
+        
+    }
+    
     // _outbound_check was moved to scrNote
 
 // State Machines
@@ -163,6 +188,19 @@ depth = 100;
             state = stateOut;
             state();
         }
+        
+        // Check Selecting
+        if(editor_get_editmode() == 4 && side == editor_get_editside()) {
+            if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
+                || (mouse_ishold_l() && _mouse_inbound_check(1))) {
+                objEditor.editorSelectSingleTarget = id;
+            }
+            
+            if(_mouse_inbound_check()) {
+                objEditor.editorSelectSingleTargetInbound = id;
+            }
+        }
+        
     }
     
     // State Last
@@ -205,22 +243,126 @@ depth = 100;
             state();
         }
     }
+    
+    // Editors
+        // State attached to cursor
+        stateAttach = function() {
+            stateString = "ATCH";
+            animTargetA = 0.5;
+            
+            if(side == 0) {
+                x = mouse_x;
+                y = editor_snap_to_grid_y(mouse_y, side);
+                position = x_to_note_pos(x, side);
+                time = y_to_note_time(y, side);
+            }
+            else {
+                y = mouse_y;
+                x = editor_snap_to_grid_y(mouse_x, side);
+                position = x_to_note_pos(y, side);
+                time = y_to_note_time(x, side);
+            }
+            
+            
+            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)) {
+                state = stateDrop;
+                origWidth = width;
+            }
+                
+        }
+        
+        // State Dropping down
+        stateDrop = function() {
+            stateString = "DROP";
+            animTargetA = 0.8;
+            if(side == 0)
+                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+            else
+                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            width = max(width, 0.01);
+            _prop_init();
+            
+            if(mouse_check_button_released(mb_left)) {
+                editor_set_width_default(width);
+                if(noteType == 2) {
+                    var _time = time;
+                    state = stateAttachSub;
+                    sinst = instance_create_depth(x, y, depth, objHoldSub);
+                    sinst.dummy = true;
+                    sinst.time = time;
+                    return;
+                }
+                build_note(random_id(6), noteType, time, position, width, -1, side, false);
+                instance_destroy();
+            }
+        }
+        
+        stateAttachSub = function () {
+            stateString = "ATCHS";
+            sinst.time = y_to_note_time(editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side), side);
+            if(mouse_check_button_pressed(mb_left)) {
+                state = stateDropSub;
+                origWidth = width;
+            }
+        }
+        
+        stateDropSub = function () {
+            stateString = "DROPS";
+            animTargetA = 1.0;
+            if(mouse_check_button_released(mb_left)) {
+                var _subid = random_id(6);
+                build_note(_subid, 3, sinst.time, position, width, -1, side, false);
+                build_note(random_id(6), 2, time, position, width, _subid, side, false);
+                instance_destroy(sinst);
+                instance_destroy();
+                sinst = -1;
+            }
+        }
+        
+        // State Selected
+        stateSelected = function() {
+            stateString = "SEL";
+            // If Single Select Then Occupy
+            objEditor.editorSelectSingleOccupied = true;
+            
+            if(editor_get_editmode() != 4)
+                state = stateNormal;
+            if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
+                if(!_mouse_inbound_check()) {
+                    state = stateNormal;
+                }
+            }
+            if(mouse_ishold_l() && _mouse_inbound_check(1)) {
+                if(!isDragging) {
+                    isDragging = true;
+                    origY = y;
+                    origX = x;
+                }
+            }
+            if(mouse_check_button_released(mb_left)) {
+                if(isDragging) {
+                    isDragging = false;
+                    note_all_sort();
+                }
+            }
+            if(isDragging) {
+                if(side == 0) {
+                    y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                    x = origX + mouse_get_delta_last_x_l();
+                    position = x_to_note_pos(x, side);
+                    time = y_to_note_time(y, side);
+                }
+                else {
+                    x = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
+                    y = origY + mouse_get_delta_last_y_l();
+                    position = x_to_note_pos(y, side);
+                    time = y_to_note_time(x, side);
+                }
+            }
+            
+            if(keyboard_check_pressed(vk_delete) && noteType != 3)
+                note_delete(nid);
+        }
 
     state = stateOut;
     stateString = "OUT";
-
-// Debug Draw Function
-
-    _debug_draw = function() {
-        if(debug_mode) {
-            // scribble(stateString+" "+string(nid)+"\n"+string(position)).starting_format("fDynamix20", c_white)
-            // .align(fa_left, fa_middle)
-            // .draw(round(x + pWidth/2), y);
-            
-            // draw_set_color(c_red);
-            // draw_line(x - pWidth/2, y, x + pWidth/2, y);
-            
-            // draw_set_color(c_red);
-            // draw_circle(x, y, 5, 0);
-        }
-    }

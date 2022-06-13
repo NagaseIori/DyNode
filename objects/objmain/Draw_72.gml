@@ -1,4 +1,4 @@
-/// @description Draw the Background
+/// @description Draw the Background & Beat Lines
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
@@ -22,4 +22,4 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     draw_sprite_stretched_exxt(
         global.sprLazer, 0,
         0, _nh - targetLineBelow, _nw, global.resolutionH/2,
-        0, themeColor, 0.5);
+        0, themeColor, bgFaintAlpha);

@@ -1,22 +1,32 @@
 
+function note_all_sort() {
+    var _f = function(_a, _b) {
+        return _a.time < _b.time;
+    }
+    array_sort_f(objMain.chartNotesArray, _f);
+}
 
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
         
     with(objMain) {
-        // By default set chart's bpm
+        // By default set chart's bpm from bar
         chartBeatPerMin = chartBarPerMin * 4;
+        
+        // Get Time Offset
+        chartTimeOffset = bar_to_ctime(chartBarOffset);
+        var _offset = chartTimeOffset;
         
         // Fix every note's time
         if(!_skipnote)
         if(instance_exists(objNote)) {
             with(objNote) {
                 time = bar_to_ctime(bar);
+                time = time_to_mtime(time);
             }
         }
         
-        // Get Time Offset
-        chartTimeOffset = bar_to_ctime(chartBarOffset);
+        chartTimeOffset = 0;
         
         // Reset to beginning
         nowTime = mtime_to_time(0);
@@ -29,12 +39,7 @@ function map_init(_skipnote = false) {
         titleElement.build(true);
         
         // Sort Notes Array base on time
-        var _f = function(_a, _b) {
-            return _a.time < _b.time;
-        }
-        // show_debug_message("ARRAY LENGTH:"+string(array_length(chartNotesArray)));
-        // show_debug_message("ARRAY:"+string(chartNotesArray));
-        array_sort_f(chartNotesArray, _f);
+        note_all_sort();
         
         // Get the chart's difficulty
         
@@ -64,8 +69,9 @@ function map_init(_skipnote = false) {
         chartDifficulty = _diff;
         
         // Initialize Timing Points
+        timing_point_reset();
         timing_point_add(
-            chartTimeOffset, bpm_to_mspb(chartBeatPerMin), 4);
+            _offset, bpm_to_mspb(chartBeatPerMin), 4);
     }
     
 }
@@ -95,19 +101,23 @@ function map_load() {
     show_debug_message("Load sucessfully.");
 }
 
-function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
+        case 0:
             _obj = objNote;
             break;
         case "CHAIN":
+        case 1:
             _obj = objChain;
             break;
         case "HOLD":
+        case 2:
             _obj = objHold;
             break;
         case "SUB":
+        case 3:
             _obj = objHoldSub;
             break;
         default:
@@ -117,12 +127,16 @@ function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
     _inst.width = real(_width);
     _inst.side = real(_side);
     // _inst.offset = real(_time);
-    _inst.bar = real(_bar);
+    if(_fromxml)
+        _inst.bar = real(_time);
+    else
+        _inst.time = _time;
     _inst.position = real(_position);
     _inst.nid = _id;
     _inst.sid = _subid;
     
-    _inst.position += _inst.width/2;
+    if(_fromxml)
+        _inst.position += _inst.width/2;
     
     with(_inst) _prop_init();
     with(objMain) {
@@ -133,9 +147,26 @@ function build_note(_id, _type, _bar, _position, _width, _subid, _side) {
             return true;
         }
         chartNotesMap[_inst.side][? _id] = _inst;
+        
+        if(!_fromxml)
+            note_all_sort();
     }
-    
-    return 0;
+}
+
+function note_delete(_id) {
+    with(objMain) {
+        var l=array_length(chartNotesArray);
+        for(var i=0; i<l; i++)
+            if(chartNotesArray[i].nid == _id) {
+                var _insta = chartNotesArray[i];
+                array_delete(chartNotesArray, i, 1);
+                if(_insta.sid != -1)
+                    note_delete(_insta.sid);
+                instance_destroy(_insta);
+                break;
+            }
+    }
+    note_all_sort();
 }
 
 function map_load_xml(_file) {

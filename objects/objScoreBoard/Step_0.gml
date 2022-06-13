@@ -1,13 +1,6 @@
 /// @description Update scoreboard
 
-if(debug_mode) {
-    if(keyboard_check(vk_f10))
-        _update_score(animTargetScore+1)
-    if(keyboard_check(vk_f11))
-        _update_score(animTargetScore-1)
-}
-
-if(int64(nowScore) <= scoreLimit)
+if(int64(nowScore) <= scoreLimit || objMain.hideScoreboard)
     animTargetAlpha = 0;
 else
     animTargetAlpha = 1;
