@@ -82,6 +82,39 @@ function timing_point_reset() {
     }
 }
 
+function timing_point_load_from_osz() {
+    var _file = "";
+    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
+        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
+        
+    if(_file == "") return;
+    
+    timing_point_reset();
+    var _grid = csv_to_grid(_file, true);
+    var _type = "";
+    var _w = ds_grid_width(_grid);
+    var _h = ds_grid_height(_grid);
+    
+    for(var i=0; i<_h; i++) {
+        if(string_last_pos("[", _grid[# 0, i]) != 0)
+            _type = _grid[# 0, i];
+        else if(_grid[# 0, i] != ""){
+            switch _type {
+                case "[TimingPoints]":
+                    var _time = real(_grid[# 0, i]);
+                    var _mspb = real(_grid[# 1, i]);
+                    var _meter = real(_grid[# 2, i]);
+                    if(_mspb > 0)
+                        timing_point_add(_time, _mspb, _meter);
+                    break;
+            }
+        }
+    }
+    
+    timing_point_sort();
+    ds_grid_destroy(_grid);
+}
+
 function note_build_attach(_type, _side, _width) {
     var _obj = [objNote, objChain, objHold];
     _obj = _obj[_type];

@@ -43,7 +43,7 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 40;
+    partNumber = 80;
     partNumberLast = 1;
     
     // Correction Values
@@ -123,7 +123,7 @@ depth = 100;
             _shadow = objShadowMIX;
         var _inst = instance_create_depth(_x, _y, 1, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
-        _inst.drawVisible = true;
+        _inst.visible = true;
         _inst.image_angle = image_angle;
         
         _burst_particle(partNumber, 0);

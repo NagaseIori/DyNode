@@ -7,6 +7,7 @@ _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
 _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
 _debug_str += "MSPD: " + string(musicSpeed)+"\n";
 _debug_str += "TIME: " + string(nowTime)+"\n";
+_debug_str += "MUSICDELAY: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) + "\n";
 if(instance_exists(editor))
 	_debug_str += "EDITMODE: " + string(editor.editorMode)+ "\n";
 draw_set_font(fDynamix20);

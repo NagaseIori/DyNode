@@ -4,6 +4,8 @@
 
     var _attach_reset_request = false;
     
+    if(keyboard_check_pressed(vk_f10))
+        timing_point_load_from_osz();
     if(keyboard_check_pressed(ord("Z")))
         editorGridYEnabled = !editorGridYEnabled;
     
@@ -122,6 +124,12 @@
                     if(_ny <= _nh - targetLineBelow && _ny >= 0) {
                         draw_set_alpha(beatlineAlpha[0]);
                         draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
+                        if(i == 0 && k == 0) {
+                            draw_set_halign(fa_center);
+                            draw_set_valign(fa_top);
+                            draw_set_color_alpha(c_white, 1);
+                            draw_text(_nw/2, _ny, string(mspb_to_bpm(_nowtp.beatLength)));
+                        }
                     }
                     if(_nyl > targetLineBeside && _nyl <= _nw / 2) {
                         draw_set_alpha(beatlineAlpha[1]);
@@ -135,6 +143,7 @@
         _nowat ++;
         if(_nowat == _pointscount) break;
         _nowtime = _nexttime;
+        _nowtp = timingPoints[_nowat];
         _nexttime = (_nowat + 1 == _pointscount ? objMain.musicLength:timingPoints[_nowat+1].time);
         _nowbeats = 0;
     }
