@@ -131,7 +131,7 @@
                             _scl * -0.25 * global.fpsAdjust, 0);
             // part_type_color3(_pt, c_white, c_orange, c_aqua);
             part_type_color2(_pt, 0x652dba, themeColor);
-            part_type_size(_pt, 0.7, 0.9, -0.02 * global.fpsAdjust, 0);
+            part_type_size(_pt, 0.5, 0.8, -0.01 * global.fpsAdjust, 0);
             part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
             part_type_life(_pt, room_speed*0.3, room_speed*0.5);

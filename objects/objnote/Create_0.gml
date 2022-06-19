@@ -43,7 +43,7 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 40;
+    partNumber = 24;
     partNumberLast = 1;
     
     // Correction Values
