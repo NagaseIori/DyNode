@@ -190,7 +190,7 @@ depth = 100;
         }
         
         // Check Selecting
-        if(editor_get_editmode() == 4 && side == editor_get_editside()) {
+        if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
                 objEditor.editorSelectSingleTarget = id;
