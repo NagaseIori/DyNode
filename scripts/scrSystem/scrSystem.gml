@@ -346,7 +346,7 @@ function map_export_xml() {
     DerpXmlWrite_New();
     DerpXmlWrite_OpenTag("CMap");
         DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);
-        DerpXmlWrite_LeafElement("m_barPerMin", string_format(objMain.chartBarPerMin, 1, 5));
+        DerpXmlWrite_LeafElement("m_barPerMin", string_format(objMain.chartBarPerMin, 1, 9));
         DerpXmlWrite_LeafElement("m_timeOffset", "0");
         DerpXmlWrite_LeafElement("m_leftRegion", objMain.chartSideType[0]);
         DerpXmlWrite_LeafElement("m_rightRegion", objMain.chartSideType[1]);
