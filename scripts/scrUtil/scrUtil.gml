@@ -34,11 +34,11 @@ function draw_set_color_alpha(color, alpha) {
 #endregion
 
 #region TIME & BAR & BPM
-function ctime_to_bar(time) {
+function time_to_bar(time) {
     return time * objMain.chartBarPerMin / 60000;
 }
 
-function bar_to_ctime(offset) {
+function bar_to_time(offset) {
     return offset * 60000 / objMain.chartBarPerMin;
 }
 
@@ -98,6 +98,20 @@ function resor_to_x(ratio) {
 function resor_to_y(ratio) {
     return global.resolutionH * ratio;
 }
+#endregion
+
+#region LOAD & SAVE CHART
+function difficulty_num_to_char(_number) {
+	return string_char_at(global.difficultyString, _number + 1);
+}
+function difficulty_char_to_num(_char) {
+	return string_last_pos(_char, global.difficultyString) - 1;
+}
+
+function note_type_num_to_string(_number) {
+	return global.noteTypeName[_number];
+}
+
 #endregion
 
 function pos_inbound(xo, yo, x1, y1, x2, y2) {

@@ -15,7 +15,7 @@ function DerpXmlExample_Write() {
 	*/
 
 	DerpXml_Init() // call this just once at the start of your game
-	DerpXmlWrite_New()
+	DerpXmlWrite_New()	
 	//DerpXmlWrite_Config('    ', chr(10)) // Optional: configure tab and newline
 
 	DerpXmlWrite_OpenTag("root")

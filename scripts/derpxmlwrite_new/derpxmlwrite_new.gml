@@ -1,5 +1,4 @@
-/// @description  DerpXmlWrite_New(filePath)
-/// @param filePath
+/// @description  DerpXmlWrite_New()
 function DerpXmlWrite_New() {
 	//
 	//  Starts a new empty xml string.

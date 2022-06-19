@@ -14,22 +14,22 @@ function map_init(_skipnote = false) {
         chartBeatPerMin = chartBarPerMin * 4;
         
         // Get Time Offset
-        chartTimeOffset = bar_to_ctime(chartBarOffset);
+        chartTimeOffset = bar_to_time(chartBarOffset);
         var _offset = chartTimeOffset;
         
         // Fix every note's time
         if(!_skipnote)
         if(instance_exists(objNote)) {
             with(objNote) {
-                time = bar_to_ctime(bar);
-                time = time_to_mtime(time);
+                time = bar_to_time(bar);           // Bar to Chart Time in ms
+                time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
             }
         }
         
-        chartTimeOffset = 0;
+        chartTimeOffset = 0;                        // Set the offset to 0
         
-        // Reset to beginning
-        nowTime = mtime_to_time(0);
+        // Reset to the beginning
+        nowTime = 0;                                // Now music time equals chart time
         animTargetTime = nowTime;
         
         // Pre-cache Title Element
@@ -42,31 +42,7 @@ function map_init(_skipnote = false) {
         note_all_sort();
         
         // Get the chart's difficulty
-        
-        var _diff = "";
-        switch string_char_at(chartID, string_length(chartID)) {
-            case "C":
-                _diff = 0;
-                break;
-            case "N":
-                _diff = 1;
-                break;
-            case "H":
-                _diff = 2;
-                break;
-            case "M":
-                _diff = 3;
-                break;
-            case "G":
-                _diff = 4;
-                break;
-            case "T":
-                _diff = 5;
-                break;
-            default:
-                _diff = 0;
-        }
-        chartDifficulty = _diff;
+        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
         
         // Initialize Timing Points
         timing_point_reset();
@@ -350,6 +326,94 @@ function image_load() {
     }
     
     sprite_delete(_spr);
+}
+
+function map_export_xml() {
+    var _file = "";
+    var _mapid = "_map_" + objMain.chartTitle + "_" + difficulty_num_to_char(objMain.chartDifficulty);
+    var _default_file_name = _mapid + "-";
+    _default_file_name += string(current_year) + "-";
+    _default_file_name += string(current_month) + "-";
+    _default_file_name += string(current_day) + "-";
+    _default_file_name += string(current_hour) + "-";
+    _default_file_name += string(current_minute) + "-";
+    _default_file_name += string(current_second);
+    _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, 
+        "Export Dynamic Chart as XMl File 导出谱面XML文件");
+    
+    if(_file == "") return;
+    
+    DerpXmlWrite_New();
+    DerpXmlWrite_OpenTag("CMap");
+        DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);
+        DerpXmlWrite_LeafElement("m_barPerMin", objMain.chartBarPerMin);
+        DerpXmlWrite_LeafElement("m_timeOffset", "0");
+        DerpXmlWrite_LeafElement("m_leftRegion", objMain.chartSideType[0]);
+        DerpXmlWrite_LeafElement("m_rightRegion", objMain.chartSideType[1]);
+        DerpXmlWrite_LeafElement("m_mapID", _mapid);
+        
+        // Down Side Notes
+        var l = array_length(objMain.chartNotesArray);
+        DerpXmlWrite_OpenTag("m_notes");
+            DerpXmlWrite_OpenTag("m_notes");
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                    if(side == 0) {
+                        DerpXmlWrite_OpenTag("CMapNoteAsset");
+                            DerpXmlWrite_LeafElement("m_id", nid);
+                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
+                            DerpXmlWrite_LeafElement("m_width", width);
+                            DerpXmlWrite_LeafElement("m_subId", sid);
+                        DerpXmlWrite_CloseTag();
+                    }
+                }
+            DerpXmlWrite_CloseTag();
+        DerpXmlWrite_CloseTag();
+        
+        // Left Side Notes
+        DerpXmlWrite_OpenTag("m_notesLeft");
+            DerpXmlWrite_OpenTag("m_notes");
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                    if(side == 1) {
+                        DerpXmlWrite_OpenTag("CMapNoteAsset");
+                            DerpXmlWrite_LeafElement("m_id", nid);
+                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
+                            DerpXmlWrite_LeafElement("m_width", width);
+                            DerpXmlWrite_LeafElement("m_subId", sid);
+                        DerpXmlWrite_CloseTag();
+                    }
+                }
+            DerpXmlWrite_CloseTag();
+        DerpXmlWrite_CloseTag();
+        
+        // Right Side Notes
+        DerpXmlWrite_OpenTag("m_notesRight");
+            DerpXmlWrite_OpenTag("m_notes");
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                    if(side == 2) {
+                        DerpXmlWrite_OpenTag("CMapNoteAsset");
+                            DerpXmlWrite_LeafElement("m_id", nid);
+                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
+                            DerpXmlWrite_LeafElement("m_width", width);
+                            DerpXmlWrite_LeafElement("m_subId", sid);
+                        DerpXmlWrite_CloseTag();
+                    }
+                }
+            DerpXmlWrite_CloseTag();
+        DerpXmlWrite_CloseTag();
+    DerpXmlWrite_CloseTag();
+    
+    var xmlString = DerpXmlWrite_GetString()
+	DerpXmlWrite_UnloadString() // free DerpXml's internal copy of the xml string
+	
+	var f = file_text_open_write(_file);
+	file_text_write_string(f, xmlString);
+	file_text_close(f);
 }
 
 function sfmod_channel_get_position(channel, spr) {

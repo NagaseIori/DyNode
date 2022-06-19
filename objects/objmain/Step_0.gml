@@ -8,6 +8,8 @@ _position_update();
         music_load();
     if(keyboard_check_pressed(vk_f4))
         image_load();
+    if(keyboard_check_pressed(vk_f5))
+    	map_export_xml();
     if(keyboard_check_pressed(ord("P")))
         hideScoreboard = !hideScoreboard;
 

@@ -7,7 +7,7 @@ function DerpXmlWrite_LeafElement(argument0, argument1) {
 	//  If you supply '' as text, the empty element syntax will be used, e.g. <tagName/>
 
 	var tagName = argument0
-	var text = argument1
+	var text = string(argument1)
 
 	if text != "" {
 	    DerpXmlWrite_OpenTag(tagName)

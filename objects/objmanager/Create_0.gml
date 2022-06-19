@@ -19,6 +19,9 @@ global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
+global.difficultyString = "CNMHGT";
+
+global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
 // Generate Temp Sprite
 
