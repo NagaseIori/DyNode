@@ -164,6 +164,7 @@
     {"id":{"name":"sh_better_scaling_5xbra","path":"shaders/sh_better_scaling_5xbra/sh_better_scaling_5xbra.yy",},"order":1,},
     {"id":{"name":"DerpXmlRead_CurGetAttribute","path":"scripts/DerpXmlRead_CurGetAttribute/DerpXmlRead_CurGetAttribute.yy",},"order":1,},
     {"id":{"name":"scribble_typewriter_add_character_delay","path":"scripts/scribble_typewriter_add_character_delay/scribble_typewriter_add_character_delay.yy",},"order":6,},
+    {"id":{"name":"fOrbitron48","path":"fonts/fOrbitron48/fOrbitron48.yy",},"order":2,},
     {"id":{"name":"scribble_anim_reset","path":"scripts/scribble_anim_reset/scribble_anim_reset.yy",},"order":5,},
     {"id":{"name":"DerpXmlWrite_New","path":"scripts/DerpXmlWrite_New/DerpXmlWrite_New.yy",},"order":6,},
     {"id":{"name":"libdlgmodule","path":"extensions/libdlgmodule/libdlgmodule.yy",},"order":2,},

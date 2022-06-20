@@ -68,7 +68,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // Draw Title
 
     titleElement
-    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 34);
+    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 42);
     
     // Draw Difficulty
     better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 

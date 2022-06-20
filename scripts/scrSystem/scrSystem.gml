@@ -33,10 +33,9 @@ function map_init(_skipnote = false) {
         animTargetTime = nowTime;
         
         // Pre-cache Title Element
-        titleElement = scribble(chartTitle).starting_format("fDynamix48", c_white)
+        titleElement = scribble(chartTitle).starting_format("fOrbitron48", c_white)
         .align(fa_left, fa_middle)
         .transform(0.7, 0.7);
-        titleElement.build(true);
         
         // Sort Notes Array base on time
         note_all_sort();
