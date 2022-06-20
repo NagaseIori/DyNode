@@ -9,6 +9,12 @@
 
     layer_set_visible(layer_get_id("Background"), false);
 
+#region Project Properties
+
+	projectPath = "";
+	
+#endregion
+
 #region Layouts Init
 
 // Target Line

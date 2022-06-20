@@ -3,6 +3,7 @@
 // Debug
 
 var _debug_str = "";
+_debug_str += "DyNode " + global.version + " - In Development\n";
 _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
 _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
 _debug_str += "MSPD: " + string(musicSpeed)+"\n";

@@ -16,7 +16,7 @@
     if(editorSide == 3) editorSide = 0;
     
     // Editor Mode Switch
-    for(var i=1; i<=4; i++)
+    for(var i=1; i<=5; i++)
         if(keyboard_check_pressed(ord(string(i)))) {
             if(editorMode != i)
                 _attach_reset_request = true;
@@ -127,7 +127,7 @@
                         if(i == 0 && k == 0) {
                             draw_set_halign(fa_center);
                             draw_set_valign(fa_top);
-                            draw_set_color_alpha(c_white, 1);
+                            draw_set_color(c_white);
                             draw_text(_nw/2, _ny, string(mspb_to_bpm(_nowtp.beatLength)));
                         }
                     }

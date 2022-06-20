@@ -9,6 +9,8 @@
 
 // Global Variables
 
+global.version = "v0.0.0-Alpha"
+
 global.resolutionW = 1920
 global.resolutionH = 1080
 
