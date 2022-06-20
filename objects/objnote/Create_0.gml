@@ -121,7 +121,7 @@ depth = 100;
         var _shadow = objShadow;
         if(side > 0 && objMain.chartSideType[side-1] == "MIXER")
             _shadow = objShadowMIX;
-        var _inst = instance_create_depth(_x, _y, 1, _shadow), _scl = 1;
+        var _inst = instance_create_depth(_x, _y, -1, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
         _inst.image_angle = image_angle;
