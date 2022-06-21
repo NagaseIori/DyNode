@@ -85,6 +85,12 @@ depth = 100;
             _y1 = y - pWidth / 2;
             _y2 = y + pWidth / 2; 
         }
+        
+        // Particles burst on mixer's position
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
+            _y = objMain.mixerX[side-1];
+        }
+        
         var _ang = image_angle, _scl = image_xscale;
         with(objMain) {
             if(_type == 0) {
@@ -119,8 +125,11 @@ depth = 100;
             _y = y;
         }
         var _shadow = objShadow;
-        if(side > 0 && objMain.chartSideType[side-1] == "MIXER")
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
             _shadow = objShadowMIX;
+            _y = objMain.mixerX[side-1];
+        }
+            
         var _inst = instance_create_depth(_x, _y, -1, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;

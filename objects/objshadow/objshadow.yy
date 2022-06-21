@@ -1,8 +1,11 @@
 {
-  "managed": true,
-  "spriteId": null,
+  "spriteId": {
+    "name": "sprShadow",
+    "path": "sprites/sprShadow/sprShadow.yy",
+  },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": null,

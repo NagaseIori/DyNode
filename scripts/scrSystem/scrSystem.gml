@@ -21,7 +21,7 @@ function map_init(_skipnote = false) {
         if(!_skipnote)
         if(instance_exists(objNote)) {
             with(objNote) {
-                time = bar_to_time(bar);           // Bar to Chart Time in ms
+                time = bar_to_time(bar);        	// Bar to Chart Time in ms
                 time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
             }
         }
