@@ -61,12 +61,12 @@ depth = 100;
     }
     _prop_init();
 
-    _burst_particle = function(_num, _type, _force = false) {
+    _emit_particle = function(_num, _type, _force = false) {
         
         if(!objMain.nowPlaying && !_force)
             return;
         
-        // Burst Particles
+        // Emit Particles
         var _x, _y, _x1, _x2, _y1, _y2;
         if(side == 0) {
             _x = x;
@@ -86,7 +86,7 @@ depth = 100;
             _y2 = y + pWidth / 2; 
         }
         
-        // Particles burst on mixer's position
+        // Emit particles on mixer's position
         if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
             _y = objMain.mixerX[side-1];
         }
@@ -135,7 +135,7 @@ depth = 100;
         _inst.visible = true;
         _inst.image_angle = image_angle;
         
-        _burst_particle(partNumber, 0);
+        _emit_particle(partNumber, 0);
     }
     
     _mouse_inbound_check = function (_mode = 0) {
@@ -223,7 +223,7 @@ depth = 100;
             image_alpha = lastTime == 0 ? 0 : image_alpha;
             state();
         }
-        else _burst_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
+        else _emit_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
         
         if(time > objMain.nowTime) {
             state = stateIn;
