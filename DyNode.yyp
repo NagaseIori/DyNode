@@ -206,6 +206,7 @@
     {"id":{"name":"scrConstructor","path":"scripts/scrConstructor/scrConstructor.yy",},"order":1,},
     {"id":{"name":"scrEditor","path":"scripts/scrEditor/scrEditor.yy",},"order":6,},
     {"id":{"name":"objInput","path":"objects/objInput/objInput.yy",},"order":1,},
+    {"id":{"name":"sndHit","path":"sounds/sndHit/sndHit.yy",},"order":0,},
     {"id":{"name":"scrInput","path":"scripts/scrInput/scrInput.yy",},"order":7,},
   ],
   "Options": [

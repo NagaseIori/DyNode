@@ -113,6 +113,9 @@ depth = 100;
         if(!objMain.nowPlaying && !_force)
             return;
         
+        // Play Sound
+        audio_play_sound(sndHit, 0, 0);
+        
         // Create Shadow
         var _x, _y;
         if(side == 0) {

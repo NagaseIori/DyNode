@@ -186,7 +186,8 @@ _position_update();
     nowMusicTime = time_to_mtime(nowTime);
     
     if(_music_resync_request) {
-        sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+        sfmod_channel_set_position(nowTime, channel, sampleRate);
+        nowTime = sfmod_channel_get_position(channel, sampleRate);
     }
 
 // Keyboard Pause & Resume
@@ -196,6 +197,7 @@ _position_update();
         if(nowPlaying) {
             FMODGMS_Chan_ResumeChannel(channel);
             sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+            nowTime = sfmod_channel_get_position(channel, sampleRate);
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
