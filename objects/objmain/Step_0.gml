@@ -81,7 +81,7 @@ _position_update();
 // Time Operation
 
     if(nowPlaying && !(_timchange != 0 || _timscr != 0)) {
-        nowTime += delta_time * musicSpeed / 1000;
+    	nowTime += delta_time * musicSpeed / 1000;
     }
     
         

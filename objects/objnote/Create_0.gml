@@ -114,7 +114,7 @@ depth = 100;
             return;
         
         // Play Sound
-        audio_play_sound(sndHit, 0, 0);
+        // audio_play_sound(sndHit, 0, 0);
         
         // Create Shadow
         var _x, _y;

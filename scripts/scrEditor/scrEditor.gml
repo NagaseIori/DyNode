@@ -89,13 +89,14 @@ function timing_point_load_from_osz() {
         
     if(_file == "") return;
     
-    var _import_hitobj = show_question("是否导入 .osu 中的物件？（仅用于测试）");
+    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
     
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
     var _type = "";
     var _w = ds_grid_width(_grid);
     var _h = ds_grid_height(_grid);
+    var _mode = 0;				// Osu Game Mode
     
     for(var i=0; i<_h; i++) {
         if(string_last_pos("[", _grid[# 0, i]) != 0) {
@@ -104,6 +105,10 @@ function timing_point_load_from_osz() {
             
         else if(_grid[# 0, i] != ""){
             switch _type {
+            	case "[General]":
+            		if(string_last_pos("Mode", _grid[# 0, i]) != 0)
+            			_mode = real(string_digits(_grid[# 0, i]));
+            		break;
                 case "[TimingPoints]":
                     var _time = real(_grid[# 0, i]);
                     var _mspb = real(_grid[# 1, i]);
@@ -115,19 +120,23 @@ function timing_point_load_from_osz() {
                 	if(_import_hitobj) {
                 		var _ntime = real(_grid[# 2, i]);
                 		var _ntype = real(_grid[# 3, i]);
-                		if(_time > 0) {
-                			build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false, false);
-                			// switch _ntype {
-                			// 	case 0:	// Hit Circle
-                			// 	case 1:
-                			// 		build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false);
-                			// 		break;
-                			// 	// case 1: // Slider
-                			// 	// 	build_hold(random_id(6), 0, _ntime, random_range(1, 4), 1.0, _ntime, 0);
-                			// 	// 	break;
-                			// 	default:
-                			// 		break;
-                			// }
+                		if(_ntime > 0) {
+	                		switch _mode {
+	                			case 0:
+	                				var _x = real(_grid[# 0, i]);
+	                				var _y = real(_grid[# 1, i]);
+	                				build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				break;
+	                			case 3: // Mania Mode
+	                				var _x = real(_grid[# 0, i]);
+	                				if(_ntype & 128) { // If is a Mania Hold
+	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1));
+	                					build_hold(random_id(6), _ntime, _x / 512 * 5, 1.0, random_id(6), _subtim, 0);
+	                				} 
+	                				else
+	                					build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				break;
+	                		}
                 		}
                 	}
                 	break;

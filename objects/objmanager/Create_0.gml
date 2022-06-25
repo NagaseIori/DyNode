@@ -6,7 +6,7 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 30        // in ms
-#macro FMOD_SOUND_DELAY 128
+#macro FMOD_SOUND_DELAY 64
 #macro FMOD_SAMPLE_DELAY 0
 
 // Global Variables
@@ -57,6 +57,8 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Initialize(32);
+    FMODGMS_Sys_Set_DSPBufferSize(128, 4);
+    // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
 
 // Input Initialization
 

@@ -278,11 +278,17 @@ function music_load() {
             FMODGMS_Snd_Unload(music);
         
         chartMusicFile = _file;
-        music = FMODGMS_Snd_LoadSound(_file);
+        music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004100, 0);
+        if(music < 0) {
+        	show_error("Load Music Failed.", false);
+        	music = undefined;
+        	return;
+        }
+        // music = FMODGMS_Snd_LoadSound(_file);
         FMODGMS_Snd_PlaySound(music, channel);
         if(!nowPlaying) FMODGMS_Chan_PauseChannel(channel);
         else {
-            nowTime = chartTimeOffset;
+            nowTime = 0;
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
