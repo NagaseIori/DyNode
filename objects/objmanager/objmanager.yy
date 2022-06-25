@@ -1,11 +1,11 @@
 {
-  "managed": true,
   "spriteId": {
     "name": "sprManager",
     "path": "sprites/sprManager/sprManager.yy",
   },
   "solid": false,
   "visible": false,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": true,
   "parentObjectId": null,

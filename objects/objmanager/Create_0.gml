@@ -6,6 +6,7 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 30        // in ms
+#macro FMOD_SOUND_DELAY 100
 
 // Global Variables
 

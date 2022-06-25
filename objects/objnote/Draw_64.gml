@@ -18,5 +18,5 @@ if(debug_mode && pos_inbound(x, y, 0, 0, room_width, room_height)) {
     draw_set_color_alpha(c_white, 1.0);
     draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
     
-    draw_text(x, y, stateString);
+    draw_text(x, y, stateString + " " + string(time));
 }

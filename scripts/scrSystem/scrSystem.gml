@@ -417,11 +417,11 @@ function map_export_xml() {
 
 function sfmod_channel_get_position(channel, spr) {
     var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = FMODGMS_Util_SamplesToSeconds(_ret, spr) * 1000.0;
+    _ret = FMODGMS_Util_SamplesToSeconds(_ret, spr) * 1000.0 - FMOD_SOUND_DELAY;
     return _ret;
 }
 
 function sfmod_channel_set_position(pos, channel, spr) {
-    pos = FMODGMS_Util_SecondsToSamples(pos / 1000.0, spr);
+    pos = FMODGMS_Util_SecondsToSamples((pos + FMOD_SOUND_DELAY) / 1000.0, spr);
     FMODGMS_Chan_Set_Position(channel, pos);
 }
