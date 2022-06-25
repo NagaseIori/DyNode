@@ -116,7 +116,7 @@ function timing_point_load_from_osz() {
                 		var _ntime = real(_grid[# 2, i]);
                 		var _ntype = real(_grid[# 3, i]);
                 		if(_time > 0) {
-                			build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false);
+                			build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false, false);
                 			// switch _ntype {
                 			// 	case 0:	// Hit Circle
                 			// 	case 1:
@@ -138,6 +138,7 @@ function timing_point_load_from_osz() {
     }
     
     timing_point_sort();
+    note_all_sort();
     ds_grid_destroy(_grid);
 }
 

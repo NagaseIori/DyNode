@@ -76,7 +76,7 @@ function map_load() {
     show_debug_message("Load sucessfully.");
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -123,7 +123,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
-        if(!_fromxml)
+        if(!_fromxml && _sort)
             note_all_sort();
     }
 }
