@@ -62,7 +62,9 @@ DerpXml_Init();
 
 instance_create(x, y, objInput);
     
-// In-Variables
+// Randomize
+
+randomize();
 
 // Init finished
 

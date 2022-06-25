@@ -128,6 +128,11 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     }
 }
 
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
+	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
+	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
+}
+
 function note_delete(_id) {
     with(objMain) {
         var l=array_length(chartNotesArray);

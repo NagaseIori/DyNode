@@ -89,6 +89,8 @@ function timing_point_load_from_osz() {
         
     if(_file == "") return;
     
+    var _import_hitobj = show_question("是否导入 .osu 中的物件？（仅用于测试）");
+    
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
     var _type = "";
@@ -96,8 +98,10 @@ function timing_point_load_from_osz() {
     var _h = ds_grid_height(_grid);
     
     for(var i=0; i<_h; i++) {
-        if(string_last_pos("[", _grid[# 0, i]) != 0)
-            _type = _grid[# 0, i];
+        if(string_last_pos("[", _grid[# 0, i]) != 0) {
+        	_type = _grid[# 0, i];
+        }
+            
         else if(_grid[# 0, i] != ""){
             switch _type {
                 case "[TimingPoints]":
@@ -107,6 +111,26 @@ function timing_point_load_from_osz() {
                     if(_mspb > 0)
                         timing_point_add(_time, _mspb, _meter);
                     break;
+                case "[HitObjects]":
+                	if(_import_hitobj) {
+                		var _ntime = real(_grid[# 2, i]);
+                		var _ntype = real(_grid[# 3, i]);
+                		if(_time > 0) {
+                			build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false);
+                			// switch _ntype {
+                			// 	case 0:	// Hit Circle
+                			// 	case 1:
+                			// 		build_note(random_id(6), 0, _ntime, random_range(1, 4), 1.0, -1, 0, false);
+                			// 		break;
+                			// 	// case 1: // Slider
+                			// 	// 	build_hold(random_id(6), 0, _ntime, random_range(1, 4), 1.0, _ntime, 0);
+                			// 	// 	break;
+                			// 	default:
+                			// 		break;
+                			// }
+                		}
+                	}
+                	break;
 				default:
 					break;
             }
