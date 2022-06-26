@@ -43,7 +43,7 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 24;
+    partNumber = 12;
     partNumberLast = 1;
     
     // Correction Values
@@ -93,18 +93,20 @@ depth = 100;
         
         var _ang = image_angle, _scl = image_xscale;
         with(objMain) {
+            _partemit_init(partEmit, _x1, _x2, _y1, _y2);
             if(_type == 0) {
                 _parttype_noted_init(partTypeNoteDL, 1, _ang);
                 _parttype_noted_init(partTypeNoteDR, 1, _ang+180);
                 
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+                part_emitter_burst(partSysNote, partEmit, partTypeNoteDL, _num);
+                part_emitter_burst(partSysNote, partEmit, partTypeNoteDR, _num);
+                // part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
+                // part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
             }
             else if(_type == 1) {
                 _parttype_hold_init(partTypeHold, 1, _ang);
-                _partemit_hold_init(partEmitHold, _x1, _x2, _y1, _y2);
                 // part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
-                part_emitter_burst(partSysNote, partEmitHold, partTypeHold, _num);
+                part_emitter_burst(partSysNote, partEmit, partTypeHold, _num);
             }
         }
     }
@@ -139,7 +141,7 @@ depth = 100;
         _inst.visible = true;
         _inst.image_angle = image_angle;
         
-        _emit_particle(partNumber, 0);
+        _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
     
     _mouse_inbound_check = function (_mode = 0) {

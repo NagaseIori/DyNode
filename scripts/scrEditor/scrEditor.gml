@@ -90,6 +90,8 @@ function timing_point_load_from_osz() {
     if(_file == "") return;
     
     var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
+    var _delay_import = show_question("是否为所有 Timing Points / 物件 添加 64ms 的延迟？");
+    var _delay_time = 64 * _delay_import;
     
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
@@ -110,7 +112,7 @@ function timing_point_load_from_osz() {
             			_mode = real(string_digits(_grid[# 0, i]));
             		break;
                 case "[TimingPoints]":
-                    var _time = real(_grid[# 0, i]);
+                    var _time = real(_grid[# 0, i]) + _delay_time;
                     var _mspb = real(_grid[# 1, i]);
                     var _meter = real(_grid[# 2, i]);
                     if(_mspb > 0)
@@ -118,7 +120,7 @@ function timing_point_load_from_osz() {
                     break;
                 case "[HitObjects]":
                 	if(_import_hitobj) {
-                		var _ntime = real(_grid[# 2, i]);
+                		var _ntime = real(_grid[# 2, i]) + _delay_time;
                 		var _ntype = real(_grid[# 3, i]);
                 		if(_ntime > 0) {
 	                		switch _mode {
@@ -130,7 +132,7 @@ function timing_point_load_from_osz() {
 	                			case 3: // Mania Mode
 	                				var _x = real(_grid[# 0, i]);
 	                				if(_ntype & 128) { // If is a Mania Hold
-	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1));
+	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
 	                					build_hold(random_id(6), _ntime, _x / 512 * 5, 1.0, random_id(6), _subtim, 0);
 	                				} 
 	                				else

@@ -48,7 +48,7 @@ DerpXml_Init();
 
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
-        show_message_async("Error! FMODGMS was not loaded properly.");
+        show_message_async("FMOD 未能正确加载，音乐将无法播放。请检查文件完整性。");
         exit;
     }
     
@@ -57,7 +57,7 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Initialize(32);
-    FMODGMS_Sys_Set_DSPBufferSize(64, 2);
+    FMODGMS_Sys_Set_DSPBufferSize(128, 4);
     // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
 
 // Input Initialization
