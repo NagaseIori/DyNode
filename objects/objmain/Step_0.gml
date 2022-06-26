@@ -12,6 +12,8 @@ _position_update();
     	map_export_xml();
     if(keyboard_check_pressed(ord("P")))
         hideScoreboard = !hideScoreboard;
+    if(keyboard_check_pressed(ord("M")))
+    	hitSoundOn = !hitSoundOn;
 
 // Chart Properties Update
 
@@ -139,9 +141,10 @@ _position_update();
                 }
             }
         
-        // Actually no need for every frame time adjust
-        // if(nowMusicTime >= 0 && abs(_cor_tim - nowMusicTime) > MAXIMUM_DELAY_OF_SOUND) {
-        //     nowMusicTime = _cor_tim;
+        // Reduce Chart to Music's Latency
+        // (Bad Performance)
+        // if(nowPlaying && nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
+        //     nowTime = _cor_tim;
         // }
         
         

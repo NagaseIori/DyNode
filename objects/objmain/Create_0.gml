@@ -95,6 +95,7 @@
     musicSpeed = 1.0;
     
     hideScoreboard = false;
+    hitSoundOn = false;
     
     // Bottom
         bottomDim = 0.75;

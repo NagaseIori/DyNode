@@ -1,5 +1,7 @@
 /// @description Input check
 
+FMODGMS_Sys_Update();
+
 if(keyboard_check_pressed(vk_escape))
     game_end();
 
