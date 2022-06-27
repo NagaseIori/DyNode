@@ -191,15 +191,16 @@ _position_update();
 // Keyboard Pause & Resume
 
     if(keyboard_check_pressed(vk_space)) {
-        nowPlaying = !nowPlaying;
-        if(nowPlaying) {
+    	if(!nowPlaying) {
         	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);
             sfmod_channel_set_position(nowTime, channel, sampleRate);
-            nowTime = sfmod_channel_get_position(channel, sampleRate);
+            time_source_start(timesourceResumeDelay);
+            // nowTime = sfmod_channel_get_position(channel, sampleRate);
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
+            nowPlaying = false;
         }
     }
 

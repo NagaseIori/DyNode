@@ -10,6 +10,7 @@ instance_destroy(objScoreBoard);
 instance_destroy(objPerfectIndc);
 instance_destroy(objEditor);
 
+time_source_destroy(timesourceResumeDelay);
 part_emitter_destroy_all(partSysNote);
 part_system_destroy(partSysNote);
 part_type_destroy(partTypeNoteDL);

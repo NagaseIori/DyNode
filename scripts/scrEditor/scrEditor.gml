@@ -139,6 +139,8 @@ function timing_point_load_from_osz() {
                 		if(_ntime > 0) {
 	                		switch _mode {
 	                			case 0:
+	                			case 1:
+	                			case 2:
 	                				var _x = real(_grid[# 0, i]);
 	                				var _y = real(_grid[# 1, i]);
 	                				build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);

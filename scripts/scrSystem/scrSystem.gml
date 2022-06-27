@@ -280,7 +280,7 @@ function music_load() {
         music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
         // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
-        	show_error("Load Music Failed.", false);
+        	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
         	music = undefined;
         	return;
         }

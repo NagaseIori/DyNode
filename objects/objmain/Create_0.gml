@@ -9,6 +9,17 @@
 
     layer_set_visible(layer_get_id("Background"), false);
 
+#region Time Sources
+	
+	// To prevent unstable delay from music to chart
+	var _tsFun = function() {
+		nowPlaying = true;
+		nowTime = sfmod_channel_get_position(channel, sampleRate);
+	}
+	timesourceResumeDelay = time_source_create(time_source_game, 0.025, time_source_units_seconds, _tsFun, [], 1, time_source_expire_nearest);
+	
+#endregion
+
 #region Project Properties
 
 	projectPath = "";
