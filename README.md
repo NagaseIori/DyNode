@@ -1,4 +1,5 @@
 # DyNode
+
 Yet another Dynamix chart tool.
 
 DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
@@ -16,3 +17,16 @@ Homepage at [here](https://dyn.iorinn.moe).
 * 可调节的多段节拍、BPM 与节拍线
 * .osu 一键转谱，导入 BPM (Timing Points) 与物件
 * 对高分辨率与高刷新率屏幕的原生支持
+
+## 支持平台 ... Supported Platforms
+
+Windows 7/10/11 (64-bit)
+
+日后预计也会添加对 Linux (64-bit) 的支持。
+
+## 致谢 ... Special Thanks
+
+DyNode 的使用了以下项目的源码：
+
+Scribble, Cleanshape by jujuAdams
+FMODGMS by mstop4
