@@ -14,5 +14,5 @@ Homepage at [here](https://dyn.iorinn.moe).
 * 编辑界面动画 & 粒子 & 细节大量改进与重制
 * 更加方便、人性化、符合直觉的编辑方式，批量编辑、复制、移动、镜像与转移下落方向
 * 可调节的多段节拍、BPM 与节拍线
-* .osu 一键转谱，导入 BPM (Timing Points) 与物件 （目前支持 STD, Mania 模式）
+* .osu 一键转谱，导入 BPM (Timing Points) 与物件
 * 对高分辨率与高刷新率屏幕的原生支持
