@@ -78,7 +78,6 @@
     themeColor = 0xc5b7ff; // Sakura pink ❤
 
     nowBar = 0;
-    nowMusicTime = 0;
     nowTime = 0;
     nowPlaying = false;
     nowScore = 0;

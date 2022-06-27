@@ -277,13 +277,13 @@ function music_load() {
             FMODGMS_Snd_Unload(music);
         
         chartMusicFile = _file;
-        music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004100, 0);
+        music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
+        // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed.", false);
         	music = undefined;
         	return;
         }
-        // music = FMODGMS_Snd_LoadSound(_file);
         FMODGMS_Snd_PlaySound(music, channel);
         if(!nowPlaying) FMODGMS_Chan_PauseChannel(channel);
         else {
@@ -291,7 +291,6 @@ function music_load() {
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
-        musicLength = FMODGMS_Util_SamplesToSeconds(musicLength, sampleRate) * 1000;
     }
     
     show_debug_message("Load sucessfully.");
@@ -427,15 +426,11 @@ function map_export_xml() {
 
 function sfmod_channel_get_position(channel, spr) {
     var _ret = FMODGMS_Chan_Get_Position(channel);
-    // _ret = _ret * 1000.0 / spr - FMOD_SOUND_DELAY;
     _ret = _ret - FMOD_SOUND_DELAY;
-    // _ret = (_ret - FMOD_SAMPLE_DELAY) * 1000.0 / spr;
     return _ret;
 }
 
 function sfmod_channel_set_position(pos, channel, spr) {
-    // pos = (pos + FMOD_SOUND_DELAY) * spr / 1000.0;
     pos = pos + FMOD_SOUND_DELAY;
-    // pos = pos * spr / 1000.0 + FMOD_SAMPLE_DELAY;
     FMODGMS_Chan_Set_Position(channel, pos);
 }

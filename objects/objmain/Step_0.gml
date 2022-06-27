@@ -54,7 +54,6 @@ _position_update();
     if(_muspdchange != 0) {
         musicSpeed += 0.1 * _muspdchange;
         musicSpeed = max(musicSpeed, 0.1);
-        // FMODGMS_Chan_Set_Frequency(channel, sampleRate * musicSpeed);
         FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
     }
 
@@ -91,14 +90,14 @@ _position_update();
         var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
         
         // Play music at chart's beginning
-        if(nowMusicTime < 0) {
+        if(nowTime < 0) {
             FMODGMS_Chan_PauseChannel(channel);
             sfmod_channel_set_position(0, channel, sampleRate);
             channelPaused = true;
         }
         else if(nowPlaying && channelPaused) {
             FMODGMS_Chan_ResumeChannel(channel);
-            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+            sfmod_channel_set_position(nowTime, channel, sampleRate);
             channelPaused = false;
         }
         
@@ -127,8 +126,7 @@ _position_update();
                     if(nowPlaying) {
                         if(abs(topBarMouseLastX - mouse_x) >= 2) {
                             musicProgress = mouse_x / global.resolutionW;
-                            nowMusicTime = musicProgress * musicLength;
-                            nowTime = mtime_to_time(musicProgress * musicLength);
+                            nowTime = musicProgress * musicLength;
                             _music_resync_request = true;
                         }
                         topBarMouseLastX = mouse_x;
@@ -149,14 +147,12 @@ _position_update();
         
         
         // If music ends then pause
-        if(_cor_tim >= musicLength && nowPlaying) {
+        if(_cor_tim > musicLength && nowPlaying) {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
         }
         
-        // nowMusicTime = min(nowMusicTime, musicLength);
-        
-        musicProgress = clamp(nowMusicTime, 0, musicLength) / musicLength;
+        musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
         
         animTargetTime = clamp(animTargetTime, mtime_to_time(0),
                             mtime_to_time(musicLength));
@@ -186,7 +182,6 @@ _position_update();
         if(abs(nowTime - animTargetTime) < 1)
             nowTime = animTargetTime; // Speeeed up
     }
-    nowMusicTime = time_to_mtime(nowTime);
     
     if(_music_resync_request) {
         sfmod_channel_set_position(nowTime, channel, sampleRate);
@@ -198,8 +193,9 @@ _position_update();
     if(keyboard_check_pressed(vk_space)) {
         nowPlaying = !nowPlaying;
         if(nowPlaying) {
+        	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);
-            sfmod_channel_set_position(nowMusicTime, channel, sampleRate);
+            sfmod_channel_set_position(nowTime, channel, sampleRate);
             nowTime = sfmod_channel_get_position(channel, sampleRate);
         }
         else {
