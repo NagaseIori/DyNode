@@ -231,7 +231,9 @@ depth = 100;
             image_alpha = lastTime == 0 ? 0 : image_alpha;
             state();
         }
-        else _emit_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
+        else if(objMain.nowPlaying || editor_get_editmode() == 5) {
+            _emit_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
+        }
         
         if(time > objMain.nowTime) {
             state = stateIn;

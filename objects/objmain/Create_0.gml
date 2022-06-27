@@ -154,16 +154,16 @@
         // Hold
         _parttype_hold_init = function(_pt, _scl = 1.0, _ang = 0.0) {
             part_type_sprite(_pt, sprParticleW, false, true, false);
-            part_type_alpha3(_pt, 0.3 * partAlphaMul, 0.3 * 0.6 * partAlphaMul, 0);
-            part_type_speed(_pt, _scl * 3 * global.fpsAdjust
-                            , _scl * 15 * global.fpsAdjust,
-                            _scl * -0.25 * global.fpsAdjust, 0);
+            part_type_alpha3(_pt, 0.6 * partAlphaMul, 0.6 * 0.6 * partAlphaMul, 0);
+            part_type_speed(_pt, _scl * 15 * global.fpsAdjust
+                            , _scl * 20 * global.fpsAdjust,
+                            _scl * -0.3 * global.fpsAdjust, 0);
             part_type_color2(_pt, 0x16925a, themeColor);
             // part_type_color2(_pt, 0x89ffff, 0xffffe5)
             part_type_size(_pt, 0.8, 1.2, -0.02 * global.fpsAdjust, 0);
             // part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
-            part_type_life(_pt, room_speed*0.3, room_speed*0.5);
+            part_type_life(_pt, room_speed*0.2, room_speed*0.4);
             part_type_blend(_pt, true);
             part_type_direction(_pt, _ang, _ang+180, 0, 0);
         }

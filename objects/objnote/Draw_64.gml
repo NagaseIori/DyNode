@@ -18,6 +18,7 @@ if(drawVisible && editor_get_editmode() == 4) {
     draw_set_color_alpha(_col, nodeAlpha);
     draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
         x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
+    draw_set_alpha(1);
 }
 else animTargetNodeA = 0;
 
