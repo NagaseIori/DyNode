@@ -193,9 +193,9 @@
 #region Perfect Indicator Init
 
     perfDepth = 1000;
-    perfLeft = instance_create_depth(resor_to_x(0.262), resor_to_y(0.635), 
+    perfLeft = instance_create_depth(resor_to_x(0.27), resor_to_y(0.64), 
         perfDepth, objPerfectIndc);
-    perfRight = instance_create_depth(resor_to_x(0.748), resor_to_y(0.635), 
+    perfRight = instance_create_depth(resor_to_x(0.744), resor_to_y(0.64), 
         perfDepth, objPerfectIndc);
         
 #endregion

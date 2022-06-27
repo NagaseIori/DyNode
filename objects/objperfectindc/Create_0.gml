@@ -3,7 +3,7 @@
 nowTime = 9999;
 lastTime = 1000; // ms
 
-scale = 1.0;
+scale = 1.1;
 scaleMul = 1.0;
 
 alpha = 0.0;
