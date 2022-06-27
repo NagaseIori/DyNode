@@ -8,7 +8,7 @@ Not released yet. You can use the modified dynamaker version at [here](https://d
 Homepage at [here](https://dyn.iorinn.moe).
 
 
-## 特性 Features
+## 特性 ... Features
 
 * 从 Dynamaker 上无障碍地转移谱面与习惯操作方式
 * 编辑界面动画 & 粒子 & 细节大量改进与重制
