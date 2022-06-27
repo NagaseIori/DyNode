@@ -12,3 +12,6 @@ if(keyboard_check_pressed(vk_f2))
 
 if(keyboard_check_pressed(ord("F")))
     window_set_fullscreen(!window_get_fullscreen());
+    
+if(keyboard_check_pressed(vk_f12))
+    screen_save(program_directory + "Screenshots\\" + random_id(6) + ".png");

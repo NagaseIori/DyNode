@@ -2,6 +2,8 @@
 
 // Debug
 
+if(!showDebugInfo) return;
+
 var _debug_str = "";
 _debug_str += "DyNode " + global.version + " - In Development\n";
 _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";

@@ -107,6 +107,8 @@
     hideScoreboard = false;
     hitSoundOn = false;
     
+    showDebugInfo = debug_mode;
+    
     // Bottom
         bottomDim = 0.75;
         bottomBgSurf = -1;

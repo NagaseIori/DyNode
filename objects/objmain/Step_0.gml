@@ -10,6 +10,8 @@ _position_update();
         image_load();
     if(keyboard_check_pressed(vk_f5))
     	map_export_xml();
+    if(keyboard_check_pressed(vk_f11))
+    	showDebugInfo = !showDebugInfo;
     if(keyboard_check_pressed(ord("P")))
         hideScoreboard = !hideScoreboard;
     if(keyboard_check_pressed(ord("M")))
