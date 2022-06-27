@@ -17,6 +17,7 @@ Homepage at [here](https://dyn.iorinn.moe).
 * 可调节的多段节拍、BPM 与节拍线
 * .osu 一键转谱，导入 BPM (Timing Points) 与物件
 * 对高分辨率与高刷新率屏幕的原生支持
+* 个性化你的编辑器 - 颜色、粒子特效或数字
 
 ## 截图 ... Screenshots
 
