@@ -48,17 +48,17 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         draw_set_alpha(1.0);
     }
     
-    // Draw Mods
+    // Draw Bottom Right
     
-    var _nxx = resor_to_x((1920 - 80 - 30) / 1920), _nww = 180;
+    var _nxx = resor_to_x((1920 - 80 - 30) / 1920), _nww = 180 * global.scaleXAdjust;
     for(var i = 0; i < 8; i++) {
         draw_sprite_ext(
             i==0?sprBottomSignBlue:sprBottomSignBlack,
             0,
             _nxx - i * _nww / 2,
             (i & 1) == 0? _nh : _nh - targetLineBelow,
-            1,
-            1,
+            global.scaleXAdjust,
+            global.scaleYAdjust,
             (i & 1) == 0? 180 : 0,
             c_white,
             1
@@ -68,11 +68,13 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // Draw Title
 
     titleElement
-    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 42);
+    .transform(global.scaleXAdjust * 0.7, global.scaleYAdjust * 0.7)
+    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 42 * global.scaleYAdjust);
     
     // Draw Difficulty
     better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
-        resor_to_x(0.019), global.resolutionH - targetLineBelow + 77, 0.2, 0.2, 0, c_white,
+        resor_to_x(0.019), global.resolutionH - targetLineBelow + 77 * global.scaleYAdjust,
+        0.2 * global.scaleXAdjust, 0.2 * global.scaleYAdjust, 0, c_white,
         1, 0);
 
 // Draw targetline

@@ -34,8 +34,7 @@ function map_init(_skipnote = false) {
         
         // Pre-cache Title Element
         titleElement = scribble(chartTitle).starting_format("fOrbitron48", c_white)
-        .align(fa_left, fa_middle)
-        .transform(0.7, 0.7);
+        .align(fa_left, fa_middle);
         
         // Sort Notes Array base on time
         note_all_sort();

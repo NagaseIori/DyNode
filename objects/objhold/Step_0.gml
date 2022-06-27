@@ -24,5 +24,3 @@ if(visible && (sinst != -1 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[
     
     edgeScaleY = pHeight / originalHeight;
 }
-
-image_yscale = 1;

@@ -33,8 +33,8 @@ global.sprLazer = generate_lazer_sprite(2000);
 
 // Set GUI Resolution
 
-display_set_gui_size(global.resolutionW, global.resolutionH);
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
+display_set_gui_size(global.resolutionW, global.resolutionH);
 
 // Smoother
 
@@ -48,7 +48,7 @@ DerpXml_Init();
 
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
-        show_message_async("FMOD 未能正确加载，音乐将无法播放。请检查文件完整性。");
+        show_message_async("FMOD 未能正确加载。请检查文件完整性。");
         exit;
     }
     

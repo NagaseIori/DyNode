@@ -1,6 +1,7 @@
 
 drawVisible = false;
 depth = 100;
+image_yscale = global.scaleYAdjust;
 
 // In-Variables
 
@@ -57,7 +58,7 @@ depth = 100;
     _prop_init = function () {
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
-        pWidth = max(pWidth, originalWidth);
+        pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
     }
