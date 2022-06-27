@@ -63,6 +63,12 @@ function editor_snap_to_grid_x(_x, _side) {
 	return note_pos_to_x(_pos, _side);
 }
 
+function editor_snap_width(_width) {
+	if(objEditor.editorGridWidthEnabled)
+		_width = round(_width * 20) / 20; // per 0.05
+	return _width;
+}
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {

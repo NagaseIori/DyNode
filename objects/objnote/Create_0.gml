@@ -36,6 +36,8 @@ depth = 100;
     // For edit
     selected = false;
     selBlendColor = 0x4fd5ff;
+    nodeAlpha = 0;
+    animTargetNodeA = 0;
     
     animSpeed = 0.4;
     animTargetA = 0;
@@ -294,6 +296,7 @@ depth = 100;
                 width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
             else
                 width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            width = editor_snap_width(width);
             width = max(width, 0.01);
             _prop_init();
             

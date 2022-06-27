@@ -14,6 +14,7 @@ editorSelectSingleOccupied = false;
     // Grid Settings
     editorGridXEnabled = true;
     editorGridYEnabled = true;
+    editorGridWidthEnabled = true;
 
 // Timings
 timingPoints = [];

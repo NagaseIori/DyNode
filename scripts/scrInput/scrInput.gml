@@ -36,3 +36,7 @@ function mouse_square_inbound_last_l(x, y, a) {
 function mouse_ishold_l() {
     return objInput.mouseHoldTimeL > objInput.mouseHoldThreshold;
 }
+
+function ctrl_ishold() {
+    return keyboard_check_direct(vk_control);
+}

@@ -36,6 +36,8 @@ if(drawVisible || image_alpha>0) {
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
+    
+    nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
 }
 
 if(drawVisible)

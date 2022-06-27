@@ -10,6 +10,7 @@
         editorGridYEnabled = !editorGridYEnabled;
     if(keyboard_check_pressed(ord("X")))
         editorGridXEnabled = !editorGridXEnabled;
+    editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
     editorSide += keyboard_check_pressed(vk_up);
