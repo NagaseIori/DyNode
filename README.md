@@ -18,6 +18,12 @@ Homepage at [here](https://dyn.iorinn.moe).
 * .osu 一键转谱，导入 BPM (Timing Points) 与物件
 * 对高分辨率与高刷新率屏幕的原生支持
 
+## 截图 ... Screenshots
+
+![RFNHJM](https://user-images.githubusercontent.com/31349569/176003151-8116cf11-d7ca-4d25-bdd0-6e199987da1c.png)
+![XLUHLV](https://user-images.githubusercontent.com/31349569/176003159-5beba39f-ea9b-44be-a6e3-b2f3e307f910.png)
+
+
 ## 支持平台 ... Supported Platforms
 
 Windows 7/10/11 (64-bit)
