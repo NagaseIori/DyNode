@@ -20,8 +20,9 @@ Homepage at [here](https://dyn.iorinn.moe).
 
 ## 截图 ... Screenshots
 
-![RFNHJM](https://user-images.githubusercontent.com/31349569/176003151-8116cf11-d7ca-4d25-bdd0-6e199987da1c.png)
-![XLUHLV](https://user-images.githubusercontent.com/31349569/176003159-5beba39f-ea9b-44be-a6e3-b2f3e307f910.png)
+![](https://user-images.githubusercontent.com/31349569/176003151-8116cf11-d7ca-4d25-bdd0-6e199987da1c.png)
+![](https://user-images.githubusercontent.com/31349569/176004671-f93cb3cd-a294-46c9-9365-2af913dc95e3.png)
+
 
 
 ## 支持平台 ... Supported Platforms
