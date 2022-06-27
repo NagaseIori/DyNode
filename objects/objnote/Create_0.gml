@@ -266,13 +266,13 @@ depth = 100;
             animTargetA = 0.5;
             
             if(side == 0) {
-                x = mouse_x;
+                x = editor_snap_to_grid_x(mouse_x, side);
                 y = editor_snap_to_grid_y(mouse_y, side);
                 position = x_to_note_pos(x, side);
                 time = y_to_note_time(y, side);
             }
             else {
-                y = mouse_y;
+                y = editor_snap_to_grid_x(mouse_x, side)
                 x = editor_snap_to_grid_y(mouse_x, side);
                 position = x_to_note_pos(y, side);
                 time = y_to_note_time(x, side);
@@ -363,13 +363,13 @@ depth = 100;
             if(isDragging) {
                 if(side == 0) {
                     y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
-                    x = origX + mouse_get_delta_last_x_l();
+                    x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
                     position = x_to_note_pos(x, side);
                     time = y_to_note_time(y, side);
                 }
                 else {
                     x = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
-                    y = origY + mouse_get_delta_last_y_l();
+                    y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
                 }

@@ -55,6 +55,14 @@ function editor_snap_to_grid_y(_y, _side) {
     return _ret;
 }
 
+function editor_snap_to_grid_x(_x, _side) {
+	if(!objEditor.editorGridXEnabled) return _x;
+	
+	var _pos = x_to_note_pos(_x, _side);
+	_pos = round(_pos * 10) / 10;
+	return note_pos_to_x(_pos, _side);
+}
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {

@@ -8,6 +8,8 @@
         timing_point_load_from_osz();
     if(keyboard_check_pressed(ord("Z")))
         editorGridYEnabled = !editorGridYEnabled;
+    if(keyboard_check_pressed(ord("X")))
+        editorGridXEnabled = !editorGridXEnabled;
     
     // Editor Side Switch
     editorSide += keyboard_check_pressed(vk_up);
