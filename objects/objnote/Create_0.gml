@@ -263,7 +263,7 @@ depth = 100;
         // State attached to cursor
         stateAttach = function() {
             stateString = "ATCH";
-            animTargetA = 0.5;
+            animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
             if(side == 0) {
                 x = editor_snap_to_grid_x(mouse_x, side);
@@ -272,7 +272,7 @@ depth = 100;
                 time = y_to_note_time(y, side);
             }
             else {
-                y = editor_snap_to_grid_x(mouse_x, side)
+                y = editor_snap_to_grid_x(mouse_y, side)
                 x = editor_snap_to_grid_y(mouse_x, side);
                 position = x_to_note_pos(y, side);
                 time = y_to_note_time(x, side);
