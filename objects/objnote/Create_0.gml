@@ -23,7 +23,7 @@ image_yscale = global.scaleYAdjust;
     origY = y;
     origX = x;
     isDragging = false;
-    mouseDetectRange = 20; // in Pixels
+    nodeRadius = 22; // in Pixels
     
     // For Hold
     lastTime = 0;

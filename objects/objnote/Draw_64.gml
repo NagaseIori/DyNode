@@ -7,18 +7,16 @@ if(drawVisible && editor_get_editmode() == 4) {
         // _col = c_white;
         animTargetNodeA = 1.0;
     }
-        
     else if(state == stateSelected) {
         _col = c_white;
         animTargetNodeA = 1.0;
     }
-    
     else animTargetNodeA = 0;
     
-    draw_set_color_alpha(_col, nodeAlpha);
-    draw_rectangle(x - mouseDetectRange / 2, y - mouseDetectRange / 2,
-        x + mouseDetectRange / 2, y + mouseDetectRange / 2, false);
-    draw_set_alpha(1);
+    CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
+        .Rounding(5)
+        .Blend(_col, nodeAlpha)
+        .Draw();
 }
 else animTargetNodeA = 0;
 
