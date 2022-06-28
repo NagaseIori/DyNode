@@ -28,7 +28,7 @@ nowTime += delta_time / 1000;
         bloomAlpha = 0;
     }
 
-if(objMain.hideScoreboard)
+if(objMain.hideScoreboard && !(editor_get_editmode() == 5))
     animTargetAlphaMul = 0;
 else
     animTargetAlphaMul = 1;

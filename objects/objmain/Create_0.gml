@@ -16,7 +16,7 @@
 		nowPlaying = true;
 		nowTime = sfmod_channel_get_position(channel, sampleRate);
 	}
-	timesourceResumeDelay = time_source_create(time_source_game, 0.025, time_source_units_seconds, _tsFun, [], 1, time_source_expire_nearest);
+	timesourceResumeDelay = time_source_create(time_source_game, 0.025, time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
 	
 #endregion
 
