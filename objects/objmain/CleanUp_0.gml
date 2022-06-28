@@ -2,7 +2,7 @@
 surface_free_f(bottomBgSurf);
 surface_free_f(bottomBgSurfPing);
 
-instance_destroy(objNote);
+note_delete_all();
 instance_destroy(objScoreBoard);
 instance_destroy(objPerfectIndc);
 instance_destroy(objEditor);

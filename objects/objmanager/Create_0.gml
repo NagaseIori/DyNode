@@ -43,9 +43,8 @@ gpu_set_tex_filter(true);
 
 // DyCore Initialization
 
-var _err = DyCore_Init();
-if(_err != "success") {
-    show_error("DyCore 核心初始化失败。\n"+_err, true);
+if(DyCore_Init() != "success") {
+    show_error("DyCore 核心初始化失败。", true);
 }
 
 // DerpXML Initialization

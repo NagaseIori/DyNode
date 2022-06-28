@@ -214,11 +214,13 @@ image_yscale = global.scaleYAdjust;
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
-                objEditor.editorSelectSingleTarget = id;
+                objEditor.editorSelectSingleTarget =
+                    editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }
             
             if(_mouse_inbound_check()) {
-                objEditor.editorSelectSingleTargetInbound = id;
+                objEditor.editorSelectSingleTargetInbound = 
+                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, id);
             }
         }
         
@@ -393,7 +395,7 @@ image_yscale = global.scaleYAdjust;
             }
             
             if(keycheck_down(vk_delete) && noteType != 3)
-                note_delete(nid);
+                instance_destroy();
         }
 
     state = stateOut;

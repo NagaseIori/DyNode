@@ -131,17 +131,16 @@ function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
 function note_delete(_id) {
     with(objMain) {
         var l=array_length(chartNotesArray);
+        var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].nid == _id) {
                 var _insta = chartNotesArray[i];
                 array_delete(chartNotesArray, i, 1);
-                if(_insta.sid != -1)
-                    note_delete(_insta.sid);
-                instance_destroy(_insta);
+                found = true;
                 break;
             }
     }
-    note_all_sort();
+    if(found) note_all_sort();
 }
 
 function note_delete_all() {
