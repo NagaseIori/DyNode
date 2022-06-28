@@ -36,3 +36,26 @@ function mouse_square_inbound_last_l(x, y, a) {
 function mouse_ishold_l() {
     return objInput.mouseHoldTimeL > objInput.mouseHoldThreshold;
 }
+
+function ctrl_ishold() {
+    return keyboard_check_direct(vk_control);
+}
+function nofunkey_ishold() {
+    return !(ctrl_ishold());
+}
+function keycheck_ctrl(key) {
+    return ctrl_ishold() && keyboard_check(key);
+}
+function keycheck_down_ctrl(key) {
+    return ctrl_ishold() && keyboard_check_pressed(key);
+}
+
+function keycheck(key) {
+    return nofunkey_ishold() && keyboard_check(key);
+}
+function keycheck_down(key) {
+    return nofunkey_ishold() && keyboard_check_pressed(key);
+}
+function keycheck_up(key) {
+    return keyboard_check_released(key);
+}

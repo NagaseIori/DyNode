@@ -60,18 +60,18 @@ function mspb_to_bpm(mspb) {
 #region POSITION TRANSFORM
 function note_pos_to_x(_pos, _side) {
     if(_side == 0) {
-        return global.resolutionW/2 + (_pos-2.5)*300;
+        return global.resolutionW/2 + (_pos-2.5)*300*global.scaleXAdjust;
     }
     else {
-        return global.resolutionH/2 + (2.5-_pos)*150;
+        return global.resolutionH/2 + (2.5-_pos)*150*global.scaleYAdjust;
     }
 }
 function x_to_note_pos(_x, _side) {
 	if(_side == 0) {
-		return (_x - global.resolutionW / 2) / 300 + 2.5;
+		return (_x - global.resolutionW / 2) / (300*global.scaleXAdjust) + 2.5;
 	}
 	else {
-		return 2.5 - (_x - global.resolutionH / 2) / 150;
+		return 2.5 - (_x - global.resolutionH / 2) / (150*global.scaleYAdjust);
 	}
 }
 function y_to_note_time(_y, _side) {
@@ -91,6 +91,12 @@ function note_time_to_y(_time, _side) {
 		return global.resolutionW / 2 + (_side == 1?-1:1) *  (global.resolutionW / 2 - 
 			(objMain.playbackSpeed * (_time - objMain.nowTime)) - objMain.targetLineBeside);
 	}
+}
+function noteprop_to_xy(_pos, _time, _side) {
+	if(_side == 0)
+		return [note_pos_to_x(_pos, _side), note_time_to_y(_time, _side)];
+	else
+		return [note_time_to_y(_time, _side), note_pos_to_x(_pos, _side)];
 }
 function resor_to_x(ratio) {
     return global.resolutionW * ratio;

@@ -32,11 +32,6 @@ function map_init(_skipnote = false) {
         nowTime = 0;                                // Now music time equals chart time
         animTargetTime = nowTime;
         
-        // Pre-cache Title Element
-        titleElement = scribble(chartTitle).starting_format("fOrbitron48", c_white)
-        .align(fa_left, fa_middle)
-        .transform(0.7, 0.7);
-        
         // Sort Notes Array base on time
         note_all_sort();
         
@@ -76,7 +71,7 @@ function map_load() {
     show_debug_message("Load sucessfully.");
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -123,25 +118,40 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
-        if(!_fromxml)
+        if(!_fromxml && _sort)
             note_all_sort();
     }
+}
+
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
+	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
+	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
 }
 
 function note_delete(_id) {
     with(objMain) {
         var l=array_length(chartNotesArray);
+        var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].nid == _id) {
                 var _insta = chartNotesArray[i];
                 array_delete(chartNotesArray, i, 1);
-                if(_insta.sid != -1)
-                    note_delete(_insta.sid);
-                instance_destroy(_insta);
+                found = true;
                 break;
             }
     }
-    note_all_sort();
+    if(found) note_all_sort();
+}
+
+function note_delete_all() {
+	with(objMain) {
+		chartNotesArray = [];
+		ds_map_clear(chartNotesMap[0]);
+		ds_map_clear(chartNotesMap[1]);
+		ds_map_clear(chartNotesMap[2]);
+		
+		instance_destroy(objNote);
+	}
 }
 
 function map_load_xml(_file) {
@@ -256,6 +266,14 @@ function map_load_xml(_file) {
     DerpXmlRead_CloseFile();
 }
 
+function map_set_title() {
+	var _title = get_string("请输入新的谱面标题：", objMain.chartTitle);
+	
+	if(_title == "") return;
+	
+	objMain.chartTitle = _title;
+}
+
 function music_load() {
     var _file = "";
     _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
@@ -273,15 +291,20 @@ function music_load() {
             FMODGMS_Snd_Unload(music);
         
         chartMusicFile = _file;
-        music = FMODGMS_Snd_LoadSound(_file);
+        music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
+        // music = FMODGMS_Snd_LoadSound(_file);
+        if(music < 0) {
+        	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
+        	music = undefined;
+        	return;
+        }
         FMODGMS_Snd_PlaySound(music, channel);
         if(!nowPlaying) FMODGMS_Chan_PauseChannel(channel);
         else {
-            nowTime = chartTimeOffset;
+            nowTime = 0;
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
-        musicLength = FMODGMS_Util_SamplesToSeconds(musicLength, sampleRate) * 1000;
     }
     
     show_debug_message("Load sucessfully.");
@@ -417,13 +440,11 @@ function map_export_xml() {
 
 function sfmod_channel_get_position(channel, spr) {
     var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = _ret * 1000.0 / spr - FMOD_SOUND_DELAY;
-    // _ret = (_ret - FMOD_SAMPLE_DELAY) * 1000.0 / spr;
+    _ret = _ret - FMOD_SOUND_DELAY;
     return _ret;
 }
 
 function sfmod_channel_set_position(pos, channel, spr) {
-    pos = (pos + FMOD_SOUND_DELAY) * spr / 1000.0;
-    // pos = pos * spr / 1000.0 + FMOD_SAMPLE_DELAY;
+    pos = pos + FMOD_SOUND_DELAY;
     FMODGMS_Chan_Set_Position(channel, pos);
 }

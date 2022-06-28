@@ -3,7 +3,7 @@
 
 // Editors
 
-editorMode = 4;                         // 1 note 2 chain 3 hold 4 view
+editorMode = 5;                         // 1 note 2 chain 3 hold 4 view 5 play
 editorSide = 0;                         // 0 down 1 left 2 right
 editorNoteAttaching = -999;             // instance that attached to cursor now
 editorDefaultWidth = 1.0;
@@ -14,6 +14,7 @@ editorSelectSingleOccupied = false;
     // Grid Settings
     editorGridXEnabled = true;
     editorGridYEnabled = true;
+    editorGridWidthEnabled = true;
 
 // Timings
 timingPoints = [];
@@ -53,7 +54,7 @@ beatlineModes = [
     [1, 2, 4, 8, 16]
     ];
 beatlineDivs = [1, 2, 3, 4, 6, 8, 16, 32];
-beatlineNowMode = 2;
+beatlineNowMode = 3;
 beatlineEnabled = array_create(20, 0);
 
 beatlineHardWidth = 8;

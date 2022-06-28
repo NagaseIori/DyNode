@@ -1,6 +1,6 @@
 /// @description Update scoreboard
 
-if(int64(nowScore) <= scoreLimit || objMain.hideScoreboard)
+if(int64(nowScore) <= scoreLimit || (objMain.hideScoreboard && !(editor_get_editmode() == 5)))
     animTargetAlpha = 0;
 else
     animTargetAlpha = 1;

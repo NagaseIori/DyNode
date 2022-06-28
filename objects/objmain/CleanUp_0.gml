@@ -2,14 +2,12 @@
 surface_free_f(bottomBgSurf);
 surface_free_f(bottomBgSurfPing);
 
-instance_destroy(objNote);
-instance_destroy(objChain);
-instance_destroy(objHold);
-instance_destroy(objHoldSub);
+note_delete_all();
 instance_destroy(objScoreBoard);
 instance_destroy(objPerfectIndc);
 instance_destroy(objEditor);
 
+time_source_destroy(timesourceResumeDelay);
 part_emitter_destroy_all(partSysNote);
 part_system_destroy(partSysNote);
 part_type_destroy(partTypeNoteDL);

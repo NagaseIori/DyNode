@@ -55,6 +55,31 @@ function editor_snap_to_grid_y(_y, _side) {
     return _ret;
 }
 
+function editor_snap_to_grid_x(_x, _side) {
+	if(!objEditor.editorGridXEnabled) return _x;
+	
+	var _pos = x_to_note_pos(_x, _side);
+	_pos = round(_pos * 10) / 10;
+	return note_pos_to_x(_pos, _side);
+}
+
+function editor_snap_width(_width) {
+	if(objEditor.editorGridWidthEnabled)
+		_width = round(_width * 20) / 20; // per 0.05
+	return _width;
+}
+
+// Comparison function to deal with multiple single selection targets
+function editor_select_compare(ida, idb) {
+	if(!instance_exists(ida)) return idb;
+	else if(!instance_exists(idb)) return ida;
+	else if(ida.depth < idb.depth) return ida;
+	else if(ida.depth > idb.depth) return idb;
+	else if(ida.time < idb.time) return ida;
+	else if(ida.time > idb.time) return idb;
+	else return min(ida, idb);
+}
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
@@ -89,24 +114,63 @@ function timing_point_load_from_osz() {
         
     if(_file == "") return;
     
+    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
+    var _delay_import = show_question("是否为所有 Timing Points / 物件 添加 64ms 的延迟？");
+    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear_notes) note_delete_all();
+    var _delay_time = 64 * _delay_import;
+    
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
     var _type = "";
     var _w = ds_grid_width(_grid);
     var _h = ds_grid_height(_grid);
+    var _mode = 0;				// Osu Game Mode
     
     for(var i=0; i<_h; i++) {
-        if(string_last_pos("[", _grid[# 0, i]) != 0)
-            _type = _grid[# 0, i];
+        if(string_last_pos("[", _grid[# 0, i]) != 0) {
+        	_type = _grid[# 0, i];
+        }
+            
         else if(_grid[# 0, i] != ""){
             switch _type {
+            	case "[General]":
+            		if(string_last_pos("Mode", _grid[# 0, i]) != 0)
+            			_mode = real(string_digits(_grid[# 0, i]));
+            		break;
                 case "[TimingPoints]":
-                    var _time = real(_grid[# 0, i]);
+                    var _time = real(_grid[# 0, i]) + _delay_time;
                     var _mspb = real(_grid[# 1, i]);
                     var _meter = real(_grid[# 2, i]);
                     if(_mspb > 0)
                         timing_point_add(_time, _mspb, _meter);
                     break;
+                case "[HitObjects]":
+                	if(_import_hitobj) {
+                		var _ntime = real(_grid[# 2, i]) + _delay_time;
+                		var _ntype = real(_grid[# 3, i]);
+                		if(_ntime > 0) {
+	                		switch _mode {
+	                			case 0:
+	                			case 1:
+	                			case 2:
+	                				var _x = real(_grid[# 0, i]);
+	                				var _y = real(_grid[# 1, i]);
+	                				build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				break;
+	                			case 3: // Mania Mode
+	                				var _x = real(_grid[# 0, i]);
+	                				if(_ntype & 128) { // If is a Mania Hold
+	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
+	                					build_hold(random_id(6), _ntime, _x / 512 * 5, 1.0, random_id(6), _subtim, 0);
+	                				} 
+	                				else
+	                					build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				break;
+	                		}
+                		}
+                	}
+                	break;
 				default:
 					break;
             }
@@ -114,6 +178,7 @@ function timing_point_load_from_osz() {
     }
     
     timing_point_sort();
+    note_all_sort();
     ds_grid_destroy(_grid);
 }
 

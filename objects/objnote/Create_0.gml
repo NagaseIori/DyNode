@@ -1,6 +1,7 @@
 
 drawVisible = false;
 depth = 100;
+image_yscale = global.scaleYAdjust;
 
 // In-Variables
 
@@ -13,6 +14,7 @@ depth = 100;
     time = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
+    sinst = -1; // Sub instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor
@@ -21,8 +23,10 @@ depth = 100;
     origPosition = position;
     origY = y;
     origX = x;
+    origLength = 0; // For hold
+    origSubTime = 0; // For hold's sub
     isDragging = false;
-    mouseDetectRange = 20; // in Pixels
+    nodeRadius = 22; // in Pixels
     
     // For Hold
     lastTime = 0;
@@ -36,6 +40,8 @@ depth = 100;
     // For edit
     selected = false;
     selBlendColor = 0x4fd5ff;
+    nodeAlpha = 0;
+    animTargetNodeA = 0;
     
     animSpeed = 0.4;
     animTargetA = 0;
@@ -43,7 +49,7 @@ depth = 100;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 24;
+    partNumber = 12;
     partNumberLast = 1;
     
     // Correction Values
@@ -55,7 +61,7 @@ depth = 100;
     _prop_init = function () {
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
-        pWidth = max(pWidth, originalWidth);
+        pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
     }
@@ -93,18 +99,20 @@ depth = 100;
         
         var _ang = image_angle, _scl = image_xscale;
         with(objMain) {
+            _partemit_init(partEmit, _x1, _x2, _y1, _y2);
             if(_type == 0) {
                 _parttype_noted_init(partTypeNoteDL, 1, _ang);
                 _parttype_noted_init(partTypeNoteDR, 1, _ang+180);
                 
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-                part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
+                part_emitter_burst(partSysNote, partEmit, partTypeNoteDL, _num);
+                part_emitter_burst(partSysNote, partEmit, partTypeNoteDR, _num);
+                // part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
+                // part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
             }
             else if(_type == 1) {
                 _parttype_hold_init(partTypeHold, 1, _ang);
-                _partemit_hold_init(partEmitHold, _x1, _x2, _y1, _y2);
                 // part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
-                part_emitter_burst(partSysNote, partEmitHold, partTypeHold, _num);
+                part_emitter_burst(partSysNote, partEmit, partTypeHold, _num);
             }
         }
     }
@@ -114,7 +122,8 @@ depth = 100;
             return;
         
         // Play Sound
-        audio_play_sound(sndHit, 0, 0);
+        if(objMain.hitSoundOn)
+            audio_play_sound(sndHit, 0, 0);
         
         // Create Shadow
         var _x, _y;
@@ -138,7 +147,7 @@ depth = 100;
         _inst.visible = true;
         _inst.image_angle = image_angle;
         
-        _emit_particle(partNumber, 0);
+        _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
     
     _mouse_inbound_check = function (_mode = 0) {
@@ -169,7 +178,7 @@ depth = 100;
             state();
         }
         // If is using adm to adjust time then speed the things hell up
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+        if(keycheck(ord("A")) || keycheck(ord("D")) || 
             objMain.topBarMousePressed) {
             image_alpha = 1;
             animTargetA = 1;
@@ -205,11 +214,13 @@ depth = 100;
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
-                objEditor.editorSelectSingleTarget = id;
+                objEditor.editorSelectSingleTarget =
+                    editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }
             
             if(_mouse_inbound_check()) {
-                objEditor.editorSelectSingleTargetInbound = id;
+                objEditor.editorSelectSingleTargetInbound = 
+                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, id);
             }
         }
         
@@ -226,7 +237,9 @@ depth = 100;
             image_alpha = lastTime == 0 ? 0 : image_alpha;
             state();
         }
-        else _emit_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
+        else if(objMain.nowPlaying || editor_get_editmode() == 5) {
+            _emit_particle(ceil(partNumberLast * image_xscale * global.fpsAdjust), 1, true);
+        }
         
         if(time > objMain.nowTime) {
             state = stateIn;
@@ -243,7 +256,7 @@ depth = 100;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
             // In Some situations no need for fading in
-            if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+            if(keycheck(ord("A")) || keycheck(ord("D")) || 
                 objMain.topBarMousePressed ||
                 (side == 0 && objMain.nowPlaying)) {
                 image_alpha = 1;
@@ -260,16 +273,16 @@ depth = 100;
         // State attached to cursor
         stateAttach = function() {
             stateString = "ATCH";
-            animTargetA = 0.5;
+            animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
             if(side == 0) {
-                x = mouse_x;
+                x = editor_snap_to_grid_x(mouse_x, side);
                 y = editor_snap_to_grid_y(mouse_y, side);
                 position = x_to_note_pos(x, side);
                 time = y_to_note_time(y, side);
             }
             else {
-                y = mouse_y;
+                y = editor_snap_to_grid_x(mouse_y, side)
                 x = editor_snap_to_grid_y(mouse_x, side);
                 position = x_to_note_pos(y, side);
                 time = y_to_note_time(x, side);
@@ -291,6 +304,7 @@ depth = 100;
                 width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
             else
                 width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            width = editor_snap_width(width);
             width = max(width, 0.01);
             _prop_init();
             
@@ -323,8 +337,8 @@ depth = 100;
             animTargetA = 1.0;
             if(mouse_check_button_released(mb_left)) {
                 var _subid = random_id(6);
-                build_note(_subid, 3, sinst.time, position, width, -1, side, false);
-                build_note(random_id(6), 2, time, position, width, _subid, side, false);
+                var _teid = random_id(6);
+                build_hold(_teid, time, position, width, _subid, sinst.time, side);
                 instance_destroy(sinst);
                 instance_destroy();
                 sinst = -1;
@@ -333,6 +347,10 @@ depth = 100;
         
         // State Selected
         stateSelected = function() {
+            if(stateString != "SEL" && instance_exists(sinst)) {
+                origLength = sinst.time - time;
+                origSubTime = sinst.time;
+            }
             stateString = "SEL";
             // If Single Select Then Occupy
             objEditor.editorSelectSingleOccupied = true;
@@ -360,20 +378,24 @@ depth = 100;
             if(isDragging) {
                 if(side == 0) {
                     y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
-                    x = origX + mouse_get_delta_last_x_l();
+                    x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
                     position = x_to_note_pos(x, side);
                     time = y_to_note_time(y, side);
                 }
                 else {
                     x = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
-                    y = origY + mouse_get_delta_last_y_l();
+                    y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
                 }
+                
+                if(noteType == 2) {
+                    sinst.time = ctrl_ishold() ? time + origLength : origSubTime;
+                }
             }
             
-            if(keyboard_check_pressed(vk_delete) && noteType != 3)
-                note_delete(nid);
+            if(keycheck_down(vk_delete) && noteType != 3)
+                instance_destroy();
         }
 
     state = stateOut;

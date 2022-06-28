@@ -14,6 +14,7 @@ if(visible && (sinst != -1 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[
     sinst.position = position;
     sinst.width = width;
     sinst.depth = depth;
+    sinst.side = side;
     
     pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
         + dFromBottom + uFromTop;
@@ -24,5 +25,3 @@ if(visible && (sinst != -1 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[
     
     edgeScaleY = pHeight / originalHeight;
 }
-
-image_yscale = 1;

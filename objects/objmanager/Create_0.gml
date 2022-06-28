@@ -5,8 +5,8 @@
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
-#macro MAXIMUM_DELAY_OF_SOUND 30        // in ms
-#macro FMOD_SOUND_DELAY 128
+#macro MAXIMUM_DELAY_OF_SOUND 20        // in ms
+#macro FMOD_SOUND_DELAY 0
 #macro FMOD_SAMPLE_DELAY 0
 
 // Global Variables
@@ -24,6 +24,7 @@ global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 global.difficultyString = "CNMHGT";
+global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
@@ -33,12 +34,18 @@ global.sprLazer = generate_lazer_sprite(2000);
 
 // Set GUI Resolution
 
-display_set_gui_size(global.resolutionW, global.resolutionH);
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
+display_set_gui_size(global.resolutionW, global.resolutionH);
 
 // Smoother
 
 gpu_set_tex_filter(true);
+
+// DyCore Initialization
+
+if(DyCore_Init() != "success") {
+    show_error("DyCore 核心初始化失败。", true);
+}
 
 // DerpXML Initialization
 
@@ -48,7 +55,7 @@ DerpXml_Init();
 
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
-        show_message_async("Error! FMODGMS was not loaded properly.");
+        show_message_async("FMOD 未能正确加载。请检查文件完整性。");
         exit;
     }
     
@@ -57,12 +64,17 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Initialize(32);
+    FMODGMS_Sys_Set_DSPBufferSize(128, 4);
+    FMODGMS_Sys_Update();
+    // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
 
 // Input Initialization
 
 instance_create(x, y, objInput);
     
-// In-Variables
+// Randomize
+
+randomize();
 
 // Init finished
 
