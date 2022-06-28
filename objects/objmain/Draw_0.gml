@@ -25,39 +25,37 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         _sprlazer, 0,
         0, _nh - targetLineBelow,
         _nw, targetLineBelowH/2 + 25,
-        0, themeColor, 1.0);
+        0, themeColor, lazerAlpha[0]);
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
         0, _nh - targetLineBelow + 1,
         _nw, -(targetLineBelowH/2 + 25),
-        0, themeColor, 1.0);
+        0, themeColor, lazerAlpha[0]);
     // Light Left
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
         targetLineBeside, _nh - targetLineBelow,
         _nh - targetLineBelow, targetLineBesideW/2 + 25,
-        90, themeColor, 1.0);
+        90, themeColor, lazerAlpha[1]);
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
         targetLineBeside + 1, _nh - targetLineBelow,
         _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
-        90, themeColor, 1.0);
+        90, themeColor, lazerAlpha[1]);
     // Light Right
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
         _nw - targetLineBeside, _nh - targetLineBelow,
         _nh - targetLineBelow, targetLineBesideW/2 + 25,
-        90, themeColor, 1.0);
+        90, themeColor, lazerAlpha[2]);
     draw_sprite_stretched_exxt(
         _sprlazer, 0,
         _nw - targetLineBeside + 1, _nh - targetLineBelow,
         _nh - targetLineBelow, -(targetLineBesideW/2 + 25),
-        90, themeColor, 1.0);
+        90, themeColor, lazerAlpha[2]);
+    
     
     draw_set_color_alpha(c_white, 1.0);
-    // Line Below
-    draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
-                    _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
     // Line Left
     draw_rectangle(targetLineBeside - targetLineBesideW/2, 0, 
                     targetLineBeside + targetLineBesideW/2,
@@ -66,4 +64,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     draw_rectangle(_nw - targetLineBeside - targetLineBesideW/2, 0, 
                     _nw - targetLineBeside + targetLineBesideW/2,
                     _nh - targetLineBelow, false);
+	// Line Below
+    draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
+                    _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
     

@@ -110,6 +110,10 @@
     
     showDebugInfo = debug_mode;
     
+    // For 3 sides targetline's glow
+    lazerAlpha = [1.0, 1.0, 1.0];
+    animTargetLazerAlpha = lazerAlpha;
+    
     // Bottom
         bottomDim = 0.75;
         bottomBgSurf = -1;

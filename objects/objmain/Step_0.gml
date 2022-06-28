@@ -215,4 +215,18 @@ _position_update();
 
 // Bg Animation
 
+	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
+   
+// Targetline Animation
+
+	if(editor_get_editmode() == 5) {
+		animTargetLazerAlpha = [1.0, 1.0, 1.0];
+	}
+	else {
+		animTargetLazerAlpha = [0.0, 0.0, 0.0];
+		animTargetLazerAlpha[editor_get_editside()] = 1.0;
+	}
+	
+	for(var i=0; i<3; i++)
+		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
