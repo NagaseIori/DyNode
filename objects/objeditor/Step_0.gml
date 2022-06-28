@@ -1,56 +1,6 @@
 /// @description Update Editor
 
-#region Input Checks
 
-    var _attach_reset_request = false;
-    
-    if(keycheck_down(vk_f10))
-        timing_point_load_from_osz();
-    if(keycheck_down(ord("Z")))
-        editorGridYEnabled = !editorGridYEnabled;
-    if(keycheck_down(ord("X")))
-        editorGridXEnabled = !editorGridXEnabled;
-    editorGridWidthEnabled = !ctrl_ishold();
-    
-    // Editor Side Switch
-    editorSide += keycheck_down(vk_up);
-    if(keycheck_down(vk_up))
-        _attach_reset_request = true;
-    if(editorSide == 3) editorSide = 0;
-    
-    // Editor Mode Switch
-    for(var i=1; i<=5; i++)
-        if(keycheck_down(ord(string(i)))) {
-            if(editorMode != i)
-                _attach_reset_request = true;
-            editorMode = i;
-        }
-
-    if(_attach_reset_request) {
-        if(instance_exists(editorNoteAttaching))
-            instance_destroy(editorNoteAttaching);
-    }
-
-    switch editorMode {
-        case 1:
-            if(!instance_exists(editorNoteAttaching))
-                editorNoteAttaching = note_build_attach(0, editorSide, editorDefaultWidth);
-            break;
-        case 2:
-            if(!instance_exists(editorNoteAttaching))
-                editorNoteAttaching = note_build_attach(1, editorSide, editorDefaultWidth);
-            break;
-        case 3:
-            if(!instance_exists(editorNoteAttaching))
-                editorNoteAttaching = note_build_attach(2, editorSide, editorDefaultWidth);
-            break;
-            
-        case 4:
-        default:
-            break;
-    }
-
-#endregion
 
 #region Beatlines
 

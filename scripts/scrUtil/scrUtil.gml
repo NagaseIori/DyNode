@@ -92,6 +92,12 @@ function note_time_to_y(_time, _side) {
 			(objMain.playbackSpeed * (_time - objMain.nowTime)) - objMain.targetLineBeside);
 	}
 }
+function noteprop_to_xy(_pos, _time, _side) {
+	if(_side == 0)
+		return [note_pos_to_x(_pos, _side), note_time_to_y(_time, _side)];
+	else
+		return [note_time_to_y(_time, _side), note_pos_to_x(_pos, _side)];
+}
 function resor_to_x(ratio) {
     return global.resolutionW * ratio;
 }
