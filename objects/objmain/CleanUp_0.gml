@@ -3,9 +3,6 @@ surface_free_f(bottomBgSurf);
 surface_free_f(bottomBgSurfPing);
 
 instance_destroy(objNote);
-instance_destroy(objChain);
-instance_destroy(objHold);
-instance_destroy(objHoldSub);
 instance_destroy(objScoreBoard);
 instance_destroy(objPerfectIndc);
 instance_destroy(objEditor);

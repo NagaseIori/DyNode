@@ -175,7 +175,7 @@ image_yscale = global.scaleYAdjust;
             state();
         }
         // If is using adm to adjust time then speed the things hell up
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+        if(keycheck(ord("A")) || keycheck(ord("D")) || 
             objMain.topBarMousePressed) {
             image_alpha = 1;
             animTargetA = 1;
@@ -251,7 +251,7 @@ image_yscale = global.scaleYAdjust;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
             // In Some situations no need for fading in
-            if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+            if(keycheck(ord("A")) || keycheck(ord("D")) || 
                 objMain.topBarMousePressed ||
                 (side == 0 && objMain.nowPlaying)) {
                 image_alpha = 1;
@@ -381,7 +381,7 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             
-            if(keyboard_check_pressed(vk_delete) && noteType != 3)
+            if(keycheck_down(vk_delete) && noteType != 3)
                 note_delete(nid);
         }
 

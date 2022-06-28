@@ -105,6 +105,8 @@ function timing_point_load_from_osz() {
     
     var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
     var _delay_import = show_question("是否为所有 Timing Points / 物件 添加 64ms 的延迟？");
+    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear_notes) note_delete_all();
     var _delay_time = 64 * _delay_import;
     
     timing_point_reset();

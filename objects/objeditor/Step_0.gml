@@ -4,23 +4,23 @@
 
     var _attach_reset_request = false;
     
-    if(keyboard_check_pressed(vk_f10))
+    if(keycheck_down(vk_f10))
         timing_point_load_from_osz();
-    if(keyboard_check_pressed(ord("Z")))
+    if(keycheck_down(ord("Z")))
         editorGridYEnabled = !editorGridYEnabled;
-    if(keyboard_check_pressed(ord("X")))
+    if(keycheck_down(ord("X")))
         editorGridXEnabled = !editorGridXEnabled;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
-    editorSide += keyboard_check_pressed(vk_up);
-    if(keyboard_check_pressed(vk_up))
+    editorSide += keycheck_down(vk_up);
+    if(keycheck_down(vk_up))
         _attach_reset_request = true;
     if(editorSide == 3) editorSide = 0;
     
     // Editor Mode Switch
     for(var i=1; i<=5; i++)
-        if(keyboard_check_pressed(ord(string(i)))) {
+        if(keycheck_down(ord(string(i)))) {
             if(editorMode != i)
                 _attach_reset_request = true;
             editorMode = i;
@@ -54,18 +54,18 @@
 
 #region Beatlines
 
-    if(keyboard_check_pressed(ord("T"))) {
+    if(keycheck_down(ord("T"))) {
         var _tp = timingPoints[array_length(timingPoints) - 1];
         timing_point_add(objMain.animTargetTime, _tp.beatLength, _tp.meter);
     }
     
-    var _modchg = keyboard_check_pressed(ord("V")) - keyboard_check_pressed(ord("C"));
+    var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
     beatlineNowMode += _modchg;
     beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
     
-    animBeatlineTargetAlpha[0] += 0.7 * keyboard_check_pressed(vk_down);
-    animBeatlineTargetAlpha[1] += 0.7 * keyboard_check_pressed(vk_left);
-    animBeatlineTargetAlpha[2] += 0.7 * keyboard_check_pressed(vk_right);
+    animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
+    animBeatlineTargetAlpha[1] += 0.7 * keycheck_down(vk_left);
+    animBeatlineTargetAlpha[2] += 0.7 * keycheck_down(vk_right);
     for(var i=0; i<3; i++) {
         if(animBeatlineTargetAlpha[i] > 1.4)
             animBeatlineTargetAlpha[i] = 0;

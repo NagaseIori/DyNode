@@ -15,8 +15,9 @@
 	var _tsFun = function() {
 		nowPlaying = true;
 		nowTime = sfmod_channel_get_position(channel, sampleRate);
-	}
-	timesourceResumeDelay = time_source_create(time_source_game, 0.025, time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
+	};
+	resumeDelay = 15;
+	timesourceResumeDelay = time_source_create(time_source_game, resumeDelay/1000, time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
 	
 #endregion
 
@@ -225,10 +226,6 @@
     sampleRate = 0;
     channelPaused = false; // Only used for time correction
     musicLength = 0;
-
-// Scribble Related
-
-    titleElement = undefined;
 
 // Init
 

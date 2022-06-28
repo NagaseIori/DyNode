@@ -4,20 +4,27 @@ _position_update();
 
 // Functions Control
     
-    if(keyboard_check_pressed(vk_f3))
+    if(keycheck_down(vk_f3))
         music_load();
-    if(keyboard_check_pressed(vk_f4))
+    if(keycheck_down(vk_f4))
         image_load();
-    if(keyboard_check_pressed(vk_f5))
+    if(keycheck_down(vk_f5))
     	map_export_xml();
-    if(keyboard_check_pressed(vk_f11))
+    if(keycheck_down(vk_f11))
     	showDebugInfo = !showDebugInfo;
-    if(keyboard_check_pressed(ord("P")))
+    if(keycheck_down(ord("P")))
         hideScoreboard = !hideScoreboard;
-    if(keyboard_check_pressed(ord("M")))
+    if(keycheck_down_ctrl(ord("M")))
     	hitSoundOn = !hitSoundOn;
+    if(keycheck_down_ctrl(ord("T")))
+    	map_set_title();
 
 // Chart Properties Update
+
+	// Adjust Difficulty
+	var _diff_delta = keycheck_down_ctrl(ord("P")) - keycheck_down_ctrl(ord("O"));
+	chartDifficulty += _diff_delta;
+	chartDifficulty = clamp(chartDifficulty, 0, global.difficultyCount - 1);
 
     chartNotesCount = array_length(chartNotesArray)
 
@@ -52,7 +59,7 @@ _position_update();
 
 // Music Speed Adjust
     
-    var _muspdchange = keyboard_check_pressed(ord("W")) - keyboard_check_pressed(ord("S"));
+    var _muspdchange = keycheck_down(ord("W")) - keycheck_down(ord("S"));
     if(_muspdchange != 0) {
         musicSpeed += 0.1 * _muspdchange;
         musicSpeed = max(musicSpeed, 0.1);
@@ -61,12 +68,12 @@ _position_update();
 
 // Keyboard Time & Speed Adjust
 
-    var _spdchange = keyboard_check_pressed(ord("E")) - keyboard_check_pressed(ord("Q"));
+    var _spdchange = keycheck_down(ord("E")) - keycheck_down(ord("Q"));
     animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     playbackSpeed = lerp_a(playbackSpeed, animTargetPlaybackSpeed, animSpeed);
     
-    var _timchange = keyboard_check(ord("D")) - keyboard_check(ord("A"));
+    var _timchange = keycheck(ord("D")) - keycheck(ord("A"));
     var _timscr = mouse_wheel_up() - mouse_wheel_down();
     
     if(_timchange != 0 || _timscr != 0) {
@@ -166,9 +173,9 @@ _position_update();
     
 // Time Jump
 
-    if(keyboard_check_pressed(ord("L")))
+    if(keycheck_down(ord("L")))
         animTargetTime = chartNotesArray[chartNotesArrayAt].time;
-    if(keyboard_check_pressed(ord("K")) && chartNotesArrayAt>0)
+    if(keycheck_down(ord("K")) && chartNotesArrayAt>0)
         animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;
 
 // Update and Sync Time & musicTime
@@ -192,11 +199,11 @@ _position_update();
 
 // Keyboard Pause & Resume
 
-    if(keyboard_check_pressed(vk_space)) {
+    if(keycheck_down(vk_space)) {
     	if(!nowPlaying) {
         	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);
-            sfmod_channel_set_position(nowTime, channel, sampleRate);
+            sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
             time_source_start(timesourceResumeDelay);
             // nowTime = sfmod_channel_get_position(channel, sampleRate);
         }

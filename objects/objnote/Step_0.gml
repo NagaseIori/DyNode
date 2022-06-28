@@ -45,7 +45,7 @@ if(drawVisible)
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
     if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
         // In Some situations no need for fading in
-        if(keyboard_check(ord("A")) || keyboard_check(ord("D")) || 
+        if(keycheck(ord("A")) || keycheck(ord("D")) || 
             objMain.topBarMousePressed ||
             (side == 0 && objMain.nowPlaying)) {
             image_alpha = 1;

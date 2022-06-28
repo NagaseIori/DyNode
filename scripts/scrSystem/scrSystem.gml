@@ -32,10 +32,6 @@ function map_init(_skipnote = false) {
         nowTime = 0;                                // Now music time equals chart time
         animTargetTime = nowTime;
         
-        // Pre-cache Title Element
-        titleElement = scribble(chartTitle).starting_format("fOrbitron48", c_white)
-        .align(fa_left, fa_middle);
-        
         // Sort Notes Array base on time
         note_all_sort();
         
@@ -148,6 +144,17 @@ function note_delete(_id) {
     note_all_sort();
 }
 
+function note_delete_all() {
+	with(objMain) {
+		chartNotesArray = [];
+		ds_map_clear(chartNotesMap[0]);
+		ds_map_clear(chartNotesMap[1]);
+		ds_map_clear(chartNotesMap[2]);
+		
+		instance_destroy(objNote);
+	}
+}
+
 function map_load_xml(_file) {
     DerpXmlRead_OpenFile(_file);
     
@@ -258,6 +265,14 @@ function map_load_xml(_file) {
     }
     
     DerpXmlRead_CloseFile();
+}
+
+function map_set_title() {
+	var _title = get_string("请输入新的谱面标题：", objMain.chartTitle);
+	
+	if(_title == "") return;
+	
+	objMain.chartTitle = _title;
 }
 
 function music_load() {
