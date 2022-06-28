@@ -32,10 +32,18 @@ Windows 7/10/11 (64-bit)
 
 日后预计也会添加对 Linux (64-bit) 的支持。
 
-## 致谢 ... Special Thanks
+## 许可 ... License
 
-DyNode 的使用了以下项目的源码：
+DyNode 使用的大多数美术资源来自游戏 Dynamix ，由 C4Cat Entertainment Limited 制作。
 
-Scribble, Cleanshape by jujuAdams
+DyNode 以 MIT 许可协议进行许可。
 
-FMODGMS by mstop4
+------------------
+
+DyNode 使用了以下开源项目的代码：
+
+Scribble (under MIT License) Copyright (c) 2022 @jujuadams
+
+Clean Shapes (under MIT License) Copyright (c) 2020 Juju Adams
+
+FMODGMS (under [BSD 2-Clause "Simplified" License](https://github.com/mstop4/FMODGMS/blob/master/LICENSE)) Copyright (c) 2016-2017, M.S.T.O.P.
