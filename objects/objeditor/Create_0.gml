@@ -9,7 +9,7 @@ editorNoteAttaching = -999;             // instance that attached to cursor now
 editorDefaultWidth = 1.0;
 editorSelectSingleTarget = -999;          // instance for single selection target
 editorSelectSingleTargetInbound = -999;
-editorSelectSingleOccupied = false;
+editorSelectOccupied = false;
 
     // Grid Settings
     editorGridXEnabled = true;

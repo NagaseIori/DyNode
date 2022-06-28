@@ -352,8 +352,7 @@ image_yscale = global.scaleYAdjust;
                 origSubTime = sinst.time;
             }
             stateString = "SEL";
-            // If Single Select Then Occupy
-            objEditor.editorSelectSingleOccupied = true;
+            objEditor.editorSelectOccupied = true;
             
             if(editor_get_editmode() != 4)
                 state = stateNormal;

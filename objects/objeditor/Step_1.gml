@@ -2,7 +2,7 @@
 
 editorSelectSingleTarget = -999;
 editorSelectSingleTargetInbound = -999;
-editorSelectSingleOccupied = false;
+editorSelectOccupied = false;
 
 #region Input Checks
 

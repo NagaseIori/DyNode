@@ -3,7 +3,7 @@
 if(drawVisible && editor_get_editmode() == 4) {
     var _col = c_blue;
     
-    if(!objEditor.editorSelectSingleOccupied && objEditor.editorSelectSingleTargetInbound == id) {
+    if(!objEditor.editorSelectOccupied && objEditor.editorSelectSingleTargetInbound == id) {
         // _col = c_white;
         animTargetNodeA = 1.0;
     }
