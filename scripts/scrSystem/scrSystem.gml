@@ -1,4 +1,14 @@
 
+function reset_scoreboard() {
+	with(objScoreBoard) {
+		nowScore = 0;
+		animTargetScore = 0;
+	}
+	with(objPerfectIndc) {
+		lastTime = 99999;
+	}
+}
+
 function note_all_sort() {
     var _f = function(_a, _b) {
         return _a.time < _b.time;

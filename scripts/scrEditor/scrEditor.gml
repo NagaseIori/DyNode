@@ -3,6 +3,10 @@ function editor_set_width_default(_width) {
     objEditor.editorDefaultWidth = _width;
 }
 
+function editor_set_editmode(mode) {
+	objEditor.editorMode = mode;
+}
+
 function editor_get_editmode() {
     return objEditor.editorMode;
 }

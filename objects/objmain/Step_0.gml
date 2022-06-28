@@ -18,6 +18,12 @@ _position_update();
     	hitSoundOn = !hitSoundOn;
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
+    if(keycheck_down(vk_enter)) {		// Replay Mode
+    	editor_set_editmode(5);
+    	nowTime = 0;
+    	animTargetTime = 0;
+    	reset_scoreboard();
+    }
 
 // Chart Properties Update
 
@@ -197,9 +203,9 @@ _position_update();
         nowTime = sfmod_channel_get_position(channel, sampleRate);
     }
 
-// Keyboard Pause & Resume
+// Muisc Pause & Resume
 
-    if(keycheck_down(vk_space)) {
+    if(keycheck_down(vk_space) || keycheck_down(vk_enter)) {
     	if(!nowPlaying) {
         	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);
