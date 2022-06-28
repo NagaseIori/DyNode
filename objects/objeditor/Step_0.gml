@@ -74,6 +74,14 @@
                         break;
                     
                     draw_set_color(beatlineColors[j]);
+                    // LR
+                    if(_nyl > targetLineBeside && _nyl <= _nw / 2) {
+                        draw_set_alpha(beatlineAlpha[1]);
+                        draw_line_width(_nyl, _nh - targetLineBelow - _nowh, _nyl, _nh - targetLineBelow, _noww);
+                        draw_set_alpha(beatlineAlpha[2]);
+                        draw_line_width(_nyr, _nh - targetLineBelow - _nowh, _nyr, _nh - targetLineBelow, _noww);
+                    }
+                    // Down
                     if(_ny <= _nh - targetLineBelow && _ny >= 0) {
                         draw_set_alpha(beatlineAlpha[0]);
                         draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
@@ -83,12 +91,6 @@
                             draw_set_color(c_white);
                             draw_text(_nw/2, _ny, string(mspb_to_bpm(_nowtp.beatLength)));
                         }
-                    }
-                    if(_nyl > targetLineBeside && _nyl <= _nw / 2) {
-                        draw_set_alpha(beatlineAlpha[1]);
-                        draw_line_width(_nyl, _nh - targetLineBelow - _nowh, _nyl, _nh - targetLineBelow, _noww);
-                        draw_set_alpha(beatlineAlpha[2]);
-                        draw_line_width(_nyr, _nh - targetLineBelow - _nowh, _nyr, _nh - targetLineBelow, _noww);
                     }
                 }
             }
