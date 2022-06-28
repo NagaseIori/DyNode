@@ -14,6 +14,7 @@ image_yscale = global.scaleYAdjust;
     time = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
+    sinst = -1; // Sub instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor
@@ -22,6 +23,8 @@ image_yscale = global.scaleYAdjust;
     origPosition = position;
     origY = y;
     origX = x;
+    origLength = 0; // For hold
+    origSubTime = 0; // For hold's sub
     isDragging = false;
     nodeRadius = 22; // in Pixels
     
@@ -342,6 +345,10 @@ image_yscale = global.scaleYAdjust;
         
         // State Selected
         stateSelected = function() {
+            if(stateString != "SEL" && instance_exists(sinst)) {
+                origLength = sinst.time - time;
+                origSubTime = sinst.time;
+            }
             stateString = "SEL";
             // If Single Select Then Occupy
             objEditor.editorSelectSingleOccupied = true;
@@ -378,6 +385,10 @@ image_yscale = global.scaleYAdjust;
                     y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
+                }
+                
+                if(noteType == 2) {
+                    sinst.time = ctrl_ishold() ? time + origLength : origSubTime;
                 }
             }
             

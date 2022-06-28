@@ -41,6 +41,13 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 
 gpu_set_tex_filter(true);
 
+// DyCore Initialization
+
+var _err = DyCore_Init();
+if(_err != "success") {
+    show_error("DyCore 核心初始化失败。\n"+_err, true);
+}
+
 // DerpXML Initialization
 
 DerpXml_Init();
