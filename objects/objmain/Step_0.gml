@@ -134,7 +134,7 @@ _position_update();
                 
             
             if(topBarMousePressed) {
-            	objInput.mouseHoldTimeL = 0; // Clear the Hold Buffer
+            	mouse_clear_hold(); // Clear the Hold Buffer
                 if(mouse_check_button_released(mb_left))
                     topBarMousePressed = false;
                 else {

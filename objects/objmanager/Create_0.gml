@@ -64,7 +64,7 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Initialize(32);
-    FMODGMS_Sys_Set_DSPBufferSize(128, 4);
+    FMODGMS_Sys_Set_DSPBufferSize(512, 4);
     FMODGMS_Sys_Update();
     // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
 

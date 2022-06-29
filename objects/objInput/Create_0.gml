@@ -11,4 +11,5 @@ last_mouse_pressedl_y = 0;
 mouseHoldThreshold = 125;
 mouseHoldDistanceThreshold = 10;
 mouseHoldTimeL = 0;
+mouseHoldClear = false;
 mouseClickL = false;

@@ -41,6 +41,7 @@ if(drawVisible)
     state();
 else if(stateString == "OUT") {   // stateMachine is slow --- in VM
     if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
+        drawVisible = true;
         // In Some situations no need for fading in
         if(keycheck(ord("A")) || keycheck(ord("D")) || 
             objMain.topBarMousePressed ||

@@ -14,7 +14,7 @@ image_yscale = global.scaleYAdjust;
     time = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
-    sinst = -1; // Sub instance id
+    sinst = -999; // Sub instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor

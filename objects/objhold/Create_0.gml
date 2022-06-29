@@ -7,18 +7,19 @@ noteType = 2;
 edgeScaleY = 1;
 
 depth *= 2;
+image_yscale = 0.6 * global.scaleYAdjust;
 
 originalHeight = sprite_get_height(sprHoldEdge);
 pHeight = originalHeight; // Height in Pixels base on sprHoldEdge
 
-sprite = sprHoldEdge;
+sprite = sprHoldEdge2;
 _prop_init();
 
 // In-Function
 
     _prop_hold_update = function () {
-        if(visible && (sinst != -1 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)))) {
-            if(sinst == -1)
+        if(drawVisible && (sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)))) {
+            if(sinst > 0)
                 sinst = objMain.chartNotesMap[side][? sid]
             
             // Being destroyed

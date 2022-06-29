@@ -33,6 +33,10 @@ function mouse_square_inbound_last_l(x, y, a) {
     return pos_inbound(_nx, _ny, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 
+function mouse_clear_hold() {
+    objInput.mouseHoldClear = true;
+}
+
 function mouse_ishold_l() {
     return objInput.mouseHoldTimeL > objInput.mouseHoldThreshold;
 }

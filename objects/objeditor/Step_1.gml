@@ -52,7 +52,6 @@ editorSelectMultiple = editorSelectCount > 1;
             instance_destroy(editorNoteAttaching);
         if(_attach_sync_request)
             editorNoteAttaching.side = editorSide;
-            
     }
    
 
