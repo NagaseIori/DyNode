@@ -4,7 +4,7 @@ Yet another Dynamix chart tool.
 
 DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
 
-Not released yet. You can use the modified dynamaker version at [here](https://dym.iorinn.moe/app/src) for now, which is made by Jmak, OmegaPi and the other people.
+Not released yet. You can use the modified dynamaker version at [here](https://dym.iorinn.moe/app/src) for now, which is made by Jmak, OmegaPi, and the other people.
 
 Homepage at [here](https://dyn.iorinn.moe).
 
@@ -18,6 +18,13 @@ Homepage at [here](https://dyn.iorinn.moe).
 * .osu 一键转谱，导入 BPM (Timing Points) 与物件
 * 对高分辨率与高刷新率屏幕的原生支持
 * 个性化你的编辑器 - 颜色、粒子特效或数字
+
+* Hassle-free transfer of charts and habits from Dynamaker
+* Numerous improvements to Dynamix's editing interface
+* More user-friendly
+* Adjustable multi-segment meter and BPM 
+* Import timing settings from osu file format's charts
+* Natively support high-refresh rate and high-resolution display
 
 ## 截图 ... Screenshots
 
@@ -38,9 +45,15 @@ DyNode 使用的大多数美术资源来自游戏 Dynamix ，由 C4Cat Entertain
 
 DyNode 以 MIT 许可协议进行许可。
 
+Most of the art assets used by DyNode are from the game Dynamix, produced by C4Cat Entertainment Limited.
+
+DyNode is licensed under the MIT License.
+
 ------------------
 
-DyNode 使用了以下开源项目的代码：
+DyNode 使用了以下开源项目的代码。
+
+DyNode uses code from the following projects.
 
 Scribble (under MIT License) Copyright (c) 2022 @jujuadams
 
