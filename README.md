@@ -12,7 +12,7 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 
 * Hassle-free transfer of charts and habits from Dynamaker
 * Numerous improvements to Dynamix's editing interface
-* More user-friendly
+* More user-friendly way to operate
 * Adjustable multi-segment metre and BPM 
 * Import timing settings from osu file format's charts
 * Natively support high-refresh rate and high-resolution display
