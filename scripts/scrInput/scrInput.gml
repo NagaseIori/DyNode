@@ -66,3 +66,15 @@ function keycheck_down(key) {
 function keycheck_up(key) {
     return keyboard_check_released(key);
 }
+function wheelcheck_up() {
+    return mouse_wheel_up() && nofunkey_ishold();
+}
+function wheelcheck_down() {
+    return mouse_wheel_down() && nofunkey_ishold();
+}
+function wheelcheck_up_ctrl() {
+    return mouse_wheel_up() && ctrl_ishold();
+}
+function wheelcheck_down_ctrl() {
+    return mouse_wheel_down() && ctrl_ishold();
+}

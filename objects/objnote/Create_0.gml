@@ -353,7 +353,6 @@ image_yscale = global.scaleYAdjust;
                 origSubTime = sinst.time;
             }
             stateString = "SEL";
-            objEditor.editorSelectOccupied = true;
             
             if(editor_get_editmode() != 4)
                 state = stateNormal;
@@ -394,10 +393,12 @@ image_yscale = global.scaleYAdjust;
                 
                 var _delta_x = x - origX;
                 var _delta_y = y - origY;
+                
                 with(objNote) {
                     if(state == stateSelected) {
                         x = origX + _delta_x;
                         y = origY + _delta_y;
+                        
                         position = x_to_note_pos(side?y:x, side);
                         time = y_to_note_time(side?x:y, side);
                         if(noteType == 2) {

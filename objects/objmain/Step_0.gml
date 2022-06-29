@@ -75,12 +75,13 @@ _position_update();
 // Keyboard Time & Speed Adjust
 
     var _spdchange = keycheck_down(ord("E")) - keycheck_down(ord("Q"));
+    _spdchange += editor_select_is_going() ? 0: wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
     animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     playbackSpeed = lerp_a(playbackSpeed, animTargetPlaybackSpeed, animSpeed);
     
     var _timchange = keycheck(ord("D")) - keycheck(ord("A"));
-    var _timscr = mouse_wheel_up() - mouse_wheel_down();
+    var _timscr = wheelcheck_up() - wheelcheck_down();
     
     if(_timchange != 0 || _timscr != 0) {
         if(nowPlaying) {

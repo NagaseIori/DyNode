@@ -12,6 +12,7 @@ with(objNote) {
         objEditor.editorSelectCount ++;
         objEditor.editorSelectDragOccupied |= isDragging;
         objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
+        objEditor.editorSelectOccupied = 1;
     }
 }
 // if(editorSelectInbound)

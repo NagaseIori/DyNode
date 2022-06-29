@@ -15,6 +15,9 @@ function editor_get_editside() {
     return objEditor.editorSide;
 }
 
+function editor_select_is_going() {
+	return objEditor.editorSelectOccupied;
+}
 function editor_select_is_multiple() {
 	return objEditor.editorSelectMultiple;
 }

@@ -105,3 +105,12 @@
     draw_set_alpha(1.0);
 
 #endregion
+
+#region Note Edit
+
+    var _delta_width = wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
+    with(objNote) if(state == stateSelected) {
+        width += _delta_width * 0.05;
+    }
+
+#endregion
