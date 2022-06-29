@@ -19,6 +19,8 @@ Homepage at [here](https://dyn.iorinn.moe).
 * 对高分辨率与高刷新率屏幕的原生支持
 * 个性化你的编辑器 - 颜色、粒子特效或数字
 
+------------------
+
 * Hassle-free transfer of charts and habits from Dynamaker
 * Numerous improvements to Dynamix's editing interface
 * More user-friendly
