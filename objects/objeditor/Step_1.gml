@@ -4,14 +4,20 @@ editorSelectSingleTarget = -999;
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;
 editorSelectDragOccupied = false;
+editorSelectInbound = false;
 
 editorSelectCount = 0;
 with(objNote) {
     if(state == stateSelected) {
         objEditor.editorSelectCount ++;
         objEditor.editorSelectDragOccupied |= isDragging;
+        objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
     }
 }
+// if(editorSelectInbound)
+//     show_debug_message("Inbound!");
+// else
+//     show_debug_message("NOPE");
 editorSelectMultiple = editorSelectCount > 1;
 
 #region Input Checks

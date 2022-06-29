@@ -21,6 +21,12 @@ function editor_select_is_multiple() {
 function editor_select_is_dragging() {
 	return objEditor.editorSelectDragOccupied;
 }
+function editor_select_is_area() {
+	return objEditor.editorSelectArea;
+}
+function editor_select_get_area_position() {
+	return objEditor.editorSelectAreaPosition;
+}
 
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;

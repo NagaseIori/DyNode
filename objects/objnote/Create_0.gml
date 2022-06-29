@@ -410,6 +410,8 @@ image_yscale = global.scaleYAdjust;
             
             if(keycheck_down(vk_delete) && noteType != 3)
                 instance_destroy();
+            if(keycheck_down(ord("M")))
+                position = 5 - position;
         }
 
     state = stateOut;

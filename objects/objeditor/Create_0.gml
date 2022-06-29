@@ -3,16 +3,19 @@
 
 // Editors
 
-editorMode = 5;                         // 1 note 2 chain 3 hold 4 view 5 play
-editorSide = 0;                         // 0 down 1 left 2 right
-editorNoteAttaching = -999;             // instance that attached to cursor now
+editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play
+editorSide = 0;                             // 0 down 1 left 2 right
+editorNoteAttaching = -999;                 // instance that attached to cursor now
 editorDefaultWidth = 1.0;
-editorSelectSingleTarget = -999;          // instance for single selection target
+editorSelectSingleTarget = -999;            // instance for single selection target
 editorSelectSingleTargetInbound = -999;
-editorSelectOccupied = false;
-editorSelectCount = 0;
-editorSelectMultiple = false;
-editorSelectDragOccupied = false;
+editorSelectOccupied = false;               // selecting note
+editorSelectCount = 0;  
+editorSelectMultiple = false;               // selecting multiple notes
+editorSelectDragOccupied = false;           // dragging notes 
+editorSelectArea = false;                   // selecting area
+editorSelectAreaPosition = [0, 0, 0, 0];
+editorSelectInbound = false;                // if at least mouse is inbound one selected note
 
     // Grid Settings
     editorGridXEnabled = true;
