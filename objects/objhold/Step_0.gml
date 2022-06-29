@@ -2,7 +2,7 @@
 // Inherit the parent event
 event_inherited();
 
-if(drawVisible && (sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)))) {
+if((drawVisible || sinst < 0) && (sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)))) {
     if(sinst <= 0)
         sinst = objMain.chartNotesMap[side][? sid]
     
