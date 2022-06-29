@@ -15,6 +15,13 @@ function editor_get_editside() {
     return objEditor.editorSide;
 }
 
+function editor_select_is_multiple() {
+	return objEditor.editorSelectMultiple;
+}
+function editor_select_is_dragging() {
+	return objEditor.editorSelectDragOccupied;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;
     
@@ -126,6 +133,9 @@ function timing_point_load_from_osz() {
     
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
+    
+    show_debug_message("CSV Load Finished.");
+    
     var _type = "";
     var _w = ds_grid_width(_grid);
     var _h = ds_grid_height(_grid);

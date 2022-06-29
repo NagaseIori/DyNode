@@ -10,6 +10,9 @@ editorDefaultWidth = 1.0;
 editorSelectSingleTarget = -999;          // instance for single selection target
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;
+editorSelectCount = 0;
+editorSelectMultiple = false;
+editorSelectDragOccupied = false;
 
     // Grid Settings
     editorGridXEnabled = true;

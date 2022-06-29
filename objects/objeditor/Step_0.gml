@@ -1,7 +1,5 @@
 /// @description Update Editor
 
-
-
 #region Beatlines
 
     if(keycheck_down(ord("T"))) {

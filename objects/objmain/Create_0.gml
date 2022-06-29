@@ -107,7 +107,7 @@
     musicProgress = 0.0;
     musicSpeed = 1.0;
     
-    hideScoreboard = false;
+    hideScoreboard = true;			// hide score board under editor mode
     hitSoundOn = false;
     
     showDebugInfo = debug_mode;

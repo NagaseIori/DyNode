@@ -3,6 +3,16 @@
 editorSelectSingleTarget = -999;
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;
+editorSelectDragOccupied = false;
+
+editorSelectCount = 0;
+with(objNote) {
+    if(state == stateSelected) {
+        objEditor.editorSelectCount ++;
+        objEditor.editorSelectDragOccupied |= isDragging;
+    }
+}
+editorSelectMultiple = editorSelectCount > 1;
 
 #region Input Checks
 

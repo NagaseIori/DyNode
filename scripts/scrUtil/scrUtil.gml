@@ -120,8 +120,11 @@ function note_type_num_to_string(_number) {
 
 #endregion
 
+function in_between(x, l, r) {
+	return abs(r-x) + abs(x-l) == abs(r-l);
+}
 function pos_inbound(xo, yo, x1, y1, x2, y2) {
-	return xo >= x1 && xo <= x2 && yo >= y1 && yo <= y2;
+	return in_between(xo, x1, x2) && in_between(yo, y1, y2);
 }
 
 function array_top(array) {
