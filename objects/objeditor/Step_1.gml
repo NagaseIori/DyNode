@@ -5,20 +5,34 @@ editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;
 editorSelectDragOccupied = false;
 editorSelectInbound = false;
+editorHighlightLine = false;
 
 editorSelectCount = 0;
 with(objNote) {
+    var _hl = false;
     if(state == stateSelected) {
         objEditor.editorSelectCount ++;
         objEditor.editorSelectDragOccupied |= isDragging;
         objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
         objEditor.editorSelectOccupied = 1;
+        
+        if(isDragging) _hl = true;
+    }
+    else if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
+        _hl = true;
+    }
+    
+    // Update Highlight Lines
+    if(_hl && objEditor.editorHighlightLineEnabled) {
+        objEditor.editorHighlightLine = true;
+        objEditor.editorHighlightTime = time;
+        objEditor.editorHighlightPosition = position;
+        if(state == stateAttachSub || state == stateDropSub) {
+            objEditor.editorHighlightTime = sinst.time;
+        }
     }
 }
-// if(editorSelectInbound)
-//     show_debug_message("Inbound!");
-// else
-//     show_debug_message("NOPE");
+
 editorSelectMultiple = editorSelectCount > 1;
 
 #region Input Checks
@@ -31,6 +45,8 @@ editorSelectMultiple = editorSelectCount > 1;
         editorGridYEnabled = !editorGridYEnabled;
     if(keycheck_down(ord("X")))
         editorGridXEnabled = !editorGridXEnabled;
+    if(keycheck_down(ord("H")))
+        editorHighlightLineEnabled = !editorHighlightLineEnabled;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch

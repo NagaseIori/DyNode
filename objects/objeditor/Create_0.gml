@@ -17,6 +17,11 @@ editorSelectArea = false;                   // selecting area
 editorSelectAreaPosition = [0, 0, 0, 0];
 editorSelectInbound = false;                // if at least mouse is inbound one selected note
 
+editorHighlightLine = false;
+editorHighlightLineEnabled = true;
+editorHighlightTime = 0;
+editorHighlightPosition = 0;
+
     // Grid Settings
     editorGridXEnabled = true;
     editorGridYEnabled = true;
