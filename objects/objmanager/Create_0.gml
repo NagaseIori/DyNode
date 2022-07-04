@@ -43,9 +43,9 @@ gpu_set_tex_filter(true);
 
 // DyCore Initialization
 
-if(DyCore_Init() != "success") {
-    show_error("DyCore 核心初始化失败。", true);
-}
+// if(DyCore_Init() != "success") {
+//     show_error("DyCore 核心初始化失败。", true);
+// }
 
 // DerpXML Initialization
 
@@ -63,10 +63,11 @@ DerpXml_Init();
     FMODGMS_Sys_Create();
     
     // Initialize the system
+    FMODGMS_Sys_Set_DSPBufferSize(256, 4);
+    FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     FMODGMS_Sys_Initialize(32);
-    FMODGMS_Sys_Set_DSPBufferSize(512, 4);
-    FMODGMS_Sys_Update();
-    // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
+    // FMODGMS_Sys_Update();
+    
 
 // Input Initialization
 

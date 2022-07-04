@@ -14,16 +14,16 @@ if(editorHighlightLine) {
         0,
         _ny,
         global.resolutionW,
-        _ny, 3);
+        _ny, 1);
     // LR
     draw_set_color(0xacb64d)
     draw_line_width(
         _nx, 0, _nx,
-        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
+        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 1);
     _nx = global.resolutionW - _nx;
     draw_line_width(
         _nx, 0, _nx,
-        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
+        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 1);
 }
 
 // Draw Selction Area
