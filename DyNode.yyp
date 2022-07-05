@@ -179,6 +179,7 @@
     {"id":{"name":"CleanCircle","path":"scripts/CleanCircle/CleanCircle.yy",},"order":2,},
     {"id":{"name":"sprNumber","path":"sprites/sprNumber/sprNumber.yy",},"order":3,},
     {"id":{"name":"DerpXmlRead_OpenFile","path":"scripts/DerpXmlRead_OpenFile/DerpXmlRead_OpenFile.yy",},"order":6,},
+    {"id":{"name":"curvBgGlow","path":"animcurves/curvBgGlow/curvBgGlow.yy",},"order":1,},
     {"id":{"name":"scribble_font_has_character","path":"scripts/scribble_font_has_character/scribble_font_has_character.yy",},"order":8,},
     {"id":{"name":"FMODGMS_Util_SamplesToSeconds","path":"scripts/FMODGMS_Util_SamplesToSeconds/FMODGMS_Util_SamplesToSeconds.yy",},"order":6,},
     {"id":{"name":"__scribble_system_glyph_data","path":"scripts/__scribble_system_glyph_data/__scribble_system_glyph_data.yy",},"order":11,},

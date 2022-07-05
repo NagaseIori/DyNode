@@ -89,7 +89,7 @@
 #region Playview Properties
 
     themeColor = 0xFFFF00;
-    themeColor = 0xc5b7ff; // Sakura pink ❤
+    // themeColor = 0xc5b7ff; // Sakura pink ❤
 
     nowBar = 0;
     nowTime = 0;
@@ -129,7 +129,9 @@
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
-        bgFaintAlpha = 0.5;
+        bgFaintAlpha = 0.75;
+        animCurvFaintChan = animcurve_get_channel(curvBgGlow, "curve1");
+        animCurvFaintEval = 0.5;
         animTargetBgFaintAlpha = 0.5; 
         animSpeedFaint = 0.1;
         

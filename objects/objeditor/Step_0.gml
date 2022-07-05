@@ -53,8 +53,14 @@
     var _nowhard = false, _noww, _nowl, _nowh;
     var _ny, _nyl, _nyr;
     
-    // if(abs(_nowbeats * _nowtp.beatLength + _nowtime - nowTime) <= 10 && objMain.nowPlaying)
-    //     with(objMain) _faint_hit();
+    
+    // Background Glow
+        with(objMain) {
+            animCurvFaintEval = animcurve_channel_evaluate(
+                animCurvFaintChan, frac((nowTime - _nowtp.time) / _nowtp.beatLength / _nowtp.meter));
+            
+            animCurvFaintEval = lerp(0.5, 1.0, animCurvFaintEval);
+        }
     
     while((_nowtime - nowTime) * playbackSpeed <= _nh) {
         for(var i = _nowbeats; i * _nowtp.beatLength + _nowtime < _nexttime && (i * _nowtp.beatLength + _nowtime - nowTime) * playbackSpeed <= _nh; i++) {
