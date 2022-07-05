@@ -301,8 +301,8 @@ function music_load() {
             FMODGMS_Snd_Unload(music);
         
         chartMusicFile = _file;
-        music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
-        // music = FMODGMS_Snd_LoadSound(_file);
+        // music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
+        music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
         	music = undefined;
