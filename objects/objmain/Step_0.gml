@@ -161,11 +161,9 @@ _position_update();
         //     nowTime = _cor_tim;
         // }
         
-        
         // If music ends then pause
         if(_cor_tim > musicLength && nowPlaying) {
-            // FMODGMS_Chan_PauseChannel(channel);
-            
+        	
             // Channel gets invalid, recreate another one.
             FMODGMS_Chan_RemoveChannel(channel);
             channel = FMODGMS_Chan_CreateChannel();
