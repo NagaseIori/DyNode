@@ -162,7 +162,7 @@ _position_update();
         // }
         
         // If music ends then pause
-        if(_cor_tim > musicLength && nowPlaying) {
+        if(FMODGMS_Chan_Is_Playing(channel)<=0 && nowPlaying) {
         	
             // Channel gets invalid, recreate another one.
             FMODGMS_Chan_RemoveChannel(channel);
