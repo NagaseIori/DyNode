@@ -239,6 +239,10 @@
             2,
             2,
           ],"resourceVersion":"1.0","name":"FMODGMS_Snd_LoadSound_Ext","tags":[],"resourceType":"GMExtensionFunction",},
+        {"externalName":"FMODGMS_Snd_LoadSound_Ext2","kind":1,"help":"FMODGMS_Snd_LoadSound_Ext2(filename, mode)","hidden":false,"returnType":2,"argCount":0,"args":[
+            1,
+            2,
+          ],"resourceVersion":"1.0","name":"FMODGMS_Snd_LoadSound_Ext2","tags":[],"resourceType":"GMExtensionFunction",},
       ],"constants":[
         {"value":"0","hidden":false,"resourceVersion":"1.0","name":"FMODGMS_LOOPPOINT_START","tags":[],"resourceType":"GMExtensionConstant",},
         {"value":"1","hidden":false,"resourceVersion":"1.0","name":"FMODGMS_LOOPPOINT_END","tags":[],"resourceType":"GMExtensionConstant",},
@@ -331,6 +335,7 @@
         {"name":"FMODGMS_Sys_Close","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Snd_LoadSound","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Snd_LoadSound_Ext","path":"extensions/FMODGMS/FMODGMS.yy",},
+        {"name":"FMODGMS_Snd_LoadSound_Ext2","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Snd_LoadStream","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Snd_Unload","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Snd_PlaySound","path":"extensions/FMODGMS/FMODGMS.yy",},
