@@ -61,7 +61,7 @@ DerpXml_Init();
     
     // Create the system
     if (FMODGMS_Sys_Create() < 0) {
-        show_message_async("FMOD 初始化失败。\n 错误信息：" + FMODGMS_Util_GetErrorMessage());
+        show_message_async("FMOD 创建系统失败。\n 错误信息：" + FMODGMS_Util_GetErrorMessage());
         exit;
     }
     
@@ -70,7 +70,6 @@ DerpXml_Init();
     // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     FMODGMS_Sys_Initialize(32);
     
-    show_debug_message(FMODGMS_Util_GetErrorMessage());
     
     // FMODGMS_Sys_Update();
     
