@@ -156,6 +156,7 @@ function note_delete(_id) {
 function note_delete_all() {
 	with(objMain) {
 		chartNotesArray = [];
+		chartNotesArrayAt = 0;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
 		ds_map_clear(chartNotesMap[2]);
@@ -302,7 +303,6 @@ function music_load() {
         
         chartMusicFile = _file;
         music = FMODGMS_Snd_LoadSound_Ext2(_file, 0x00004200);
-        // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
         	music = undefined;
