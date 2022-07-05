@@ -18,6 +18,12 @@ _position_update();
     	hitSoundOn = !hitSoundOn;
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
+    if(keycheck_down(vk_enter)) {		// Replay Mode
+    	editor_set_editmode(5);
+    	nowTime = 0;
+    	animTargetTime = 0;
+    	reset_scoreboard();
+    }
 
 // Chart Properties Update
 
@@ -69,12 +75,13 @@ _position_update();
 // Keyboard Time & Speed Adjust
 
     var _spdchange = keycheck_down(ord("E")) - keycheck_down(ord("Q"));
+    _spdchange += editor_select_is_going() ? 0: wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
     animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     playbackSpeed = lerp_a(playbackSpeed, animTargetPlaybackSpeed, animSpeed);
     
     var _timchange = keycheck(ord("D")) - keycheck(ord("A"));
-    var _timscr = mouse_wheel_up() - mouse_wheel_down();
+    var _timscr = wheelcheck_up() - wheelcheck_down();
     
     if(_timchange != 0 || _timscr != 0) {
         if(nowPlaying) {
@@ -128,7 +135,7 @@ _position_update();
                 
             
             if(topBarMousePressed) {
-            	objInput.mouseHoldTimeL = 0; // Clear the Hold Buffer
+            	mouse_clear_hold(); // Clear the Hold Buffer
                 if(mouse_check_button_released(mb_left))
                     topBarMousePressed = false;
                 else {
@@ -154,10 +161,16 @@ _position_update();
         //     nowTime = _cor_tim;
         // }
         
-        
         // If music ends then pause
         if(_cor_tim > musicLength && nowPlaying) {
+        	
+            // Channel gets invalid, recreate another one.
+            FMODGMS_Chan_RemoveChannel(channel);
+            channel = FMODGMS_Chan_CreateChannel();
+            FMODGMS_Snd_PlaySound(music, channel);
+            FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
             FMODGMS_Chan_PauseChannel(channel);
+            
             nowPlaying = false;
         }
         
@@ -197,9 +210,9 @@ _position_update();
         nowTime = sfmod_channel_get_position(channel, sampleRate);
     }
 
-// Keyboard Pause & Resume
+// Muisc Pause & Resume
 
-    if(keycheck_down(vk_space)) {
+    if(keycheck_down(vk_space) || keycheck_down(vk_enter)) {
     	if(!nowPlaying) {
         	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);

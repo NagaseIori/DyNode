@@ -33,8 +33,15 @@ function mouse_square_inbound_last_l(x, y, a) {
     return pos_inbound(_nx, _ny, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 
+function mouse_clear_hold() {
+    objInput.mouseHoldClear = true;
+}
+
 function mouse_ishold_l() {
     return objInput.mouseHoldTimeL > objInput.mouseHoldThreshold;
+}
+function mouse_isclick_l() {
+    return objInput.mouseClickL;
 }
 
 function ctrl_ishold() {
@@ -58,4 +65,16 @@ function keycheck_down(key) {
 }
 function keycheck_up(key) {
     return keyboard_check_released(key);
+}
+function wheelcheck_up() {
+    return mouse_wheel_up() && nofunkey_ishold();
+}
+function wheelcheck_down() {
+    return mouse_wheel_down() && nofunkey_ishold();
+}
+function wheelcheck_up_ctrl() {
+    return mouse_wheel_up() && ctrl_ishold();
+}
+function wheelcheck_down_ctrl() {
+    return mouse_wheel_down() && ctrl_ishold();
 }

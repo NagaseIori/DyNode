@@ -17,7 +17,9 @@
 		nowTime = sfmod_channel_get_position(channel, sampleRate);
 	};
 	resumeDelay = 15;
-	timesourceResumeDelay = time_source_create(time_source_game, resumeDelay/1000, time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
+	timesourceResumeDelay =
+		time_source_create(time_source_game, resumeDelay/1000,
+		time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
 	
 #endregion
 
@@ -105,7 +107,7 @@
     musicProgress = 0.0;
     musicSpeed = 1.0;
     
-    hideScoreboard = false;
+    hideScoreboard = true;			// hide score board under editor mode
     hitSoundOn = false;
     
     showDebugInfo = debug_mode;

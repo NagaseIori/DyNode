@@ -14,7 +14,7 @@ image_yscale = global.scaleYAdjust;
     time = 0;
     nid = -1; // Note id
     sid = -1; // Sub id
-    sinst = -1; // Sub instance id
+    sinst = -999; // Sub instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor
@@ -211,7 +211,8 @@ image_yscale = global.scaleYAdjust;
         }
         
         // Check Selecting
-        if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed) {
+        if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
+            && !(objEditor.editorSelectOccupied && noteType == 3)) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1))) {
                 objEditor.editorSelectSingleTarget =
@@ -352,21 +353,22 @@ image_yscale = global.scaleYAdjust;
                 origSubTime = sinst.time;
             }
             stateString = "SEL";
-            // If Single Select Then Occupy
-            objEditor.editorSelectSingleOccupied = true;
             
             if(editor_get_editmode() != 4)
                 state = stateNormal;
-            if(mouse_check_button_pressed(mb_left) && editor_get_editmode() == 4) {
-                if(!_mouse_inbound_check()) {
-                    state = stateNormal;
-                }
-            }
-            if(mouse_ishold_l() && _mouse_inbound_check(1)) {
+            
+            if(editor_select_is_multiple() && noteType == 3)
+                state = stateNormal;
+            
+            if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
                 if(!isDragging) {
                     isDragging = true;
-                    origY = y;
-                    origX = x;
+                    with(objNote) {
+                        if(state == stateSelected) {
+                            origX = x;
+                            origY = y;
+                        }
+                    }
                 }
             }
             if(mouse_check_button_released(mb_left)) {
@@ -389,13 +391,28 @@ image_yscale = global.scaleYAdjust;
                     time = y_to_note_time(x, side);
                 }
                 
-                if(noteType == 2) {
-                    sinst.time = ctrl_ishold() ? time + origLength : origSubTime;
+                var _delta_x = x - origX;
+                var _delta_y = y - origY;
+                
+                with(objNote) {
+                    if(state == stateSelected) {
+                        x = origX + _delta_x;
+                        y = origY + _delta_y;
+                        
+                        position = x_to_note_pos(side?y:x, side);
+                        time = y_to_note_time(side?x:y, side);
+                        if(noteType == 2) {
+                            sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
+                            _prop_hold_update();
+                        }
+                    }
                 }
             }
             
             if(keycheck_down(vk_delete) && noteType != 3)
                 instance_destroy();
+            if(keycheck_down(ord("M")))
+                position = 5 - position;
         }
 
     state = stateOut;

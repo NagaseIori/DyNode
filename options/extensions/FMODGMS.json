@@ -1,0 +1,9 @@
+{
+  "extensionId": {
+    "name": "FMODGMS",
+    "path": "extensions/FMODGMS/FMODGMS.yy"
+  },
+  "resourceVersion": "1.0",
+  "resourceType": "GMExtensionConfigSet",
+  "configurables": null
+}

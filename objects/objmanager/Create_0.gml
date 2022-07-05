@@ -43,9 +43,9 @@ gpu_set_tex_filter(true);
 
 // DyCore Initialization
 
-if(DyCore_Init() != "success") {
-    show_error("DyCore 核心初始化失败。", true);
-}
+// if(DyCore_Init() != "success") {
+//     show_error("DyCore 核心初始化失败。", true);
+// }
 
 // DerpXML Initialization
 
@@ -60,13 +60,19 @@ DerpXml_Init();
     }
     
     // Create the system
-    FMODGMS_Sys_Create();
+    if (FMODGMS_Sys_Create() < 0) {
+        show_message_async("FMOD 创建系统失败。\n 错误信息：" + FMODGMS_Util_GetErrorMessage());
+        exit;
+    }
     
     // Initialize the system
+    FMODGMS_Sys_Set_DSPBufferSize(512, 4);
+    // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     FMODGMS_Sys_Initialize(32);
-    FMODGMS_Sys_Set_DSPBufferSize(128, 4);
-    FMODGMS_Sys_Update();
-    // FMODGMS_Sys_Set_SoftwareFormat(44100, 0);
+    
+    
+    // FMODGMS_Sys_Update();
+    
 
 // Input Initialization
 

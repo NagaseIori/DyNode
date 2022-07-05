@@ -3,12 +3,32 @@ function editor_set_width_default(_width) {
     objEditor.editorDefaultWidth = _width;
 }
 
+function editor_set_editmode(mode) {
+	objEditor.editorMode = mode;
+}
+
 function editor_get_editmode() {
     return objEditor.editorMode;
 }
 
 function editor_get_editside() {
     return objEditor.editorSide;
+}
+
+function editor_select_is_going() {
+	return objEditor.editorSelectOccupied;
+}
+function editor_select_is_multiple() {
+	return objEditor.editorSelectMultiple;
+}
+function editor_select_is_dragging() {
+	return objEditor.editorSelectDragOccupied;
+}
+function editor_select_is_area() {
+	return objEditor.editorSelectArea;
+}
+function editor_select_get_area_position() {
+	return objEditor.editorSelectAreaPosition;
 }
 
 function editor_snap_to_grid_y(_y, _side) {
@@ -122,6 +142,9 @@ function timing_point_load_from_osz() {
     
     timing_point_reset();
     var _grid = csv_to_grid(_file, true);
+    
+    show_debug_message("CSV Load Finished.");
+    
     var _type = "";
     var _w = ds_grid_width(_grid);
     var _h = ds_grid_height(_grid);

@@ -1,8 +1,12 @@
-/// @description Input check
+/// @description Input check & FMOD Update
 
 camera_set_view_size(view_camera[0], global.resolutionW, global.resolutionH);
 
-// FMODGMS_Sys_Update();
+var _fmoderr = FMODGMS_Sys_Update();
+
+if(_fmoderr < 0) {
+    show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
+}
 
 if(keycheck_down(vk_escape))
     game_end();
