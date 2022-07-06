@@ -9,9 +9,9 @@ else
 
 if(drawVisible || image_alpha>0) {
     image_alpha = lerp_a(image_alpha, animTargetA,
-        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
+        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
-        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed : 1));
+        animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
     
