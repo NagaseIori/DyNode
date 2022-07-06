@@ -72,6 +72,9 @@ image_yscale = global.scaleYAdjust;
         if(!objMain.nowPlaying && !_force)
             return;
         
+        if(!objMain.particlesEnabled)
+            return;
+        
         // Emit Particles
         var _x, _y, _x1, _x2, _y1, _y2;
         if(side == 0) {
