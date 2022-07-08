@@ -1,11 +1,11 @@
 {
+  "managed": true,
   "spriteId": {
     "name": "sprChain",
     "path": "sprites/sprChain/sprChain.yy",
   },
   "solid": false,
   "visible": true,
-  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
