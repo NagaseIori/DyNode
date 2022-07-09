@@ -190,7 +190,7 @@ _position_update();
     
 // Time Jump
 
-    if(keycheck_down(ord("L")))
+    if(keycheck_down(ord("L")) && chartNotesArrayAt<chartNotesCount)
         animTargetTime = chartNotesArray[chartNotesArrayAt].time;
     if(keycheck_down(ord("K")) && chartNotesArrayAt>0)
         animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;
