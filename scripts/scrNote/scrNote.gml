@@ -9,6 +9,10 @@ function _outbound_check(_x, _y, _side) {
         return false;
 }
 
+function _outroom_check(_x, _y) {
+	return !pos_inbound(_x, _y, 0, 0, global.resolutionW, global.resolutionH);
+}
+
 function _outbound_check_t(_time, _side) {
     var _pos = note_time_to_y(_time, _side);
     if(_side == 0 && _pos < -100)

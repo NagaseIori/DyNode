@@ -1,6 +1,8 @@
 /// @description Draw editor & debug things
 
-if((drawVisible || nodeAlpha > 0 || infoAlpha > 0) && editor_get_editmode() <= 4) {
+if(_outroom_check(x, y)) return;
+
+if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() <= 4) {
     var _col = c_blue;
     
     animTargetInfoA = 0;
@@ -22,7 +24,7 @@ if((drawVisible || nodeAlpha > 0 || infoAlpha > 0) && editor_get_editmode() <= 4
         else if(objEditor.editorHighlightLine && objEditor.editorHighlightPosition == position &&
             objEditor.editorHighlightSide == side) {
             animTargetNodeA = 1.0;
-            animTargetInfoA = 1;
+            animTargetInfoA = 0;
             _col = 0xc2577e;
         }
         else animTargetNodeA = 0;
@@ -36,7 +38,7 @@ if((drawVisible || nodeAlpha > 0 || infoAlpha > 0) && editor_get_editmode() <= 4
 		animTargetNodeA = 0.0;
 		animTargetInfoA = 1;
 	}
-	if((state == stateLast && noteType == 2) || !drawVisible) {
+	if((state == stateLast && noteType == 2) || state == stateOut) {
 		animTargetNodeA = 0;
 		animTargetInfoA = 0;
 	}

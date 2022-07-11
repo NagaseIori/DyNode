@@ -8,6 +8,7 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        // in ms
 #macro FMOD_SOUND_DELAY 0
 #macro FMOD_SAMPLE_DELAY 0
+#macro EPS 0.001
 
 // Global Variables
 

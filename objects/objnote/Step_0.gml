@@ -1,13 +1,17 @@
 
 var _vec2 = noteprop_to_xy(position, time, side);
 x = _vec2[0]; y = _vec2[1];
-if(state == stateOut && image_alpha == 0)
+if(state == stateOut && image_alpha < EPS)
     drawVisible = false;
 else
     drawVisible = true;
 
+if(_outroom_check(x, y)) {
+	nodeAlpha = 0;
+	infoAlpha = 0;
+}
 
-if(drawVisible || nodeAlpha>0 || infoAlpha>0 || image_alpha>0) {
+if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     image_alpha = lerp_a(image_alpha, animTargetA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
@@ -28,6 +32,18 @@ if(drawVisible || nodeAlpha>0 || infoAlpha>0 || image_alpha>0) {
                 mixerNextX[_nside] = _nx;
             }
         }
+    }
+    
+    // Update Highlight Line's Position
+    if(objEditor.editorHighlightLine) {
+    	if(state == stateSelected && isDragging || state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
+    		objEditor.editorHighlightTime = time;
+            objEditor.editorHighlightPosition = position;
+            objEditor.editorHighlightSide = side;
+            if(state == stateAttachSub || state == stateDropSub) {
+                objEditor.editorHighlightTime = sinst.time;
+            }
+    	}
     }
 }
 

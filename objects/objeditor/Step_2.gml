@@ -59,27 +59,3 @@ if(editorMode == 4) {
         
     }
 }
-
-// Update Highlight Line
-
-if(editorHighlightLine) {
-    with(objNote) {
-        var _hl = false;
-        if(state == stateSelected && isDragging) {
-            _hl = true;
-        }
-        else if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
-            _hl = true;
-        }
-        
-        // Update Highlight Lines
-        if(_hl) {
-            objEditor.editorHighlightTime = time;
-            objEditor.editorHighlightPosition = position;
-            objEditor.editorHighlightSide = side;
-            if(state == stateAttachSub || state == stateDropSub) {
-                objEditor.editorHighlightTime = sinst.time;
-            }
-        }
-    }
-}
