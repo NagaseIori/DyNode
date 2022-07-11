@@ -1,4 +1,6 @@
 
+depth = 0;
+
 // Shaders
 
     shaderBlur = shd_gaussian_blur_2pass;

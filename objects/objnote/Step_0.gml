@@ -16,12 +16,7 @@ if(drawVisible || nodeAlpha>0 || infoAlpha>0 || image_alpha>0) {
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
     infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
     
-    // _prop_init() is slow :(
-    image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-    originalWidth = sprite_get_width(sprite);
-    pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
-    pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
-    image_xscale = pWidth / originalWidth;
+    _prop_init();
     
     // Update Mixer's Position
     if(side > 0) {

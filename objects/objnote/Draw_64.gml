@@ -74,5 +74,5 @@ if(debug_mode && objMain.showDebugInfo && pos_inbound(x, y, 0, 0, global.resolut
     draw_set_color_alpha(c_white, 1.0);
     draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
     
-    draw_text(x, y, stateString + " " + string(time)+" "+string(position)+"\n"+string(width));
+    draw_text(x, y, stateString + " " + string(time)+" "+string(position)+"\n"+string(width)+"\n"+string(depth));
 }
