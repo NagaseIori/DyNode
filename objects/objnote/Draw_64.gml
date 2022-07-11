@@ -43,7 +43,7 @@ if(drawVisible && editor_get_editmode() <= 4) {
 }
 else animTargetNodeA = 0;
 
-if(debug_mode && pos_inbound(x, y, 0, 0, global.resolutionW, global.resolutionH)) {
+if(debug_mode && objMain.showDebugInfo && pos_inbound(x, y, 0, 0, global.resolutionW, global.resolutionH)) {
     draw_set_color_alpha(c_white, 1.0);
     draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
     
