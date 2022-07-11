@@ -6,7 +6,7 @@ event_inherited();
 noteType = 2;
 edgeScaleY = 1;
 
-origDepth += 5000;
+origDepth /= 2;
 image_yscale = 0.6 * global.scaleYAdjust;
 
 originalHeight = sprite_get_height(sprHoldEdge);

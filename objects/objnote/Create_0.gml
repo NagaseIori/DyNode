@@ -1,6 +1,6 @@
 
 drawVisible = false;
-origDepth = -10000;
+origDepth = -10000000;
 image_yscale = global.scaleYAdjust;
 
 // In-Variables
@@ -71,7 +71,7 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - clamp(side == 0?-y:(side == 1?x:-x), -2500, 2500);
+        depth = origDepth - time;
     }
     _prop_init();
 
@@ -153,7 +153,7 @@ image_yscale = global.scaleYAdjust;
             _y = objMain.mixerX[side-1];
         }
             
-        var _inst = instance_create_depth(_x, _y, -16000, _shadow), _scl = 1;
+        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
         _inst.image_angle = image_angle;
