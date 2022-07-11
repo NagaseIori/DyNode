@@ -14,7 +14,7 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 ![](https://user-images.githubusercontent.com/31349569/176004671-f93cb3cd-a294-46c9-9365-2af913dc95e3.png)
 
 
-## Minimum System Requirements .. 最低系统要求
+## Recommended System Requirements .. 建议系统要求
 
 * **OS:** Windows 7/10/11 (64-bit)
 * **Memory:** 4 GB RAM
