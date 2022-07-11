@@ -27,6 +27,7 @@ image_yscale = global.scaleYAdjust;
     origSubTime = 0; // For hold's sub
     isDragging = false;
     nodeRadius = 22; // in Pixels
+    nodeColor = c_blue;
     
     // For Hold
     lastTime = 0;

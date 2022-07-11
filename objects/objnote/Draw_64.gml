@@ -1,6 +1,6 @@
 /// @description Draw editor & debug things
 
-if(drawVisible && editor_get_editmode() == 4) {
+if(drawVisible && editor_get_editmode() <= 4) {
     var _col = c_blue;
     
     if(editor_select_is_area()) {
@@ -18,16 +18,27 @@ if(drawVisible && editor_get_editmode() == 4) {
         if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == id) {
             animTargetNodeA = 1.0;
         }
+        else if(objEditor.editorHighlightLine && objEditor.editorHighlightPosition == position &&
+            objEditor.editorHighlightSide == side) {
+            animTargetNodeA = 1.0;
+            _col = 0xc2577e;
+        }
         else animTargetNodeA = 0;
     }
     if(state == stateSelected) {
         _col = c_white;
         animTargetNodeA = 1.0;
     }
+	if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
+		animTargetNodeA = 0.0;
+	}
+	
+	if(animTargetNodeA > 0)
+	    nodeColor = _col;
     
     CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
         .Rounding(5)
-        .Blend(_col, nodeAlpha)
+        .Blend(nodeColor, nodeAlpha)
         .Draw();
 }
 else animTargetNodeA = 0;

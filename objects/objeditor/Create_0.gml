@@ -21,6 +21,7 @@ editorHighlightLine = false;
 editorHighlightLineEnabled = true;
 editorHighlightTime = 0;
 editorHighlightPosition = 0;
+editorHighlightSide = 0;
 
     // Grid Settings
     editorGridXEnabled = true;
