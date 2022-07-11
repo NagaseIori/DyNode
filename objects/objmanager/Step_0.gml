@@ -19,3 +19,9 @@ if(keycheck_down(ord("F")))
     
 if(keycheck_down(vk_f12))
     screen_save(program_directory + "Screenshots\\" + random_id(6) + ".png");
+
+if(keycheck_down_ctrl(ord("S")))
+    project_save();
+
+if(keycheck_down(vk_f1))
+    project_load();

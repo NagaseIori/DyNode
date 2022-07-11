@@ -80,3 +80,12 @@ randomize();
 // Init finished
 
 room_goto(rMain);
+
+#region Project Properties
+
+	projectPath = "";
+	backgroundPath = "";
+	musicPath = "";
+	chartPath = "";
+	
+#endregion

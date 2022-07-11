@@ -41,10 +41,11 @@ function map_init(_skipnote = false) {
     
 }
 
-function map_load() {
-    var _file = "";
-    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
-        program_directory, "Load Dynamix Chart File 加载谱面文件");
+function map_load(_file = "") {
+	
+	if(_file == "")
+	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
+	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
     
@@ -62,8 +63,9 @@ function map_load() {
         map_load_xml(_file);
     
     map_init();
+    objManager.chartPath = _file;
     
-    show_debug_message("Load sucessfully.");
+    show_debug_message("Load map sucessfully.");
 }
 
 function map_load_xml(_file) {
@@ -186,10 +188,10 @@ function map_set_title() {
 	objMain.chartTitle = _title;
 }
 
-function music_load() {
-    var _file = "";
-    _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
-        program_directory, "Load Music File 加载音乐文件");
+function music_load(_file = "") {
+    if(_file == "")
+	    _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
+	        program_directory, "Load Music File 加载音乐文件");
         
     if(_file == "") return;
     
@@ -217,15 +219,17 @@ function music_load() {
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
+        
+        
     }
-    
+    objManager.musicPath = _file;
     show_debug_message("Load sucessfully.");
 }
 
-function image_load() {
-    var _file = "";
-    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
-        program_directory, "Load Background File 加载背景图片");
+function image_load(_file = "") {
+	if(_file == "")
+	    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
+	        program_directory, "Load Background File 加载背景图片");
         
     if(_file == "") return;
     
@@ -250,15 +254,16 @@ function image_load() {
         if(bgImageSpr != -1)
             sprite_delete(bgImageSpr);
         
-        bgImageFile = _file;
         bgImageSpr = _nspr;
         
         // Bottom reset
         
         surface_free_f(bottomBgSurf);
         bottomBgSurf = -1;
+        
+        
     }
-    
+    objManager.backgroundPath = _file;
     sprite_delete(_spr);
 }
 
@@ -348,6 +353,69 @@ function map_export_xml() {
 	var f = file_text_open_write(_file);
 	file_text_write_string(f, xmlString);
 	file_text_close(f);
+	
+	objManager.chartPath = _file;
+}
+
+#endregion
+
+#region PROJECT FUNCTIONS
+
+function project_load(_file = "") {
+	if(_file == "") 
+		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+        "Load Project 打开工程");
+    
+    if(_file == "") return 0;
+    
+    var _f = file_text_open_read(_file);
+    var _contents = json_parse(file_text_read_all(_f));
+    file_text_close(_f);
+    
+    with(objManager) {
+    	musicPath = _contents.musicPath;
+    	backgroundPath = _contents.backgroundPath;
+    	chartPath = _contents.chartPath;
+    }
+    
+    map_load(chartPath);
+    music_load(musicPath);
+    image_load(backgroundPath);
+    
+    timing_point_reset();
+    objEditor.timingPoints = _contents.timingPoints;
+    timing_point_sort();
+    
+    projectPath = _file;
+    
+    return 1;
+}
+
+function project_save() {
+	return project_save_as(objManager.projectPath);
+}
+
+function project_save_as(_file = "") {
+	
+	if(_file == "")
+		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+	        "Project save as 工程另存为");
+	
+	if(_file == "") return 0;
+	
+	var _contents = {
+		version : global.version,
+		musicPath: objManager.musicPath,
+		backgroundPath: objManager.backgroundPath,
+		chartPath: objManager.chartPath,
+		timingPoints: objEditor.timingPoints
+	};
+	
+	var _f = file_text_open_write(_file);
+	file_text_write_string(_f, json_stringify(_contents));
+	file_text_close(_f);
+	
+	return 1;
 }
 
 #endregion

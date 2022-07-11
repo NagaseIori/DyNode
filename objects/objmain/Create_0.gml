@@ -23,15 +23,6 @@
 	
 #endregion
 
-#region Project Properties
-
-	projectPath = "";
-	backgroundPath = "";
-	musicPath = "";
-	chartPath = "";
-	
-#endregion
-
 #region Layouts Init
 
 // Target Line
