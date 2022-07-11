@@ -3,6 +3,6 @@
 // Inherit the parent event
 event_inherited();
 
-animTime = room_speed * 0.1;
+animTime = 100;
 
 alphaMul = 1;
