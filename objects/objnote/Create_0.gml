@@ -42,7 +42,9 @@ image_yscale = global.scaleYAdjust;
     selected = false;
     selBlendColor = 0x4fd5ff;
     nodeAlpha = 0;
+    infoAlpha = 0;
     animTargetNodeA = 0;
+    animTargetInfoA = 0;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1.5;
@@ -57,6 +59,8 @@ image_yscale = global.scaleYAdjust;
     // Correction Values
     lFromLeft = 5;
     rFromRight = 5;
+    dFromBottom = 0;
+    uFromTop = 0;
 
 // In-Functions
 

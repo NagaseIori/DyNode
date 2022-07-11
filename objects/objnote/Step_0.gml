@@ -7,13 +7,14 @@ else
     drawVisible = true;
 
 
-if(drawVisible || image_alpha>0) {
+if(drawVisible || nodeAlpha>0 || infoAlpha>0 || image_alpha>0) {
     image_alpha = lerp_a(image_alpha, animTargetA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     lastAlpha = lerp_a(lastAlpha, animTargetLstA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
+    infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
     
     // _prop_init() is slow :(
     image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
