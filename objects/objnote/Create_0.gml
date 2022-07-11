@@ -1,6 +1,6 @@
 
 drawVisible = false;
-depth = 100;
+depth = -100;
 image_yscale = global.scaleYAdjust;
 
 // In-Variables
@@ -44,6 +44,7 @@ image_yscale = global.scaleYAdjust;
     animTargetNodeA = 0;
     
     animSpeed = 0.4;
+    animPlaySpeedMul = 1.5;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
     image_alpha = 0;
@@ -70,6 +71,9 @@ image_yscale = global.scaleYAdjust;
     _emit_particle = function(_num, _type, _force = false) {
         
         if(!objMain.nowPlaying && !_force)
+            return;
+        
+        if(!objMain.particlesEnabled)
             return;
         
         // Emit Particles
@@ -142,7 +146,7 @@ image_yscale = global.scaleYAdjust;
             _y = objMain.mixerX[side-1];
         }
             
-        var _inst = instance_create_depth(_x, _y, -1, _shadow), _scl = 1;
+        var _inst = instance_create_depth(_x, _y, -1000, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
         _inst.image_angle = image_angle;

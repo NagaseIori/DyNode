@@ -120,6 +120,15 @@ function note_type_num_to_string(_number) {
 
 #endregion
 
+function has_cjk(str) {
+	var i=1, l=string_length(str);
+	for(; i<=l; i++) {
+		if(ord(string_char_at(str, i)) >= 255)
+			return true;
+	}
+	return false;
+}
+
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }

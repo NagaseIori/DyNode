@@ -34,7 +34,7 @@ timingPoints = [];
 beatlineSurf = -1;
 beatlineColors = [0, 0xffffff, 0x3643f4, 0xb0279c, 0xf39621,
     0, 0x889600, 0, 0x3bebff,
-    0, 0, 0, 0,
+    0, 0, 0, 0x37405d,
     0, 0, 0, 0x921b31]; // 1/1, 1/2, 1/3 ...
 beatlineLengthOffset = [
     0,
@@ -49,7 +49,7 @@ beatlineLengthOffset = [
     0,
     0,
     0,
-    0,
+    -120,
     0,
     0,
     0,
@@ -62,9 +62,10 @@ beatlineModes = [
     [1, 3, 6],
     [1, 2, 4, 8],
     [1, 2, 4, 8, 16],
+    [1, 3, 6, 12], 
     [1, 2, 4, 8, 16]
     ];
-beatlineDivs = [1, 2, 3, 4, 6, 8, 16, 32];
+beatlineDivs = [1, 2, 3, 4, 6, 8, 16, 12, 32];
 beatlineNowMode = 3;
 beatlineEnabled = array_create(20, 0);
 

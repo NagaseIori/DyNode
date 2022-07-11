@@ -14,10 +14,13 @@ _position_update();
     	showDebugInfo = !showDebugInfo;
     if(keycheck_down(ord("P")))
         hideScoreboard = !hideScoreboard;
+    if(keycheck_down(ord("O")))
+    	particlesEnabled = !particlesEnabled;
     if(keycheck_down_ctrl(ord("M")))
     	hitSoundOn = !hitSoundOn;
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
+    
     if(keycheck_down(vk_enter)) {		// Replay Mode
     	editor_set_editmode(5);
     	nowTime = 0;
@@ -161,15 +164,16 @@ _position_update();
         //     nowTime = _cor_tim;
         // }
         
-        // If music ends then pause
-        if(_cor_tim > musicLength && nowPlaying) {
+        // If music ends then stop
+        if(FMODGMS_Chan_Is_Playing(channel)<=0 && nowPlaying) {
         	
-            // Channel gets invalid, recreate another one.
+            // Channel gets invalid, create another one.
             FMODGMS_Chan_RemoveChannel(channel);
             channel = FMODGMS_Chan_CreateChannel();
             FMODGMS_Snd_PlaySound(music, channel);
             FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
             FMODGMS_Chan_PauseChannel(channel);
+            nowTime = musicLength;
             
             nowPlaying = false;
         }
@@ -186,7 +190,7 @@ _position_update();
     
 // Time Jump
 
-    if(keycheck_down(ord("L")))
+    if(keycheck_down(ord("L")) && chartNotesArrayAt<chartNotesCount)
         animTargetTime = chartNotesArray[chartNotesArrayAt].time;
     if(keycheck_down(ord("K")) && chartNotesArrayAt>0)
         animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;

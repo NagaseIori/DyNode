@@ -1,20 +1,5 @@
 
-function reset_scoreboard() {
-	with(objScoreBoard) {
-		nowScore = 0;
-		animTargetScore = 0;
-	}
-	with(objPerfectIndc) {
-		lastTime = 99999;
-	}
-}
-
-function note_all_sort() {
-    var _f = function(_a, _b) {
-        return _a.time < _b.time;
-    }
-    array_sort_f(objMain.chartNotesArray, _f);
-}
+#region MAP FUNCTIONS
 
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
@@ -56,10 +41,11 @@ function map_init(_skipnote = false) {
     
 }
 
-function map_load() {
-    var _file = "";
-    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
-        program_directory, "Load Dynamix Chart File 加载谱面文件");
+function map_load(_file = "") {
+	
+	if(_file == "")
+	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
+	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
     
@@ -77,91 +63,9 @@ function map_load() {
         map_load_xml(_file);
     
     map_init();
+    objManager.chartPath = _file;
     
-    show_debug_message("Load sucessfully.");
-}
-
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
-    var _obj = undefined;
-    switch(_type) {
-        case "NORMAL":
-        case 0:
-            _obj = objNote;
-            break;
-        case "CHAIN":
-        case 1:
-            _obj = objChain;
-            break;
-        case "HOLD":
-        case 2:
-            _obj = objHold;
-            break;
-        case "SUB":
-        case 3:
-            _obj = objHoldSub;
-            break;
-        default:
-            return;
-    }
-    var _inst = instance_create_depth(0, 0, 0, _obj);
-    _inst.width = real(_width);
-    _inst.side = real(_side);
-    // _inst.offset = real(_time);
-    if(_fromxml)
-        _inst.bar = real(_time);
-    else
-        _inst.time = _time;
-    _inst.position = real(_position);
-    _inst.nid = _id;
-    _inst.sid = _subid;
-    
-    if(_fromxml)
-        _inst.position += _inst.width/2;
-    
-    with(_inst) _prop_init();
-    with(objMain) {
-        array_push(chartNotesArray, _inst);
-        if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
-            show_error_async("Duplicate Note ID " + _id + " in side " 
-                + string(_side), false);
-            return true;
-        }
-        chartNotesMap[_inst.side][? _id] = _inst;
-        
-        if(!_fromxml && _sort)
-            note_all_sort();
-    }
-}
-
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
-	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
-	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
-}
-
-function note_delete(_id) {
-    with(objMain) {
-        var l=array_length(chartNotesArray);
-        var found = false;
-        for(var i=0; i<l; i++)
-            if(chartNotesArray[i].nid == _id) {
-                var _insta = chartNotesArray[i];
-                array_delete(chartNotesArray, i, 1);
-                found = true;
-                break;
-            }
-    }
-    if(found) note_all_sort();
-}
-
-function note_delete_all() {
-	with(objMain) {
-		chartNotesArray = [];
-		ds_map_clear(chartNotesMap[0]);
-		ds_map_clear(chartNotesMap[1]);
-		ds_map_clear(chartNotesMap[2]);
-		
-		instance_destroy(objNote);
-	}
+    show_debug_message("Load map sucessfully.");
 }
 
 function map_load_xml(_file) {
@@ -284,10 +188,10 @@ function map_set_title() {
 	objMain.chartTitle = _title;
 }
 
-function music_load() {
-    var _file = "";
-    _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
-        program_directory, "Load Music File 加载音乐文件");
+function music_load(_file = "") {
+    if(_file == "")
+	    _file = get_open_filename_ext("Music Files (*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid)|*.mp3;*.flac;*.wav;*.ogg;*.aiff;*.mid", "", 
+	        program_directory, "Load Music File 加载音乐文件");
         
     if(_file == "") return;
     
@@ -301,8 +205,8 @@ function music_load() {
             FMODGMS_Snd_Unload(music);
         
         chartMusicFile = _file;
-        // music = FMODGMS_Snd_LoadSound_Ext(_file, 0x00004200, 0);
-        music = FMODGMS_Snd_LoadSound(_file);
+        music = FMODGMS_Snd_LoadSound_Ext2(_file, 0x00004200);
+        // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
         	music = undefined;
@@ -315,15 +219,17 @@ function music_load() {
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
+        
+        
     }
-    
+    objManager.musicPath = _file;
     show_debug_message("Load sucessfully.");
 }
 
-function image_load() {
-    var _file = "";
-    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
-        program_directory, "Load Background File 加载背景图片");
+function image_load(_file = "") {
+	if(_file == "")
+	    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
+	        program_directory, "Load Background File 加载背景图片");
         
     if(_file == "") return;
     
@@ -348,15 +254,16 @@ function image_load() {
         if(bgImageSpr != -1)
             sprite_delete(bgImageSpr);
         
-        bgImageFile = _file;
         bgImageSpr = _nspr;
         
         // Bottom reset
         
         surface_free_f(bottomBgSurf);
         bottomBgSurf = -1;
+        
+        
     }
-    
+    objManager.backgroundPath = _file;
     sprite_delete(_spr);
 }
 
@@ -446,6 +353,81 @@ function map_export_xml() {
 	var f = file_text_open_write(_file);
 	file_text_write_string(f, xmlString);
 	file_text_close(f);
+	
+	objManager.chartPath = _file;
+}
+
+#endregion
+
+#region PROJECT FUNCTIONS
+
+function project_load(_file = "") {
+	if(_file == "") 
+		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+        "Load Project 打开工程");
+    
+    if(_file == "") return 0;
+    
+    var _f = file_text_open_read(_file);
+    var _contents = json_parse(file_text_read_all(_f));
+    file_text_close(_f);
+    
+    with(objManager) {
+    	musicPath = _contents.musicPath;
+    	backgroundPath = _contents.backgroundPath;
+    	chartPath = _contents.chartPath;
+    }
+    
+    map_load(chartPath);
+    music_load(musicPath);
+    image_load(backgroundPath);
+    
+    timing_point_reset();
+    objEditor.timingPoints = _contents.timingPoints;
+    timing_point_sort();
+    
+    projectPath = _file;
+    
+    return 1;
+}
+
+function project_save() {
+	return project_save_as(objManager.projectPath);
+}
+
+function project_save_as(_file = "") {
+	
+	if(_file == "")
+		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+	        "Project save as 工程另存为");
+	
+	if(_file == "") return 0;
+	
+	var _contents = {
+		version : global.version,
+		musicPath: objManager.musicPath,
+		backgroundPath: objManager.backgroundPath,
+		chartPath: objManager.chartPath,
+		timingPoints: objEditor.timingPoints
+	};
+	
+	var _f = file_text_open_write(_file);
+	file_text_write_string(_f, json_stringify(_contents));
+	file_text_close(_f);
+	
+	return 1;
+}
+
+#endregion
+
+function reset_scoreboard() {
+	with(objScoreBoard) {
+		nowScore = 0;
+		animTargetScore = 0;
+	}
+	with(objPerfectIndc) {
+		lastTime = 99999;
+	}
 }
 
 function sfmod_channel_get_position(channel, spr) {

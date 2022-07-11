@@ -147,6 +147,7 @@
     {"id":{"name":"__shdCleanAntialias","path":"shaders/__shdCleanAntialias/__shdCleanAntialias.yy",},"order":1,},
     {"id":{"name":"DerpXmlWrite_GetString","path":"scripts/DerpXmlWrite_GetString/DerpXmlWrite_GetString.yy",},"order":4,},
     {"id":{"name":"scribble_font_combine","path":"scripts/scribble_font_combine/scribble_font_combine.yy",},"order":5,},
+    {"id":{"name":"sprMsdfNotoSans","path":"sprites/sprMsdfNotoSans/sprMsdfNotoSans.yy",},"order":0,},
     {"id":{"name":"CleanEllipse","path":"scripts/CleanEllipse/CleanEllipse.yy",},"order":4,},
     {"id":{"name":"__scribble_gen_8_position_glyphs","path":"scripts/__scribble_gen_8_position_glyphs/__scribble_gen_8_position_glyphs.yy",},"order":8,},
     {"id":{"name":"scribble_anim_cycle","path":"scripts/scribble_anim_cycle/scribble_anim_cycle.yy",},"order":1,},
@@ -179,6 +180,7 @@
     {"id":{"name":"CleanCircle","path":"scripts/CleanCircle/CleanCircle.yy",},"order":2,},
     {"id":{"name":"sprNumber","path":"sprites/sprNumber/sprNumber.yy",},"order":3,},
     {"id":{"name":"DerpXmlRead_OpenFile","path":"scripts/DerpXmlRead_OpenFile/DerpXmlRead_OpenFile.yy",},"order":6,},
+    {"id":{"name":"curvBgGlow","path":"animcurves/curvBgGlow/curvBgGlow.yy",},"order":1,},
     {"id":{"name":"scribble_font_has_character","path":"scripts/scribble_font_has_character/scribble_font_has_character.yy",},"order":8,},
     {"id":{"name":"FMODGMS_Util_SamplesToSeconds","path":"scripts/FMODGMS_Util_SamplesToSeconds/FMODGMS_Util_SamplesToSeconds.yy",},"order":6,},
     {"id":{"name":"__scribble_system_glyph_data","path":"scripts/__scribble_system_glyph_data/__scribble_system_glyph_data.yy",},"order":11,},
@@ -306,16 +308,19 @@
     {"folderPath":"folders/Clean Shapes/Batches.yy","order":2,"resourceVersion":"1.0","name":"Batches","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Clean Shapes/Shapes.yy","order":3,"resourceVersion":"1.0","name":"Shapes","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Clean Shapes/Transform.yy","order":4,"resourceVersion":"1.0","name":"Transform","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/Fonts.yy","order":32,"resourceVersion":"1.0","name":"Fonts","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
   ],
   "TextureGroups": [
     {"isScaled":true,"compressFormat":"bz2","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
+    {"isScaled":false,"compressFormat":"png","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"texFonts","resourceType":"GMTextureGroup",},
   ],
   "IncludedFiles": [
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"inigo quilez 2d sdf license.txt","resourceType":"GMIncludedFile",},
     {"CopyToMask":3035461389054378222,"filePath":"datafiles","resourceVersion":"1.0","name":"inigo quilez 2d sdf license.txt","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprMsdfNotoSans.json","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2022.6.0.23",

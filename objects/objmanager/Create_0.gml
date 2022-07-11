@@ -67,12 +67,7 @@ DerpXml_Init();
     
     // Initialize the system
     FMODGMS_Sys_Set_DSPBufferSize(512, 4);
-    // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     FMODGMS_Sys_Initialize(32);
-    
-    
-    // FMODGMS_Sys_Update();
-    
 
 // Input Initialization
 
@@ -85,3 +80,12 @@ randomize();
 // Init finished
 
 room_goto(rMain);
+
+#region Project Properties
+
+	projectPath = "";
+	backgroundPath = "";
+	musicPath = "";
+	chartPath = "";
+	
+#endregion

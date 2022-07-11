@@ -1,6 +1,6 @@
 {
   "hinting": 2,
-  "glyphOperations": 0,
+  "glyphOperations": 4,
   "interpreter": 0,
   "pointRounding": 0,
   "applyKerning": 0,

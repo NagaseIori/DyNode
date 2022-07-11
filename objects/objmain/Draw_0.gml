@@ -6,10 +6,19 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
     // Draw Title
 
-    scribble(chartTitle).starting_format("fOrbitron48", c_white)
+	if(has_cjk(chartTitle)) {
+		scribble("[sprMsdfNotoSans]"+chartTitle).starting_format("fOrbitron48", c_white)
+        .align(fa_left, fa_middle)
+	    .transform(global.scaleXAdjust * 1.2, global.scaleYAdjust * 1.2)
+	    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 47 * global.scaleYAdjust);
+	}
+	else {
+		scribble(chartTitle).starting_format("fOrbitron48", c_white)
         .align(fa_left, fa_middle)
 	    .transform(global.scaleXAdjust * 0.7, global.scaleYAdjust * 0.7)
 	    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 42 * global.scaleYAdjust);
+	}
+    
     
     // Draw Difficulty
     better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
