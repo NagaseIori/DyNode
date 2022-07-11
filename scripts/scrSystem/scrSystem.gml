@@ -21,6 +21,11 @@ function map_init(_skipnote = false) {
             }
         }
         
+        // Fix every note's time in the array
+        for(var i=0; i<array_length(chartNotesArray); i++) {
+        	chartNotesArray[i].time = time_to_mtime(bar_to_time(chartNotesArray[i].time));
+        }
+        
         chartTimeOffset = 0;                        // Set the offset to 0
         
         // Reset to the beginning
@@ -295,7 +300,7 @@ function map_export_xml() {
         var l = array_length(objMain.chartNotesArray);
         DerpXmlWrite_OpenTag("m_notes");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 0) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
@@ -313,7 +318,7 @@ function map_export_xml() {
         // Left Side Notes
         DerpXmlWrite_OpenTag("m_notesLeft");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 1) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
@@ -331,7 +336,7 @@ function map_export_xml() {
         // Right Side Notes
         DerpXmlWrite_OpenTag("m_notesRight");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 2) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);

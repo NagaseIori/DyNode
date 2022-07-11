@@ -69,9 +69,16 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     if(_fromxml)
         _inst.position += _inst.width/2;
     
-    with(_inst) _prop_init();
+    with(_inst) {
+    	_prop_init();
+    	if(noteType == 2) _prop_hold_update();
+    }
     with(objMain) {
-        array_push(chartNotesArray, _inst);
+        array_push(chartNotesArray, {
+        	time : _fromxml?_inst.bar:_inst.time,
+        	side : _inst.side,
+        	inst : _inst
+        });
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
@@ -82,6 +89,8 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         if(!_fromxml && _sort)
             note_all_sort();
     }
+    
+    // return _inst;
 }
 
 function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
@@ -94,12 +103,13 @@ function note_delete(_id) {
         var l=array_length(chartNotesArray);
         var found = false;
         for(var i=0; i<l; i++)
-            if(chartNotesArray[i].nid == _id) {
-                var _insta = chartNotesArray[i];
+            if(chartNotesArray[i].inst.nid == _id) {
+                var _insta = chartNotesArray[i].inst;
                 array_delete(chartNotesArray, i, 1);
                 found = true;
                 break;
             }
+		chartNotesCount = array_length(chartNotesArray);
     }
     if(found) note_all_sort();
 }

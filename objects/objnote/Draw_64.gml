@@ -49,26 +49,31 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	    nodeColor = _col;
     
     // Draw Node
-    CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
-        .Rounding(5)
-        .Blend(nodeColor, nodeAlpha)
-        .Draw();
+    if(nodeAlpha>EPS) {
+    	CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
+	        .Rounding(5)
+	        .Blend(nodeColor, nodeAlpha)
+	        .Draw();
+    }
     
     // Draw Information
-    var _dx = 20, _dy = (noteType == 2? dFromBottom:20) * _inv;
-    scribble(string_format(position, 1, 2))
-    	.starting_format("fDynamix16", c_aqua)
-    	.transform(global.scaleXAdjust, global.scaleYAdjust)
-    	.blend(c_white, infoAlpha)
-    	.align(fa_right, fa_middle)
-    	.draw(x - _dx, y + _dy);
+    if(infoAlpha > EPS) {
+    	var _dx = 20, _dy = (noteType == 2? dFromBottom:20) * _inv;
+	    scribble(string_format(position, 1, 2))
+	    	.starting_format("fDynamix16", c_aqua)
+	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
+	    	.blend(c_white, infoAlpha)
+	    	.align(fa_right, fa_middle)
+	    	.draw(x - _dx, y + _dy);
+	    
+	    scribble(string_format(width, 1, 2))
+	    	.starting_format("fDynamix16", c_white)
+	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
+	    	.blend(c_white, infoAlpha)
+	    	.align(fa_left, fa_middle)
+	    	.draw(x + _dx, y + _dy);
+    }
     
-    scribble(string_format(width, 1, 2))
-    	.starting_format("fDynamix16", c_white)
-    	.transform(global.scaleXAdjust, global.scaleYAdjust)
-    	.blend(c_white, infoAlpha)
-    	.align(fa_left, fa_middle)
-    	.draw(x + _dx, y + _dy);
 }
 else animTargetNodeA = 0;
 

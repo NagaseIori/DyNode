@@ -15,6 +15,7 @@ image_yscale = global.scaleYAdjust;
     nid = -1; // Note id
     sid = -1; // Sub id
     sinst = -999; // Sub instance id
+    finst = -999; // Father instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor
@@ -70,7 +71,7 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - (side == 0?-y:(side == 1?x:-x));
+        depth = origDepth - clamp(side == 0?-y:(side == 1?x:-x), -2500, 2500);
     }
     _prop_init();
 

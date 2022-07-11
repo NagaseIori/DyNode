@@ -18,9 +18,12 @@ _prop_init();
 // In-Function
 
     _prop_hold_update = function () {
-        if(drawVisible && (sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid)))) {
+        if(sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid))) {
             if(sinst <= 0)
 		        sinst = objMain.chartNotesMap[side][? sid]
+		    
+		    if(state != stateOut)
+		    	instance_activate_object(sinst);
     
 		    // Being destroyed
 		    if(!instance_exists(sinst))
@@ -31,6 +34,7 @@ _prop_init();
 		    sinst.width = width;
 		    sinst.depth = depth;
 		    sinst.side = side;
+		    sinst.finst = id;
     
 		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
 		        + dFromBottom + uFromTop;

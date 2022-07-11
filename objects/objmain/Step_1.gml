@@ -1,4 +1,4 @@
-/// @description Reset Tags & Time Update
+/// @description Reset Tags & Time Update & Activate notes
 
 // Mixer
     
@@ -155,5 +155,20 @@ var _music_resync_request = false;
         sfmod_channel_set_position(nowTime, channel, sampleRate);
         nowTime = sfmod_channel_get_position(channel, sampleRate);
     }
+
+#endregion
+
+#region NOTES ACTIVATE
+
+	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount, _str, _flag;
+	
+	for(; i<l; i++) {
+		_str = chartNotesArray[i];
+		_flag = _outbound_check_t(_str.time, _str.side);
+		if(!_flag && _str.time > nowTime)
+			instance_activate_object(_str.inst);
+		else if(_flag && _outbound_check_t(_str.time, !(_str.side)))
+			break;
+	}
 
 #endregion
