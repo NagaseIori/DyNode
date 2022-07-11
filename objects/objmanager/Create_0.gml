@@ -77,6 +77,10 @@ instance_create(x, y, objInput);
 
 randomize();
 
+// Check For Update
+
+_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
+
 // Init finished
 
 room_goto(rMain);

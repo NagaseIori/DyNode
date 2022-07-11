@@ -420,6 +420,7 @@ function project_save_as(_file = "") {
 
 #endregion
 
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;
