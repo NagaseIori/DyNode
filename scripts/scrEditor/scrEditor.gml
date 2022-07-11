@@ -100,6 +100,24 @@ function editor_select_compare(ida, idb) {
 	else return min(ida, idb);
 }
 
+function note_build_attach(_type, _side, _width) {
+    var _obj = [objNote, objChain, objHold];
+    _obj = _obj[_type];
+    
+    var _inst = instance_create_depth(mouse_x, mouse_y, 
+                depth, _obj);
+    
+    with(_inst) {
+        state = stateAttach;
+        width = _width;
+        side = _side;
+        _prop_init();
+    }
+    
+    return _inst;
+}
+
+#region TIMING POINT FUNCTION
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
@@ -204,20 +222,4 @@ function timing_point_load_from_osz() {
     note_all_sort();
     ds_grid_destroy(_grid);
 }
-
-function note_build_attach(_type, _side, _width) {
-    var _obj = [objNote, objChain, objHold];
-    _obj = _obj[_type];
-    
-    var _inst = instance_create_depth(mouse_x, mouse_y, 
-                depth, _obj);
-    
-    with(_inst) {
-        state = stateAttach;
-        width = _width;
-        side = _side;
-        _prop_init();
-    }
-    
-    return _inst;
-}
+#endregion

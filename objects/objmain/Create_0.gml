@@ -26,6 +26,9 @@
 #region Project Properties
 
 	projectPath = "";
+	backgroundPath = "";
+	musicPath = "";
+	chartPath = "";
 	
 #endregion
 
