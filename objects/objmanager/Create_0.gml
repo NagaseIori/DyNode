@@ -12,7 +12,7 @@
 
 // Global Variables
 
-global.version = "v0.0.0-Alpha"
+global.version = "v0.1.0"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -73,6 +73,10 @@ DerpXml_Init();
 // Input Initialization
 
 instance_create(x, y, objInput);
+
+// Scribble Initialization
+
+scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 6, c_black, 0.4, 0, true);
     
 // Randomize
 

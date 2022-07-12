@@ -49,8 +49,7 @@ void main()
 {
     vec4 sample = texture2D(gm_BaseTexture, v_vTexcoord);
     float distBase = MSDFSignedDistance(sample);
-    float alphaBase = MSDFAlpha(distBase, v_fPixelScale, 0.0);
-    gl_FragColor = vec4(v_vColour.rgb, alphaBase);
+    gl_FragColor = vec4(v_vColour.rgb, v_vColour.a*MSDFAlpha(distBase, v_fPixelScale, 0.0));
     
     if (u_fSecondDraw < 0.5)
     {
@@ -78,10 +77,6 @@ void main()
     
     if (PREMULTIPLY_ALPHA)
     {
-        gl_FragColor.rgb *= v_vColour.a;
-    }
-    else
-    {
-        gl_FragColor.a *= v_vColour.a;
+        gl_FragColor.rgb *= gl_FragColor.a;
     }
 }
