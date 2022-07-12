@@ -125,3 +125,15 @@ function note_delete_all() {
 		instance_destroy(objNote);
 	}
 }
+
+function notes_array_update() {
+	with(objMain) {
+		chartNotesCount = array_length(chartNotesArray);
+		var i=0, l=chartNotesCount;
+		for(; i<l; i++) {
+			chartNotesArray[i].time = chartNotesArray[i].inst.time;
+			chartNotesArray[i].side = chartNotesArray[i].inst.side;
+		}
+	}
+	note_all_sort();
+}

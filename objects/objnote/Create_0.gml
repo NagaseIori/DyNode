@@ -385,7 +385,7 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
-                    note_all_sort();
+                    notes_array_update();
                 }
             }
             if(isDragging) {
@@ -420,7 +420,7 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             
-            if(keycheck_down(vk_delete) && noteType != 3)
+            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
                 instance_destroy();
             if(keycheck_down(ord("M")))
                 position = 5 - position;

@@ -1,7 +1,7 @@
 
 var _vec2 = noteprop_to_xy(position, time, side);
 x = _vec2[0]; y = _vec2[1];
-if(state == stateOut && image_alpha < EPS) {
+if(state == stateOut && image_alpha < EPS && !instance_exists(finst)) {
 	drawVisible = false;
 	image_alpha = 0;
 	if(instance_exists(sinst))

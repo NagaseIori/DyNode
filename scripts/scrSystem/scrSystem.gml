@@ -446,3 +446,4 @@ function sfmod_channel_set_position(pos, channel, spr) {
     pos = pos + FMOD_SOUND_DELAY;
     FMODGMS_Chan_Set_Position(channel, pos);
 }
+

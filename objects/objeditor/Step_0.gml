@@ -2,7 +2,7 @@
 
 #region Beatlines
 
-    if(keycheck_down(ord("T"))) {
+    if(keycheck_down(vk_add)) {
         var _tp = timingPoints[array_length(timingPoints) - 1];
         timing_point_add(objMain.animTargetTime, _tp.beatLength, _tp.meter);
     }

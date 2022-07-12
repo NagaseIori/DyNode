@@ -43,7 +43,7 @@ _prop_init();
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 0.0001);
     
-		    edgeScaleY = pHeight / originalHeight;
+		    edgeScaleY = min(pHeight, side==0?global.resolutionH:global.resolutionW) / originalHeight;
         }
     }
 
