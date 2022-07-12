@@ -42,4 +42,8 @@ Clean Shapes (under MIT License) Copyright (c) 2020 Juju Adams
 
 FMODGMS (under [BSD 2-Clause "Simplified" License](https://github.com/mstop4/FMODGMS/blob/master/LICENSE)) Copyright (c) 2016-2017, M.S.T.O.P.
 
+-------------------
+
+DyNode uses assets & designs from the following projects.
+
 Dynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd
