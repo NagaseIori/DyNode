@@ -1,6 +1,38 @@
 
 #region MAP FUNCTIONS
 
+function map_close() {
+	
+	with(objMain) {
+		surface_free_f(bottomBgSurf);
+		surface_free_f(bottomBgSurfPing);
+		
+		note_delete_all();
+		instance_destroy(objScoreBoard);
+		instance_destroy(objPerfectIndc);
+		instance_destroy(objEditor);
+		
+		time_source_destroy(timesourceResumeDelay);
+		part_emitter_destroy_all(partSysNote);
+		part_system_destroy(partSysNote);
+		part_type_destroy(partTypeNoteDL);
+		part_type_destroy(partTypeNoteDR);
+		
+		if(bgImageSpr != -1)
+		    sprite_delete(bgImageSpr);
+		
+		for(var i=0; i<3; i++)
+		    ds_map_destroy(chartNotesMap[i]);
+		
+		if(!is_undefined(music)) {
+			FMODGMS_Snd_Unload(music);
+			FMODGMS_Chan_RemoveChannel(channel);
+		}
+	}
+	
+	instance_destroy(objMain);
+}
+
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
         
@@ -54,10 +86,8 @@ function map_load(_file = "") {
         
     if(_file == "") return;
     
-    // Cleanup.
-    instance_destroy(objMain);
+    map_close();
     instance_create_depth(0, 0, 0, objMain);
-    
     
     if(!file_exists(_file)) {
         show_error("Map file " + _file + " doesnt exist.", false);

@@ -40,18 +40,6 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
             }
         }
     }
-    
-    // Update Highlight Line's Position
-    if(objEditor.editorHighlightLine) {
-    	if(state == stateSelected && isDragging || state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
-    		objEditor.editorHighlightTime = time;
-            objEditor.editorHighlightPosition = position;
-            objEditor.editorHighlightSide = side;
-            if(state == stateAttachSub || state == stateDropSub) {
-                objEditor.editorHighlightTime = sinst.time;
-            }
-    	}
-    }
 }
 
 
@@ -73,6 +61,18 @@ else if(stateString == "OUT") {   // stateMachine is slow --- in VM
             state = stateIn;
         state();
     }
+}
+
+// Update Highlight Line's Position
+if(objEditor.editorHighlightLine && instance_exists(id)) {
+	if(state == stateSelected && isDragging || state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
+		objEditor.editorHighlightTime = time;
+        objEditor.editorHighlightPosition = position;
+        objEditor.editorHighlightSide = side;
+        if(state == stateAttachSub || state == stateDropSub) {
+            objEditor.editorHighlightTime = sinst.time;
+        }
+	}
 }
 
 // Add selection blend

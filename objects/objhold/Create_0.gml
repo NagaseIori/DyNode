@@ -53,7 +53,3 @@ _prop_init();
     uFromTop = 13; 
     lFromLeft = 12;
     rFromRight = 12;
-
-// Surfaces
-    
-    surf_temp = -1;

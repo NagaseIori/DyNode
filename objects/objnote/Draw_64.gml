@@ -78,8 +78,5 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 else animTargetNodeA = 0;
 
 if(debug_mode && objMain.showDebugInfo && pos_inbound(x, y, 0, 0, global.resolutionW, global.resolutionH)) {
-    draw_set_color_alpha(c_white, 1.0);
-    draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, true);
     
-    draw_text(x, y, stateString + " " + string(time)+" "+string(position)+"\n"+string(width)+"\n"+string(depth));
 }
