@@ -24,7 +24,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
         else if(objEditor.editorHighlightLine && objEditor.editorHighlightPosition == position &&
             objEditor.editorHighlightSide == side) {
             animTargetNodeA = 1.0;
-            animTargetInfoA = 0;
+            animTargetInfoA = 1;
             _col = 0xc2577e;
         }
         else animTargetNodeA = 0;

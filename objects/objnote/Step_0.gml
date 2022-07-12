@@ -1,12 +1,8 @@
 
 var _vec2 = noteprop_to_xy(position, time, side);
 x = _vec2[0]; y = _vec2[1];
-if(state == stateOut && image_alpha < EPS && !instance_exists(finst)) {
+if(state == stateOut && image_alpha<EPS) {
 	drawVisible = false;
-	image_alpha = 0;
-	if(instance_exists(sinst))
-		instance_deactivate_object(sinst);
-	instance_deactivate_object(id);
 }
 else
     drawVisible = true;
@@ -14,6 +10,12 @@ else
 if(_outroom_check(x, y)) {
 	nodeAlpha = 0;
 	infoAlpha = 0;
+}
+
+if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
+	if(instance_exists(sinst))
+		instance_deactivate_object(sinst);
+	instance_deactivate_object(id);
 }
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
