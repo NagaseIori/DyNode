@@ -1,7 +1,6 @@
 /// @description Update Notes' States
 
 if(editorMode == 4) {
-    
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied) {
             editorSelectArea = true;
@@ -60,4 +59,3 @@ if(editorMode == 4) {
         
     }
 }
-

@@ -1,6 +1,6 @@
 
 drawVisible = false;
-depth = -100;
+origDepth = -10000000;
 image_yscale = global.scaleYAdjust;
 
 // In-Variables
@@ -15,6 +15,7 @@ image_yscale = global.scaleYAdjust;
     nid = -1; // Note id
     sid = -1; // Sub id
     sinst = -999; // Sub instance id
+    finst = -999; // Father instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
     
     // For Editor
@@ -27,6 +28,7 @@ image_yscale = global.scaleYAdjust;
     origSubTime = 0; // For hold's sub
     isDragging = false;
     nodeRadius = 22; // in Pixels
+    nodeColor = c_blue;
     
     // For Hold
     lastTime = 0;
@@ -41,7 +43,9 @@ image_yscale = global.scaleYAdjust;
     selected = false;
     selBlendColor = 0x4fd5ff;
     nodeAlpha = 0;
+    infoAlpha = 0;
     animTargetNodeA = 0;
+    animTargetInfoA = 0;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1.5;
@@ -56,6 +60,8 @@ image_yscale = global.scaleYAdjust;
     // Correction Values
     lFromLeft = 5;
     rFromRight = 5;
+    dFromBottom = 0;
+    uFromTop = 0;
 
 // In-Functions
 
@@ -65,6 +71,7 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
+        depth = origDepth - time;
     }
     _prop_init();
 
@@ -146,7 +153,7 @@ image_yscale = global.scaleYAdjust;
             _y = objMain.mixerX[side-1];
         }
             
-        var _inst = instance_create_depth(_x, _y, -1000, _shadow), _scl = 1;
+        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
         _inst.nowWidth = pWidth;
         _inst.visible = true;
         _inst.image_angle = image_angle;
@@ -346,7 +353,7 @@ image_yscale = global.scaleYAdjust;
                 build_hold(_teid, time, position, width, _subid, sinst.time, side);
                 instance_destroy(sinst);
                 instance_destroy();
-                sinst = -1;
+                sinst = -999;
             }
         }
         
@@ -378,7 +385,7 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
-                    note_all_sort();
+                    notes_array_update();
                 }
             }
             if(isDragging) {
@@ -413,7 +420,7 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             
-            if(keycheck_down(vk_delete) && noteType != 3)
+            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
                 instance_destroy();
             if(keycheck_down(ord("M")))
                 position = 5 - position;

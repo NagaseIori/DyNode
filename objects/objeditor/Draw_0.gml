@@ -24,6 +24,14 @@ if(editorHighlightLine) {
     draw_line_width(
         _nx, 0, _nx,
         global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
+    
+    // Vertical
+    draw_set_color(c_white);
+    _nx = note_pos_to_x(editorHighlightPosition, 0);
+    if(editorHighlightSide == 0)
+        draw_line_width(
+        _nx, 0, _nx,
+        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
 }
 
 // Draw Selction Area

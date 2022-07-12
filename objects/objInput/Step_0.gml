@@ -13,3 +13,5 @@ if(mouse_check_button(mb_left) && !mouseHoldClear) {
 else {
     mouseHoldTimeL = 0;
 }
+
+mouseHoldClear = false;

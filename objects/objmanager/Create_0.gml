@@ -8,10 +8,11 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        // in ms
 #macro FMOD_SOUND_DELAY 0
 #macro FMOD_SAMPLE_DELAY 0
+#macro EPS 0.001
 
 // Global Variables
 
-global.version = "v0.0.0-Alpha"
+global.version = "v0.1.0"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -72,10 +73,18 @@ DerpXml_Init();
 // Input Initialization
 
 instance_create(x, y, objInput);
+
+// Scribble Initialization
+
+scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 6, c_black, 0.4, 0, true);
     
 // Randomize
 
 randomize();
+
+// Check For Update
+
+_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 
 // Init finished
 

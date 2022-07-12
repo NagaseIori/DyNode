@@ -1,6 +1,38 @@
 
 #region MAP FUNCTIONS
 
+function map_close() {
+	
+	with(objMain) {
+		surface_free_f(bottomBgSurf);
+		surface_free_f(bottomBgSurfPing);
+		
+		note_delete_all();
+		instance_destroy(objScoreBoard);
+		instance_destroy(objPerfectIndc);
+		instance_destroy(objEditor);
+		
+		time_source_destroy(timesourceResumeDelay);
+		part_emitter_destroy_all(partSysNote);
+		part_system_destroy(partSysNote);
+		part_type_destroy(partTypeNoteDL);
+		part_type_destroy(partTypeNoteDR);
+		
+		if(bgImageSpr != -1)
+		    sprite_delete(bgImageSpr);
+		
+		for(var i=0; i<3; i++)
+		    ds_map_destroy(chartNotesMap[i]);
+		
+		if(!is_undefined(music)) {
+			FMODGMS_Snd_Unload(music);
+			FMODGMS_Chan_RemoveChannel(channel);
+		}
+	}
+	
+	instance_destroy(objMain);
+}
+
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
         
@@ -19,6 +51,11 @@ function map_init(_skipnote = false) {
                 time = bar_to_time(bar);        	// Bar to Chart Time in ms
                 time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
             }
+        }
+        
+        // Fix every note's time in the array
+        for(var i=0; i<array_length(chartNotesArray); i++) {
+        	chartNotesArray[i].time = time_to_mtime(bar_to_time(chartNotesArray[i].time));
         }
         
         chartTimeOffset = 0;                        // Set the offset to 0
@@ -49,10 +86,8 @@ function map_load(_file = "") {
         
     if(_file == "") return;
     
-    // Cleanup.
-    instance_destroy(objMain);
+    map_close();
     instance_create_depth(0, 0, 0, objMain);
-    
     
     if(!file_exists(_file)) {
         show_error("Map file " + _file + " doesnt exist.", false);
@@ -295,7 +330,7 @@ function map_export_xml() {
         var l = array_length(objMain.chartNotesArray);
         DerpXmlWrite_OpenTag("m_notes");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 0) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
@@ -313,7 +348,7 @@ function map_export_xml() {
         // Left Side Notes
         DerpXmlWrite_OpenTag("m_notesLeft");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 1) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
@@ -331,7 +366,7 @@ function map_export_xml() {
         // Right Side Notes
         DerpXmlWrite_OpenTag("m_notesRight");
             DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i] {
+                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
                     if(side == 2) {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
@@ -420,6 +455,7 @@ function project_save_as(_file = "") {
 
 #endregion
 
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;
@@ -440,3 +476,4 @@ function sfmod_channel_set_position(pos, channel, spr) {
     pos = pos + FMOD_SOUND_DELAY;
     FMODGMS_Chan_Set_Position(channel, pos);
 }
+
