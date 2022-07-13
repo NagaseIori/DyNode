@@ -30,7 +30,7 @@ if(!drawVisible) return;
     else {
         // var _spr = side == 1? sprHoldL:sprHoldR;
         for(var _i = _th; _i >= 0; _i -= _h)
-        	if(in_between(_nx + (_i - _h) * (side == 1 ? 1 : -1), 0, global.resolutionW)) {
+        	if(in_between(_nx + (_i-_h) * (side == 1 ? 1 : -1), -_h, global.resolutionW+_h)) {
 	            draw_sprite_part_ext(_spr, 0, 0, 0, 
 	                min(_h, _i), _w,
 	                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,

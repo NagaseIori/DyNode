@@ -317,6 +317,9 @@ function map_export_xml() {
     
     if(_file == "") return;
     
+    notes_reallocate_id(); // For Dynamaker's Reading
+    instance_activate_object(objNote); // Temporary activate all notes
+    
     DerpXmlWrite_New();
     DerpXmlWrite_OpenTag("CMap");
         DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);

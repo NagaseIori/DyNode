@@ -142,3 +142,19 @@ function notes_array_update() {
 	}
 	note_all_sort();
 }
+
+function notes_reallocate_id() {
+	with(objMain) {
+		var i=0, l=chartNotesCount;
+		var _cnt = [0, 0, 0];
+		for(; i<l; i++) {
+			var _inst = chartNotesArray[i].inst;
+			_inst.nid = string(_cnt[_inst.side]++);
+		}
+		for(i=0; i<l; i++) {
+			var _inst = chartNotesArray[i].inst;
+			if(_inst.noteType == 2)
+				_inst.sid = _inst.sinst.nid;
+		}
+	}
+}
