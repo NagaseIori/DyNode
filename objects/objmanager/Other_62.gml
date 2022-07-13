@@ -14,8 +14,9 @@ if (async_load[? "id"] == _update_get) {
 				announcement_play("DyNode 已经是最新版本。")
 			}
 			else {
-				announcement_play("DyNode 新版本已发布：" + _result.tag_name + "\n" +
-					format_markdown(_result.body), 10000);
+				_update_url = _result.html_url;
+				announcement_play("[scale, 1.2]收取到新版本 DyNode：[#aed581]" + _result.tag_name + "[/c][/scale]\n[region,update][cycle,130,150]前往更新页面[/cycle][/region]\n\n" +
+					"[c_ltgrey][scale, 0.8]"+format_markdown(_result.body)+"\n", 10000);
 			}
 		}
 	}

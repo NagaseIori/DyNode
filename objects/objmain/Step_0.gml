@@ -10,7 +10,7 @@ _position_update();
     if(keycheck_down(vk_f5))
     	map_export_xml();
     if(keycheck_down(vk_f11))
-    	showDebugInfo = !showDebugInfo;
+    	switch_debug_info();
     if(keycheck_down(ord("P")))
         hideScoreboard = !hideScoreboard;
     if(keycheck_down(ord("O")))

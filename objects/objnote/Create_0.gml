@@ -48,7 +48,7 @@ image_yscale = global.scaleYAdjust;
     animTargetInfoA = 0;
     
     animSpeed = 0.4;
-    animPlaySpeedMul = 1.5;
+    animPlaySpeedMul = 1.2;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
     image_alpha = 0;

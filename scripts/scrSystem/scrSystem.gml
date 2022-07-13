@@ -551,6 +551,40 @@ function announcement_error(str, time = 8000) {
 
 #endregion
 
+#region SYSTEM FUNCTIONS
+
+function load_config() {
+	if(!file_exists(global.configPath)) return;
+	
+	var _f = file_text_open_read(global.configPath);
+	var _con = json_parse(file_text_read_all(_f));
+	file_text_close(_f);
+	
+	if(variable_struct_exists(_con, "theme"))
+		global.themeAt = _con.theme;
+}
+
+function save_config() {
+	
+	var _f = file_text_open_write(global.configPath);
+	file_text_write_string(_f, json_stringify({
+		theme: global.themeAt
+	}));
+	
+	file_text_close(_f);
+	
+}
+
+function switch_debug_info() {
+	with(objMain) {
+		showDebugInfo = !showDebugInfo;
+		announcement_play("调试信息："+(showDebugInfo?"打开":"关闭"));
+	}
+}
+
+#endregion
+
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;

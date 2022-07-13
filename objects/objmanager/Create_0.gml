@@ -12,6 +12,8 @@
 
 // Global Variables
 
+global.configPath = program_directory + "config.json";
+
 global.version = "v0.1.0"
 
 global.resolutionW = 1920
@@ -80,6 +82,7 @@ instance_create(x, y, objInput);
 
 // Fonts Initialization
 
+scribble_anim_cycle(0.2, 255, 255);
 scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 10, c_black, 0.4, 0, true);
 	// Prefetch Msdf Fonts' Texture (this takes time)
 	var _texarr = texturegroup_get_textures("texFonts");
@@ -94,6 +97,11 @@ randomize();
 // Check For Update
 
 _update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
+_update_url = "";
+
+// Load Settings
+
+load_config();
 
 // Init finished
 
