@@ -165,7 +165,7 @@ var _music_resync_request = false;
 	for(; i<l; i++) {
 		_str = chartNotesArray[i];
 		_flag = _outbound_check_t(_str.time, _str.side);
-		if(!_flag && _str.time > nowTime)
+		if(!_flag && _str.time + _str.lastTime > nowTime)
 			instance_activate_object(_str.inst);
 		else if(_flag && _outbound_check_t(_str.time, !(_str.side)))
 			break;

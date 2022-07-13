@@ -50,13 +50,14 @@ function map_init(_skipnote = false) {
             with(objNote) {
                 time = bar_to_time(bar);        	// Bar to Chart Time in ms
                 time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
+                
+                if(noteType == 2)
+                	_prop_hold_update();			// Hold prop init
             }
         }
         
-        // Fix every note's time in the array
-        for(var i=0; i<array_length(chartNotesArray); i++) {
-        	chartNotesArray[i].time = time_to_mtime(bar_to_time(chartNotesArray[i].time));
-        }
+        // Update notesArray
+        notes_array_update();
         
         chartTimeOffset = 0;                        // Set the offset to 0
         

@@ -79,6 +79,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         	side : _inst.side,
         	width : _inst.width,
         	position : _inst.position,
+        	lastTime : _inst.lastTime,
         	inst : _inst
         });
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
@@ -137,6 +138,7 @@ function notes_array_update() {
 			chartNotesArray[i].time = chartNotesArray[i].inst.time;
 			chartNotesArray[i].side = chartNotesArray[i].inst.side;
 			chartNotesArray[i].width = chartNotesArray[i].inst.width;
+			chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
 			chartNotesArray[i].position = chartNotesArray[i].inst.position;
 		}
 	}
