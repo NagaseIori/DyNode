@@ -133,11 +133,19 @@ function cjk_prefix() {
 	return "[sprMsdfNotoSans]";
 }
 
+
+#region FORMAT FUNCTIONS
 function format_markdown(_str) {
 	_str = string_replace_all(_str, "**", "");
 	_str = string_replace_all(_str, "* ", "· ")
 	return _str;
 }
+
+function format_time_ms(_time) {
+	return string_format(_time, 1, 1) + "ms";
+}
+
+#endregion
 
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);

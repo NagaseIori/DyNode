@@ -210,6 +210,19 @@ image_yscale = global.scaleYAdjust;
     stateNormal = function() {
         stateString = "NM";
         
+        // Update Mixer's Position
+	    if(side > 0) {
+	        var _nside = side-1, _noff = time, _nx = y, _nid = id;
+	        
+	        with(objMain) {
+	            if((_noff-nowTime)*playbackSpeed/global.resolutionW < MIXER_REACTION_RANGE &&
+	              (mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].time)) {
+	                mixerNextNote[_nside] = _nid;
+	                mixerNextX[_nside] = _nx;
+	            }
+	        }
+	    }
+        
         var _limTime = min(objMain.nowTime, objMain.animTargetTime);
         if(time <= _limTime) {
             _create_shadow();
@@ -426,7 +439,9 @@ image_yscale = global.scaleYAdjust;
             	position = 5 - position;
             	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
             }
-                
+            if(keycheck_down(vk_add)) {
+            	timing_point_duplicate(time);
+		    }
         }
 
     state = stateOut;

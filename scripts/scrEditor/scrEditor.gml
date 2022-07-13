@@ -138,6 +138,17 @@ function timing_point_add(_t, _l, _b) {
     }
 }
 
+// Duplicate the last timing point at certain point
+function timing_point_duplicate(_time) {
+	with(objEditor) {
+		var _tp = timingPoints[array_length(timingPoints) - 1];
+    	timing_point_add(_time, _tp.beatLength, _tp.meter);
+    	
+    	announcement_play("复制末尾 Timing Point 至 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
+    		"\n节拍：1/"+string(_tp.meter), 5000);
+	}
+}
+
 // Reset the "timingPoints" array
 function timing_point_reset() {
     with(objEditor) {
