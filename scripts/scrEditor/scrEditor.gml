@@ -31,6 +31,10 @@ function editor_select_get_area_position() {
 	return objEditor.editorSelectAreaPosition;
 }
 
+function editor_select_count() {
+	return objEditor.editorSelectCount;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;
     

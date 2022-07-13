@@ -422,8 +422,11 @@ image_yscale = global.scaleYAdjust;
             
             if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
                 instance_destroy();
-            if(keycheck_down(ord("M")))
-                position = 5 - position;
+            if(keycheck_down(ord("M"))) {
+            	position = 5 - position;
+            	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+            }
+                
         }
 
     state = stateOut;
