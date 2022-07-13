@@ -34,4 +34,6 @@ global.__scribble_colours = {
     c_smaragdine: scribble_rgb_to_bgr(0x50c875),
     c_xanadu:     scribble_rgb_to_bgr(0x738678),
     c_amaranth:   scribble_rgb_to_bgr(0xe52b50),
+    c_warning:    scribble_rgb_to_bgr(0xffca28),
+    c_sakura:     scribble_rgb_to_bgr(0xffb7c5)
 }

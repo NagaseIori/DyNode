@@ -129,6 +129,16 @@ function has_cjk(str) {
 	return false;
 }
 
+function cjk_prefix() {
+	return "[sprMsdfNotoSans]";
+}
+
+function format_markdown(_str) {
+	_str = string_replace_all(_str, "**", "");
+	_str = string_replace_all(_str, "* ", "· ")
+	return _str;
+}
+
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }

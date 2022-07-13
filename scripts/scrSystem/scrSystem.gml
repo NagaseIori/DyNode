@@ -102,6 +102,7 @@ function map_load(_file = "") {
     objManager.chartPath = _file;
     
     show_debug_message("Load map sucessfully.");
+    announcement_play("谱面读取完毕。");
 }
 
 function map_load_xml(_file) {
@@ -260,6 +261,8 @@ function music_load(_file = "") {
     }
     objManager.musicPath = _file;
     show_debug_message("Load sucessfully.");
+    
+    announcement_play("音乐加载完毕。", 1000);
 }
 
 function image_load(_file = "") {
@@ -394,6 +397,8 @@ function map_export_xml() {
 	file_text_close(f);
 	
 	objManager.chartPath = _file;
+	
+	announcement_play("谱面导出完毕。");
 }
 
 #endregion
@@ -403,7 +408,7 @@ function map_export_xml() {
 function project_load(_file = "") {
 	if(_file == "") 
 		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
-        "Load Project 打开工程");
+        "Load Project 打开项目");
     
     if(_file == "") return 0;
     
@@ -427,6 +432,8 @@ function project_load(_file = "") {
     
     projectPath = _file;
     
+    announcement_play("打开项目完毕。");
+    
     return 1;
 }
 
@@ -438,7 +445,7 @@ function project_save_as(_file = "") {
 	
 	if(_file == "")
 		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
-	        "Project save as 工程另存为");
+	        "Project save as 项目另存为");
 	
 	if(_file == "") return 0;
 	
@@ -454,10 +461,14 @@ function project_save_as(_file = "") {
 	file_text_write_string(_f, json_stringify(_contents));
 	file_text_close(_f);
 	
+	announcement_play("项目保存完毕。");
+	
 	return 1;
 }
 
 #endregion
+
+#region THEME FUNCTIONS
 
 function theme_init() {
 	
@@ -467,7 +478,7 @@ function theme_init() {
 	/// Theme Configuration
 	
 	array_push(global.themes, {
-		title: "Dynamix",
+		title: "[c_aqua]Dynamix[/c]",
 		color: c_aqua,
 		partSpr: sprParticleW,		// Particle Sprite
 		partColA: 0x652dba, 		// Note's Particle Color
@@ -478,7 +489,7 @@ function theme_init() {
 	});
 	
 	array_push(global.themes, {
-		title: "Sakura",
+		title: "[c_sakura]Sakura[/c]",
 		color: 0xc5b7ff,
 		partSpr: sprParticleW,		// Particle Sprite
 		partColA: 0x652dba, 		// Note's Particle Color
@@ -510,11 +521,35 @@ function theme_next() {
 	global.themeAt %= global.themeCount;
 	
 	objMain.themeColor = global.themes[global.themeAt].color;
+	
+	announcement_play("已切换到主题 [[" + global.themes[global.themeAt].title + "]", 1000);
 }
 
 function theme_get() {
 	return global.themes[global.themeAt];
 }
+
+#endregion
+
+#region ANNOUNCEMENT FUNCTIONS
+
+function announcement_play(str, time = 2000) {
+	with(objManager) {
+		announcementString = str;
+		announcementLastTime = time;
+		announcementTime = 0;
+	}
+}
+
+function announcement_warning(str, time = 5000) {
+	announcement_play("[c_warning][[警告] [/c]" + str, time);
+}
+
+function announcement_error(str, time = 8000) {
+	announcement_play("[c_red][[错误] " + str, time);
+}
+
+#endregion
 
 function reset_scoreboard() {
 	with(objScoreBoard) {

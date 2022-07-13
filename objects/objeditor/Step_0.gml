@@ -11,6 +11,10 @@
     beatlineNowMode += _modchg;
     beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
     
+    if(_modchg != 0) {
+        announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowMode]));
+    }
+    
     animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
     animBeatlineTargetAlpha[1] += 0.7 * keycheck_down(vk_left);
     animBeatlineTargetAlpha[2] += 0.7 * keycheck_down(vk_right);

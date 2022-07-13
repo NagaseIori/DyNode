@@ -52,8 +52,11 @@ editorSelectMultiple = editorSelectCount > 1;
     
     // Editor Side Switch
     editorSide += keycheck_down(vk_up);
-    if(keycheck_down(vk_up))
+    if(keycheck_down(vk_up)) {
         _attach_sync_request = true;
+        if(editorMode == 5)
+            editorMode = 4;
+    }
     if(editorSide == 3) editorSide = 0;
     
     // Editor Mode Switch

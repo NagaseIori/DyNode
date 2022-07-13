@@ -221,5 +221,7 @@ function timing_point_load_from_osz() {
     timing_point_sort();
     note_all_sort();
     ds_grid_destroy(_grid);
+    
+    announcement_play("导入谱面信息完毕。", 1000);
 }
 #endregion

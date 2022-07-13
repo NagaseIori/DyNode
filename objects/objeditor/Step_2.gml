@@ -1,6 +1,7 @@
 /// @description Update Notes' States
 
 if(editorMode == 4) {
+    // Detect mouse's drag to enable selecting area
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied) {
             editorSelectArea = true;
