@@ -321,8 +321,10 @@ function map_export_xml() {
     
     if(_file == "") return;
     
-    notes_reallocate_id(); // For Dynamaker's Reading
-    instance_activate_object(objNote); // Temporary activate all notes
+    // For Compatibility
+    notes_reallocate_id();
+    timing_point_sync_with_chart_prop();
+    instance_activate_object(objNote); // Temporarily activate all notes
     
     DerpXmlWrite_New();
     DerpXmlWrite_OpenTag("CMap");
@@ -547,6 +549,13 @@ function announcement_warning(str, time = 5000) {
 
 function announcement_error(str, time = 8000) {
 	announcement_play("[c_red][[错误] " + str, time);
+}
+
+function announcement_adjust(str, val) {
+	if(is_bool(val))
+		announcement_play(str + "：" + (val?"开启":"关闭"));
+	else
+		announcement_play(str + "：" + string(val));
 }
 
 #endregion

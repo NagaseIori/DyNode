@@ -160,6 +160,14 @@ function timing_point_reset() {
     }
 }
 
+// For Compatibility
+function timing_point_sync_with_chart_prop() {
+	with(objMain) {
+		chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
+		chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+	}
+}
+
 function timing_point_load_from_osz() {
     var _file = "";
     _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 

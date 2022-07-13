@@ -442,6 +442,10 @@ image_yscale = global.scaleYAdjust;
             if(keycheck_down(vk_add)) {
             	timing_point_duplicate(time);
 		    }
+		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
+		    	objEditor.editorDefaultWidth = width;
+		    	announcement_play("复制宽度："+string_format(width, 1, 2));
+		    }
         }
 
     state = stateOut;

@@ -10,13 +10,10 @@ if (async_load[? "id"] == _update_get) {
 				show_debug_message("No updates found.")
 				announcement_warning("未收取到 DyNode 的任何正式版本。");
 			}
-			else if(_result.tag_name == global.version) {
-				announcement_play("DyNode 已经是最新版本。")
-			}
-			else {
+			else if(_result.tag_name != global.version) {
 				_update_url = _result.html_url;
 				announcement_play("[scale, 1.2]收取到新版本 DyNode：[#aed581]" + _result.tag_name + "[/c][/scale]\n[region,update][cycle,130,150]前往更新页面[/cycle][/region]\n\n" +
-					"[c_ltgrey][scale, 0.8]"+format_markdown(_result.body)+"\n", 10000);
+					"[c_ltgrey][scale, 0.8]"+format_markdown(_result.body)+"\n", 5000);
 			}
 		}
 	}
