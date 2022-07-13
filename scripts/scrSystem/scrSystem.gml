@@ -455,6 +455,62 @@ function project_save_as(_file = "") {
 
 #endregion
 
+function theme_init() {
+	
+	global.themes = [];
+	global.themeAt = 0;
+	
+	/// Theme Configuration
+	
+	array_push(global.themes, {
+		title: "Dynamix",
+		color: c_aqua,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: 0x652dba, 		// Note's Particle Color
+		partColB: 0x652dba,
+		partColHA: 0x16925a,		// Hold's Particle Color
+		partColHB: 0x16925a,
+		partBlend: true
+	});
+	
+	array_push(global.themes, {
+		title: "Sakura",
+		color: 0xc5b7ff,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: 0x652dba, 		// Note's Particle Color
+		partColB: 0x652dba,
+		partColHA: 0x16925a,		// Hold's Particle Color
+		partColHB: 0x16925a,
+		partBlend: true
+	});
+	
+	array_push(global.themes, {
+		title: "Piano",
+		color: c_black,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: c_white, 		// Note's Particle Color
+		partColB: c_ltgrey,
+		partColHA: c_white,		// Hold's Particle Color
+		partColHB: c_black,
+		partBlend: false
+	});
+	
+	/// End of Configuration
+	
+	global.themeCount = array_length(global.themes);
+	
+}
+
+function theme_next() {
+	global.themeAt ++;
+	global.themeAt %= global.themeCount;
+	
+	objMain.themeColor = global.themes[global.themeAt].color;
+}
+
+function theme_get() {
+	return global.themes[global.themeAt];
+}
 
 function reset_scoreboard() {
 	with(objScoreBoard) {

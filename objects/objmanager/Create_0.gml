@@ -29,6 +29,10 @@ global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
+// Themes Init
+
+theme_init();
+
 // Generate Temp Sprite
 
 global.sprLazer = generate_lazer_sprite(2000);

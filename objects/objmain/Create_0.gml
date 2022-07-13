@@ -84,8 +84,7 @@ depth = 0;
 
 #region Playview Properties
 
-    themeColor = 0xFFFF00;
-    themeColor = 0xc5b7ff; // Sakura pink ❤
+    themeColor = theme_get().color;
 
     nowBar = 0;
     nowTime = 0;
@@ -150,18 +149,23 @@ depth = 0;
     
         // Note
         _parttype_noted_init = function(_pt, _scl = 1.0, _ang = 0.0) {
-            part_type_sprite(_pt, sprParticleW, false, true, false);
-            part_type_alpha3(_pt, partAlphaMul, 0.6 * partAlphaMul, 0);
+        	var _theme = theme_get();
+            part_type_sprite(_pt, _theme.partSpr, false, true, false);
+            if(_theme.partBlend)
+            	part_type_alpha3(_pt, partAlphaMul, 0.6 * partAlphaMul, 0);
+            else
+            	part_type_alpha3(_pt, 1, 0.6, 0);
+            
             part_type_speed(_pt, _scl * 10 * global.fpsAdjust
                             , _scl * 30 * global.fpsAdjust,
                             _scl * -0.5 * global.fpsAdjust, 0);
-            part_type_color3(_pt, 0x652dba, 0x652dba, themeColor);
+            part_type_color3(_pt, _theme.partColA, _theme.partColB, themeColor);
             //part_type_color2(_pt, 0x652dba, themeColor);
             part_type_size(_pt, 0.5, 0.8, -0.01 * global.fpsAdjust, 0);
             part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
             part_type_life(_pt, room_speed*0.2, room_speed*0.4);
-            part_type_blend(_pt, true);
+            part_type_blend(_pt, _theme.partBlend);
             part_type_direction(_pt, _ang, _ang, 0, 0);
         }
         
@@ -172,18 +176,22 @@ depth = 0;
         
         // Hold
         _parttype_hold_init = function(_pt, _scl = 1.0, _ang = 0.0) {
-            part_type_sprite(_pt, sprParticleW, false, true, false);
-            part_type_alpha3(_pt, 0.6 * partAlphaMul, 0.6 * 0.6 * partAlphaMul, 0);
+        	var _theme = theme_get();
+            part_type_sprite(_pt, _theme.partSpr, false, true, false);
+            if(_theme.partBlend)
+            	part_type_alpha3(_pt, 0.6 * partAlphaMul, 0.6 * 0.6 * partAlphaMul, 0);
+            else
+            	part_type_alpha3(_pt, 1, 0.6, 0);
             part_type_speed(_pt, _scl * 15 * global.fpsAdjust
                             , _scl * 20 * global.fpsAdjust,
                             _scl * -0.3 * global.fpsAdjust, 0);
-            part_type_color2(_pt, 0x16925a, 0x16925a);
+            part_type_color2(_pt, _theme.partColHA, _theme.partColHB);
             // part_type_color2(_pt, 0x89ffff, 0xffffe5)
             part_type_size(_pt, 0.8, 1.2, -0.02 * global.fpsAdjust, 0);
             // part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
             part_type_life(_pt, room_speed*0.2, room_speed*0.4);
-            part_type_blend(_pt, true);
+            part_type_blend(_pt, _theme.partBlend);
             part_type_direction(_pt, _ang, _ang+180, 0, 0);
         }
         partTypeHold = part_type_create();

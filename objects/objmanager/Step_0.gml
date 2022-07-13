@@ -25,3 +25,6 @@ if(keycheck_down_ctrl(ord("S")))
 
 if(keycheck_down(vk_f1))
     project_load();
+
+if(keycheck_down(vk_f9))
+	theme_next();
