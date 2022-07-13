@@ -3,35 +3,42 @@
 if(editorMode == 4) {
     // Detect mouse's drag to enable selecting area
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
-        && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied) {
+        && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
             editorSelectArea = true;
             if(!ctrl_ishold()) {
-                with(objNote) {
-                    if(state == stateSelected) {
-                        state = stateNormal;
-                        state();
-                    }
-                }
+                editorSelectResetRequest = true;
             }
         }
     if(editorSelectDragOccupied)
         editorSelectArea = false;
     
-    // Select a note
-    if(instance_exists(editorSelectSingleTarget) && (!editorSelectOccupied || ctrl_ishold()) && !keyboard_check_pressed(vk_up))
-        with(editorSelectSingleTarget) {
-            state = stateSelected;
-            state();
-        }           
     // If necessary reset all selected notes
-    else if((mouse_isclick_l() && !editorSelectInbound) || keyboard_check_pressed(vk_up)) { 
+    if((instance_exists(editorSelectSingleTarget) && !ctrl_ishold()) || keyboard_check_pressed(vk_up)) { 
+        editorSelectResetRequest = true;
+    }
+    if(mouse_isclick_l() && !editorSelectInbound) {
+        editorSelectResetRequest = true;
+    }
+    
+    if(editorSelectResetRequest) {
         with(objNote) {
             if(state == stateSelected) {
                 state = stateNormal;
                 state();
             }
         }
+        editorSelectResetRequest = false;
     }
+    
+    // Select a note
+    if(instance_exists(editorSelectSingleTarget) && !keyboard_check_pressed(vk_up))
+        with(editorSelectSingleTarget) {
+            state = stateSelected;
+            state();
+        }           
+    
+    
+    
     
     // Selecting Area part
     if(editorSelectArea) {

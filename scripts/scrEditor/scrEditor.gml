@@ -35,6 +35,10 @@ function editor_select_count() {
 	return objEditor.editorSelectCount;
 }
 
+function editor_select_reset() {
+	objEditor.editorSelectResetRequest = true;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;
     

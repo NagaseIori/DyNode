@@ -18,6 +18,7 @@ editorSelectDragOccupied = false;           // dragging notes
 editorSelectArea = false;                   // selecting area
 editorSelectAreaPosition = [0, 0, 0, 0];
 editorSelectInbound = false;                // if at least mouse is inbound one selected note
+editorSelectResetRequest = false;
 
 editorHighlightLine = false;
 editorHighlightLineEnabled = true;
