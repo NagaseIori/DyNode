@@ -34,7 +34,8 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
         var _nside = side-1, _noff = time, _nx = y, _nid = id;
         
         with(objMain) {
-            if(mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].time) {
+            if((_noff-nowTime)*playbackSpeed/global.resolutionW < MIXER_REACTION_RANGE &&
+              (mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].time)) {
                 mixerNextNote[_nside] = _nid;
                 mixerNextX[_nside] = _nx;
             }

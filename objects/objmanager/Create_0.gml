@@ -9,6 +9,7 @@
 #macro FMOD_SOUND_DELAY 0
 #macro FMOD_SAMPLE_DELAY 0
 #macro EPS 0.001
+#macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 
 // Global Variables
 
