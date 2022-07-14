@@ -6,34 +6,26 @@ if(surface_exists(beatlineSurf))
 // Draw Highlight Lines
 
 if(editorHighlightLine) {
-    var _width = 14;
     draw_set_color_alpha(0x75e7dc, 1);
     var _ny = note_time_to_y(editorHighlightTime, 0),
         _nx = note_time_to_y(editorHighlightTime, 1);
     // Down
-    CleanLine(30, _ny, global.resolutionW/2, _ny)
-        .Thickness(_width)
-        .Blend2(highlightLineColorDownA, 1,
-            highlightLineColorDownB, 0.8)
-        .Cap("round", "none")
-        .Draw();
-    CleanLine(global.resolutionW/2, _ny, global.resolutionW-30, _ny)
-        .Thickness(_width)
-        .Blend2(highlightLineColorDownB, 0.8,
-            highlightLineColorDownA, 1)
-        .Cap("none", "round")
+    CleanPolyline([30, _ny, global.resolutionW/2, _ny, global.resolutionW - 30, _ny])
+        .BlendExt([highlightLineColorDownA, 1, highlightLineColorDownB, 0.8, highlightLineColorDownA, 1])
+        .Thickness(8)
+        .Cap("round", "round")
         .Draw();
     
     // LR
     CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
-        .Thickness(_width)
+        .Thickness(14)
         .Blend2(highlightLineColorSideA, 1,
             highlightLineColorSideB, 1)
         .Cap("round", "none")
         .Draw();
     _nx = global.resolutionW - _nx;
     CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
-        .Thickness(_width)
+        .Thickness(14)
         .Blend2(highlightLineColorSideA, 1,
             highlightLineColorSideB, 1)
         .Cap("round", "none")

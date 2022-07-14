@@ -446,6 +446,10 @@ image_yscale = global.scaleYAdjust;
 		    	objEditor.editorDefaultWidth = width;
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
+		    if(keycheck_down_ctrl(ord("V"))) {
+		    	width = objEditor.editorDefaultWidth;
+		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+		    }
         }
 
     state = stateOut;

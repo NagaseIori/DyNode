@@ -1,11 +1,11 @@
 {
+  "managed": true,
   "spriteId": {
     "name": "sprNote",
     "path": "sprites/sprNote/sprNote.yy",
   },
   "solid": false,
   "visible": true,
-  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": null,
