@@ -649,10 +649,7 @@ function announcement_error(str, time = 8000) {
 }
 
 function announcement_adjust(str, val) {
-	if(is_bool(val))
-		announcement_play(str + "：" + (val?"开启":"关闭"));
-	else
-		announcement_play(str + "：" + string(val));
+	announcement_play(str + "：" + (val?"开启":"关闭"));
 }
 
 #endregion
