@@ -34,6 +34,13 @@ editorHighlightSide = 0;
 // Timings
 timingPoints = [];
 
+// Highlight lines
+
+highlightLineColorDownA = scribble_rgb_to_bgr(0xb6ffff);
+highlightLineColorDownB = scribble_rgb_to_bgr(0x81d4fa);
+highlightLineColorSideA = scribble_rgb_to_bgr(0xffc1e3);
+highlightLineColorSideB = scribble_rgb_to_bgr(0xce93d8);
+
 // Beatlines
 beatlineSurf = -1;
 beatlineColors = [0, 0xffffff, 0x3643f4, 0xb0279c, 0xf39621,
@@ -73,7 +80,7 @@ beatlineDivs = [1, 2, 3, 4, 6, 8, 16, 12, 32];
 beatlineNowMode = 3;
 beatlineEnabled = array_create(20, 0);
 
-beatlineHardWidth = 8;
+beatlineHardWidth = 6;
 beatlineWidth = 3;
 beatlineHardLength = global.resolutionW * 0.9;
 beatlineLength = global.resolutionW * 0.75;
