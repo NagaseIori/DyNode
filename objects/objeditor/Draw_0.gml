@@ -6,27 +6,41 @@ if(surface_exists(beatlineSurf))
 // Draw Highlight Lines
 
 if(editorHighlightLine) {
+    var _width = 14;
     draw_set_color_alpha(0x75e7dc, 1);
     var _ny = note_time_to_y(editorHighlightTime, 0),
         _nx = note_time_to_y(editorHighlightTime, 1);
     // Down
-    draw_line_width(
-        0,
-        _ny,
-        global.resolutionW,
-        _ny, 3);
+    CleanLine(30, _ny, global.resolutionW/2, _ny)
+        .Thickness(_width)
+        .Blend2(highlightLineColorDownA, 1,
+            highlightLineColorDownB, 0.8)
+        .Cap("round", "none")
+        .Draw();
+    CleanLine(global.resolutionW/2, _ny, global.resolutionW-30, _ny)
+        .Thickness(_width)
+        .Blend2(highlightLineColorDownB, 0.8,
+            highlightLineColorDownA, 1)
+        .Cap("none", "round")
+        .Draw();
+    
     // LR
-    draw_set_color(0xacb64d)
-    draw_line_width(
-        _nx, 0, _nx,
-        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
+    CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
+        .Thickness(_width)
+        .Blend2(highlightLineColorSideA, 1,
+            highlightLineColorSideB, 1)
+        .Cap("round", "none")
+        .Draw();
     _nx = global.resolutionW - _nx;
-    draw_line_width(
-        _nx, 0, _nx,
-        global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2, 3);
+    CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
+        .Thickness(_width)
+        .Blend2(highlightLineColorSideA, 1,
+            highlightLineColorSideB, 1)
+        .Cap("round", "none")
+        .Draw();
     
     // Vertical
-    draw_set_color(c_white);
+    draw_set_color_alpha(c_white, 1);
     _nx = note_pos_to_x(editorHighlightPosition, 0);
     if(editorHighlightSide == 0)
         draw_line_width(

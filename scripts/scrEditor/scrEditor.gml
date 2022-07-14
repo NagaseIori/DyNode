@@ -31,6 +31,14 @@ function editor_select_get_area_position() {
 	return objEditor.editorSelectAreaPosition;
 }
 
+function editor_select_count() {
+	return objEditor.editorSelectCount;
+}
+
+function editor_select_reset() {
+	objEditor.editorSelectResetRequest = true;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
     if(!objEditor.editorGridYEnabled) return _y;
     
@@ -134,6 +142,17 @@ function timing_point_add(_t, _l, _b) {
     }
 }
 
+// Duplicate the last timing point at certain point
+function timing_point_duplicate(_time) {
+	with(objEditor) {
+		var _tp = timingPoints[array_length(timingPoints) - 1];
+    	timing_point_add(_time, _tp.beatLength, _tp.meter);
+    	
+    	announcement_play("复制末尾 Timing Point 至 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
+    		"\n节拍：1/"+string(_tp.meter), 5000);
+	}
+}
+
 // Reset the "timingPoints" array
 function timing_point_reset() {
     with(objEditor) {
@@ -143,6 +162,14 @@ function timing_point_reset() {
         }
         timingPoints = [];
     }
+}
+
+// For Compatibility
+function timing_point_sync_with_chart_prop() {
+	with(objMain) {
+		chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
+		chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+	}
 }
 
 function timing_point_load_from_osz() {
@@ -221,5 +248,7 @@ function timing_point_load_from_osz() {
     timing_point_sort();
     note_all_sort();
     ds_grid_destroy(_grid);
+    
+    announcement_play("导入谱面信息完毕。", 1000);
 }
 #endregion

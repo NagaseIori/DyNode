@@ -20,11 +20,12 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
     else {
         if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == id) {
             animTargetNodeA = 1.0;
+            animTargetInfoA = ctrl_ishold()? 1:0;
         }
         else if(objEditor.editorHighlightLine && objEditor.editorHighlightPosition == position &&
             objEditor.editorHighlightSide == side) {
             animTargetNodeA = 1.0;
-            animTargetInfoA = 1;
+            animTargetInfoA = ctrl_ishold()? 1:0;
             _col = 0xc2577e;
         }
         else animTargetNodeA = 0;
@@ -60,14 +61,14 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
     if(infoAlpha > EPS) {
     	var _dx = 20, _dy = (noteType == 2? dFromBottom:20) * _inv;
 	    scribble(string_format(position, 1, 2))
-	    	.starting_format("fDynamix16", c_aqua)
+	    	.starting_format("fDynamix16s", c_aqua)
 	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
 	    	.blend(c_white, infoAlpha)
 	    	.align(fa_right, fa_middle)
 	    	.draw(x - _dx, y + _dy);
 	    
 	    scribble(string_format(width, 1, 2))
-	    	.starting_format("fDynamix16", c_white)
+	    	.starting_format("fDynamix16s", c_white)
 	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
 	    	.blend(c_white, infoAlpha)
 	    	.align(fa_left, fa_middle)
@@ -77,6 +78,9 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 }
 else animTargetNodeA = 0;
 
-if(debug_mode && objMain.showDebugInfo && pos_inbound(x, y, 0, 0, global.resolutionW, global.resolutionH)) {
-    
+if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
+    scribble(stateString)
+    	.starting_format("fDynamix16", c_white)
+    	.align(fa_center, fa_top)
+    	.draw(x, y)
 }

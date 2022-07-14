@@ -198,6 +198,7 @@
     {"id":{"name":"__CleanConfig","path":"scripts/__CleanConfig/__CleanConfig.yy",},"order":5,},
     {"id":{"name":"scribble_msdf_thickness_offset","path":"scripts/scribble_msdf_thickness_offset/scribble_msdf_thickness_offset.yy",},"order":5,},
     {"id":{"name":"scribble_font_bake_shader","path":"scripts/scribble_font_bake_shader/scribble_font_bake_shader.yy",},"order":3,},
+    {"id":{"name":"sprParticleBlock","path":"sprites/sprParticleBlock/sprParticleBlock.yy",},"order":33,},
     {"id":{"name":"libdlgmodule","path":"extensions/libdlgmodule/libdlgmodule.yy",},"order":2,},
     {"id":{"name":"shd_gaussian_blur","path":"shaders/shd_gaussian_blur/shd_gaussian_blur.yy",},"order":9,},
     {"id":{"name":"DerpXmlRead_CloseFile","path":"scripts/DerpXmlRead_CloseFile/DerpXmlRead_CloseFile.yy",},"order":0,},

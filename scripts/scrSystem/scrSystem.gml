@@ -33,6 +33,11 @@ function map_close() {
 	instance_destroy(objMain);
 }
 
+function map_reset() {
+	map_close();
+	instance_create_depth(0, 0, 0, objMain);
+}
+
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
         
@@ -50,13 +55,14 @@ function map_init(_skipnote = false) {
             with(objNote) {
                 time = bar_to_time(bar);        	// Bar to Chart Time in ms
                 time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
+                
+                if(noteType == 2)
+                	_prop_hold_update();			// Hold prop init
             }
         }
         
-        // Fix every note's time in the array
-        for(var i=0; i<array_length(chartNotesArray); i++) {
-        	chartNotesArray[i].time = time_to_mtime(bar_to_time(chartNotesArray[i].time));
-        }
+        // Update notesArray
+        notes_array_update();
         
         chartTimeOffset = 0;                        // Set the offset to 0
         
@@ -79,6 +85,11 @@ function map_init(_skipnote = false) {
 }
 
 function map_load(_file = "") {
+
+	if(is_struct(_file)) {
+		map_load_struct(_file);
+		return;
+	}
 	
 	if(_file == "")
 	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
@@ -86,11 +97,11 @@ function map_load(_file = "") {
         
     if(_file == "") return;
     
-    map_close();
-    instance_create_depth(0, 0, 0, objMain);
+    var _clear = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear) note_delete_all();
     
     if(!file_exists(_file)) {
-        show_error("Map file " + _file + " doesnt exist.", false);
+        announcement_error("谱面文件不存在。导入中止。");
         return;
     }
     
@@ -100,7 +111,8 @@ function map_load(_file = "") {
     map_init();
     objManager.chartPath = _file;
     
-    show_debug_message("Load map sucessfully.");
+    show_debug_message("Import map sucessfully.");
+    announcement_play("导入谱面完毕。");
 }
 
 function map_load_xml(_file) {
@@ -259,6 +271,8 @@ function music_load(_file = "") {
     }
     objManager.musicPath = _file;
     show_debug_message("Load sucessfully.");
+    
+    announcement_play("音乐加载完毕。", 1000);
 }
 
 function image_load(_file = "") {
@@ -269,13 +283,13 @@ function image_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        show_error("Image file " + _file + " doesnt exist.\n图片文件不存在。", false);
+        announcement_error("图片文件不存在。\n[scale, 0.8]路径："+_file);
         return;
     }
     
     var _spr = sprite_add(_file, 1, 0, 0, 0, 0);
     if(_spr < 0) {
-        show_error("Loading image file " + _file + " failed.\n图片文件读取失败。", false);
+        announcement_error("图片文件读取失败。图片可能过大或损坏。");
         return;
     }
     
@@ -316,6 +330,11 @@ function map_export_xml() {
         "Export Dynamic Chart as XMl File 导出谱面XML文件");
     
     if(_file == "") return;
+    
+    // For Compatibility
+    notes_reallocate_id();
+    timing_point_sync_with_chart_prop();
+    instance_activate_object(objNote); // Temporarily activate all notes
     
     DerpXmlWrite_New();
     DerpXmlWrite_OpenTag("CMap");
@@ -390,6 +409,68 @@ function map_export_xml() {
 	file_text_close(f);
 	
 	objManager.chartPath = _file;
+	
+	announcement_play("谱面导出完毕。");
+}
+
+function map_get_struct() {
+	var _arr = [];
+	
+	with(objMain) {
+		notes_array_update();
+		var i=0, l=chartNotesCount, _inst;
+		for(; i<l; i++) {
+			var _str = chartNotesArray[i];
+			if(_str.noteType != 3)
+				array_push(_arr, {
+					width : _str.width,
+					side : _str.side,
+					noteType : _str.noteType,
+					position : _str.position,
+					time : _str.time,
+					lastTime : _str.lastTime,
+				});
+		}
+	}
+	
+	var _str = {
+		title: objMain.chartTitle,
+		bpm: objMain.chartBeatPerMin,
+		barpm: objMain.chartBarPerMin,
+		difficulty: objMain.chartDifficulty,
+		sidetype: objMain.chartSideType,
+		notes: _arr
+	}
+	
+	return _str;
+}
+
+function map_load_struct(_str) {
+	note_delete_all();
+	
+	with(objMain) {
+		chartTitle = _str.title;
+		chartBeatPerMin = _str.bpm;
+		chartBarPerMin = _str.barpm;
+		chartDifficulty = _str.difficulty;
+		chartSideType = _str.sidetype;
+	}
+	
+	var _arr = _str.notes;
+	for(var i=0, l=array_length(_arr); i<l; i++) {
+		if(_arr[i].noteType < 2) {
+			build_note(random_id(6), _arr[i].noteType, _arr[i].time, _arr[i].position, 
+				_arr[i].width, "-1", _arr[i].side, false, false);
+		}
+		else {
+			build_hold(random_id(6), _arr[i].time, _arr[i].position, _arr[i].width,
+				random_id(6), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
+		}
+	}
+	
+	note_all_sort();
+	
+	show_debug_message("Load map from struct sucessfully.");
 }
 
 #endregion
@@ -399,7 +480,7 @@ function map_export_xml() {
 function project_load(_file = "") {
 	if(_file == "") 
 		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
-        "Load Project 打开工程");
+        "Load Project 打开项目");
     
     if(_file == "") return 0;
     
@@ -413,7 +494,13 @@ function project_load(_file = "") {
     	chartPath = _contents.chartPath;
     }
     
-    map_load(chartPath);
+    
+    if(variable_struct_exists(_contents, "charts")) {
+    	objMain.animTargetTime = 0;
+    	map_load(_contents.charts);
+    }
+    else
+    	map_load(chartPath);
     music_load(musicPath);
     image_load(backgroundPath);
     
@@ -422,6 +509,8 @@ function project_load(_file = "") {
     timing_point_sort();
     
     projectPath = _file;
+    
+    announcement_play("打开项目完毕。");
     
     return 1;
 }
@@ -434,7 +523,7 @@ function project_save_as(_file = "") {
 	
 	if(_file == "")
 		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
-	        "Project save as 工程另存为");
+	        "Project save as 项目另存为");
 	
 	if(_file == "") return 0;
 	
@@ -443,14 +532,160 @@ function project_save_as(_file = "") {
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
-		timingPoints: objEditor.timingPoints
+		timingPoints: objEditor.timingPoints,
+		charts: []
 	};
+	
+	_contents.charts = map_get_struct();
 	
 	var _f = file_text_open_write(_file);
 	file_text_write_string(_f, json_stringify(_contents));
 	file_text_close(_f);
 	
+	objManager.projectPath = _file;
+	
+	announcement_play("项目保存完毕。");
+	
 	return 1;
+}
+
+function project_new() {
+	
+	var _confirm = show_question("确定要创建新的工程吗？所有未保存的更改都将丢失。");
+	if(!_confirm) return;
+	
+	map_reset();
+	with(objManager) {
+		musicPath = "";
+		backgroundPath = "";
+		chartPath = "";
+		projectPath = "";
+	}
+	
+	announcement_play("新建工程完毕。");
+}
+
+#endregion
+
+#region THEME FUNCTIONS
+
+function theme_init() {
+	
+	global.themes = [];
+	global.themeAt = 0;
+	
+	/// Theme Configuration
+	
+	array_push(global.themes, {
+		title: "[c_aqua]Dynamix[/c]",
+		color: c_aqua,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: 0x652dba, 		// Note's Particle Color
+		partColB: 0x652dba,
+		partColHA: 0x16925a,		// Hold's Particle Color
+		partColHB: 0x16925a,
+		partBlend: true
+	});
+	
+	array_push(global.themes, {
+		title: "[c_sakura]Sakura[/c]",
+		color: 0xc5b7ff,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: 0x652dba, 		// Note's Particle Color
+		partColB: 0x652dba,
+		partColHA: 0x16925a,		// Hold's Particle Color
+		partColHB: 0x16925a,
+		partBlend: true
+	});
+	
+	array_push(global.themes, {
+		title: "Piano",
+		color: c_black,
+		partSpr: sprParticleW,		// Particle Sprite
+		partColA: c_white, 		// Note's Particle Color
+		partColB: c_ltgrey,
+		partColHA: c_white,		// Hold's Particle Color
+		partColHB: c_black,
+		partBlend: false
+	});
+	
+	/// End of Configuration
+	
+	global.themeCount = array_length(global.themes);
+	
+}
+
+function theme_next() {
+	global.themeAt ++;
+	global.themeAt %= global.themeCount;
+	
+	objMain.themeColor = global.themes[global.themeAt].color;
+	
+	announcement_play("已切换到主题 [[" + global.themes[global.themeAt].title + "]", 1000);
+}
+
+function theme_get() {
+	return global.themes[global.themeAt];
+}
+
+#endregion
+
+#region ANNOUNCEMENT FUNCTIONS
+
+function announcement_play(str, time = 3000) {
+	with(objManager) {
+		announcementString = str;
+		announcementLastTime = time;
+		announcementTime = 0;
+	}
+}
+
+function announcement_warning(str, time = 5000) {
+	announcement_play("[c_warning][[警告] [/c]" + str, time);
+}
+
+function announcement_error(str, time = 8000) {
+	announcement_play("[#f44336][[错误] " + str, time);
+}
+
+function announcement_adjust(str, val) {
+	if(is_bool(val))
+		announcement_play(str + "：" + (val?"开启":"关闭"));
+	else
+		announcement_play(str + "：" + string(val));
+}
+
+#endregion
+
+#region SYSTEM FUNCTIONS
+
+function load_config() {
+	if(!file_exists(global.configPath)) return;
+	
+	var _f = file_text_open_read(global.configPath);
+	var _con = json_parse(file_text_read_all(_f));
+	file_text_close(_f);
+	
+	if(variable_struct_exists(_con, "theme"))
+		global.themeAt = _con.theme;
+}
+
+function save_config() {
+	
+	var _f = file_text_open_write(global.configPath);
+	file_text_write_string(_f, json_stringify({
+		theme: global.themeAt
+	}));
+	
+	file_text_close(_f);
+	
+}
+
+function switch_debug_info() {
+	with(objMain) {
+		showDebugInfo = !showDebugInfo;
+		announcement_play("调试信息："+(showDebugInfo?"打开":"关闭"));
+	}
 }
 
 #endregion

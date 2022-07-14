@@ -10,13 +10,20 @@ _position_update();
     if(keycheck_down(vk_f5))
     	map_export_xml();
     if(keycheck_down(vk_f11))
-    	showDebugInfo = !showDebugInfo;
-    if(keycheck_down(ord("P")))
-        hideScoreboard = !hideScoreboard;
-    if(keycheck_down(ord("O")))
+    	switch_debug_info();
+    if(keycheck_down(ord("P"))) {
+    	hideScoreboard = !hideScoreboard;
+    	announcement_adjust("编辑模式下隐藏分数显示", hideScoreboard);
+    }
+    if(keycheck_down(ord("O"))) {
     	particlesEnabled = !particlesEnabled;
-    if(keycheck_down_ctrl(ord("M")))
+    	announcement_adjust("粒子效果", particlesEnabled);
+    }
+    if(keycheck_down_ctrl(ord("M"))) {
     	hitSoundOn = !hitSoundOn;
+    	announcement_adjust("打击音", hitSoundOn);
+    }
+    	
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
     

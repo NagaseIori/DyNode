@@ -2,14 +2,13 @@
 
 #region Beatlines
 
-    if(keycheck_down(vk_add)) {
-        var _tp = timingPoints[array_length(timingPoints) - 1];
-        timing_point_add(objMain.animTargetTime, _tp.beatLength, _tp.meter);
-    }
-    
     var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
     beatlineNowMode += _modchg;
     beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
+    
+    if(_modchg != 0) {
+        announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowMode]));
+    }
     
     animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
     animBeatlineTargetAlpha[1] += 0.7 * keycheck_down(vk_left);

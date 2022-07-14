@@ -48,7 +48,7 @@ image_yscale = global.scaleYAdjust;
     animTargetInfoA = 0;
     
     animSpeed = 0.4;
-    animPlaySpeedMul = 1.5;
+    animPlaySpeedMul = 1.2;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
     image_alpha = 0;
@@ -210,6 +210,19 @@ image_yscale = global.scaleYAdjust;
     stateNormal = function() {
         stateString = "NM";
         
+        // Update Mixer's Position
+	    if(side > 0) {
+	        var _nside = side-1, _noff = time, _nx = y, _nid = id;
+	        
+	        with(objMain) {
+	            if((_noff-nowTime)*playbackSpeed/global.resolutionW < MIXER_REACTION_RANGE &&
+	              (mixerNextNote[_nside] == -1 || _noff < mixerNextNote[_nside].time)) {
+	                mixerNextNote[_nside] = _nid;
+	                mixerNextX[_nside] = _nx;
+	            }
+	        }
+	    }
+        
         var _limTime = min(objMain.nowTime, objMain.animTargetTime);
         if(time <= _limTime) {
             _create_shadow();
@@ -225,7 +238,7 @@ image_yscale = global.scaleYAdjust;
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
-                || (mouse_ishold_l() && _mouse_inbound_check(1))) {
+                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area())) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }
@@ -422,8 +435,17 @@ image_yscale = global.scaleYAdjust;
             
             if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
                 instance_destroy();
-            if(keycheck_down(ord("M")))
-                position = 5 - position;
+            if(keycheck_down(ord("M"))) {
+            	position = 5 - position;
+            	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+            }
+            if(keycheck_down(vk_add)) {
+            	timing_point_duplicate(time);
+		    }
+		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
+		    	objEditor.editorDefaultWidth = width;
+		    	announcement_play("复制宽度："+string_format(width, 1, 2));
+		    }
         }
 
     state = stateOut;
