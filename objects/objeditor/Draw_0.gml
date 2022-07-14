@@ -1,7 +1,7 @@
 
 // Draw Beatlines
 if(surface_exists(beatlineSurf))
-    draw_surface_ext(beatlineSurf, 0, 0, 1, 1, 0, c_white, 1.0);
+    draw_surface_ext(beatlineSurf, 0, 0, 1, 1, 0, c_white, beatlineAlphaMul);
 
 // Draw Highlight Lines
 
@@ -12,20 +12,20 @@ if(editorHighlightLine) {
     // Down
     CleanPolyline([30, _ny, global.resolutionW/2, _ny, global.resolutionW - 30, _ny])
         .BlendExt([highlightLineColorDownA, 1, highlightLineColorDownB, 0.8, highlightLineColorDownA, 1])
-        .Thickness(8)
+        .Thickness(5)
         .Cap("round", "round")
         .Draw();
     
     // LR
     CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
-        .Thickness(14)
+        .Thickness(10)
         .Blend2(highlightLineColorSideA, 1,
             highlightLineColorSideB, 1)
         .Cap("round", "none")
         .Draw();
     _nx = global.resolutionW - _nx;
     CleanLine(_nx, 30, _nx, global.resolutionH - objMain.targetLineBelow - objMain.targetLineBelowH / 2)
-        .Thickness(14)
+        .Thickness(10)
         .Blend2(highlightLineColorSideA, 1,
             highlightLineColorSideB, 1)
         .Cap("round", "none")

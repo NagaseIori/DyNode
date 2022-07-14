@@ -2,6 +2,10 @@
 
 #region Beatlines
 
+    
+    animBeatlineTargetAlphaM = editorMode != 5;
+    beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);
+
     var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
     beatlineNowMode += _modchg;
     beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
