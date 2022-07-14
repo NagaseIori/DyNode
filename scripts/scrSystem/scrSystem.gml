@@ -33,6 +33,11 @@ function map_close() {
 	instance_destroy(objMain);
 }
 
+function map_reset() {
+	map_close();
+	instance_create_depth(0, 0, 0, objMain);
+}
+
 // After loading map, map_init is called to init objMain again.
 function map_init(_skipnote = false) {
         
@@ -80,6 +85,11 @@ function map_init(_skipnote = false) {
 }
 
 function map_load(_file = "") {
+
+	if(is_struct(_file)) {
+		map_load_struct(_file);
+		return;
+	}
 	
 	if(_file == "")
 	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
@@ -87,11 +97,11 @@ function map_load(_file = "") {
         
     if(_file == "") return;
     
-    map_close();
-    instance_create_depth(0, 0, 0, objMain);
+    var _clear = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear) note_delete_all();
     
     if(!file_exists(_file)) {
-        show_error("Map file " + _file + " doesnt exist.", false);
+        announcement_error("谱面文件不存在。导入中止。");
         return;
     }
     
@@ -101,8 +111,8 @@ function map_load(_file = "") {
     map_init();
     objManager.chartPath = _file;
     
-    show_debug_message("Load map sucessfully.");
-    announcement_play("谱面读取完毕。");
+    show_debug_message("Import map sucessfully.");
+    announcement_play("导入谱面完毕。");
 }
 
 function map_load_xml(_file) {
@@ -273,13 +283,13 @@ function image_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        show_error("Image file " + _file + " doesnt exist.\n图片文件不存在。", false);
+        announcement_error("图片文件不存在。\n[scale, 0.8]路径："+_file);
         return;
     }
     
     var _spr = sprite_add(_file, 1, 0, 0, 0, 0);
     if(_spr < 0) {
-        show_error("Loading image file " + _file + " failed.\n图片文件读取失败。", false);
+        announcement_error("图片文件读取失败。图片可能过大或损坏。");
         return;
     }
     
@@ -403,6 +413,66 @@ function map_export_xml() {
 	announcement_play("谱面导出完毕。");
 }
 
+function map_get_struct() {
+	var _arr = [];
+	
+	with(objMain) {
+		notes_array_update();
+		var i=0, l=chartNotesCount, _inst;
+		for(; i<l; i++) {
+			var _str = chartNotesArray[i];
+			if(_str.noteType != 3)
+				array_push(_arr, {
+					width : _str.width,
+					side : _str.side,
+					noteType : _str.noteType,
+					position : _str.position,
+					time : _str.time,
+					lastTime : _str.lastTime,
+				});
+		}
+	}
+	
+	var _str = {
+		title: objMain.chartTitle,
+		bpm: objMain.chartBeatPerMin,
+		barpm: objMain.chartBarPerMin,
+		difficulty: objMain.chartDifficulty,
+		sidetype: objMain.chartSideType,
+		notes: _arr
+	}
+	
+	return _str;
+}
+
+function map_load_struct(_str) {
+	note_delete_all();
+	
+	with(objMain) {
+		chartTitle = _str.title;
+		chartBeatPerMin = _str.bpm;
+		chartBarPerMin = _str.barpm;
+		chartDifficulty = _str.difficulty;
+		chartSideType = _str.sidetype;
+	}
+	
+	var _arr = _str.notes;
+	for(var i=0, l=array_length(_arr); i<l; i++) {
+		if(_arr[i].noteType < 2) {
+			build_note(random_id(6), _arr[i].noteType, _arr[i].time, _arr[i].position, 
+				_arr[i].width, "-1", _arr[i].side, false, false);
+		}
+		else {
+			build_hold(random_id(6), _arr[i].time, _arr[i].position, _arr[i].width,
+				random_id(6), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
+		}
+	}
+	
+	note_all_sort();
+	
+	show_debug_message("Load map from struct sucessfully.");
+}
+
 #endregion
 
 #region PROJECT FUNCTIONS
@@ -424,7 +494,13 @@ function project_load(_file = "") {
     	chartPath = _contents.chartPath;
     }
     
-    map_load(chartPath);
+    
+    if(variable_struct_exists(_contents, "charts")) {
+    	objMain.animTargetTime = 0;
+    	map_load(_contents.charts);
+    }
+    else
+    	map_load(chartPath);
     music_load(musicPath);
     image_load(backgroundPath);
     
@@ -456,16 +532,37 @@ function project_save_as(_file = "") {
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
-		timingPoints: objEditor.timingPoints
+		timingPoints: objEditor.timingPoints,
+		charts: []
 	};
+	
+	_contents.charts = map_get_struct();
 	
 	var _f = file_text_open_write(_file);
 	file_text_write_string(_f, json_stringify(_contents));
 	file_text_close(_f);
 	
+	objManager.projectPath = _file;
+	
 	announcement_play("项目保存完毕。");
 	
 	return 1;
+}
+
+function project_new() {
+	
+	var _confirm = show_question("确定要创建新的工程吗？所有未保存的更改都将丢失。");
+	if(!_confirm) return;
+	
+	map_reset();
+	with(objManager) {
+		musicPath = "";
+		backgroundPath = "";
+		chartPath = "";
+		projectPath = "";
+	}
+	
+	announcement_play("新建工程完毕。");
 }
 
 #endregion
@@ -535,7 +632,7 @@ function theme_get() {
 
 #region ANNOUNCEMENT FUNCTIONS
 
-function announcement_play(str, time = 2000) {
+function announcement_play(str, time = 3000) {
 	with(objManager) {
 		announcementString = str;
 		announcementLastTime = time;
@@ -548,7 +645,7 @@ function announcement_warning(str, time = 5000) {
 }
 
 function announcement_error(str, time = 8000) {
-	announcement_play("[c_red][[错误] " + str, time);
+	announcement_play("[#f44336][[错误] " + str, time);
 }
 
 function announcement_adjust(str, val) {

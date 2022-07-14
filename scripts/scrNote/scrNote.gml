@@ -80,6 +80,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         	width : _inst.width,
         	position : _inst.position,
         	lastTime : _inst.lastTime,
+        	noteType : _inst.noteType,
         	inst : _inst
         });
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
@@ -96,9 +97,9 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     // return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
-	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
-	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _sort = true) {
+	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
+	build_note(_id, 2, _time, _position, _width, _subid, _side, false, _sort);
 }
 
 function note_delete(_id) {
@@ -134,12 +135,13 @@ function notes_array_update() {
 	with(objMain) {
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
-		for(; i<l; i++) {
+		for(; i<l; i++) if(instance_exists(chartNotesArray[i].inst)) {
 			chartNotesArray[i].time = chartNotesArray[i].inst.time;
 			chartNotesArray[i].side = chartNotesArray[i].inst.side;
 			chartNotesArray[i].width = chartNotesArray[i].inst.width;
 			chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
 			chartNotesArray[i].position = chartNotesArray[i].inst.position;
+			chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
 		}
 	}
 	note_all_sort();
