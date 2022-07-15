@@ -73,13 +73,20 @@ var _music_resync_request = false;
         
         // Top Bar Adjust Part
         
-            if((mouse_y <= topBarMouseH && mouse_y > 0) || topBarMousePressed)
-                animTargetTopBarIndicatorA = 0.3;
+            if((mouse_y <= topBarMouseH && mouse_y > 0) || topBarMousePressed || _timchange != 0 || _timscr != 0) {
+            	animTargetTopBarIndicatorA = 0.3;
+            	topBarTimeLastTime = 5000;
+            }
             else
                 animTargetTopBarIndicatorA = 0;
             
             topBarIndicatorA = lerp(topBarIndicatorA, 
                 animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
+            
+            topBarTimeLastTime -= delta_time / 1000;
+            
+        	animTargetTopBarTimeA = topBarTimeLastTime > 0;
+        	topBarTimeA = lerp_a(topBarTimeA, animTargetTopBarTimeA, 0.2);
                 
         
             if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH && mouse_y > 0) {

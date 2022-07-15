@@ -47,6 +47,9 @@ depth = 0;
     topBarMouseLastX = 0;
     topBarIndicatorA = 0;
     animTargetTopBarIndicatorA = 0;
+    topBarTimeA = 0;
+    animTargetTopBarTimeA = 0;
+    topBarTimeLastTime = 0;
 
 #endregion
 

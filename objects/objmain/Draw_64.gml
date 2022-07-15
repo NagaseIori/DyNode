@@ -1,4 +1,17 @@
-/// @description Debug
+/// @description Draw some infos
+
+// Time Info
+
+if(topBarTimeA > 0) {
+	var _nx = 0.5 * global.resolutionW, _ny = 20;
+	var _ele = scribble(format_time_string(nowTime) + " / "+format_time_string(musicLength))
+		.starting_format("fMono16", c_white)
+		.align(fa_center, fa_top)
+		.blend(c_white, topBarTimeA)
+	// _nx = min(_nx, global.resolutionW * 0.8);
+	_ele.draw(_nx, _ny);
+}
+
 
 // Debug
 
@@ -15,8 +28,8 @@ _debug_str += "MUSICDELAY: " + string(sfmod_channel_get_position(channel, sample
 // _debug_str += "SAMPLERATE: " + string(sampleRate)+ "\n";
 if(instance_exists(editor))
 	_debug_str += "EDITMODE: " + string(editor.editorMode)+ "\n";
-draw_set_font(fDynamix20);
+draw_set_font(fMono16);
 draw_set_halign(fa_center);
 draw_set_valign(fa_top);
 draw_set_color_alpha(c_white, 1);
-draw_text(global.resolutionW/2, 30, _debug_str);
+draw_text(global.resolutionW/2, 50, _debug_str);

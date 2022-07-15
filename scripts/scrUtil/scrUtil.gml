@@ -31,6 +31,15 @@ function draw_set_color_alpha(color, alpha) {
 	draw_set_color(color);
 	draw_set_alpha(alpha);
 }
+
+function draw_scribble_box(_ele, x, y, alpha) {
+	var _bbox = _ele.get_bbox(x, y);
+	
+	CleanRectangle(_bbox.left-5, _bbox.top-5, _bbox.right+5, _bbox.bottom+5)
+		.Blend(theme_get().color, alpha)
+		.Rounding(5)
+		.Draw();
+}
 #endregion
 
 #region TIME & BAR & BPM
@@ -143,6 +152,15 @@ function format_markdown(_str) {
 
 function format_time_ms(_time) {
 	return string_format(_time, 1, 1) + "ms";
+}
+
+function format_time_string(_time) {
+	var _min = floor(_time / 1000 / 60);
+	var _sec = floor((_time - _min * 60000)/1000);
+	var _ms = floor(_time - _min * 60000 - _sec * 1000);
+	var _str = string_format(_min, 2, 0) + ":" + string_format(_sec, 2, 0) + ":" + string_format(_ms, 3, 0);
+	_str = string_replace_all(_str, " ", "0");
+	return _str;
 }
 
 #endregion

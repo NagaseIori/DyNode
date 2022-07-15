@@ -238,7 +238,7 @@ image_yscale = global.scaleYAdjust;
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
             if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
-                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area())) {
+                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area() && !editor_select_is_dragging())) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }

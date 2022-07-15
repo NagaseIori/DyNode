@@ -488,6 +488,8 @@ function project_load(_file = "") {
     var _contents = json_parse(file_text_read_all(_f));
     file_text_close(_f);
     
+    map_reset();
+    
     with(objManager) {
     	musicPath = _contents.musicPath;
     	backgroundPath = _contents.backgroundPath;
