@@ -325,10 +325,15 @@ image_yscale = global.scaleYAdjust;
         stateDrop = function() {
             stateString = "DROP";
             animTargetA = 0.8;
-            if(side == 0)
-                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
-            else
-                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            if(!mouse_ishold_l())
+            	width = origWidth;
+            else {
+            	if(side == 0)
+	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+	            else
+	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            }
+            
             width = editor_snap_width(width);
             width = max(width, 0.01);
             _prop_init();
