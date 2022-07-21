@@ -132,6 +132,7 @@ var _music_resync_request = false;
             FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
             FMODGMS_Chan_PauseChannel(channel);
             nowTime = musicLength;
+            animTargetTime = musicLength;
             
             nowPlaying = false;
         }

@@ -667,13 +667,23 @@ function load_config() {
 	
 	if(variable_struct_exists(_con, "theme"))
 		global.themeAt = _con.theme;
+	if(variable_struct_exists(_con, "FPS"))
+		room_speed = _con.FPS;
+	if(variable_struct_exists(_con, "resolutionH"))
+		global.resolutionH = _con.resolutionH;
+	if(variable_struct_exists(_con, "resolutionW"))
+		global.resolutionW = _con.resolutionW;
 }
 
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
 	file_text_write_string(_f, json_stringify({
-		theme: global.themeAt
+		theme: global.themeAt,
+		FPS: room_speed,
+		resolutionW: global.resolutionW,
+		resolutionH: global.resolutionH,
+		version: global.version
 	}));
 	
 	file_text_close(_f);
