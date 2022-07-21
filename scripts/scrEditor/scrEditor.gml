@@ -103,8 +103,8 @@ function editor_select_compare(ida, idb) {
 	else if(!instance_exists(idb)) return ida;
 	else if(ida.depth < idb.depth) return ida;
 	else if(ida.depth > idb.depth) return idb;
-	else if(ida.time > idb.time) return ida;
-	else if(ida.time < idb.time) return idb;
+	else if(ida.time < idb.time) return ida;
+	else if(ida.time > idb.time) return idb;
 	else return min(ida, idb);
 }
 
