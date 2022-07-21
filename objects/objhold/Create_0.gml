@@ -35,7 +35,7 @@ _prop_init();
 		    sinst.depth = depth;
 		    sinst.side = side;
 		    sinst.finst = id;
-		    sinst.time = max(sinst.time, time);
+		    sinst.time = max(sinst.time, time+0.0001);
     
 		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
 		        + dFromBottom + uFromTop;

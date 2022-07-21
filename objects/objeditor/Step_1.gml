@@ -12,10 +12,9 @@ with(objNote) {
     var _hl = false;
     if(state == stateSelected) {
         objEditor.editorSelectCount ++;
-        objEditor.editorSelectDragOccupied |= isDragging;
         objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
         objEditor.editorSelectOccupied = 1;
-        
+        objEditor.editorSelectDragOccupied |= isDragging;
         if(isDragging) _hl = true;
     }
     else if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {

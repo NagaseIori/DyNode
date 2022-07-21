@@ -72,6 +72,8 @@ image_yscale = global.scaleYAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
         depth = origDepth - time;
+        if(noteType == 3 && instance_exists(finst))
+        	depth = finst.depth;
     }
     _prop_init();
 
@@ -392,6 +394,7 @@ image_yscale = global.scaleYAdjust;
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
                 if(!isDragging) {
                     isDragging = true;
+                    objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
                         if(state == stateSelected) {
                             origX = x;
