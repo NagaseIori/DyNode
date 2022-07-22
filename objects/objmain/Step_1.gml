@@ -85,7 +85,7 @@ var _music_resync_request = false;
                 animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
             
             topBarTimeLastTime -= delta_time / 1000;
-            if(editor_get_editmode() < 5) topBarTimeLastTime = 100000;
+            if(editor_get_editmode() < 5) topBarTimeLastTime = 1;
         	
             animTargetTopBarTimeGradA = topBarMouseInbound || topBarMousePressed;
         	animTargetTopBarTimeA = topBarTimeLastTime > 0;
