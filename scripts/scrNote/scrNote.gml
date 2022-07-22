@@ -112,6 +112,7 @@ function note_delete(_id) {
         var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].inst.nid == _id) {
+            	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _id);
                 var _insta = chartNotesArray[i].inst;
                 array_delete(chartNotesArray, i, 1);
                 found = true;

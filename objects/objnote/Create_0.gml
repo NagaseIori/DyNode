@@ -463,6 +463,20 @@ image_yscale = global.scaleYAdjust;
 		    	width = objEditor.editorDefaultWidth;
 		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
 		    }
+		    if(keycheck_down_ctrl(ord("1"))) {
+		    	if(noteType < 2) {
+		    		instance_destroy();
+		    		build_note(nid, 0, time, position, width, sid, side, false, true);
+		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
+		    	}
+		    }
+		    if(keycheck_down_ctrl(ord("2"))) {
+		    	if(noteType < 2) {
+		    		instance_destroy();
+		    		build_note(nid, 1, time, position, width, sid, side, false, true);
+		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
+		    	}
+		    }
         }
 
     state = stateOut;
