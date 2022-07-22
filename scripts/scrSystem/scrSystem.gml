@@ -168,7 +168,7 @@ function map_load_xml(_file) {
                         var _err = build_note(_note_id, _note_type, _note_time,
                             _note_position, _note_width, _note_subid,
                             _in_left + _in_right*2);
-                        if(_err) return;
+                        if(_err < 0) return;
                         break;
                 }
                 break;
@@ -698,7 +698,6 @@ function switch_debug_info() {
 }
 
 #endregion
-
 
 function reset_scoreboard() {
 	with(objScoreBoard) {

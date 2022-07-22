@@ -81,7 +81,8 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         	position : _inst.position,
         	lastTime : _inst.lastTime,
         	noteType : _inst.noteType,
-        	inst : _inst
+        	inst : _inst,
+        	beginTime : _inst.beginTime
         });
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
@@ -94,12 +95,14 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
             note_all_sort();
     }
     
-    // return _inst;
+    return _inst;
 }
 
 function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _sort = true) {
-	build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
 	build_note(_id, 2, _time, _position, _width, _subid, _side, false, _sort);
+	_sinst.beginTime = _time;
+	notes_array_update();
 }
 
 function note_delete(_id) {
@@ -142,6 +145,7 @@ function notes_array_update() {
 			chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
 			chartNotesArray[i].position = chartNotesArray[i].inst.position;
 			chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
+			chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
 		}
 	}
 	note_all_sort();
@@ -161,4 +165,17 @@ function notes_reallocate_id() {
 				_inst.sid = _inst.sinst.nid;
 		}
 	}
+}
+
+function note_check_and_activate(_struct) {
+	var _str = _struct, _flag;
+	_flag = _outbound_check_t(_str.time, _str.side);
+	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
+		instance_activate_object(_str.inst);
+		return 1;
+	}
+	else if(_flag && _outbound_check_t(_str.time, !(_str.side))) {
+		return -1;
+	}
+	return 0;
 }

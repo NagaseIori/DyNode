@@ -24,24 +24,7 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     _prop_init();
 }
 
-if(drawVisible)
-    state();
-else if(stateString == "OUT") {   // stateMachine is slow --- in VM
-    if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
-        drawVisible = true;
-        // In Some situations no need for fading in
-        if(keycheck(ord("A")) || keycheck(ord("D")) || 
-            objMain.topBarMousePressed ||
-            (side == 0 && objMain.nowPlaying)) {
-            image_alpha = 1;
-            animTargetA = 1;
-            state = stateNormal;
-        }
-        else 
-            state = stateIn;
-        state();
-    }
-}
+state();
 
 // If no longer visible then deactivate self
 if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {

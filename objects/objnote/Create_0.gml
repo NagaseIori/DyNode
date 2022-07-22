@@ -30,8 +30,9 @@ image_yscale = global.scaleYAdjust;
     nodeRadius = 22; // in Pixels
     nodeColor = c_blue;
     
-    // For Hold
+    // For Hold & Sub
     lastTime = 0;
+    beginTime = 999999999;
     lastAlphaL = 0.4;
     lastAlphaR = 1.0;
     lastAlpha = lastAlphaL;
@@ -282,18 +283,22 @@ image_yscale = global.scaleYAdjust;
         animTargetLstA = lastAlphaL;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
-            // In Some situations no need for fading in
-            if(keycheck(ord("A")) || keycheck(ord("D")) || 
-                objMain.topBarMousePressed ||
-                (side == 0 && objMain.nowPlaying)) {
-                image_alpha = 1;
-                animTargetA = 1;
-                state = stateNormal;
-            }
-            else 
-                state = stateIn;
-            state();
-        }
+	        drawVisible = true;
+	        // In Some situations no need for fading in
+	        if(keycheck(ord("A")) || keycheck(ord("D")) || 
+	            objMain.topBarMousePressed ||
+	            (side == 0 && objMain.nowPlaying)) {
+	            image_alpha = 1;
+	            animTargetA = 1;
+	            state = stateNormal;
+	        }
+	        else 
+	            state = stateIn;
+	        state();
+	    }
+	    
+	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
+	    	instance_activate_object(finst);
     }
     
     // Editors

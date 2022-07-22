@@ -44,12 +44,17 @@ _position_update();
     chartNotesCount = array_length(chartNotesArray)
 
     while(chartNotesArrayAt < chartNotesCount &&
-        chartNotesArray[chartNotesArrayAt].time <= nowTime)
-        chartNotesArrayAt ++;
-    
+        chartNotesArray[chartNotesArrayAt].time <= nowTime) {
+            chartNotesArrayAt ++;
+            if(chartNotesArrayAt < chartNotesCount)
+                note_check_and_activate(chartNotesArray[chartNotesArrayAt]);
+        }
+
     while(chartNotesArrayAt > 0 &&
-        chartNotesArray[chartNotesArrayAt-1].time > nowTime)
-        chartNotesArrayAt --;
+        chartNotesArray[chartNotesArrayAt-1].time > nowTime){
+            chartNotesArrayAt --;
+            note_check_and_activate(chartNotesArray[chartNotesArrayAt]);
+        }
     
 // Scoreboard Update
 

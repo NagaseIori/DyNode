@@ -105,10 +105,6 @@ var _music_resync_request = false;
                             musicProgress = mouse_x / global.resolutionW;
                             nowTime = musicProgress * musicLength;
                             _music_resync_request = true;
-                            
-                            // To prevent a certain bug making objHold not displaying
-                            instance_activate_object(objHoldSub);
-                            instance_activate_object(objHold);
                         }
                         topBarMouseLastX = mouse_x;
                     }
@@ -181,15 +177,10 @@ var _music_resync_request = false;
 
 #region NOTES ACTIVATE
 
-	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount, _str, _flag;
+	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount;
 	
-	for(; i<l; i++) {
-		_str = chartNotesArray[i];
-		_flag = _outbound_check_t(_str.time, _str.side);
-		if(!_flag && _str.time + _str.lastTime > nowTime)
-			instance_activate_object(_str.inst);
-		else if(_flag && _outbound_check_t(_str.time, !(_str.side)))
+	for(; i<l; i++)
+		if(note_check_and_activate(chartNotesArray[i]) < 0)
 			break;
-	}
 
 #endregion
