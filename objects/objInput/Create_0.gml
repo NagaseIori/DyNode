@@ -9,7 +9,7 @@ last_mouse_pressedl_x = 0;
 last_mouse_pressedl_y = 0;
 
 mouseHoldThreshold = 125;
-mouseHoldDistanceThreshold = 10;
+mouseHoldDistanceThreshold = 20;
 mouseHoldTimeL = 0;
 mouseHoldClear = false;
 mouseClickL = false;

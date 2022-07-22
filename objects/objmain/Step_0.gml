@@ -1,7 +1,7 @@
 
 _position_update();
 
-// Functions Control
+#region Functions Control
     
     if(keycheck_down(vk_f3))
         music_load();
@@ -34,7 +34,9 @@ _position_update();
     	reset_scoreboard();
     }
 
-// Chart Properties Update
+#endregion
+
+#region Chart Properties Update
 
 	// Adjust Difficulty
 	var _diff_delta = keycheck_down_ctrl(ord("P")) - keycheck_down_ctrl(ord("O"));
@@ -55,8 +57,10 @@ _position_update();
             chartNotesArrayAt --;
             note_check_and_activate(chartNotesArray[chartNotesArrayAt]);
         }
-    
-// Scoreboard Update
+
+#endregion
+  
+#region Scoreboard Update
 
     if(nowCombo != chartNotesArrayAt) {
         var _hit = nowCombo < chartNotesArrayAt;
@@ -76,7 +80,9 @@ _position_update();
         }
     }
 
-// Muisc Pause & Resume
+#endregion
+
+#region Muisc Pause & Resume
 
     if(keycheck_down(vk_space) || keycheck_down(vk_enter)) {
     	FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
@@ -93,12 +99,16 @@ _position_update();
         }
     }
 
-// Bg Animation
+#endregion
+
+#region Bg Animation
 
 	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
-   
-// Targetline Animation
+    
+#endregion
+
+#region Targetline Animation
 
 	if(editor_get_editmode() == 5) {
 		animTargetLazerAlpha = [1.0, 1.0, 1.0];
@@ -110,3 +120,5 @@ _position_update();
 	
 	for(var i=0; i<3; i++)
 		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
+
+#endregion

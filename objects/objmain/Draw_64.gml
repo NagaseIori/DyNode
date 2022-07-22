@@ -4,11 +4,17 @@
 
 if(topBarTimeA > 0) {
 	var _nx = 0.5 * global.resolutionW, _ny = 20;
-	var _ele = scribble(format_time_string(nowTime) + " / "+format_time_string(musicLength))
+	var _ntime = musicLength;
+	
+	if(topBarMouseInbound || topBarMousePressed)
+		_ntime = mouse_x / global.resolutionW * musicLength;
+	
+	var _ele = scribble(format_time_string(nowTime) + " / "+format_time_string(_ntime))
 		.starting_format("fMono16", c_white)
 		.align(fa_center, fa_top)
 		.blend(c_white, topBarTimeA)
-	// _nx = min(_nx, global.resolutionW * 0.8);
+		.gradient(themeColor, topBarTimeGradA);
+	
 	_ele.draw(_nx, _ny);
 }
 
