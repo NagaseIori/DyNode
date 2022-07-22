@@ -102,7 +102,8 @@ function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _sor
 	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
 	build_note(_id, 2, _time, _position, _width, _subid, _side, false, _sort);
 	_sinst.beginTime = _time;
-	notes_array_update();
+	if(_sort)
+		notes_array_update();
 }
 
 function note_delete(_id) {

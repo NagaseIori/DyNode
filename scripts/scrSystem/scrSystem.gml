@@ -469,6 +469,7 @@ function map_load_struct(_str) {
 	}
 	
 	note_all_sort();
+	notes_array_update();
 	
 	show_debug_message("Load map from struct sucessfully.");
 }
