@@ -105,6 +105,10 @@ var _music_resync_request = false;
                             musicProgress = mouse_x / global.resolutionW;
                             nowTime = musicProgress * musicLength;
                             _music_resync_request = true;
+                            
+                            // To prevent a certain bug making objHold not displaying
+                            instance_activate_object(objHoldSub);
+                            instance_activate_object(objHold);
                         }
                         topBarMouseLastX = mouse_x;
                     }

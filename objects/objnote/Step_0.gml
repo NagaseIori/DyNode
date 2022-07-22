@@ -12,12 +12,6 @@ if(_outroom_check(x, y)) {
 	infoAlpha = 0;
 }
 
-if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
-	if(instance_exists(sinst))
-		instance_deactivate_object(sinst);
-	instance_deactivate_object(id);
-}
-
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     image_alpha = lerp_a(image_alpha, animTargetA,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
@@ -29,8 +23,6 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     
     _prop_init();
 }
-
-
 
 if(drawVisible)
     state();
@@ -49,6 +41,13 @@ else if(stateString == "OUT") {   // stateMachine is slow --- in VM
             state = stateIn;
         state();
     }
+}
+
+// If no longer visible then deactivate self
+if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
+	if(instance_exists(sinst))
+		instance_deactivate_object(sinst);
+	instance_deactivate_object(id);
 }
 
 // Update Highlight Line's Position
