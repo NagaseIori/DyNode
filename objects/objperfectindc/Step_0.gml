@@ -34,3 +34,4 @@ else
     animTargetAlphaMul = 1;
 
 alphaMul = lerp_a(alphaMul, animTargetAlphaMul, animSpeed);
+nowTime = min(nowTime, 99999999);

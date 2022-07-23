@@ -19,8 +19,8 @@ global.version = "v0.1.0"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
+global.fps = display_get_frequency();
 
-room_speed = 165;
 
 // Load Settings
 
@@ -28,7 +28,8 @@ load_config();
 
 // Global Variables
 
-global.fpsAdjust = BASE_FPS / room_speed;
+game_set_speed(global.fps, gamespeed_fps);
+global.fpsAdjust = BASE_FPS / global.fps;
 global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
