@@ -20,7 +20,7 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 ## Recommended System Requirements .. 建议系统要求
 
 * **OS:** Windows 7/10/11 (64-bit)
-* **Memory:** 4 GB RAM
+* **Memory:** 8 GB RAM
 
 ## License ... 许可
 
