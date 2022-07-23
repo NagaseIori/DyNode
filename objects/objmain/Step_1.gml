@@ -73,13 +73,24 @@ var _music_resync_request = false;
         
         // Top Bar Adjust Part
         
-            if((mouse_y <= topBarMouseH && mouse_y > 0) || topBarMousePressed)
-                animTargetTopBarIndicatorA = 0.3;
+    		topBarMouseInbound = mouse_y <= topBarMouseH && mouse_y > 0;
+            if(topBarMouseInbound || topBarMousePressed || _timchange != 0 || _timscr != 0) {
+            	animTargetTopBarIndicatorA = 0.3;
+            	topBarTimeLastTime = 2000;
+            }
             else
                 animTargetTopBarIndicatorA = 0;
             
             topBarIndicatorA = lerp(topBarIndicatorA, 
                 animTargetTopBarIndicatorA, animSpeed * global.fpsAdjust);
+            
+            topBarTimeLastTime -= delta_time / 1000;
+            if(editor_get_editmode() < 5) topBarTimeLastTime = 1;
+        	
+            animTargetTopBarTimeGradA = topBarMouseInbound || topBarMousePressed;
+        	animTargetTopBarTimeA = topBarTimeLastTime > 0;
+        	topBarTimeA = lerp_a(topBarTimeA, animTargetTopBarTimeA, 0.2);
+        	topBarTimeGradA = lerp_a(topBarTimeGradA, animTargetTopBarTimeGradA, 0.2);
                 
         
             if(mouse_check_button_pressed(mb_left) && mouse_y <= topBarMouseH && mouse_y > 0) {
@@ -125,6 +136,7 @@ var _music_resync_request = false;
             FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
             FMODGMS_Chan_PauseChannel(channel);
             nowTime = musicLength;
+            animTargetTime = musicLength;
             
             nowPlaying = false;
         }
@@ -169,15 +181,10 @@ var _music_resync_request = false;
 
 #region NOTES ACTIVATE
 
-	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount, _str, _flag;
+	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount;
 	
-	for(; i<l; i++) {
-		_str = chartNotesArray[i];
-		_flag = _outbound_check_t(_str.time, _str.side);
-		if(!_flag && _str.time + _str.lastTime > nowTime)
-			instance_activate_object(_str.inst);
-		else if(_flag && _outbound_check_t(_str.time, !(_str.side)))
+	for(; i<l; i++)
+		if(note_check_and_activate(chartNotesArray[i]) < 0)
 			break;
-	}
 
 #endregion

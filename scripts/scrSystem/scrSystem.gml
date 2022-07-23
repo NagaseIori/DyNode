@@ -168,7 +168,7 @@ function map_load_xml(_file) {
                         var _err = build_note(_note_id, _note_type, _note_time,
                             _note_position, _note_width, _note_subid,
                             _in_left + _in_right*2);
-                        if(_err) return;
+                        if(_err < 0) return;
                         break;
                 }
                 break;
@@ -469,6 +469,7 @@ function map_load_struct(_str) {
 	}
 	
 	note_all_sort();
+	notes_array_update();
 	
 	show_debug_message("Load map from struct sucessfully.");
 }
@@ -487,6 +488,8 @@ function project_load(_file = "") {
     var _f = file_text_open_read(_file);
     var _contents = json_parse(file_text_read_all(_f));
     file_text_close(_f);
+    
+    map_reset();
     
     with(objManager) {
     	musicPath = _contents.musicPath;
@@ -649,10 +652,7 @@ function announcement_error(str, time = 8000) {
 }
 
 function announcement_adjust(str, val) {
-	if(is_bool(val))
-		announcement_play(str + "：" + (val?"开启":"关闭"));
-	else
-		announcement_play(str + "：" + string(val));
+	announcement_play(str + "：" + (val?"开启":"关闭"));
 }
 
 #endregion
@@ -668,13 +668,23 @@ function load_config() {
 	
 	if(variable_struct_exists(_con, "theme"))
 		global.themeAt = _con.theme;
+	if(variable_struct_exists(_con, "FPS"))
+		room_speed = _con.FPS;
+	if(variable_struct_exists(_con, "resolutionH"))
+		global.resolutionH = _con.resolutionH;
+	if(variable_struct_exists(_con, "resolutionW"))
+		global.resolutionW = _con.resolutionW;
 }
 
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
 	file_text_write_string(_f, json_stringify({
-		theme: global.themeAt
+		theme: global.themeAt,
+		FPS: room_speed,
+		resolutionW: global.resolutionW,
+		resolutionH: global.resolutionH,
+		version: global.version
 	}));
 	
 	file_text_close(_f);
@@ -689,7 +699,6 @@ function switch_debug_info() {
 }
 
 #endregion
-
 
 function reset_scoreboard() {
 	with(objScoreBoard) {

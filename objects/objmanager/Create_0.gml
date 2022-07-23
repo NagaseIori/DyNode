@@ -11,7 +11,7 @@
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 
-// Global Variables
+// Global Configs
 
 global.configPath = program_directory + "config.json";
 
@@ -21,10 +21,16 @@ global.resolutionW = 1920
 global.resolutionH = 1080
 
 room_speed = 165;
+
+// Load Settings
+
+load_config();
+
+// Global Variables
+
 global.fpsAdjust = BASE_FPS / room_speed;
 global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 global.scaleYAdjust = global.resolutionH / BASE_RES_H;
-
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 global.difficultyString = "CNMHGT";
@@ -86,6 +92,7 @@ instance_create(x, y, objInput);
 scribble_anim_cycle(0.2, 255, 255);
 scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 10, c_black, 0.4, 0, true);
 scribble_font_bake_shadow("fDynamix16", "fDynamix16s", 0, 2, c_black, 0.3, 0, true);
+scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 	// Prefetch Msdf Fonts' Texture (this takes time)
 	var _texarr = texturegroup_get_textures("texFonts");
 	for(var i=0, l=array_length(_texarr); i<l; i++) {
@@ -100,10 +107,6 @@ randomize();
 
 _update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
-
-// Load Settings
-
-load_config();
 
 // Init finished
 

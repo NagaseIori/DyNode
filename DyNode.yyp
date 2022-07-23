@@ -50,6 +50,7 @@
     {"id":{"name":"FMODGMS_Util_SecondsToSamples","path":"scripts/FMODGMS_Util_SecondsToSamples/FMODGMS_Util_SecondsToSamples.yy",},"order":7,},
     {"id":{"name":"DerpXmlExample_ReadComplex","path":"scripts/DerpXmlExample_ReadComplex/DerpXmlExample_ReadComplex.yy",},"order":1,},
     {"id":{"name":"scribble_super_create","path":"scripts/scribble_super_create/scribble_super_create.yy",},"order":1,},
+    {"id":{"name":"fMono16","path":"fonts/fMono16/fMono16.yy",},"order":4,},
     {"id":{"name":"CleanCapsuleVertical","path":"scripts/CleanCapsuleVertical/CleanCapsuleVertical.yy",},"order":1,},
     {"id":{"name":"scribble_fallback_font","path":"fonts/scribble_fallback_font/scribble_fallback_font.yy",},"order":12,},
     {"id":{"name":"CleanCapsule","path":"scripts/CleanCapsule/CleanCapsule.yy",},"order":0,},

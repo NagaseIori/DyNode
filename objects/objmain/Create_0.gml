@@ -41,12 +41,18 @@ depth = 0;
 
 // Top Progress Bar
 
-    topBarH = 5*global.resolutionH/1080;
-    topBarMouseH = 20*global.resolutionH/1080;
+    topBarH = 5*global.scaleYAdjust;
+    topBarMouseH = 20*global.scaleYAdjust;
+    topBarMouseInbound = false;
     topBarMousePressed = false;
     topBarMouseLastX = 0;
     topBarIndicatorA = 0;
     animTargetTopBarIndicatorA = 0;
+    topBarTimeA = 0;
+    animTargetTopBarTimeA = 0;
+    topBarTimeLastTime = 0;
+    topBarTimeGradA = 0;
+    animTargetTopBarTimeGradA = 0;
 
 #endregion
 

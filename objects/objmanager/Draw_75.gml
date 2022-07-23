@@ -22,11 +22,7 @@ if(announcementAlpha > 0) {
 	var _bbox = _ele.get_bbox(_nx, _ny);
 	if(mouse_inbound(_bbox.left, _bbox.top, _bbox.right, _bbox.bottom))
 		announcementAlpha = 1;
-	
-	CleanRectangle(_bbox.left-5, _bbox.top-5, _bbox.right+5, _bbox.bottom+5)
-		.Blend(theme_get().color, 0.3 * announcementAlpha)
-		.Rounding(5)
-		.Draw();
+	draw_scribble_box(_ele, _nx, _ny, announcementAlpha * 0.3);
 	
 	_ele
 	.draw(_nx, _ny);

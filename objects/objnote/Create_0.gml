@@ -30,8 +30,9 @@ image_yscale = global.scaleYAdjust;
     nodeRadius = 22; // in Pixels
     nodeColor = c_blue;
     
-    // For Hold
+    // For Hold & Sub
     lastTime = 0;
+    beginTime = 999999999;
     lastAlphaL = 0.4;
     lastAlphaR = 1.0;
     lastAlpha = lastAlphaL;
@@ -72,6 +73,8 @@ image_yscale = global.scaleYAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
         depth = origDepth - time;
+        if(noteType == 3 && instance_exists(finst))
+        	depth = finst.depth;
     }
     _prop_init();
 
@@ -237,8 +240,8 @@ image_yscale = global.scaleYAdjust;
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
-            if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
-                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area())) {
+            if((mouse_isclick_l() && _mouse_inbound_check())
+                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area() && !editor_select_is_dragging())) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }
@@ -280,18 +283,22 @@ image_yscale = global.scaleYAdjust;
         animTargetLstA = lastAlphaL;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
-            // In Some situations no need for fading in
-            if(keycheck(ord("A")) || keycheck(ord("D")) || 
-                objMain.topBarMousePressed ||
-                (side == 0 && objMain.nowPlaying)) {
-                image_alpha = 1;
-                animTargetA = 1;
-                state = stateNormal;
-            }
-            else 
-                state = stateIn;
-            state();
-        }
+	        drawVisible = true;
+	        // In Some situations no need for fading in
+	        if(keycheck(ord("A")) || keycheck(ord("D")) || 
+	            objMain.topBarMousePressed ||
+	            (side == 0 && objMain.nowPlaying)) {
+	            image_alpha = 1;
+	            animTargetA = 1;
+	            state = stateNormal;
+	        }
+	        else 
+	            state = stateIn;
+	        state();
+	    }
+	    
+	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
+	    	instance_activate_object(finst);
     }
     
     // Editors
@@ -325,13 +332,7 @@ image_yscale = global.scaleYAdjust;
         stateDrop = function() {
             stateString = "DROP";
             animTargetA = 0.8;
-            if(side == 0)
-                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
-            else
-                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
-            width = editor_snap_width(width);
-            width = max(width, 0.01);
-            _prop_init();
+            
             
             if(mouse_check_button_released(mb_left)) {
                 editor_set_width_default(width);
@@ -346,6 +347,19 @@ image_yscale = global.scaleYAdjust;
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
+            
+            if(!mouse_ishold_l())
+            	width = origWidth;
+            else {
+            	if(side == 0)
+	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+	            else
+	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            }
+            
+            width = editor_snap_width(width);
+            width = max(width, 0.01);
+            _prop_init();
         }
         
         stateAttachSub = function () {
@@ -387,6 +401,7 @@ image_yscale = global.scaleYAdjust;
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
                 if(!isDragging) {
                     isDragging = true;
+                    objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
                         if(state == stateSelected) {
                             origX = x;
@@ -445,6 +460,24 @@ image_yscale = global.scaleYAdjust;
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	objEditor.editorDefaultWidth = width;
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
+		    }
+		    if(keycheck_down_ctrl(ord("V"))) {
+		    	width = objEditor.editorDefaultWidth;
+		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+		    }
+		    if(keycheck_down_ctrl(ord("1"))) {
+		    	if(noteType < 2) {
+		    		instance_destroy();
+		    		build_note(nid, 0, time, position, width, sid, side, false, true);
+		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
+		    	}
+		    }
+		    if(keycheck_down_ctrl(ord("2"))) {
+		    	if(noteType < 2) {
+		    		instance_destroy();
+		    		build_note(nid, 1, time, position, width, sid, side, false, true);
+		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
+		    	}
 		    }
         }
 

@@ -2,6 +2,10 @@
 
 #region Beatlines
 
+    
+    animBeatlineTargetAlphaM = editorMode != 5;
+    beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);
+
     var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
     beatlineNowMode += _modchg;
     beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
@@ -89,10 +93,11 @@
                         draw_set_alpha(beatlineAlpha[0]);
                         draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
                         if(i == 0 && k == 0) {
-                            draw_set_halign(fa_center);
-                            draw_set_valign(fa_top);
-                            draw_set_color(c_white);
-                            draw_text(_nw/2, _ny, string(mspb_to_bpm(_nowtp.beatLength)));
+                            scribble(string(mspb_to_bpm(_nowtp.beatLength)))
+                                .starting_format("fDynamix20", c_white)
+                                .align(fa_center, fa_top)
+                                .blend(c_white, beatlineAlpha[0])
+                                .draw(_nw/2, _ny);
                         }
                     }
                 }
