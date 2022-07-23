@@ -240,7 +240,7 @@ image_yscale = global.scaleYAdjust;
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
-            if((mouse_check_button_pressed(mb_left) && _mouse_inbound_check())
+            if((mouse_isclick_l() && _mouse_inbound_check())
                 || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area() && !editor_select_is_dragging())) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
@@ -332,18 +332,7 @@ image_yscale = global.scaleYAdjust;
         stateDrop = function() {
             stateString = "DROP";
             animTargetA = 0.8;
-            if(!mouse_ishold_l())
-            	width = origWidth;
-            else {
-            	if(side == 0)
-	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
-	            else
-	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
-            }
             
-            width = editor_snap_width(width);
-            width = max(width, 0.01);
-            _prop_init();
             
             if(mouse_check_button_released(mb_left)) {
                 editor_set_width_default(width);
@@ -358,6 +347,19 @@ image_yscale = global.scaleYAdjust;
                 build_note(random_id(6), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
+            
+            if(!mouse_ishold_l())
+            	width = origWidth;
+            else {
+            	if(side == 0)
+	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+	            else
+	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+            }
+            
+            width = editor_snap_width(width);
+            width = max(width, 0.01);
+            _prop_init();
         }
         
         stateAttachSub = function () {

@@ -18,7 +18,7 @@ if(editorMode == 4) {
     if((_selectable && !ctrl_ishold()) || keyboard_check_pressed(vk_up)) { 
         editorSelectResetRequest = true;
     }
-    if(mouse_isclick_l() && !editorSelectInbound) {
+    if(mouse_isclick_l() && !editorSelectInbound && !_selectable) {
         editorSelectResetRequest = true;
     }
     

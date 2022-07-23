@@ -76,7 +76,7 @@ var _music_resync_request = false;
     		topBarMouseInbound = mouse_y <= topBarMouseH && mouse_y > 0;
             if(topBarMouseInbound || topBarMousePressed || _timchange != 0 || _timscr != 0) {
             	animTargetTopBarIndicatorA = 0.3;
-            	topBarTimeLastTime = 5000;
+            	topBarTimeLastTime = 2000;
             }
             else
                 animTargetTopBarIndicatorA = 0;
