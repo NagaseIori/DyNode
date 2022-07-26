@@ -30,6 +30,10 @@ function editor_select_is_area() {
 function editor_select_get_area_position() {
 	return objEditor.editorSelectAreaPosition;
 }
+function editor_select_inbound(x, y, side, type) {
+	var _pos = editor_select_get_area_position();
+	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])
+}
 
 function editor_select_count() {
 	return objEditor.editorSelectCount;
