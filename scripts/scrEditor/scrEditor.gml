@@ -30,6 +30,10 @@ function editor_select_is_area() {
 function editor_select_get_area_position() {
 	return objEditor.editorSelectAreaPosition;
 }
+function editor_select_inbound(x, y, side, type) {
+	var _pos = editor_select_get_area_position();
+	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])
+}
 
 function editor_select_count() {
 	return objEditor.editorSelectCount;
@@ -224,16 +228,16 @@ function timing_point_load_from_osz() {
 	                			case 2:
 	                				var _x = real(_grid[# 0, i]);
 	                				var _y = real(_grid[# 1, i]);
-	                				build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
 	                				break;
 	                			case 3: // Mania Mode
 	                				var _x = real(_grid[# 0, i]);
 	                				if(_ntype & 128) { // If is a Mania Hold
 	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
-	                					build_hold(random_id(6), _ntime, _x / 512 * 5, 1.0, random_id(6), _subtim, 0);
+	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
 	                				} 
 	                				else
-	                					build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
 	                				break;
 	                		}
                 		}

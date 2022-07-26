@@ -20,7 +20,7 @@ if(keycheck_down(ord("F")))
     window_set_fullscreen(!window_get_fullscreen());
     
 if(keycheck_down(vk_f12)) {
-	var _file = program_directory + "Screenshots\\" + random_id(6) + ".png"
+	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
 	announcement_play("已保存截图到: " + _file)
 }

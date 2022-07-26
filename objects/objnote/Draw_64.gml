@@ -7,9 +7,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
     
     animTargetInfoA = 0;
     if(editor_select_is_area()) {
-        var _pos = editor_select_get_area_position();
-        
-        if(side == editor_get_editside() && noteType != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])) {
+        if(editor_select_inbound(x, y, side, noteType)) {
             _col = 0x28caff;
             animTargetNodeA = 1;
         }
@@ -31,7 +29,10 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
         else animTargetNodeA = 0;
     }
     if(state == stateSelected) {
-        _col = c_white;
+    	if(editor_select_is_area() && editor_select_inbound(x, y, side, noteType))
+    		_col = scribble_rgb_to_bgr(0xff1744);
+    	else 
+        	_col = c_white;
         animTargetNodeA = 1.0;
         animTargetInfoA = 1;
     }

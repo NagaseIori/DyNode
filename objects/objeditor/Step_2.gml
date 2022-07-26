@@ -59,9 +59,9 @@ if(editorMode == 4) {
             
             with(objNote) {
                 if(side == editor_get_editside() && noteType != 3 && 
-                    state == stateNormal && 
+                    (state == stateNormal || state == stateSelected) && 
                     pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])) {
-                        state = stateSelected;
+                        state = (state == stateSelected ? stateNormal : stateSelected);
                         state();
                     }
             }

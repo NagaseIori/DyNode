@@ -21,6 +21,9 @@ global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
 
+// Themes Init
+
+theme_init();
 
 // Load Settings
 
@@ -38,10 +41,6 @@ global.difficultyString = "CNMHGT";
 global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
-
-// Themes Init
-
-theme_init();
 
 // Generate Temp Sprite
 

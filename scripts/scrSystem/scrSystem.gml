@@ -460,12 +460,12 @@ function map_load_struct(_str) {
 	var _arr = _str.notes;
 	for(var i=0, l=array_length(_arr); i<l; i++) {
 		if(_arr[i].noteType < 2) {
-			build_note(random_id(6), _arr[i].noteType, _arr[i].time, _arr[i].position, 
+			build_note(random_id(9), _arr[i].noteType, _arr[i].time, _arr[i].position, 
 				_arr[i].width, "-1", _arr[i].side, false, false);
 		}
 		else {
-			build_hold(random_id(6), _arr[i].time, _arr[i].position, _arr[i].width,
-				random_id(6), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
+			build_hold(random_id(9), _arr[i].time, _arr[i].position, _arr[i].width,
+				random_id(9), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
 		}
 	}
 	
