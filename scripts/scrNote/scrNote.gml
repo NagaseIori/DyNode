@@ -155,11 +155,15 @@ function notes_array_update() {
 
 function notes_reallocate_id() {
 	with(objMain) {
+		instance_activate_object(objNote);
 		var i=0, l=chartNotesCount;
-		var _cnt = [0, 0, 0];
+		ds_map_clear(chartNotesMap[0]);
+		ds_map_clear(chartNotesMap[1]);
+		ds_map_clear(chartNotesMap[2]);
 		for(; i<l; i++) {
 			var _inst = chartNotesArray[i].inst;
-			_inst.nid = string(_cnt[_inst.side]++);
+			_inst.nid = string(i);
+			chartNotesMap[_inst.side][? _inst.nid] = _inst;
 		}
 		for(i=0; i<l; i++) {
 			var _inst = chartNotesArray[i].inst;

@@ -344,7 +344,7 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
                     return;
                 }
-                build_note(random_id(6), noteType, time, position, width, -1, side, false);
+                build_note(random_id(9), noteType, time, position, width, -1, side, false);
                 instance_destroy();
             }
             
@@ -375,8 +375,8 @@ image_yscale = global.scaleYAdjust;
             stateString = "DROPS";
             animTargetA = 1.0;
             if(mouse_check_button_released(mb_left)) {
-                var _subid = random_id(6);
-                var _teid = random_id(6);
+                var _subid = random_id(9);
+                var _teid = random_id(9);
                 build_hold(_teid, time, position, width, _subid, sinst.time, side);
                 instance_destroy(sinst);
                 instance_destroy();

@@ -228,16 +228,16 @@ function timing_point_load_from_osz() {
 	                			case 2:
 	                				var _x = real(_grid[# 0, i]);
 	                				var _y = real(_grid[# 1, i]);
-	                				build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
 	                				break;
 	                			case 3: // Mania Mode
 	                				var _x = real(_grid[# 0, i]);
 	                				if(_ntype & 128) { // If is a Mania Hold
 	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
-	                					build_hold(random_id(6), _ntime, _x / 512 * 5, 1.0, random_id(6), _subtim, 0);
+	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
 	                				} 
 	                				else
-	                					build_note(random_id(6), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
 	                				break;
 	                		}
                 		}
