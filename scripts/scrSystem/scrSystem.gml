@@ -318,7 +318,7 @@ function image_load(_file = "") {
 
 function map_export_xml() {
     var _file = "";
-    var _mapid = "_map_" + objMain.chartTitle + "_" + difficulty_num_to_char(objMain.chartDifficulty);
+    var _mapid = "_map_" + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
     var _default_file_name = _mapid + "-";
     _default_file_name += string(current_year) + "-";
     _default_file_name += string(current_month) + "-";
@@ -475,13 +475,20 @@ function map_load_struct(_str) {
 	show_debug_message("Load map from struct sucessfully.");
 }
 
+function map_get_alt_title() {
+	var _title = objMain.chartTitle;
+	_title = string_replace_all(_title, "\"", "");
+	
+	return _title;
+}
+
 #endregion
 
 #region PROJECT FUNCTIONS
 
 function project_load(_file = "") {
 	if(_file == "") 
-		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+		_file = get_open_filename_ext("DyNode File (*.dyn)|*.dyn", map_get_alt_title() + ".dyn", program_directory, 
         "Load Project 打开项目");
     
     if(_file == "") return 0;
@@ -526,7 +533,7 @@ function project_save() {
 function project_save_as(_file = "") {
 	
 	if(_file == "")
-		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", objMain.chartTitle + ".dyn", program_directory, 
+		_file = get_save_filename_ext("DyNode File (*.dyn)|*.dyn", map_get_alt_title() + ".dyn", program_directory, 
 	        "Project save as 项目另存为");
 	
 	if(_file == "") return 0;
