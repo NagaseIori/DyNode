@@ -13,3 +13,7 @@ mouseHoldDistanceThreshold = 20;
 mouseHoldTimeL = 0;
 mouseHoldClear = false;
 mouseClickL = false;
+
+// For Input Reset
+windowNFocusTime = 0;
+windowNFocusTimeThreshold = 500;
