@@ -112,7 +112,7 @@ function editor_select_compare(ida, idb) {
 	else return min(ida, idb);
 }
 
-function note_build_attach(_type, _side, _width) {
+function note_build_attach(_type, _side, _width, _lasttime = -1) {
     var _obj = [objNote, objChain, objHold];
     _obj = _obj[_type];
     
@@ -123,7 +123,14 @@ function note_build_attach(_type, _side, _width) {
         state = stateAttach;
         width = _width;
         side = _side;
+        fixedLastTime = _lasttime;
         _prop_init();
+        
+        if(_lasttime != -1 && _type == 2) {
+        	sinst = instance_create(x, y, objHoldSub);
+        	sinst.dummy = true;
+        	_prop_hold_update();
+        }
     }
     
     return _inst;

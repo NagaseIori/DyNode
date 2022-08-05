@@ -41,12 +41,21 @@ editorSelectMultiple = editorSelectCount > 1;
     
     if(keycheck_down(vk_f10))
         timing_point_load_from_osz();
-    if(keycheck_down(ord("Z")))
+    if(keycheck_down(ord("Z"))) {
         editorGridYEnabled = !editorGridYEnabled;
-    if(keycheck_down(ord("X")))
+        announcement_adjust("时间方向网格吸附", editorGridYEnabled);
+    }
+        
+    if(keycheck_down(ord("X"))) {
         editorGridXEnabled = !editorGridXEnabled;
-    if(keycheck_down(ord("H")))
+        announcement_adjust("位置方向网格吸附", editorGridXEnabled);
+    }
+        
+    if(keycheck_down(ord("H"))) {
         editorHighlightLineEnabled = !editorHighlightLineEnabled;
+        announcement_adjust("时间/位置高亮显示", editorHighlightLineEnabled);
+    }
+        
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch

@@ -26,6 +26,7 @@ image_yscale = global.scaleYAdjust;
     origX = x;
     origLength = 0; // For hold
     origSubTime = 0; // For hold's sub
+    fixedLastTime = -1; // For hold's copy and paste
     isDragging = false;
     nodeRadius = 22; // in Pixels
     nodeColor = c_blue;
@@ -350,6 +351,11 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 editor_set_width_default(width);
                 if(noteType == 2) {
+                	if(fixedLastTime != -1) {
+                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, false);
+                		instance_destroy();
+                		return;
+                	}
                     var _time = time;
                     state = stateAttachSub;
                     sinst = instance_create_depth(x, y, depth, objHoldSub);
