@@ -174,6 +174,19 @@ image_yscale = global.scaleYAdjust;
         
     }
     
+    get_prop = function (_fromxml = false) {
+    	return {
+        	time : _fromxml?bar:time,
+        	side : side,
+        	width : width,
+        	position : position,
+        	lastTime : lastTime,
+        	noteType : noteType,
+        	inst : id,
+        	beginTime : beginTime
+        };
+    }
+    
     // _outbound_check was moved to scrNote
 
 // State Machines

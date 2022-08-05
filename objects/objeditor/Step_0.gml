@@ -93,7 +93,7 @@
                         draw_set_alpha(beatlineAlpha[0]);
                         draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
                         if(i == 0 && k == 0) {
-                            scribble(string(mspb_to_bpm(_nowtp.beatLength)))
+                            scribble("BPM "+string(mspb_to_bpm(_nowtp.beatLength))+" "+string(_nowtp.meter)+"/4")
                                 .starting_format("fDynamix20", c_white)
                                 .align(fa_center, fa_top)
                                 .blend(c_white, beatlineAlpha[0])
@@ -110,7 +110,6 @@
         _nexttime = (_nowat + 1 == _pointscount ? objMain.musicLength:timingPoints[_nowat+1].time);
         _nowbeats = 0;
     }
-    
     surface_reset_target();
     draw_set_alpha(1.0);
 

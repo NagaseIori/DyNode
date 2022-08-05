@@ -74,16 +74,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     	if(noteType == 2) _prop_hold_update();
     }
     with(objMain) {
-        array_push(chartNotesArray, {
-        	time : _fromxml?_inst.bar:_inst.time,
-        	side : _inst.side,
-        	width : _inst.width,
-        	position : _inst.position,
-        	lastTime : _inst.lastTime,
-        	noteType : _inst.noteType,
-        	inst : _inst,
-        	beginTime : _inst.beginTime
-        });
+        array_push(chartNotesArray, _inst.get_prop(_fromxml));
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
