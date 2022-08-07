@@ -114,6 +114,9 @@ depth = 0;
     hitSoundOn = false;
     
     showDebugInfo = debug_mode;
+    showStats = false;
+    
+    statCount = [0, 0, 0];
     
     // For 3 sides targetline's glow
     lazerAlpha = [1.0, 1.0, 1.0];

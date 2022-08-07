@@ -38,6 +38,10 @@ _position_update();
     	animTargetTime = 0;
     	reset_scoreboard();
     }
+    
+    if(mouse_check_button_pressed(mb_middle)) {
+    	showStats = !showStats;
+    }
 
 #endregion
 
