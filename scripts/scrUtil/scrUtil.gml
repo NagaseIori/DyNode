@@ -42,19 +42,19 @@ function draw_scribble_box(_ele, x, y, alpha) {
 #endregion
 
 #region TIME & BAR & BPM
-function time_to_bar(time) {
-    return time * objMain.chartBarPerMin / 60000;
+function time_to_bar(time, barpm = objMain.chartBarPerMin) {
+    return time * barpm / 60000;
 }
 
-function bar_to_time(offset) {
-    return offset * 60000 / objMain.chartBarPerMin;
+function bar_to_time(offset, barpm = objMain.chartBarPerMin) {
+    return offset * 60000 / barpm;
 }
 
-function mtime_to_time(mtime) {
-	return mtime + objMain.chartTimeOffset;
+function mtime_to_time(mtime, offset = objMain.chartTimeOffset) {
+	return mtime + offset;
 }
-function time_to_mtime(time) {
-	return time - objMain.chartTimeOffset;
+function time_to_mtime(time, offset = objMain.chartTimeOffset) {
+	return time - offset;
 }
 
 function bpm_to_mspb(bpm) {

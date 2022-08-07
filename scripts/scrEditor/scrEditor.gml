@@ -44,7 +44,7 @@ function editor_select_reset() {
 }
 
 function editor_snap_to_grid_y(_y, _side) {
-    if(!objEditor.editorGridYEnabled) return _y;
+    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _y;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
     var _ret = _y;

@@ -87,7 +87,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
-        if(!_fromxml && _sort)
+        if(_sort)
             note_sort_request();
     }
     

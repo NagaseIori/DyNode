@@ -249,7 +249,3 @@ depth = 0;
     sampleRate = 0;
     channelPaused = false; // Only used for time correction
     musicLength = 0;
-
-// Init
-
-    map_init(true);
