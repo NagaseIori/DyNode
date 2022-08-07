@@ -71,7 +71,7 @@ function map_init(_skipnote = false) {
         animTargetTime = nowTime;
         
         // Sort Notes Array base on time
-        note_all_sort();
+        note_sort_all();
         
         // Get the chart's difficulty
         chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
@@ -469,7 +469,7 @@ function map_load_struct(_str) {
 		}
 	}
 	
-	note_all_sort();
+	note_sort_all();
 	notes_array_update();
 	
 	show_debug_message("Load map from struct sucessfully.");

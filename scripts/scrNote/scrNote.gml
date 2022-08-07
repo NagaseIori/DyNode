@@ -25,11 +25,16 @@ function _outbound_check_t(_time, _side) {
         return false;
 }
 
-function note_all_sort() {
+function note_sort_all() {
+	notes_array_update();
     var _f = function(_a, _b) {
         return _a.time < _b.time;
     }
     array_sort_f(objMain.chartNotesArray, _f);
+}
+
+function note_sort_request() {
+	objEditor.editorNoteSortRequest = true;
 }
 
 function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
@@ -83,7 +88,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         chartNotesMap[_inst.side][? _id] = _inst;
         
         if(!_fromxml && _sort)
-            note_all_sort();
+            note_sort_request();
     }
     
     return _inst;
@@ -111,7 +116,7 @@ function note_delete(_id) {
             }
 		chartNotesCount = array_length(chartNotesArray);
     }
-    if(found) note_all_sort();
+    if(found) note_sort_request();
 }
 
 function note_delete_all() {
@@ -141,7 +146,7 @@ function notes_array_update() {
 			chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
 		}
 	}
-	note_all_sort();
+	note_sort_request();
 }
 
 function notes_reallocate_id() {

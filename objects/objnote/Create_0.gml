@@ -76,6 +76,9 @@ image_yscale = global.scaleYAdjust;
         depth = origDepth - time;
         if(noteType == 3 && instance_exists(finst))
         	depth = finst.depth;
+        
+        var _vec2 = noteprop_to_xy(position, time, side);
+		x = _vec2[0]; y = _vec2[1];
     }
     _prop_init();
 
@@ -321,19 +324,32 @@ image_yscale = global.scaleYAdjust;
             stateString = "ATCH";
             animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
-            if(side == 0) {
-                x = editor_snap_to_grid_x(mouse_x, side);
-                y = editor_snap_to_grid_y(mouse_y, side);
-                position = x_to_note_pos(x, side);
-                time = y_to_note_time(y, side);
+            if(editor_get_note_attaching_center() == id) {
+            	if(side == 0) {
+	                x = editor_snap_to_grid_x(mouse_x, side);
+	                y = editor_snap_to_grid_y(mouse_y, side);
+	                position = x_to_note_pos(x, side);
+	                time = y_to_note_time(y, side);
+	            }
+	            else {
+	                y = editor_snap_to_grid_x(mouse_y, side)
+	                x = editor_snap_to_grid_y(mouse_x, side);
+	                position = x_to_note_pos(y, side);
+	                time = y_to_note_time(x, side);
+	            }
+	            
+	            var _pos = position, _time = time;
+	            with(objNote) {
+	            	var _center = editor_get_note_attaching_center();
+	            	if(state == stateAttach) {
+	            		position = _pos + origPosition - _center.origPosition;
+	            		time = _time + origTime - _center.origTime;
+	            		_prop_init();
+		            	if(noteType == 2)
+		            		_prop_hold_update();
+	            	}
+	            }
             }
-            else {
-                y = editor_snap_to_grid_x(mouse_y, side)
-                x = editor_snap_to_grid_y(mouse_x, side);
-                position = x_to_note_pos(y, side);
-                time = y_to_note_time(x, side);
-            }
-            
             
             if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)) {
                 state = stateDrop;
@@ -349,10 +365,11 @@ image_yscale = global.scaleYAdjust;
             
             
             if(mouse_check_button_released(mb_left)) {
-                editor_set_width_default(width);
+            	if(editor_get_editmode() > 0)
+                	editor_set_width_default(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
-                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, false);
+                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side);
                 		instance_destroy();
                 		return;
                 	}

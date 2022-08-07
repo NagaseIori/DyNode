@@ -1,7 +1,6 @@
 /// @description Update Editor
 
 #region Beatlines
-
     
     animBeatlineTargetAlphaM = editorMode != 5;
     beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);

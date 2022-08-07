@@ -112,7 +112,7 @@ function editor_select_compare(ida, idb) {
 	else return min(ida, idb);
 }
 
-function note_build_attach(_type, _side, _width, _lasttime = -1) {
+function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1) {
     var _obj = [objNote, objChain, objHold];
     _obj = _obj[_type];
     
@@ -124,6 +124,8 @@ function note_build_attach(_type, _side, _width, _lasttime = -1) {
         width = _width;
         side = _side;
         fixedLastTime = _lasttime;
+        origPosition = _pos;
+        origTime = _time;
         _prop_init();
         
         if(_lasttime != -1 && _type == 2) {
@@ -134,6 +136,10 @@ function note_build_attach(_type, _side, _width, _lasttime = -1) {
     }
     
     return _inst;
+}
+
+function editor_get_note_attaching_center() {
+	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
 
 #region TIMING POINT FUNCTION
@@ -257,7 +263,7 @@ function timing_point_load_from_osz() {
     }
     
     timing_point_sort();
-    note_all_sort();
+    note_sort_all();
     ds_grid_destroy(_grid);
     
     announcement_play("导入谱面信息完毕。", 1000);

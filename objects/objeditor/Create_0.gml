@@ -4,10 +4,11 @@
 depth = -500000000;
 
 // Editors
-
-editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play
+editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play 0 copy
+editorModeBeforeCopy = 5;
 editorSide = 0;                             // 0 down 1 left 2 right
-editorNoteAttaching = -999;                 // instance that attached to cursor now
+editorNoteAttaching = -1;                   // instances that attached to cursor now
+editorNoteAttachingCenter = 0;           // attached instances' center
 editorDefaultWidth = 1.0;
 editorSelectSingleTarget = -999;            // instance for single selection target
 editorSelectSingleTargetInbound = -999;
@@ -19,6 +20,7 @@ editorSelectArea = false;                   // selecting area
 editorSelectAreaPosition = [0, 0, 0, 0];
 editorSelectInbound = false;                // if at least mouse is inbound one selected note
 editorSelectResetRequest = false;
+editorNoteSortRequest = false;
 
 editorHighlightLine = false;
 editorHighlightLineEnabled = true;
@@ -35,7 +37,6 @@ editorHighlightSide = 0;
 timingPoints = [];
 
 // Highlight lines
-
 highlightLineColorDownA = scribble_rgb_to_bgr(0xb6ffff);
 highlightLineColorDownB = scribble_rgb_to_bgr(0x81d4fa);
 highlightLineColorSideA = scribble_rgb_to_bgr(0xffc1e3);
@@ -92,3 +93,7 @@ beatlineAlphaMul = 0;
 animSpeed = 0.4;
 animBeatlineTargetAlpha = [0, 0, 0];
 animBeatlineTargetAlphaM = 0;
+
+// Copy & Paste
+
+copyStack = [];

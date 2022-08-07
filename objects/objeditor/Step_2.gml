@@ -37,10 +37,7 @@ if(editorMode == 4) {
         with(editorSelectSingleTarget) {
             state = stateSelected;
             state();
-        }           
-    
-    
-    
+        }
     
     // Selecting Area part
     if(editorSelectArea) {
@@ -68,4 +65,9 @@ if(editorMode == 4) {
         }
         
     }
+}
+
+if(editorNoteSortRequest) {
+    note_sort_all();
+    editorNoteSortRequest = false;
 }

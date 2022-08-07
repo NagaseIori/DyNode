@@ -1,4 +1,3 @@
-
 function generate_lazer_sprite(_height) {
 	var _spr = -1;
 	var _surf = surface_create(1, _height);
