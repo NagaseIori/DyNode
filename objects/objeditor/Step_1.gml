@@ -79,10 +79,8 @@ editorSelectMultiple = editorSelectCount > 1;
             editorMode = i;
         }
     
-    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0) {
+    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
         editorModeBeforeCopy = editorMode;
-        if(editorMode != 0)
-            _attach_reset_request = true;
         editorMode = 0; // Paste Mode
     }
     if(keycheck_down(vk_escape) && editorMode == 0) {
@@ -106,7 +104,7 @@ editorSelectMultiple = editorSelectCount > 1;
             for(; i<l; i++)
                 instance_destroy(editorNoteAttaching[i]);
             editorNoteAttaching = -1;
-            editorNoteAttachingCenter = 0;
+            if(editorMode != 0) editorNoteAttachingCenter = 0;
         }
         if(_attach_sync_request) {
             var i=0, l=array_length(editorNoteAttaching);
