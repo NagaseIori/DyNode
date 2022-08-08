@@ -50,8 +50,11 @@ function ctrl_ishold() {
 function alt_ishold() {
     return keyboard_check_direct(vk_alt);
 }
+function shift_ishold() {
+    return keyboard_check_direct(vk_shift);
+}
 function nofunkey_ishold() {
-    return !(ctrl_ishold()) && !(alt_ishold());
+    return !(ctrl_ishold()) && !(alt_ishold()) && !(shift_ishold());
 }
 function keycheck_ctrl(key) {
     return ctrl_ishold() && keyboard_check(key);
