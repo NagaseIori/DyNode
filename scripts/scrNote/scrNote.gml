@@ -25,14 +25,19 @@ function _outbound_check_t(_time, _side) {
         return false;
 }
 
-function note_all_sort() {
+function note_sort_all() {
+	notes_array_update();
     var _f = function(_a, _b) {
         return _a.time < _b.time;
     }
     array_sort_f(objMain.chartNotesArray, _f);
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
+function note_sort_request() {
+	objEditor.editorNoteSortRequest = true;
+}
+
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -74,16 +79,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     	if(noteType == 2) _prop_hold_update();
     }
     with(objMain) {
-        array_push(chartNotesArray, {
-        	time : _fromxml?_inst.bar:_inst.time,
-        	side : _inst.side,
-        	width : _inst.width,
-        	position : _inst.position,
-        	lastTime : _inst.lastTime,
-        	noteType : _inst.noteType,
-        	inst : _inst,
-        	beginTime : _inst.beginTime
-        });
+        array_push(chartNotesArray, _inst.get_prop(_fromxml));
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
@@ -91,27 +87,33 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
-        if(!_fromxml && _sort)
-            note_all_sort();
+        note_sort_request();
     }
+    
+    if(_record)
+    	operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(_fromxml), -1);
     
     return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _sort = true) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
-	build_note(_id, 2, _time, _position, _width, _subid, _side, false, _sort);
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false) {
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side);
+	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side);
 	_sinst.beginTime = _time;
-	if(_sort)
-		notes_array_update();
+	if(_record)
+		operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(), -1);
+	return _inst;
 }
 
-function note_delete(_id) {
+function note_delete(_id, _record = false) {
     with(objMain) {
         var l=array_length(chartNotesArray);
         var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].inst.nid == _id) {
+            	if(_record)
+            		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i], -1);
+            	
             	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _id);
                 var _insta = chartNotesArray[i].inst;
                 array_delete(chartNotesArray, i, 1);
@@ -120,7 +122,7 @@ function note_delete(_id) {
             }
 		chartNotesCount = array_length(chartNotesArray);
     }
-    if(found) note_all_sort();
+    if(found) note_sort_request();
 }
 
 function note_delete_all() {
@@ -138,19 +140,24 @@ function note_delete_all() {
 
 function notes_array_update() {
 	with(objMain) {
+		statCount = [0, 0, 0];
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
-		for(; i<l; i++) if(instance_exists(chartNotesArray[i].inst)) {
-			chartNotesArray[i].time = chartNotesArray[i].inst.time;
-			chartNotesArray[i].side = chartNotesArray[i].inst.side;
-			chartNotesArray[i].width = chartNotesArray[i].inst.width;
-			chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
-			chartNotesArray[i].position = chartNotesArray[i].inst.position;
-			chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
-			chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
+		for(; i<l; i++) {
+			if(instance_exists(chartNotesArray[i].inst)) {
+				chartNotesArray[i].time = chartNotesArray[i].inst.time;
+				chartNotesArray[i].side = chartNotesArray[i].inst.side;
+				chartNotesArray[i].width = chartNotesArray[i].inst.width;
+				chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
+				chartNotesArray[i].position = chartNotesArray[i].inst.position;
+				chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
+				chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
+			}
+			if(chartNotesArray[i].noteType < 3)
+				statCount[chartNotesArray[i].noteType] ++;
 		}
 	}
-	note_all_sort();
+	note_sort_request();
 }
 
 function notes_reallocate_id() {

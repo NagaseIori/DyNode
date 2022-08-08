@@ -19,6 +19,17 @@ if(topBarTimeA > 0) {
 }
 
 
+// Chart stats
+
+if(showStats)
+scribble("[sprNote] "+string(statCount[0])
+	+" [scale,0.5][sprChain][/s] "+string(statCount[1])
+	+" [scale,0.5][sprHoldEdge][/s] "+string(statCount[2])
+	+ " Total " + string(chartNotesCount))
+	.starting_format("fMono16", c_white)
+	.align(fa_center, fa_bottom)
+	.draw(global.resolutionW/2, global.resolutionH-3);
+
 // Debug
 
 if(!showDebugInfo) return;

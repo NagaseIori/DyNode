@@ -60,7 +60,8 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
     
     // Draw Information
     if(infoAlpha > EPS) {
-    	var _dx = 20, _dy = (noteType == 2? dFromBottom:20) * _inv;
+    	var _dx = 20, _dy = (noteType == 2? dFromBottom:20) * _inv,
+    		_dyu = (noteType == 2? dFromBottom:25) * _inv;
 	    scribble(string_format(position, 1, 2))
 	    	.starting_format("fDynamix16", c_aqua)
 	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
@@ -74,6 +75,13 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	    	.blend(c_white, infoAlpha)
 	    	.align(fa_left, fa_middle)
 	    	.draw(x + _dx, y + _dy);
+	    
+	    scribble(string_format(time, 1, 0))
+	    	.starting_format("fDynamix16", scribble_rgb_to_bgr(0xb2fab4))
+	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
+	    	.blend(c_white, infoAlpha)
+	    	.align(fa_right, fa_middle)
+	    	.draw(x - _dx, y - _dyu);
     }
     
 }

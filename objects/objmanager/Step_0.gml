@@ -10,9 +10,6 @@ if(_fmoderr < 0) {
     show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
 }
 
-if(keycheck_down(vk_escape))
-    game_end();
-
 if(keycheck_down(vk_f2))
     map_load();
 

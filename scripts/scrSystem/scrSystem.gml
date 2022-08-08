@@ -38,52 +38,6 @@ function map_reset() {
 	instance_create_depth(0, 0, 0, objMain);
 }
 
-// After loading map, map_init is called to init objMain again.
-function map_init(_skipnote = false) {
-        
-    with(objMain) {
-        // By default set chart's bpm from bar
-        chartBeatPerMin = chartBarPerMin * 4;
-        
-        // Get Time Offset
-        chartTimeOffset = bar_to_time(chartBarOffset);
-        var _offset = chartTimeOffset;
-        
-        // Fix every note's time
-        if(!_skipnote)
-        if(instance_exists(objNote)) {
-            with(objNote) {
-                time = bar_to_time(bar);        	// Bar to Chart Time in ms
-                time = time_to_mtime(time);         // Chart Time to Music Time in ms (Fix the offset to 0)
-                
-                if(noteType == 2)
-                	_prop_hold_update();			// Hold prop init
-            }
-        }
-        
-        // Update notesArray
-        notes_array_update();
-        
-        chartTimeOffset = 0;                        // Set the offset to 0
-        
-        // Reset to the beginning
-        nowTime = 0;                                // Now music time equals chart time
-        animTargetTime = nowTime;
-        
-        // Sort Notes Array base on time
-        note_all_sort();
-        
-        // Get the chart's difficulty
-        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
-        
-        // Initialize Timing Points
-        timing_point_reset();
-        timing_point_add(
-            _offset, bpm_to_mspb(chartBeatPerMin), 4);
-    }
-    
-}
-
 function map_load(_file = "") {
 
 	if(is_struct(_file)) {
@@ -97,25 +51,29 @@ function map_load(_file = "") {
         
     if(_file == "") return;
     
-    var _clear = show_question("是否清除所有原谱面物件？此操作不可撤销！");
-    if(_clear) note_delete_all();
-    
     if(!file_exists(_file)) {
         announcement_error("谱面文件不存在。导入中止。");
         return;
     }
     
-    if(filename_ext(_file) == ".xml")
-        map_load_xml(_file);
+    var _confirm = show_question("确认导入谱面？所有操作将不可撤销。");
+    if(!_confirm) return;
+    var _clear = show_question("是否清除所有原谱面物件？");
+    if(_clear) note_delete_all();
     
-    map_init();
+    var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
+    
+    if(filename_ext(_file) == ".xml")
+        map_load_xml(_file, _import_info);
+    
     objManager.chartPath = _file;
     
     show_debug_message("Import map sucessfully.");
     announcement_play("导入谱面完毕。");
 }
 
-function map_load_xml(_file) {
+function map_load_xml(_file, _import_info) {
+	notes_reallocate_id();
     DerpXmlRead_OpenFile(_file);
     
     var _stack = [];
@@ -126,6 +84,7 @@ function map_load_xml(_file) {
     var _in_assets = 0;
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
+    var _barpm, _offset;
     while DerpXmlRead_Read() {
         _line ++;
         switch DerpXmlRead_CurType() {
@@ -165,9 +124,9 @@ function map_load_xml(_file) {
                         break;
                     case "CMapNoteAsset":
                         _in_assets --;
-                        var _err = build_note(_note_id, _note_type, _note_time,
-                            _note_position, _note_width, _note_subid,
-                            _in_left + _in_right*2);
+                        var _err = build_note(_note_id+"_imported", _note_type, _note_time,
+                            _note_position, _note_width, _note_subid+"_imported",
+                            _in_left + _in_right*2, true);
                         if(_err < 0) return;
                         break;
                 }
@@ -176,21 +135,25 @@ function map_load_xml(_file) {
                 var _val = DerpXmlRead_CurValue();
                 switch array_top(_stack) {
                     case "m_path":
+                    	if(_import_info)
                         objMain.chartTitle = _val;
                         break;
                     case "m_barPerMin":
-                        objMain.chartBarPerMin = real(_val);
+                        _barpm = real(_val);
                         break;
                     case "m_timeOffset":
-                        objMain.chartBarOffset = real(_val);
+                        _offset = real(_val);
                         break;
                     case "m_leftRegion":
+                    	if(_import_info)
                         objMain.chartSideType[0] = _val;
                         break;
                     case "m_rightRegion":
+                    	if(_import_info)
                         objMain.chartSideType[1] = _val;
                         break;
                     case "m_mapID":
+                    	if(_import_info)
                         objMain.chartID = _val;
                         break;
                     default:
@@ -225,6 +188,44 @@ function map_load_xml(_file) {
     }
     
     DerpXmlRead_CloseFile();
+    
+    if(_import_info) {
+    	with(objMain) {
+    		chartBarPerMin = _barpm;
+    		chartBeatPerMin = _barpm * 4;
+    		chartBarOffset = _offset;
+    		chartTimeOffset = 0;                        // Set the offset to 0
+        
+	        // Reset to the beginning
+	        nowTime = 0;
+	        animTargetTime = nowTime;
+	        
+	        // Sort Notes Array base on time
+	        note_sort_all();
+	        
+	        // Get the chart's difficulty
+	        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
+	        
+	        // Initialize Timing Points
+	    	timing_point_reset();
+	        timing_point_add(
+	            _offset, bpm_to_mspb(chartBeatPerMin), 4);
+    	}
+    }
+    
+    // Fix every note's time
+    _offset = bar_to_time(_offset, _barpm);
+    if(instance_exists(objNote)) {
+        with(objNote) {
+        	if(string_last_pos("_imported", nid) > 0) {
+        		time = bar_to_time(bar, _barpm);        	// Bar to Chart Time in ms
+	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)
+	            
+	            if(noteType == 2)
+	            	_prop_hold_update();			// Hold prop init
+        	}
+        }
+    }
 }
 
 function map_set_title() {
@@ -446,6 +447,17 @@ function map_get_struct() {
 	return _str;
 }
 
+function build_note_withprop(prop) {
+	if(prop.noteType < 2) {
+		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
+			prop.width, "-1", prop.side);
+	}
+	else {
+		return build_hold(random_id(9), prop.time, prop.position, prop.width,
+			random_id(9), prop.time + prop.lastTime, prop.side);
+	}
+}
+
 function map_load_struct(_str) {
 	note_delete_all();
 	
@@ -458,19 +470,8 @@ function map_load_struct(_str) {
 	}
 	
 	var _arr = _str.notes;
-	for(var i=0, l=array_length(_arr); i<l; i++) {
-		if(_arr[i].noteType < 2) {
-			build_note(random_id(9), _arr[i].noteType, _arr[i].time, _arr[i].position, 
-				_arr[i].width, "-1", _arr[i].side, false, false);
-		}
-		else {
-			build_hold(random_id(9), _arr[i].time, _arr[i].position, _arr[i].width,
-				random_id(9), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
-		}
-	}
-	
-	note_all_sort();
-	notes_array_update();
+	for(var i=0, l=array_length(_arr); i<l; i++) 
+		build_note_withprop(_arr[i]);
 	
 	show_debug_message("Load map from struct sucessfully.");
 }

@@ -36,6 +36,10 @@ _prop_init();
 		    sinst.side = side;
 		    sinst.finst = id;
 		    sinst.time = max(sinst.time, time+0.0001);
+		    
+		    if(fixedLastTime != -1)
+		    	sinst.time = time + fixedLastTime;
+		    
 		    sinst.beginTime = time;
     
 		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))

@@ -44,7 +44,7 @@ function editor_select_reset() {
 }
 
 function editor_snap_to_grid_y(_y, _side) {
-    if(!objEditor.editorGridYEnabled) return _y;
+    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _y;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
     var _ret = _y;
@@ -112,7 +112,7 @@ function editor_select_compare(ida, idb) {
 	else return min(ida, idb);
 }
 
-function note_build_attach(_type, _side, _width) {
+function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1) {
     var _obj = [objNote, objChain, objHold];
     _obj = _obj[_type];
     
@@ -123,11 +123,127 @@ function note_build_attach(_type, _side, _width) {
         state = stateAttach;
         width = _width;
         side = _side;
+        fixedLastTime = _lasttime;
+        origPosition = _pos;
+        origTime = _time;
         _prop_init();
+        
+        if(_lasttime != -1 && _type == 2) {
+        	sinst = instance_create(x, y, objHoldSub);
+        	sinst.dummy = true;
+        	_prop_hold_update();
+        }
     }
     
     return _inst;
 }
+
+function editor_get_note_attaching_center() {
+	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
+}
+
+#region UNDO & REDO FUNCTION
+
+function operation_step_add(_type, _from, _to) {
+	with(objEditor) {
+		array_push(operationStackStep, new sOperation(_type, _from, _to));
+	}
+}
+
+function operation_step_flush(_array) {
+	with(objEditor) {
+		array_resize(operationStack, operationPointer + 1);
+		array_push(operationStack, _array);
+		operationPointer ++;
+		operationCount = operationPointer + 1;
+		// show_debug_message("New operation: "+string(array_length(_array)));
+	}
+}
+
+function operation_do(_type, _from, _to = -1) {
+	switch(_type) {
+		case OPERATION_TYPE.ADD:
+			return build_note_withprop(_from);
+			break;
+		case OPERATION_TYPE.MOVE:
+			_from.inst.set_prop(_to);
+			break;
+		case OPERATION_TYPE.REMOVE:
+			instance_activate_object(_from.inst);
+			instance_destroy(_from.inst);
+			break;
+	}
+}
+
+function operation_refresh_inst(_origi, _nowi) {
+	with(objEditor) {
+		for(var i=0, l=array_length(operationStack); i<l; i++) {
+			var _ops = operationStack[i];
+			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) {
+				if(_ops[ii].fromProp.inst == _origi)
+					_ops[ii].fromProp.inst = _nowi;
+				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
+					_ops[ii].toProp.inst = _nowi;
+			}
+		}
+	}
+	
+}
+
+function operation_undo() {
+	if(operationPointer == -1) return;
+	var _ops = operationStack[operationPointer];
+	
+	
+	for(var i=0, l=array_length(_ops); i<l; i++) {
+		switch(_ops[i].opType) {
+			case OPERATION_TYPE.MOVE:
+				operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.ADD:
+				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.REMOVE:
+				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			default:
+				show_error("Unknown operation type.", true);
+		}
+	}
+	
+	operationPointer--;
+	
+	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
+	// show_debug_message("POINTER: "+ string(operationPointer));
+}
+
+function operation_redo() {
+	if(operationPointer + 1 == operationCount) return;
+	operationPointer ++;
+	var _ops = operationStack[operationPointer];
+	
+	for(var i=0, l=array_length(_ops); i<l; i++) {
+		switch(_ops[i].opType) {
+			case OPERATION_TYPE.MOVE:
+				operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
+				break;
+			case OPERATION_TYPE.ADD:
+				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			case OPERATION_TYPE.REMOVE:
+				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+				break;
+			default:
+				show_error("Unknown operation type.", true);
+		}
+	}
+	
+	announcement_play("还原操作 共 "+ string(array_length(_ops)) + " 处")
+}
+
+#endregion
 
 #region TIMING POINT FUNCTION
 // Sort the "timingPoints" array
@@ -228,7 +344,7 @@ function timing_point_load_from_osz() {
 	                			case 2:
 	                				var _x = real(_grid[# 0, i]);
 	                				var _y = real(_grid[# 1, i]);
-	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
 	                				break;
 	                			case 3: // Mania Mode
 	                				var _x = real(_grid[# 0, i]);
@@ -237,7 +353,7 @@ function timing_point_load_from_osz() {
 	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
 	                				} 
 	                				else
-	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
 	                				break;
 	                		}
                 		}
@@ -250,7 +366,7 @@ function timing_point_load_from_osz() {
     }
     
     timing_point_sort();
-    note_all_sort();
+    note_sort_all();
     ds_grid_destroy(_grid);
     
     announcement_play("导入谱面信息完毕。", 1000);

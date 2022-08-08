@@ -1,6 +1,5 @@
+_prop_init();
 
-var _vec2 = noteprop_to_xy(position, time, side);
-x = _vec2[0]; y = _vec2[1];
 if(state == stateOut && image_alpha<EPS) {
 	drawVisible = false;
 }
@@ -20,8 +19,6 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
     infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
-    
-    _prop_init();
 }
 
 state();
@@ -35,7 +32,8 @@ if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) 
 
 // Update Highlight Line's Position
 if(objEditor.editorHighlightLine && instance_exists(id)) {
-	if(state == stateSelected && isDragging || state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
+	if(state == stateSelected && isDragging || state == stateAttachSub || state == stateDropSub
+		|| ((state == stateAttach || state == stateDrop) && id == editor_get_note_attaching_center())) {
 		objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;

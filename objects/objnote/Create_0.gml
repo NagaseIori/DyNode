@@ -26,6 +26,8 @@ image_yscale = global.scaleYAdjust;
     origX = x;
     origLength = 0; // For hold
     origSubTime = 0; // For hold's sub
+    origProp = -1; // For Undo & Redo
+    fixedLastTime = -1; // For hold's copy and paste
     isDragging = false;
     nodeRadius = 22; // in Pixels
     nodeColor = c_blue;
@@ -47,6 +49,7 @@ image_yscale = global.scaleYAdjust;
     infoAlpha = 0;
     animTargetNodeA = 0;
     animTargetInfoA = 0;
+    recordRequest = false;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1.2;
@@ -75,6 +78,9 @@ image_yscale = global.scaleYAdjust;
         depth = origDepth - time;
         if(noteType == 3 && instance_exists(finst))
         	depth = finst.depth;
+        
+        var _vec2 = noteprop_to_xy(position, time, side);
+		x = _vec2[0]; y = _vec2[1];
     }
     _prop_init();
 
@@ -172,6 +178,32 @@ image_yscale = global.scaleYAdjust;
                 return mouse_inbound_last_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
         }
         
+    }
+    
+    get_prop = function (_fromxml = false) {
+    	return {
+        	time : _fromxml?bar:time,
+        	side : side,
+        	width : width,
+        	position : position,
+        	lastTime : lastTime,
+        	noteType : noteType,
+        	inst : id,
+        	beginTime : beginTime
+        };
+    }
+    
+    set_prop = function (props) {
+    	if(!is_struct(props))
+    		show_error("property must be a struct.", true);
+    	
+    	time = props.time;
+    	side = props.side;
+    	width = props.width;
+    	position = props.position;
+    	lastTime = props.lastTime;
+    	noteType = props.noteType;
+    	beginTime = props.beginTime;
     }
     
     // _outbound_check was moved to scrNote
@@ -307,23 +339,39 @@ image_yscale = global.scaleYAdjust;
             stateString = "ATCH";
             animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
-            if(side == 0) {
-                x = editor_snap_to_grid_x(mouse_x, side);
-                y = editor_snap_to_grid_y(mouse_y, side);
-                position = x_to_note_pos(x, side);
-                time = y_to_note_time(y, side);
-            }
-            else {
-                y = editor_snap_to_grid_x(mouse_y, side)
-                x = editor_snap_to_grid_y(mouse_x, side);
-                position = x_to_note_pos(y, side);
-                time = y_to_note_time(x, side);
+            if(editor_get_note_attaching_center() == id) {
+            	if(side == 0) {
+	                x = editor_snap_to_grid_x(mouse_x, side);
+	                y = editor_snap_to_grid_y(mouse_y, side);
+	                position = x_to_note_pos(x, side);
+	                time = y_to_note_time(y, side);
+	            }
+	            else {
+	                y = editor_snap_to_grid_x(mouse_y, side)
+	                x = editor_snap_to_grid_y(mouse_x, side);
+	                position = x_to_note_pos(y, side);
+	                time = y_to_note_time(x, side);
+	            }
+	            
+	            var _pos = position, _time = time;
+	            with(objNote) {
+	            	var _center = editor_get_note_attaching_center();
+	            	if(state == stateAttach) {
+	            		position = _pos + origPosition - _center.origPosition;
+	            		time = _time + origTime - _center.origTime;
+	            		_prop_init();
+		            	if(noteType == 2)
+		            		_prop_hold_update();
+	            	}
+	            }
             }
             
-            
-            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)) {
-                state = stateDrop;
-                origWidth = width;
+            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)
+            	&& id == editor_get_note_attaching_center()) {
+                with(objNote) if(state == stateAttach) {
+                	state = stateDrop;
+                	origWidth = width;
+                }
             }
                 
         }
@@ -335,8 +383,14 @@ image_yscale = global.scaleYAdjust;
             
             
             if(mouse_check_button_released(mb_left)) {
-                editor_set_width_default(width);
+            	if(editor_get_editmode() > 0)
+                	editor_set_width_default(width);
                 if(noteType == 2) {
+                	if(fixedLastTime != -1) {
+                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
+                		instance_destroy();
+                		return;
+                	}
                     var _time = time;
                     state = stateAttachSub;
                     sinst = instance_create_depth(x, y, depth, objHoldSub);
@@ -344,7 +398,7 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
                     return;
                 }
-                build_note(random_id(9), noteType, time, position, width, -1, side, false);
+                build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
                 instance_destroy();
             }
             
@@ -377,7 +431,7 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 var _subid = random_id(9);
                 var _teid = random_id(9);
-                build_hold(_teid, time, position, width, _subid, sinst.time, side);
+                build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
                 instance_destroy(sinst);
                 instance_destroy();
                 sinst = -999;
@@ -404,6 +458,7 @@ image_yscale = global.scaleYAdjust;
                     objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
                         if(state == stateSelected) {
+                        	origProp = get_prop();
                             origX = x;
                             origY = y;
                         }
@@ -413,7 +468,14 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
-                    notes_array_update();
+                    
+                    with(objNote) {
+                    	if(state == stateSelected) {
+                    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+                    	}
+                    }
+                    
+                    note_sort_request();
                 }
             }
             if(isDragging) {
@@ -448,10 +510,15 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             
-            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
-                instance_destroy();
+            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3) {
+            	recordRequest = true;
+            	instance_destroy();
+            }
+                
             if(keycheck_down(ord("M"))) {
+            	origProp = get_prop();
             	position = 5 - position;
+            	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
             }
             if(keycheck_down(vk_add)) {
@@ -462,11 +529,14 @@ image_yscale = global.scaleYAdjust;
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
 		    if(keycheck_down_ctrl(ord("V"))) {
+		    	origProp = get_prop();
 		    	width = objEditor.editorDefaultWidth;
+		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
 		    }
 		    if(keycheck_down_ctrl(ord("1"))) {
 		    	if(noteType < 2) {
+		    		recordRequest = true;
 		    		instance_destroy();
 		    		build_note(nid, 0, time, position, width, sid, side, false, true);
 		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
@@ -474,11 +544,26 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    if(keycheck_down_ctrl(ord("2"))) {
 		    	if(noteType < 2) {
+		    		recordRequest = true;
 		    		instance_destroy();
 		    		build_note(nid, 1, time, position, width, sid, side, false, true);
 		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
+		    
+		    // Pos / Time Adjustment
+		    var _poschg = (keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left)) * (shift_ishold() ? 0.05: 0.01);
+		    var _timechg = (keycheck_down_ctrl(vk_up) - keycheck_down_ctrl(vk_down)) * (shift_ishold() ? 5: 1);
+		    
+		    if(_timechg != 0 || _poschg != 0)
+		    	origProp = get_prop();
+		    time += _timechg;
+		    position += _poschg;
+		    if(_timechg != 0)
+		    	note_sort_request();
+		    if(_timechg != 0 || _poschg != 0)
+		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+		    	
         }
 
     state = stateOut;

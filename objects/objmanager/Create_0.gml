@@ -31,6 +31,7 @@ load_config();
 
 // Global Variables
 
+if(debug_mode) global.fps = 165;
 game_set_speed(global.fps, gamespeed_fps);
 global.fpsAdjust = BASE_FPS / global.fps;
 global.scaleXAdjust = global.resolutionW / BASE_RES_W;
