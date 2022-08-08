@@ -89,6 +89,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
         editorModeBeforeCopy = editorMode;
         editorMode = 0; // Paste Mode
+        _attach_reset_request = true;
     }
     if(keycheck_down(vk_escape) && editorMode == 0) {
         editorMode = editorModeBeforeCopy;
@@ -96,10 +97,22 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Copies Mirror
-    if(keycheck_down(ord("M")) && editorMode == 0) {
-        for(var i=0, l=array_length(copyStack); i<l; i++)
-            copyStack[i].position = 5 - copyStack[i].position;
-        _attach_reset_request = true;
+    if(editorMode == 0) {
+        if(keycheck_down(ord("M"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].position = 5 - copyStack[i].position;
+            _attach_reset_request = true;
+        }
+        if(keycheck_down_ctrl(ord("1"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].noteType = 0;
+            _attach_reset_request = true;
+        }
+        if(keycheck_down_ctrl(ord("2"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].noteType = 1;
+            _attach_reset_request = true;
+        }
     }
 
     // Sync or Destroy attached instance
