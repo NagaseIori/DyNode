@@ -204,6 +204,12 @@ image_yscale = global.scaleYAdjust;
     	lastTime = props.lastTime;
     	noteType = props.noteType;
     	beginTime = props.beginTime;
+    	
+    	if(noteType == 2 && sinst > 0) {
+    		instance_activate_object(sinst);
+    		sinst.time = time + lastTime;
+    		_prop_hold_update();
+    	}
     }
     
     // _outbound_check was moved to scrNote

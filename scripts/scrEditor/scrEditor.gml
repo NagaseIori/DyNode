@@ -166,6 +166,7 @@ function operation_do(_type, _from, _to = -1) {
 			return build_note_withprop(_from);
 			break;
 		case OPERATION_TYPE.MOVE:
+			instance_activate_object(_from.inst);
 			_from.inst.set_prop(_to);
 			break;
 		case OPERATION_TYPE.REMOVE:
@@ -215,6 +216,7 @@ function operation_undo() {
 	operationPointer--;
 	
 	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
+	note_sort_request();
 	// show_debug_message("POINTER: "+ string(operationPointer));
 }
 
@@ -240,7 +242,8 @@ function operation_redo() {
 		}
 	}
 	
-	announcement_play("还原操作 共 "+ string(array_length(_ops)) + " 处")
+	announcement_play("还原操作 共 "+ string(array_length(_ops)) + " 处");
+	note_sort_request();
 }
 
 #endregion

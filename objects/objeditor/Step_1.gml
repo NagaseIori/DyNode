@@ -180,7 +180,7 @@ editorSelectMultiple = editorSelectCount > 1;
                 _cnt ++;
             }
         }
-        array_sort_f(copyStack, function (_a, _b) { return _a.time < _b.time; });
+        array_sort_f(copyStack, function (_a, _b) { return _a.time == _b.time? _a.position < _b.position : _a.time < _b.time; });
         
         
         announcement_play("复制音符共 " + string(_cnt) + " 处");
