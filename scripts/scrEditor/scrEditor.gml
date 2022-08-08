@@ -156,7 +156,7 @@ function operation_step_flush(_array) {
 		array_push(operationStack, _array);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
-		show_debug_message("New operation: "+string(array_length(_array)));
+		// show_debug_message("New operation: "+string(array_length(_array)));
 	}
 }
 
@@ -213,7 +213,9 @@ function operation_undo() {
 	}
 	
 	operationPointer--;
-	show_debug_message("POINTER: "+ string(operationPointer));
+	
+	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
+	// show_debug_message("POINTER: "+ string(operationPointer));
 }
 
 function operation_redo() {
@@ -237,6 +239,8 @@ function operation_redo() {
 				show_error("Unknown operation type.", true);
 		}
 	}
+	
+	announcement_play("还原操作 共 "+ string(array_length(_ops)) + " 处")
 }
 
 #endregion

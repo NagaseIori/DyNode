@@ -366,9 +366,12 @@ image_yscale = global.scaleYAdjust;
 	            }
             }
             
-            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)) {
-                state = stateDrop;
-                origWidth = width;
+            if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)
+            	&& id == editor_get_note_attaching_center()) {
+                with(objNote) if(state == stateAttach) {
+                	state = stateDrop;
+                	origWidth = width;
+                }
             }
                 
         }
