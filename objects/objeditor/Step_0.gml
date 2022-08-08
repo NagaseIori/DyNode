@@ -93,7 +93,7 @@
                             draw_set_alpha(beatlineAlpha[0]);
                             draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
                             if(i == 0 && k == 0) {
-                                scribble("BPM "+string(mspb_to_bpm(_nowtp.beatLength))+" "+string(_nowtp.meter)+"/4")
+                                scribble("BPM "+string_format(mspb_to_bpm(_nowtp.beatLength), 1, 2)+" "+string(_nowtp.meter)+"/4")
                                     .starting_format("fDynamix20", c_white)
                                     .align(fa_center, fa_top)
                                     .blend(c_white, beatlineAlpha[0])
