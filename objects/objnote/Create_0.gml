@@ -515,6 +515,14 @@ image_yscale = global.scaleYAdjust;
 		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
+		    
+		    var _poschg = (keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left)) * (alt_ishold() ? 0.05: 0.01);
+		    var _timechg = (keycheck_down_ctrl(vk_up) - keycheck_down_ctrl(vk_down)) * (alt_ishold() ? 5: 1);
+		    
+		    time += _timechg;
+		    position += _poschg;
+		    if(_timechg != 0)
+		    	note_sort_request();
         }
 
     state = stateOut;
