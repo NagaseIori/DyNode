@@ -715,7 +715,7 @@ function reset_scoreboard() {
 		animTargetScore = 0;
 	}
 	with(objPerfectIndc) {
-		lastTime = 99999;
+		nowTime = 99999;
 	}
 }
 

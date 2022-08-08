@@ -135,7 +135,7 @@ depth = 0;
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
-        bgFaintAlpha = 0.75;
+        bgFaintAlpha = 1;
         animCurvFaintChan = animcurve_get_channel(curvBgGlow, "curve1");
         animCurvFaintEval = 0.5;
         animTargetBgFaintAlpha = 0.5; 
