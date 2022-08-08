@@ -37,7 +37,7 @@ function note_sort_request() {
 	objEditor.editorNoteSortRequest = true;
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -90,21 +90,30 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         note_sort_request();
     }
     
+    if(_record)
+    	operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(_fromxml), -1);
+    
     return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
-	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false) {
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side);
+	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side);
 	_sinst.beginTime = _time;
+	if(_record)
+		operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(), -1);
+	return _inst;
 }
 
-function note_delete(_id) {
+function note_delete(_id, _record = false) {
     with(objMain) {
         var l=array_length(chartNotesArray);
         var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].inst.nid == _id) {
+            	if(_record)
+            		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i], -1);
+            	
             	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _id);
                 var _insta = chartNotesArray[i].inst;
                 array_delete(chartNotesArray, i, 1);

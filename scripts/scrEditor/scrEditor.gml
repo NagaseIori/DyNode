@@ -142,6 +142,105 @@ function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
 
+#region UNDO & REDO FUNCTION
+
+function operation_step_add(_type, _from, _to) {
+	with(objEditor) {
+		array_push(operationStackStep, new sOperation(_type, _from, _to));
+	}
+}
+
+function operation_step_flush(_array) {
+	with(objEditor) {
+		array_resize(operationStack, operationPointer + 1);
+		array_push(operationStack, _array);
+		operationPointer ++;
+		operationCount = operationPointer + 1;
+		show_debug_message("New operation: "+string(array_length(_array)));
+	}
+}
+
+function operation_do(_type, _from, _to = -1) {
+	switch(_type) {
+		case OPERATION_TYPE.ADD:
+			return build_note_withprop(_from);
+			break;
+		case OPERATION_TYPE.MOVE:
+			_from.inst.set_prop(_to);
+			break;
+		case OPERATION_TYPE.REMOVE:
+			instance_activate_object(_from.inst);
+			instance_destroy(_from.inst);
+			break;
+	}
+}
+
+function operation_refresh_inst(_origi, _nowi) {
+	with(objEditor) {
+		for(var i=0, l=array_length(operationStack); i<l; i++) {
+			var _ops = operationStack[i];
+			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) {
+				if(_ops[ii].fromProp.inst == _origi)
+					_ops[ii].fromProp.inst = _nowi;
+				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
+					_ops[ii].toProp.inst = _nowi;
+			}
+		}
+	}
+	
+}
+
+function operation_undo() {
+	if(operationPointer == -1) return;
+	var _ops = operationStack[operationPointer];
+	
+	
+	for(var i=0, l=array_length(_ops); i<l; i++) {
+		switch(_ops[i].opType) {
+			case OPERATION_TYPE.MOVE:
+				operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.ADD:
+				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.REMOVE:
+				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			default:
+				show_error("Unknown operation type.", true);
+		}
+	}
+	
+	operationPointer--;
+	show_debug_message("POINTER: "+ string(operationPointer));
+}
+
+function operation_redo() {
+	if(operationPointer + 1 == operationCount) return;
+	operationPointer ++;
+	var _ops = operationStack[operationPointer];
+	
+	for(var i=0, l=array_length(_ops); i<l; i++) {
+		switch(_ops[i].opType) {
+			case OPERATION_TYPE.MOVE:
+				operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
+				break;
+			case OPERATION_TYPE.ADD:
+				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			case OPERATION_TYPE.REMOVE:
+				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+				break;
+			default:
+				show_error("Unknown operation type.", true);
+		}
+	}
+}
+
+#endregion
+
 #region TIMING POINT FUNCTION
 // Sort the "timingPoints" array
 function timing_point_sort() {

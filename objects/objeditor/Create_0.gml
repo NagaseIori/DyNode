@@ -28,6 +28,9 @@ editorHighlightTime = 0;
 editorHighlightPosition = 0;
 editorHighlightSide = 0;
 
+editorWidthAdjustTime = 999;
+editorWidthAdjustTimeThreshold = 100;
+
     // Grid Settings
     editorGridXEnabled = true;
     editorGridYEnabled = true;
@@ -97,3 +100,10 @@ animBeatlineTargetAlphaM = 0;
 // Copy & Paste
 
 copyStack = [];
+
+// Undo & Redo
+
+operationStack = [];
+operationStackStep = [];
+operationPointer = -1;
+operationCount = 0;

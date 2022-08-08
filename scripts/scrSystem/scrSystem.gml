@@ -56,10 +56,12 @@ function map_load(_file = "") {
         return;
     }
     
-    var _clear = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    var _confirm = show_question("确认导入谱面？所有操作将不可撤销。");
+    if(!_confirm) return;
+    var _clear = show_question("是否清除所有原谱面物件？");
     if(_clear) note_delete_all();
     
-    var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？此操作不可撤销！");
+    var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
     
     if(filename_ext(_file) == ".xml")
         map_load_xml(_file, _import_info);
@@ -124,7 +126,7 @@ function map_load_xml(_file, _import_info) {
                         _in_assets --;
                         var _err = build_note(_note_id+"_imported", _note_type, _note_time,
                             _note_position, _note_width, _note_subid+"_imported",
-                            _in_left + _in_right*2);
+                            _in_left + _in_right*2, true);
                         if(_err < 0) return;
                         break;
                 }
@@ -445,6 +447,17 @@ function map_get_struct() {
 	return _str;
 }
 
+function build_note_withprop(prop) {
+	if(prop.noteType < 2) {
+		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
+			prop.width, "-1", prop.side);
+	}
+	else {
+		return build_hold(random_id(9), prop.time, prop.position, prop.width,
+			random_id(9), prop.time + prop.lastTime, prop.side);
+	}
+}
+
 function map_load_struct(_str) {
 	note_delete_all();
 	
@@ -457,19 +470,8 @@ function map_load_struct(_str) {
 	}
 	
 	var _arr = _str.notes;
-	for(var i=0, l=array_length(_arr); i<l; i++) {
-		if(_arr[i].noteType < 2) {
-			build_note(random_id(9), _arr[i].noteType, _arr[i].time, _arr[i].position, 
-				_arr[i].width, "-1", _arr[i].side, false, false);
-		}
-		else {
-			build_hold(random_id(9), _arr[i].time, _arr[i].position, _arr[i].width,
-				random_id(9), _arr[i].time + _arr[i].lastTime, _arr[i].side, false);
-		}
-	}
-	
-	note_sort_all();
-	notes_array_update();
+	for(var i=0, l=array_length(_arr); i<l; i++) 
+		build_note_withprop(_arr[i]);
 	
 	show_debug_message("Load map from struct sucessfully.");
 }

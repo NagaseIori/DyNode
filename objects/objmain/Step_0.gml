@@ -54,6 +54,8 @@ _position_update();
 
     chartNotesCount = array_length(chartNotesArray)
 
+	chartNotesArrayAt = clamp(chartNotesArrayAt, 0, chartNotesCount);
+	
     while(chartNotesArrayAt < chartNotesCount &&
         chartNotesArray[chartNotesArrayAt].time <= nowTime) {
             chartNotesArrayAt ++;
@@ -71,7 +73,7 @@ _position_update();
   
 #region Scoreboard Update
 
-    if(nowCombo != chartNotesArrayAt) {
+    if(nowCombo != chartNotesArrayAt && chartNotesCount > 0) {
         var _hit = nowCombo < chartNotesArrayAt;
         if(_hit) {
             with(objPerfectIndc)
@@ -87,6 +89,10 @@ _position_update();
         with(scbRight) {
             _update_score(_val, _hit, true);
         }
+    }
+    if(chartNotesCount == 0) {
+    	with(scbLeft) _update_score(0, 0);
+    	with(scbRight) _update_score(0, 0, true);
     }
 
 #endregion

@@ -59,6 +59,13 @@ editorSelectMultiple = editorSelectCount > 1;
         editorHighlightLineEnabled = !editorHighlightLineEnabled;
         announcement_adjust("时间/位置高亮显示", editorHighlightLineEnabled);
     }
+    
+    if(keycheck_down_ctrl(ord("Z"))) {
+        operation_undo();
+    }
+    if(keycheck_down_ctrl(ord("Y"))) {
+        operation_redo();
+    }
         
     editorGridWidthEnabled = !ctrl_ishold();
     

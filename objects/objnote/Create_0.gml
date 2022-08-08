@@ -26,6 +26,7 @@ image_yscale = global.scaleYAdjust;
     origX = x;
     origLength = 0; // For hold
     origSubTime = 0; // For hold's sub
+    origProp = -1; // For Undo & Redo
     fixedLastTime = -1; // For hold's copy and paste
     isDragging = false;
     nodeRadius = 22; // in Pixels
@@ -48,6 +49,7 @@ image_yscale = global.scaleYAdjust;
     infoAlpha = 0;
     animTargetNodeA = 0;
     animTargetInfoA = 0;
+    recordRequest = false;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1.2;
@@ -189,6 +191,19 @@ image_yscale = global.scaleYAdjust;
         	inst : id,
         	beginTime : beginTime
         };
+    }
+    
+    set_prop = function (props) {
+    	if(!is_struct(props))
+    		show_error("property must be a struct.", true);
+    	
+    	time = props.time;
+    	side = props.side;
+    	width = props.width;
+    	position = props.position;
+    	lastTime = props.lastTime;
+    	noteType = props.noteType;
+    	beginTime = props.beginTime;
     }
     
     // _outbound_check was moved to scrNote
@@ -369,7 +384,7 @@ image_yscale = global.scaleYAdjust;
                 	editor_set_width_default(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
-                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side);
+                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
                 		instance_destroy();
                 		return;
                 	}
@@ -380,7 +395,7 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
                     return;
                 }
-                build_note(random_id(9), noteType, time, position, width, -1, side, false);
+                build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
                 instance_destroy();
             }
             
@@ -413,7 +428,7 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 var _subid = random_id(9);
                 var _teid = random_id(9);
-                build_hold(_teid, time, position, width, _subid, sinst.time, side);
+                build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
                 instance_destroy(sinst);
                 instance_destroy();
                 sinst = -999;
@@ -440,6 +455,7 @@ image_yscale = global.scaleYAdjust;
                     objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
                         if(state == stateSelected) {
+                        	origProp = get_prop();
                             origX = x;
                             origY = y;
                         }
@@ -449,7 +465,14 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
-                    notes_array_update();
+                    
+                    with(objNote) {
+                    	if(state == stateSelected) {
+                    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+                    	}
+                    }
+                    
+                    note_sort_request();
                 }
             }
             if(isDragging) {
@@ -484,10 +507,15 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             
-            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3)
-                instance_destroy();
+            if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3) {
+            	recordRequest = true;
+            	instance_destroy();
+            }
+                
             if(keycheck_down(ord("M"))) {
+            	origProp = get_prop();
             	position = 5 - position;
+            	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
             }
             if(keycheck_down(vk_add)) {
@@ -498,31 +526,41 @@ image_yscale = global.scaleYAdjust;
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
 		    if(keycheck_down_ctrl(ord("V"))) {
+		    	origProp = get_prop();
 		    	width = objEditor.editorDefaultWidth;
+		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
 		    }
 		    if(keycheck_down_ctrl(ord("1"))) {
 		    	if(noteType < 2) {
+		    		recordRequest = true;
 		    		instance_destroy();
-		    		build_note(nid, 0, time, position, width, sid, side, false);
+		    		build_note(nid, 0, time, position, width, sid, side, false, true);
 		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
 		    if(keycheck_down_ctrl(ord("2"))) {
 		    	if(noteType < 2) {
+		    		recordRequest = true;
 		    		instance_destroy();
-		    		build_note(nid, 1, time, position, width, sid, side, false);
+		    		build_note(nid, 1, time, position, width, sid, side, false, true);
 		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
 		    
+		    // Pos / Time Adjustment
 		    var _poschg = (keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left)) * (shift_ishold() ? 0.05: 0.01);
 		    var _timechg = (keycheck_down_ctrl(vk_up) - keycheck_down_ctrl(vk_down)) * (shift_ishold() ? 5: 1);
 		    
+		    if(_timechg != 0 || _poschg != 0)
+		    	origProp = get_prop();
 		    time += _timechg;
 		    position += _poschg;
 		    if(_timechg != 0)
 		    	note_sort_request();
+		    if(_timechg != 0 || _poschg != 0)
+		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+		    	
         }
 
     state = stateOut;

@@ -23,6 +23,14 @@ if(editorMode == 4) {
     }
     
     if(editorSelectResetRequest) {
+        // For wheel width adjust undo
+        if(editorWidthAdjustTime < editorWidthAdjustTimeThreshold) {
+            editorWidthAdjustTime = 1000;
+            with(objNote) if(state == stateSelected) {
+                operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+            }
+        }
+        
         with(objNote) {
             if(state == stateSelected) {
                 state = stateNormal;
@@ -67,7 +75,14 @@ if(editorMode == 4) {
     }
 }
 
+// Note's array update & sort
 if(editorNoteSortRequest) {
     note_sort_all();
     editorNoteSortRequest = false;
+}
+
+// Operation stack flush
+if(array_length(operationStackStep)) {
+    operation_step_flush(operationStackStep);
+    operationStackStep = [];
 }
