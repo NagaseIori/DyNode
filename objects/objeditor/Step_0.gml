@@ -128,7 +128,7 @@
         }
         editorWidthAdjustTime = 0;
     }
-        
+    
     if(editorWidthAdjustTime < editorWidthAdjustTimeThreshold) {
         editorWidthAdjustTime += delta_time / 1000;
         if(editorWidthAdjustTime >= editorWidthAdjustTimeThreshold) {

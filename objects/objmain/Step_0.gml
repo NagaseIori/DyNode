@@ -26,7 +26,7 @@ _position_update();
     	
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
-    if(keycheck_down_ctrl(ord("Y")) && editor_get_editside() > 0) {
+    if(keycheck_down_ctrl(ord("F")) && editor_get_editside() > 0) {
     	var _side = editor_get_editside() - 1;
     	chartSideType[_side] = chartSideType[_side] == "MIXER"? "MULTI": "MIXER";
     	announcement_play("切换侧面类型至："+chartSideType[_side]);
