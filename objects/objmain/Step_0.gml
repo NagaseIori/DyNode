@@ -93,7 +93,7 @@ _position_update();
 
 #region Muisc Pause & Resume
 
-    if(keycheck_down(vk_space) || keycheck_down(vk_enter)) {
+    if(keycheck_down(vk_space) || (keycheck_down(vk_enter) && !nowPlaying)) {
     	FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
     	if(!nowPlaying) {
         	if(nowTime >= musicLength) nowTime = 0;
