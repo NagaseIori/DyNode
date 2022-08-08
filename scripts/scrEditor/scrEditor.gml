@@ -241,7 +241,7 @@ function timing_point_load_from_osz() {
 	                			case 2:
 	                				var _x = real(_grid[# 0, i]);
 	                				var _y = real(_grid[# 1, i]);
-	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
 	                				break;
 	                			case 3: // Mania Mode
 	                				var _x = real(_grid[# 0, i]);
@@ -250,7 +250,7 @@ function timing_point_load_from_osz() {
 	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
 	                				} 
 	                				else
-	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false, false);
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
 	                				break;
 	                		}
                 		}

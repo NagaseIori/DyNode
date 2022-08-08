@@ -37,7 +37,7 @@ function note_sort_request() {
 	objEditor.editorNoteSortRequest = true;
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true, _sort = true) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = true) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -87,19 +87,16 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
-        if(_sort)
-            note_sort_request();
+        note_sort_request();
     }
     
     return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _sort = true) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, _sort);
-	build_note(_id, 2, _time, _position, _width, _subid, _side, false, _sort);
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side) {
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false);
+	build_note(_id, 2, _time, _position, _width, _subid, _side, false);
 	_sinst.beginTime = _time;
-	if(_sort)
-		notes_array_update();
 }
 
 function note_delete(_id) {

@@ -504,14 +504,14 @@ image_yscale = global.scaleYAdjust;
 		    if(keycheck_down_ctrl(ord("1"))) {
 		    	if(noteType < 2) {
 		    		instance_destroy();
-		    		build_note(nid, 0, time, position, width, sid, side, false, true);
+		    		build_note(nid, 0, time, position, width, sid, side, false);
 		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
 		    if(keycheck_down_ctrl(ord("2"))) {
 		    	if(noteType < 2) {
 		    		instance_destroy();
-		    		build_note(nid, 1, time, position, width, sid, side, false, true);
+		    		build_note(nid, 1, time, position, width, sid, side, false);
 		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
 		    	}
 		    }
