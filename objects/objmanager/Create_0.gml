@@ -5,7 +5,7 @@
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
-#macro MAXIMUM_DELAY_OF_SOUND 20        // in ms
+#macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro FMOD_SOUND_DELAY 0
 #macro FMOD_SAMPLE_DELAY 0
 #macro EPS 0.001
@@ -20,6 +20,7 @@ global.version = "v0.1.0"
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
+global.autosave = false;
 
 // Themes Init
 
@@ -130,5 +131,17 @@ room_goto(rMain);
 	announcementTime = 0;
 	announcementAlpha = 0;
 	animAnnoSpeed = 1 / room_speed;
+	
+	var _auto_save = function () {
+		if(projectPath != "")
+			project_save();
+		announcement_play("自动保存项目完毕。");
+	}
+	tsAutosave = time_source_create(time_source_game, 60*5, time_source_units_seconds, _auto_save, [], -1);
+	if(global.autosave) {
+		global.autosave = false;
+		switch_autosave();
+	}
+		
 
 #endregion

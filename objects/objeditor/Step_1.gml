@@ -175,19 +175,25 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Copy
-    if(keycheck_down_ctrl(ord("C")) && editorSelectCount > 0) {
+    if((keycheck_down_ctrl(ord("C")) || keycheck_down_ctrl(ord("X"))) && editorSelectCount > 0) {
         var _cnt = 0;
         copyStack = [];
         with(objNote) {
             if(state == stateSelected) {
                 array_push(objEditor.copyStack, get_prop());
                 _cnt ++;
+                if(keycheck_down_ctrl(ord("X"))) {
+                    recordRequest = true;
+                    instance_destroy();
+                }
             }
         }
         array_sort_f(copyStack, function (_a, _b) { return _a.time == _b.time? _a.position < _b.position : _a.time < _b.time; });
         
-        
-        announcement_play("复制音符共 " + string(_cnt) + " 处");
+        if(keycheck_down_ctrl(ord("X")))
+            announcement_play("剪切音符共 " + string(_cnt) + " 处");
+        else
+            announcement_play("复制音符共 " + string(_cnt) + " 处");
     }
 
 #endregion

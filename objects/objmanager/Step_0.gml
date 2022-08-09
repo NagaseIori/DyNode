@@ -22,6 +22,8 @@ if(keycheck_down(vk_f12)) {
 	screen_save(_file);
 	announcement_play("已保存截图到: " + _file)
 }
+if(keycheck_down(vk_f8))
+	switch_autosave();
     
 
 if(keycheck_down_ctrl(ord("S")))

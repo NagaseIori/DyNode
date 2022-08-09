@@ -707,6 +707,8 @@ function load_config() {
 		global.resolutionH = _con.resolutionH;
 	if(variable_struct_exists(_con, "resolutionW"))
 		global.resolutionW = _con.resolutionW;
+	if(variable_struct_exists(_con, "autosave"))
+		global.autosave = _con.autosave;
 }
 
 function save_config() {
@@ -717,7 +719,8 @@ function save_config() {
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
 		resolutionH: global.resolutionH,
-		version: global.version
+		version: global.version,
+		autosave: global.autosave
 	}));
 	
 	file_text_close(_f);
@@ -728,6 +731,20 @@ function switch_debug_info() {
 	with(objMain) {
 		showDebugInfo = !showDebugInfo;
 		announcement_play("调试信息："+(showDebugInfo?"打开":"关闭"));
+	}
+}
+
+function switch_autosave() {
+	with(objManager) {
+		if(!global.autosave) {
+			announcement_play("自动保存已开启。", 2000);
+			time_source_start(tsAutosave);
+		}
+		else {
+			announcement_play("自动保存已关闭。", 2000);
+			time_source_start(tsAutosave);
+		}
+		global.autosave = !global.autosave;
 	}
 }
 
