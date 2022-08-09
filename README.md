@@ -2,7 +2,7 @@
 
 Yet another Dynamix chart tool.
 
-Not released yet. You can use the modified dynamaker version at [here](https://dym.iorinn.moe/app/src) for now, which is made by Jmak, OmegaPi, and the other people.
+Not released yet. You can use the modified dynamaker version at [here](https://dym.iorinn.moe/app/src) for now, which is made by Jmak, OmegaPi and the other people.
 
 Homepage at [here](https://dyn.iorinn.moe).
 
@@ -10,21 +10,20 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 
 ## Screenshots ... 截图
 
-![](https://user-images.githubusercontent.com/31349569/176003151-8116cf11-d7ca-4d25-bdd0-6e199987da1c.png)
-![](https://user-images.githubusercontent.com/31349569/178320331-440727cf-1acc-4f38-9b56-e140eb2b2926.png)
+![](https://user-images.githubusercontent.com/31349569/183392671-49dc874b-9519-4521-928a-c32cf71c887a.png)
+![](https://user-images.githubusercontent.com/31349569/183392693-e9f2ad6c-b0a5-452f-8223-d046aeba316e.png)
 ![](https://user-images.githubusercontent.com/31349569/178319567-0541db14-3dc0-4162-8a2e-2c74f563f3d2.png)
-![](https://user-images.githubusercontent.com/31349569/178319594-f245a52b-25af-43fd-b029-508e23856f0f.png)
-
+![](https://user-images.githubusercontent.com/31349569/183392698-12587e13-53ee-4b91-9a84-27d8898369b5.png)
 
 
 ## Recommended System Requirements .. 建议系统要求
 
 * **OS:** Windows 7/10/11 (64-bit)
-* **Memory:** 4 GB RAM
+* **Memory:** 8 GB RAM
 
 ## License ... 许可
 
-Most of the art assets used in DyNode are from Dynamix, created by C4Cat Entertainment Limited.
+Most of the art assets used by DyNode are from the game Dynamix, produced by C4Cat Entertainment Limited.
 
 DyNode is licensed under the MIT License.
 
