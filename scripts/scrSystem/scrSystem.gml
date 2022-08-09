@@ -494,7 +494,7 @@ function map_set_global_bar() {
 	var _barpm = get_string("请输入自定义的全局 Bar Per Minute :", "");
 	_barpm = string_real(_barpm);
 	if(_barpm == "") return;
-	var _offset = get_integer("请输入用于 Bar 显示与导出的全局 Offset （毫秒）:", "");
+	var _offset = string_digits(get_string("请输入用于 Bar 显示与导出的全局 Offset （毫秒）:", ""));
 	if(_offset == "") return;
 	with(objMain) {
 		chartBarPerMin = real(_barpm);

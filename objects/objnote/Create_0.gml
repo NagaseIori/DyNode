@@ -527,8 +527,11 @@ image_yscale = global.scaleYAdjust;
             	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
             }
-            if(keycheck_down(vk_add)) {
+            if(keycheck_down(ord("T"))) {
             	timing_point_duplicate(time);
+		    }
+		    if(keycheck_down_ctrl(vk_delete)) {
+		    	timing_point_delete_at(time);
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	objEditor.editorDefaultWidth = width;

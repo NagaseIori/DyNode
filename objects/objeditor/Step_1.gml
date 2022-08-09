@@ -60,6 +60,10 @@ editorSelectMultiple = editorSelectCount > 1;
         announcement_adjust("时间/位置高亮显示", editorHighlightLineEnabled);
     }
     
+    if(keycheck_down(ord("Y"))) {
+        timing_point_create();
+    }
+    
     if(keycheck_down_ctrl(ord("Z"))) {
         operation_undo();
     }

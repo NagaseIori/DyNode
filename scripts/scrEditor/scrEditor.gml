@@ -265,13 +265,47 @@ function timing_point_add(_t, _l, _b) {
     }
 }
 
+function timing_point_create() {
+	var _time = string_digits(get_string("请输入该 Timing Point 的时间位置（毫秒）：", ""));
+	if(_time == "") return;
+	var _bpm = string_real(get_string("请输入 BPM ：", ""));
+	if(_bpm == "") return;
+	var _meter = string_digits(get_string("请输入节拍（x/4）：", ""));
+	if(_meter == "") return;
+	
+	_time = real(_time);
+	_bpm = real(_bpm);
+	_meter = real(_meter);
+	
+	_bpm = bpm_to_mspb(_bpm);
+	timing_point_add(_time, _bpm, _meter);
+	
+	announcement_play("添加 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_bpm)) +
+    		"\n节拍：1/"+string(_meter), 5000);
+	
+}
+
+function timing_point_delete_at(_time) {
+	with(objEditor) {
+		for(var i=0, l=array_length(timingPoints); i<l; i++)
+			if(int64(timingPoints[i].time) == _time) {
+				var _tp = timingPoints[i];
+				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
+					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +
+    				"\n节拍：1/"+string(_tp.meter), 5000);
+				array_delete(timingPoints, i, 1);
+				return;
+			}
+	}
+}
+
 // Duplicate the last timing point at certain point
 function timing_point_duplicate(_time) {
 	with(objEditor) {
 		var _tp = timingPoints[array_length(timingPoints) - 1];
     	timing_point_add(_time, _tp.beatLength, _tp.meter);
     	
-    	announcement_play("复制末尾 Timing Point 至 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
+    	announcement_play("复制末尾 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
     		"\n节拍：1/"+string(_tp.meter), 5000);
 	}
 }
