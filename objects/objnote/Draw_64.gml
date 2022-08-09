@@ -76,7 +76,8 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	    	.align(fa_left, fa_middle)
 	    	.draw(x + _dx, y + _dy);
 	    
-	    scribble(string_format(time, 1, 0))
+	    var _time = objMain.showBar ? "Bar " + string_format(time_to_bar(mtime_to_time(time)), 1, 6) : string_format(time, 1, 0);
+	    scribble(_time)
 	    	.starting_format("fDynamix16", scribble_rgb_to_bgr(0xb2fab4))
 	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
 	    	.blend(c_white, infoAlpha)

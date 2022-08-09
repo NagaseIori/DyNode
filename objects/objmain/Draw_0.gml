@@ -65,16 +65,19 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         90, themeColor, lazerAlpha[2]);
     
     
-    draw_set_color_alpha(c_white, 1.0);
+    
     // Line Left
+    draw_set_color_alpha(merge_color(themeColor, c_white, lineMix[1]), 1.0);
     draw_rectangle(targetLineBeside - targetLineBesideW/2, 0, 
                     targetLineBeside + targetLineBesideW/2,
                     _nh - targetLineBelow, false);
     // Line Right
+    draw_set_color_alpha(merge_color(themeColor, c_white, lineMix[2]), 1.0);
     draw_rectangle(_nw - targetLineBeside - targetLineBesideW/2, 0, 
                     _nw - targetLineBeside + targetLineBesideW/2,
                     _nh - targetLineBelow, false);
 	// Line Below
+	draw_set_color_alpha(merge_color(themeColor, c_white, lineMix[0]), 1.0);
     draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
                     _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
     

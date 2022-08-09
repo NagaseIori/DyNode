@@ -137,6 +137,21 @@ function has_cjk(str) {
 	return false;
 }
 
+function string_real(str) {
+	var _dot = false, _ch, _ret = "";
+	for(var i=1, l=string_length(str); i<=l; i++) {
+		_ch = string_char_at(str, i);
+		_ch = ord(_ch);
+		if(_ch >= ord("0") || _ch <=ord("9"))
+			_ret += chr(_ch);
+		else if(!_dot && _ch == ord(".")) {
+			_dot = true;
+			_ret += chr(_ch);
+		}
+	}
+	return _ret;
+}
+
 function cjk_prefix() {
 	return "[sprMsdfNotoSans]";
 }

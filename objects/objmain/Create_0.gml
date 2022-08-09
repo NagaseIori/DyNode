@@ -73,6 +73,7 @@ depth = 0;
     chartBarPerMin = 180/4;
     chartBarOffset = 0;
     chartTimeOffset = 0;
+    chartBarUsed = false;
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";
@@ -115,12 +116,15 @@ depth = 0;
     
     showDebugInfo = debug_mode;
     showStats = false;
+    showBar = false;
     
     statCount = [0, 0, 0];
     
     // For 3 sides targetline's glow
     lazerAlpha = [1.0, 1.0, 1.0];
     animTargetLazerAlpha = lazerAlpha;
+    lineMix = [1.0, 1.0, 1.0];
+    animTargetLineMix = lineMix;
     
     // Bottom
         bottomDim = 0.75;
@@ -135,7 +139,7 @@ depth = 0;
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
-        bgFaintAlpha = 0.75;
+        bgFaintAlpha = 1;
         animCurvFaintChan = animcurve_get_channel(curvBgGlow, "curve1");
         animCurvFaintEval = 0.5;
         animTargetBgFaintAlpha = 0.5; 

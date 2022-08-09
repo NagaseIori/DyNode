@@ -60,6 +60,10 @@ editorSelectMultiple = editorSelectCount > 1;
         announcement_adjust("时间/位置高亮显示", editorHighlightLineEnabled);
     }
     
+    if(keycheck_down(ord("Y"))) {
+        timing_point_create();
+    }
+    
     if(keycheck_down_ctrl(ord("Z"))) {
         operation_undo();
     }
@@ -89,6 +93,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
         editorModeBeforeCopy = editorMode;
         editorMode = 0; // Paste Mode
+        _attach_reset_request = true;
     }
     if(keycheck_down(vk_escape) && editorMode == 0) {
         editorMode = editorModeBeforeCopy;
@@ -96,10 +101,22 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Copies Mirror
-    if(keycheck_down(ord("M")) && editorMode == 0) {
-        for(var i=0, l=array_length(copyStack); i<l; i++)
-            copyStack[i].position = 5 - copyStack[i].position;
-        _attach_reset_request = true;
+    if(editorMode == 0) {
+        if(keycheck_down(ord("M"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].position = 5 - copyStack[i].position;
+            _attach_reset_request = true;
+        }
+        if(keycheck_down_ctrl(ord("1"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].noteType = 0;
+            _attach_reset_request = true;
+        }
+        if(keycheck_down_ctrl(ord("2"))) {
+            for(var i=0, l=array_length(copyStack); i<l; i++)
+                copyStack[i].noteType = 1;
+            _attach_reset_request = true;
+        }
     }
 
     // Sync or Destroy attached instance
@@ -158,19 +175,25 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Copy
-    if(keycheck_down_ctrl(ord("C")) && editorSelectCount > 0) {
+    if((keycheck_down_ctrl(ord("C")) || keycheck_down_ctrl(ord("X"))) && editorSelectCount > 0) {
         var _cnt = 0;
         copyStack = [];
         with(objNote) {
             if(state == stateSelected) {
                 array_push(objEditor.copyStack, get_prop());
                 _cnt ++;
+                if(keycheck_down_ctrl(ord("X"))) {
+                    recordRequest = true;
+                    instance_destroy();
+                }
             }
         }
-        array_sort_f(copyStack, function (_a, _b) { return _a.time < _b.time; });
+        array_sort_f(copyStack, function (_a, _b) { return _a.time == _b.time? _a.position < _b.position : _a.time < _b.time; });
         
-        
-        announcement_play("复制音符共 " + string(_cnt) + " 处");
+        if(keycheck_down_ctrl(ord("X")))
+            announcement_play("剪切音符共 " + string(_cnt) + " 处");
+        else
+            announcement_play("复制音符共 " + string(_cnt) + " 处");
     }
 
 #endregion

@@ -204,6 +204,12 @@ image_yscale = global.scaleYAdjust;
     	lastTime = props.lastTime;
     	noteType = props.noteType;
     	beginTime = props.beginTime;
+    	
+    	if(noteType == 2 && sinst > 0) {
+    		instance_activate_object(sinst);
+    		sinst.time = time + lastTime;
+    		_prop_hold_update();
+    	}
     }
     
     // _outbound_check was moved to scrNote
@@ -521,8 +527,11 @@ image_yscale = global.scaleYAdjust;
             	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
             }
-            if(keycheck_down(vk_add)) {
+            if(keycheck_down(ord("T"))) {
             	timing_point_duplicate(time);
+		    }
+		    if(keycheck_down_ctrl(vk_delete)) {
+		    	timing_point_delete_at(time);
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	objEditor.editorDefaultWidth = width;

@@ -9,8 +9,19 @@ _position_update();
         image_load();
     if(keycheck_down(vk_f5))
     	map_export_xml();
+    if(keycheck_down(vk_f6))
+    	map_set_global_bar();
     if(keycheck_down(vk_f11))
     	switch_debug_info();
+    if(keycheck_down_ctrl(ord("B"))) {
+    	if(!chartBarUsed) {
+    		announcement_warning("你还未设置全局 Bar Per Minute 与 Offset 。无法切换 Bar/Time 显示。\n使用 F6 即可进行设置。");
+    	}
+    	else {
+    		showBar = !showBar;
+    		announcement_adjust("以 Bar 代替 Time 显示", showBar);
+    	}
+    }
     if(keycheck_down(ord("P"))) {
     	hideScoreboard = !hideScoreboard;
     	announcement_adjust("编辑模式下隐藏分数显示", hideScoreboard);
@@ -99,9 +110,9 @@ _position_update();
 
 #region Muisc Pause & Resume
 
-    if(keycheck_down(vk_space) || (keycheck_down(vk_enter) && !nowPlaying)) {
+    if(keycheck_down(vk_space) || keycheck_down(vk_enter)) {
     	FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
-    	if(!nowPlaying) {
+    	if(!nowPlaying || keycheck_down(vk_enter)) {
         	if(nowTime >= musicLength) nowTime = 0;
             FMODGMS_Chan_ResumeChannel(channel);
             sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
@@ -125,15 +136,20 @@ _position_update();
 
 #region Targetline Animation
 
+	animTargetLineMix = [1.0, 1.0, 1.0];
 	if(editor_get_editmode() == 5) {
 		animTargetLazerAlpha = [1.0, 1.0, 1.0];
 	}
 	else {
 		animTargetLazerAlpha = [0.0, 0.0, 0.0];
 		animTargetLazerAlpha[editor_get_editside()] = 1.0;
+		animTargetLineMix[editor_get_editside()] = 0.5;
 	}
 	
-	for(var i=0; i<3; i++)
+	for(var i=0; i<3; i++) {
 		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
+		lineMix[i] = lerp_a(lineMix[i], animTargetLineMix[i], animSpeed);
+	}
+		
 
 #endregion
