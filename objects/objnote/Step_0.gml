@@ -12,9 +12,12 @@ if(_outroom_check(x, y)) {
 }
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
-    image_alpha = lerp_a(image_alpha, animTargetA,
+	var _factor = 1;
+	if(editor_get_editmode() < 5 && objMain.fadeOtherNotes && side != editor_get_editside())
+    	_factor = 0.5;
+    image_alpha = lerp_a(image_alpha, animTargetA * _factor,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
-    lastAlpha = lerp_a(lastAlpha, animTargetLstA,
+    lastAlpha = lerp_a(lastAlpha, animTargetLstA * _factor,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);

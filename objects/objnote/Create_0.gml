@@ -215,41 +215,12 @@ image_yscale = global.scaleYAdjust;
     // _outbound_check was moved to scrNote
 
 // State Machines
-
-    // State Fade in
-    stateIn = function () {
-        
-        stateString = "IN";
-        animTargetA = 1.0;
-        animTargetLstA = lastAlphaL;
-        
-        var _limTime = min(objMain.nowTime, objMain.animTargetTime);
-        if(time <= _limTime) {
-            _create_shadow();
-            state = stateLast;
-            state();
-        }
-        // If is using adm to adjust time then speed the things hell up
-        if(keycheck(ord("A")) || keycheck(ord("D")) || 
-            objMain.topBarMousePressed) {
-            image_alpha = 1;
-            animTargetA = 1;
-            state = stateNormal;
-        }
-        else if(image_alpha > 0.98) {
-            state = stateNormal;
-            image_alpha = 1;
-        }
-        
-        if(_outbound_check(x, y, side)) {
-            state = stateOut;
-            state();
-        }
-    }
     
     // State Normal
     stateNormal = function() {
         stateString = "NM";
+        animTargetA = 1.0;
+        animTargetLstA = lastAlphaL;
         
         // Update Mixer's Position
 	    if(side > 0) {
@@ -308,7 +279,7 @@ image_yscale = global.scaleYAdjust;
         }
         
         if(time > objMain.nowTime) {
-            state = stateIn;
+            state = stateNormal;
             state();
         }
     }
@@ -331,7 +302,7 @@ image_yscale = global.scaleYAdjust;
 	            state = stateNormal;
 	        }
 	        else 
-	            state = stateIn;
+	            state = stateNormal;
 	        state();
 	    }
 	    

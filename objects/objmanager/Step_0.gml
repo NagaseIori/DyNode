@@ -14,7 +14,7 @@ if(_fmoderr < 0) {
 if(keycheck_down(vk_f2))
     map_load();
 
-if(keycheck_down(ord("F")))
+if(keycheck_down(vk_f7))
     window_set_fullscreen(!window_get_fullscreen());
     
 if(keycheck_down(vk_f12)) {

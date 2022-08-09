@@ -37,10 +37,19 @@ _position_update();
     	
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
-    if(keycheck_down_ctrl(ord("F")) && editor_get_editside() > 0) {
-    	var _side = editor_get_editside() - 1;
-    	chartSideType[_side] = chartSideType[_side] == "MIXER"? "MULTI": "MIXER";
-    	announcement_play("切换侧面类型至："+chartSideType[_side]);
+    if(keycheck_down_ctrl(ord("F"))) {
+    	if(editor_get_editside() > 0) {
+    		var _side = editor_get_editside() - 1;
+	    	chartSideType[_side] = chartSideType[_side] == "MIXER"? "MULTI": "MIXER";
+	    	announcement_play("切换侧面类型至："+chartSideType[_side]);
+    	}
+    	else {
+    		announcement_warning("你只有正在编辑侧面才可以切换侧面类型。");
+    	}
+    }
+    if(keycheck_down(ord("F"))) {
+    	fadeOtherNotes = !fadeOtherNotes;
+    	announcement_adjust("透明化非编辑侧音符", fadeOtherNotes);
     }
     
     if(keycheck_down(vk_enter)) {		// Replay Mode
