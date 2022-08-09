@@ -194,7 +194,8 @@ function map_load_xml(_file, _import_info) {
     		chartBarPerMin = _barpm;
     		chartBeatPerMin = _barpm * 4;
     		chartBarOffset = _offset;
-    		chartTimeOffset = 0;                        // Set the offset to 0
+    		chartTimeOffset = bar_to_time(_offset);
+    		chartBarUsed = true;
         
 	        // Reset to the beginning
 	        nowTime = 0;
@@ -209,7 +210,7 @@ function map_load_xml(_file, _import_info) {
 	        // Initialize Timing Points
 	    	timing_point_reset();
 	        timing_point_add(
-	            _offset, bpm_to_mspb(chartBeatPerMin), 4);
+	            0, bpm_to_mspb(chartBeatPerMin), 4);
     	}
     }
     
@@ -334,14 +335,15 @@ function map_export_xml() {
     
     // For Compatibility
     notes_reallocate_id();
-    timing_point_sync_with_chart_prop();
+    if(!objMain.chartBarUsed)
+    	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
     DerpXmlWrite_New();
     DerpXmlWrite_OpenTag("CMap");
         DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);
         DerpXmlWrite_LeafElement("m_barPerMin", string_format(objMain.chartBarPerMin, 1, 9));
-        DerpXmlWrite_LeafElement("m_timeOffset", "0");
+        DerpXmlWrite_LeafElement("m_timeOffset", string_format(objMain.chartBarOffset, 1, 9));
         DerpXmlWrite_LeafElement("m_leftRegion", objMain.chartSideType[0]);
         DerpXmlWrite_LeafElement("m_rightRegion", objMain.chartSideType[1]);
         DerpXmlWrite_LeafElement("m_mapID", _mapid);
@@ -355,7 +357,7 @@ function map_export_xml() {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
                             DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
                             DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
                             DerpXmlWrite_LeafElement("m_width", width);
                             DerpXmlWrite_LeafElement("m_subId", sid);
@@ -373,7 +375,7 @@ function map_export_xml() {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
                             DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
                             DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
                             DerpXmlWrite_LeafElement("m_width", width);
                             DerpXmlWrite_LeafElement("m_subId", sid);
@@ -391,7 +393,7 @@ function map_export_xml() {
                         DerpXmlWrite_OpenTag("CMapNoteAsset");
                             DerpXmlWrite_LeafElement("m_id", nid);
                             DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(time), 1, 9));
+                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
                             DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
                             DerpXmlWrite_LeafElement("m_width", width);
                             DerpXmlWrite_LeafElement("m_subId", sid);
@@ -441,6 +443,7 @@ function map_get_struct() {
 		barpm: objMain.chartBarPerMin,
 		difficulty: objMain.chartDifficulty,
 		sidetype: objMain.chartSideType,
+		barused: objMain.chartBarUsed,
 		notes: _arr
 	}
 	
@@ -467,6 +470,9 @@ function map_load_struct(_str) {
 		chartBarPerMin = _str.barpm;
 		chartDifficulty = _str.difficulty;
 		chartSideType = _str.sidetype;
+		
+		if(variable_struct_exists(_str, "barused"))
+			chartBarUsed = _str.barused;
 	}
 	
 	var _arr = _str.notes;
@@ -481,6 +487,24 @@ function map_get_alt_title() {
 	_title = string_replace_all(_title, "\"", "");
 	
 	return _title;
+}
+
+function map_set_global_bar() {
+	
+	var _barpm = get_string("请输入自定义的全局 Bar Per Minute :", "");
+	_barpm = string_real(_barpm);
+	if(_barpm == "") return;
+	var _offset = get_integer("请输入用于 Bar 显示与导出的全局 Offset （毫秒）:", "");
+	if(_offset == "") return;
+	with(objMain) {
+		chartBarPerMin = real(_barpm);
+		chartBarUsed = true;
+		chartTimeOffset = real(_offset);
+		chartBarOffset = time_to_bar(chartTimeOffset);
+	}
+	
+	announcement_play("已更改全局 BarPM 与 Offset 至："+_barpm+"/"+string(_offset));
+	
 }
 
 #endregion

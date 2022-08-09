@@ -114,8 +114,7 @@ var _music_resync_request = false;
                     }
                     else {
                         musicProgress = mouse_x / global.resolutionW;
-                        animTargetTime =
-                            mtime_to_time(musicProgress * musicLength);
+                        animTargetTime = musicProgress * musicLength;
                     }
                 }
             }
@@ -143,8 +142,7 @@ var _music_resync_request = false;
         
         musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
         
-        animTargetTime = clamp(animTargetTime, mtime_to_time(0),
-                            mtime_to_time(musicLength));
+        animTargetTime = clamp(animTargetTime, 0, musicLength);
     }
     
     else {
@@ -162,7 +160,7 @@ var _music_resync_request = false;
 
     if(nowPlaying) {
         if(music != undefined)
-            nowTime = clamp(nowTime, mtime_to_time(0), mtime_to_time(musicLength));
+            nowTime = clamp(nowTime, 0, musicLength);
         animTargetTime = nowTime;
     }
     else {

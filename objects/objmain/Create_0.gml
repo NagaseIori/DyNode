@@ -73,6 +73,7 @@ depth = 0;
     chartBarPerMin = 180/4;
     chartBarOffset = 0;
     chartTimeOffset = 0;
+    chartBarUsed = false;
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";
@@ -115,6 +116,7 @@ depth = 0;
     
     showDebugInfo = debug_mode;
     showStats = false;
+    showBar = false;
     
     statCount = [0, 0, 0];
     

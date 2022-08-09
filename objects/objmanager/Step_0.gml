@@ -1,6 +1,7 @@
 /// @description Input check & FMOD Update
 
-announcementTime += delta_time / 1000;
+if(delta_time / 1000 < 100)
+	announcementTime += delta_time / 1000;
 
 camera_set_view_size(view_camera[0], global.resolutionW, global.resolutionH);
 
