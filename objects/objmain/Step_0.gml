@@ -136,15 +136,20 @@ _position_update();
 
 #region Targetline Animation
 
+	animTargetLineMix = [1.0, 1.0, 1.0];
 	if(editor_get_editmode() == 5) {
 		animTargetLazerAlpha = [1.0, 1.0, 1.0];
 	}
 	else {
 		animTargetLazerAlpha = [0.0, 0.0, 0.0];
 		animTargetLazerAlpha[editor_get_editside()] = 1.0;
+		animTargetLineMix[editor_get_editside()] = 0.5;
 	}
 	
-	for(var i=0; i<3; i++)
+	for(var i=0; i<3; i++) {
 		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
+		lineMix[i] = lerp_a(lineMix[i], animTargetLineMix[i], animSpeed);
+	}
+		
 
 #endregion
