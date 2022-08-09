@@ -213,7 +213,6 @@
     {"id":{"name":"scribble_anim_rainbow","path":"scripts/scribble_anim_rainbow/scribble_anim_rainbow.yy",},"order":4,},
     {"id":{"name":"scribble_typist","path":"scripts/scribble_typist/scribble_typist.yy",},"order":9,},
     {"id":{"name":"sprHold","path":"sprites/sprHold/sprHold.yy",},"order":3,},
-    {"id":{"name":"DyCore","path":"extensions/DyCore/DyCore.yy",},"order":5,},
     {"id":{"name":"__shd_scribble_msdf","path":"shaders/__shd_scribble_msdf/__shd_scribble_msdf.yy",},"order":5,},
     {"id":{"name":"scribble_font_add","path":"scripts/scribble_font_add/scribble_font_add.yy",},"order":0,},
     {"id":{"name":"objHoldSub","path":"objects/objHoldSub/objHoldSub.yy",},"order":3,},

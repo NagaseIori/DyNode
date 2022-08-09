@@ -52,7 +52,7 @@ image_yscale = global.scaleYAdjust;
     recordRequest = false;
     
     animSpeed = 0.4;
-    animPlaySpeedMul = 1.2;
+    animPlaySpeedMul = 1;
     animTargetA = 0;
     animTargetLstA = lastAlpha;
     image_alpha = 0;
