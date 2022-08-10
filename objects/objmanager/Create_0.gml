@@ -108,7 +108,8 @@ randomize();
 
 // Check For Update
 
-_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
+if(global.autoupdate)
+	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
 
 // Init finished
