@@ -2,11 +2,13 @@
 
 Yet another Dynamix chart tool.
 
-Not released yet. You can use the modified dynamaker version at [here](https://dym.iorinn.moe/app/src) for now, which is made by Jmak, OmegaPi and the other people.
+[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)
 
-Homepage at [here](https://dyn.iorinn.moe).
+只是另一个 Dynamix 谱面编辑器。
 
-DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
+想了解如何使用 DyNode 请查看 [DyNode Wiki](https://github.com/NagaseIori/DyNode/wiki) 。
+
+如果你不想使用 DyNode，你也可以在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
 
 ## Screenshots ... 截图
 
@@ -15,8 +17,6 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 ![](https://user-images.githubusercontent.com/31349569/178319567-0541db14-3dc0-4162-8a2e-2c74f563f3d2.png)
 ![](https://user-images.githubusercontent.com/31349569/183392698-12587e13-53ee-4b91-9a84-27d8898369b5.png)
 ![](https://user-images.githubusercontent.com/31349569/183830626-9b7e54f7-6460-4238-8ed6-821e58ec1e8d.png)
-
-
 
 ## Recommended System Requirements .. 建议系统要求
 
