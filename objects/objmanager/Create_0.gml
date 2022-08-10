@@ -21,6 +21,7 @@ global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
 global.autosave = false;
+global.autoupdate = true;
 
 // Themes Init
 
@@ -112,7 +113,7 @@ _update_url = "";
 
 // Init finished
 
-room_goto(rMain);
+room_goto(rStartPage);
 
 #region Project Properties
 
@@ -131,6 +132,9 @@ room_goto(rMain);
 	announcementTime = 0;
 	announcementAlpha = 0;
 	animAnnoSpeed = 1 / room_speed;
+	
+	initVars = undefined;
+	initWithProject = false;
 	
 	var _auto_save = function () {
 		if(projectPath != "")

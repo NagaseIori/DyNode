@@ -1,0 +1,9 @@
+{
+  "extensionId": {
+    "name": "Better_Scaling",
+    "path": "extensions/Better_Scaling/Better_Scaling.yy"
+  },
+  "resourceVersion": "1.0",
+  "resourceType": "GMExtensionConfigSet",
+  "configurables": null
+}

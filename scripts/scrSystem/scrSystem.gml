@@ -44,7 +44,7 @@ function map_load(_file = "") {
 		map_load_struct(_file);
 		return;
 	}
-	
+	var _direct = _file != "";
 	if(_file == "")
 	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
 	        program_directory, "Load Dynamix Chart File 加载谱面文件");
@@ -56,9 +56,9 @@ function map_load(_file = "") {
         return;
     }
     
-    var _confirm = show_question("确认导入谱面？所有操作将不可撤销。");
+    var _confirm = _direct? true:show_question("确认导入谱面？所有操作将不可撤销。");
     if(!_confirm) return;
-    var _clear = show_question("是否清除所有原谱面物件？");
+    var _clear = _direct? true:show_question("是否清除所有原谱面物件？");
     if(_clear) note_delete_all();
     
     var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
@@ -590,7 +590,6 @@ function project_new() {
 	var _confirm = show_question("确定要创建新的工程吗？所有未保存的更改都将丢失。");
 	if(!_confirm) return;
 	
-	map_reset();
 	with(objManager) {
 		musicPath = "";
 		backgroundPath = "";
@@ -598,7 +597,7 @@ function project_new() {
 		projectPath = "";
 	}
 	
-	announcement_play("新建工程完毕。");
+	room_goto(rProjectInit);
 }
 
 #endregion
@@ -655,7 +654,8 @@ function theme_next() {
 	global.themeAt ++;
 	global.themeAt %= global.themeCount;
 	
-	objMain.themeColor = global.themes[global.themeAt].color;
+	if(instance_exists(objMain))
+		objMain.themeColor = global.themes[global.themeAt].color;
 	
 	announcement_play("已切换到主题 [[" + global.themes[global.themeAt].title + "]", 1000);
 }
@@ -709,6 +709,8 @@ function load_config() {
 		global.resolutionW = _con.resolutionW;
 	if(variable_struct_exists(_con, "autosave"))
 		global.autosave = _con.autosave;
+	if(variable_struct_exists(_con, "autoupdate"))
+		global.autoupdate = _con.autoupdate;
 }
 
 function save_config() {
@@ -720,7 +722,8 @@ function save_config() {
 		resolutionW: global.resolutionW,
 		resolutionH: global.resolutionH,
 		version: global.version,
-		autosave: global.autosave
+		autosave: global.autosave,
+		autoupdate: global.autoupdate
 	}));
 	
 	file_text_close(_f);
