@@ -8,5 +8,4 @@ if(mouse_isclick_l() && mouse_inbound(x, y, x+maxWidth, y+scriHeight*2)) {
     }
 }
 
-animTargetGradAlpha = mouse_inbound(x, y, x+maxWidth, y+scriHeight*2);
-gradAlpha = lerp_a(gradAlpha, animTargetGradAlpha, animSpeed);
+event_inherited();
