@@ -4,7 +4,7 @@ Yet another Dynamix chart tool.
 
 **[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)**
 
-只是又一个 Dynamix 谱面编辑器。
+另一个 Dynamix 谱面编辑器。
 
 若想了解如何使用 DyNode ，请前往 [DyNode Wiki](https://github.com/NagaseIori/DyNode/wiki) 。
 
