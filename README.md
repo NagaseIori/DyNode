@@ -2,7 +2,7 @@
 
 Yet another Dynamix chart tool.
 
-[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)
+**[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)**
 
 只是另一个 Dynamix 谱面编辑器。
 
