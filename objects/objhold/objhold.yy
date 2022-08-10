@@ -1,11 +1,11 @@
 {
-  "managed": true,
   "spriteId": {
     "name": "sprHoldEdge2",
     "path": "sprites/sprHoldEdge2/sprHoldEdge2.yy",
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {

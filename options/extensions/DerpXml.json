@@ -1,0 +1,9 @@
+{
+  "extensionId": {
+    "name": "DerpXml",
+    "path": "extensions/DerpXml/DerpXml.yy"
+  },
+  "resourceVersion": "1.0",
+  "resourceType": "GMExtensionConfigSet",
+  "configurables": null
+}

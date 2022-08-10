@@ -1,0 +1,9 @@
+{
+  "extensionId": {
+    "name": "libfilesystem",
+    "path": "extensions/libfilesystem/libfilesystem.yy"
+  },
+  "resourceVersion": "1.0",
+  "resourceType": "GMExtensionConfigSet",
+  "configurables": null
+}

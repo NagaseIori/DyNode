@@ -101,8 +101,11 @@ var _music_resync_request = false;
             
             if(topBarMousePressed) {
             	mouse_clear_hold(); // Clear the Hold Buffer
-                if(mouse_check_button_released(mb_left))
-                    topBarMousePressed = false;
+                if(mouse_check_button_released(mb_left)) {
+                	topBarMousePressed = false;
+                	mouse_clear(mb_left);
+                }
+                    
                 else {
                     if(nowPlaying) {
                         if(abs(topBarMouseLastX - mouse_x) >= 2) {

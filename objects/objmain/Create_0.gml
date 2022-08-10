@@ -117,6 +117,7 @@ depth = 0;
     showDebugInfo = debug_mode;
     showStats = false;
     showBar = false;
+    fadeOtherNotes = false;
     
     statCount = [0, 0, 0];
     
