@@ -4,7 +4,7 @@ Yet another Dynamix chart tool.
 
 **[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)**
 
-只是另一个 Dynamix 谱面编辑器。
+只是又一个 Dynamix 谱面编辑器。
 
 若想了解如何使用 DyNode ，请前往 [DyNode Wiki](https://github.com/NagaseIori/DyNode/wiki) 。
 
@@ -18,10 +18,17 @@ Yet another Dynamix chart tool.
 ![](https://user-images.githubusercontent.com/31349569/183392698-12587e13-53ee-4b91-9a84-27d8898369b5.png)
 ![](https://user-images.githubusercontent.com/31349569/183830626-9b7e54f7-6460-4238-8ed6-821e58ec1e8d.png)
 
-## Recommended System Requirements .. 建议系统要求
+## Recommended System Requirements ... 建议系统要求
 
 * **OS:** Windows 7/10/11 (64-bit)
 * **Memory:** 8 GB RAM
+
+
+## Contributing ... 贡献
+
+Any issues & ideas are welcomed! [Open an issue](https://github.com/NagaseIori/DyNode/issues/new) or submit PRs.
+
+欢迎发现问题/提出建议/翻译文档等，可以在此处 [提交 issue](https://github.com/NagaseIori/DyNode/issues/new) 或提交 PR ，也可以通过各种途径联系我进行反馈。
 
 ## License ... 许可
 
