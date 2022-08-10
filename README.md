@@ -14,6 +14,8 @@ DyNode 目前还未发布。你目前可以暂时在 [这里](https://dym.iorinn
 ![](https://user-images.githubusercontent.com/31349569/183392693-e9f2ad6c-b0a5-452f-8223-d046aeba316e.png)
 ![](https://user-images.githubusercontent.com/31349569/178319567-0541db14-3dc0-4162-8a2e-2c74f563f3d2.png)
 ![](https://user-images.githubusercontent.com/31349569/183392698-12587e13-53ee-4b91-9a84-27d8898369b5.png)
+![](https://user-images.githubusercontent.com/31349569/183830626-9b7e54f7-6460-4238-8ed6-821e58ec1e8d.png)
+
 
 
 ## Recommended System Requirements .. 建议系统要求
