@@ -281,7 +281,7 @@ function timing_point_create() {
 	timing_point_add(_time, _bpm, _meter);
 	
 	announcement_play("添加 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_bpm)) +
-    		"\n节拍："+string(_tp.meter)+"/4", 5000);
+    		"\n节拍："+string(_meter)+"/4", 5000);
 	
 }
 
