@@ -6,7 +6,7 @@ Yet another Dynamix chart tool.
 
 另一个 Dynamix 谱面编辑器。
 
-若想了解如何使用 DyNode ，请前往 [DyNode Wiki](https://github.com/NagaseIori/DyNode/wiki) 。
+若想了解如何使用 DyNode ，请前往 [DyNode Wiki](https://github.com/NagaseIori/DyNode/wiki) 。网盘分流请前往 [此处](https://pan.baidu.com/s/1RyZdpPNNMWxifeuhUdRcow?pwd=6gwt) 。
 
 如果你不想使用 DyNode，你也可以在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
 
