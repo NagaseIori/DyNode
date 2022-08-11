@@ -302,6 +302,10 @@ function timing_point_delete_at(_time) {
 // Duplicate the last timing point at certain point
 function timing_point_duplicate(_time) {
 	with(objEditor) {
+		if(array_length(timingPoints) == 0) {
+			announcement_error("你没有设置任何 Timing Point 。需按 Y 键放置至少一个 Timing Point 。");
+			return;
+		}
 		var _tp = timingPoints[array_length(timingPoints) - 1];
     	timing_point_add(_time, _tp.beatLength, _tp.meter);
     	
