@@ -3,7 +3,7 @@
 windowNFocusTime = delta_time / 1000;
 
 if(windowNFocusTime > windowNFocusTimeThreshold) {
-    io_clear();
+    io_clear_diag();
     
     last_mouse_x = 0;
     last_mouse_y = 0;

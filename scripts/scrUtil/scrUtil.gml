@@ -319,6 +319,12 @@ function surface_free_f(_surf) {
         surface_free(_surf);
 }
 
+function io_clear_diag() {
+	keyboard_clear(keyboard_lastkey);
+	mouse_clear(mouse_lastbutton);
+	io_clear();
+}
+
 function csv_to_grid(){
 	/// @desc csv_to_grid
 	/// @param file
