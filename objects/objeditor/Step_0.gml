@@ -8,10 +8,10 @@
     
         var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
         var _groupchg = keycheck_down(ord("G"));
-        beatlineNowMode += _modchg;
-        beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes[beatlineNowGroup])-1);
         beatlineNowGroup += _groupchg;
         beatlineNowGroup %= 2;
+        beatlineNowMode += _modchg;
+        beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes[beatlineNowGroup])-1);
         
         if(_modchg != 0 || _groupchg != 0) {
             announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowGroup][beatlineNowMode])
