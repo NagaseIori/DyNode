@@ -51,8 +51,8 @@ if(editorMode == 4) {
     if(editorSelectArea) {
         
         editorSelectAreaPosition = [
-            objInput.last_mouse_pressedl_x,
-            objInput.last_mouse_pressedl_y,
+            mouse_get_last_pos(0)[0],
+            mouse_get_last_pos(0)[1],
             mouse_x,
             mouse_y
             ];
