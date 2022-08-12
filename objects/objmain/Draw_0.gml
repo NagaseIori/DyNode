@@ -7,7 +7,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // Draw Title
 
 	if(has_cjk(chartTitle)) {
-		scribble("[sprMsdfNotoSans]"+chartTitle).starting_format("fOrbitron48", c_white)
+		scribble(cjk_prefix()+chartTitle).starting_format("fOrbitron48", c_white)
         .align(fa_left, fa_middle)
 	    .transform(global.scaleXAdjust * 1.5, global.scaleYAdjust * 1.5)
 	    .msdf_shadow(c_black, 0.4, 0, 3, 0.1)

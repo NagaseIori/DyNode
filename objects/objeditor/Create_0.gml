@@ -7,6 +7,7 @@ depth = -500000000;
 editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play 0 copy
 editorModeBeforeCopy = 5;
 editorSide = 0;                             // 0 down 1 left 2 right
+editorLastSide = 0;
 editorNoteAttaching = -1;                   // instances that attached to cursor now
 editorNoteAttachingCenter = 0;           // attached instances' center
 editorDefaultWidth = 1.0;
@@ -48,41 +49,60 @@ highlightLineColorSideB = scribble_rgb_to_bgr(0xce93d8);
 // Beatlines
 beatlineSurf = -1;
 beatlineColors = [0, 0xffffff, 0x3643f4, 0xb0279c, 0xf39621,
-    0, 0x889600, 0, 0x3bebff,
-    0, 0, 0, 0x37405d,
-    0, 0, 0, 0x921b31]; // 1/1, 1/2, 1/3 ...
+    0x6abb66, 0x889600, 0x757575, 0x3bebff,
+    0, 0x33cac0, 0, 0x37405d,
+    0, 0x414c6d, 0, 0x921b31,
+    0, 0, 0, 0x00b3ff,
+    0, 0, 0, 0,
+    0, 0, 0, 0x7a6e54]; // 1/1, 1/2, 1/3 ...
 beatlineLengthOffset = [
     0,
     0,
+    -30,    // 2
+    -30,    // 3
+    -60,    // 4
+    -30,    // 5
+    -60,    // 6
     -30,
-    -30,
-    -60,
-    0,
-    -60,
-    0,
     -90,
     0,
-    0,
+    -60,
     0,
     -120,
     0,
+    -60,
     0,
-    0,
-    -120];
+    -120,   // 16
+    0, 0, 0, -120, // 20
+    0, 0, 0, 0, 0, 0, 0, -120];
 beatlineModes = [
-    [1],
-    [1, 2],
-    [1, 3],
-    [1, 2, 4],
-    [1, 3, 6],
-    [1, 2, 4, 8],
-    [1, 2, 4, 8, 16],
-    [1, 3, 6, 12], 
-    [1, 2, 4, 8, 16]
-    ];
-beatlineDivs = [1, 2, 3, 4, 6, 8, 16, 12, 32];
+    [
+        [1],
+        [1, 2],
+        [1, 3],
+        [1, 2, 4],
+        [1, 3, 6],
+        [1, 2, 4, 8],
+        [1, 2, 4, 8, 16],
+        [1, 3, 6, 12], 
+        [1, 2, 4, 8, 16],
+        [1, 2, 4, 8, 16],
+        [1, 2, 4, 8, 16]
+    ],
+    [
+        [1],
+        [1, 5],
+        [1, 7],
+        [1, 5, 10],
+        [1, 7, 14],
+        [1, 5, 10, 20],
+        [1, 7, 14, 28]
+    ]
+];
+beatlineDivs = [[1, 2, 3, 4, 6, 8, 16, 12, 32, 64, 128], [1, 5, 7, 10, 14, 20, 28]];
+beatlineNowGroup = 0;
 beatlineNowMode = 3;
-beatlineEnabled = array_create(20, 0);
+beatlineEnabled = array_create(28, 0);
 
 beatlineHardWidth = 6;
 beatlineWidth = 3;

@@ -2,6 +2,9 @@
 _position_update();
 
 #region Functions Control
+
+	if(mouse_ishold_r() && !instance_exists(objUISideSwitcher))
+		instance_create(mouse_get_last_pos(1)[0], mouse_get_last_pos(1)[1], objUISideSwitcher);
     
     if(keycheck_down(vk_f3))
         music_load();

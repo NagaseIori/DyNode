@@ -11,6 +11,17 @@ function editor_get_editmode() {
     return objEditor.editorMode;
 }
 
+function editor_set_editside(side) {
+	var _sidename = ["正面", "左侧", "右侧"];
+	
+	objEditor.editorSide = side;
+	
+	announcement_play("编辑侧切换至："+_sidename[side]);
+	
+	if(editor_get_editmode() == 5)
+		editor_set_editmode(4);
+}
+
 function editor_get_editside() {
     return objEditor.editorSide;
 }
@@ -60,7 +71,7 @@ function editor_snap_to_grid_y(_y, _side) {
         var _nowtp = timingPoints[_nowat];
         var _nowbeats = floor((_time - _nowtp.time) / _nowtp.beatLength);
         var _nexttime = (_nowat + 1 == _l ? objMain.musicLength:timingPoints[_nowat+1].time)
-        var _nowdiv = 1 / beatlineDivs[beatlineNowMode] * _nowtp.beatLength;
+        var _nowdiv = 1 / beatlineDivs[beatlineNowGroup][beatlineNowMode] * _nowtp.beatLength;
         
         var _ntime = (_time - _nowbeats * _nowtp.beatLength - _nowtp.time) / _nowdiv;
         var _rt = round(_ntime) * _nowdiv;
@@ -70,16 +81,18 @@ function editor_snap_to_grid_y(_y, _side) {
         var _ry = note_time_to_y(_rt, min(_side, 1));
         var _rby = note_time_to_y(_rbt, min(_side, 1));
         
+        var _eps = 1;	// Prevent some precision problems
+        
         if(_side == 0) {
-            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt <= _nexttime)
+            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
                 _ret = _ry;
-            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt <= _nexttime)
+            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
                 _ret = _rby;
         }
         else {
-            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt <= _nexttime)
+            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
                 _ret = _side == 1?_ry:_nw - _ry;
-            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt <= _nexttime)
+            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
                 _ret = _side == 1?_rby:_nw - _rby;
         }
     }
@@ -266,7 +279,7 @@ function timing_point_add(_t, _l, _b) {
 }
 
 function timing_point_create() {
-	var _time = string_digits(get_string("请输入该 Timing Point 的时间位置（毫秒）：", ""));
+	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
 	var _bpm = string_real(get_string("请输入 BPM ：", ""));
 	if(_bpm == "") return;

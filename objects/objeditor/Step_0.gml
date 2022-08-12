@@ -7,11 +7,15 @@
         beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);
     
         var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
+        var _groupchg = keycheck_down(ord("G"));
         beatlineNowMode += _modchg;
-        beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes)-1);
+        beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes[beatlineNowGroup])-1);
+        beatlineNowGroup += _groupchg;
+        beatlineNowGroup %= 2;
         
-        if(_modchg != 0) {
-            announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowMode]));
+        if(_modchg != 0 || _groupchg != 0) {
+            announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowGroup][beatlineNowMode])
+            +"\n节拍细分组："+chr(beatlineNowGroup+ord("A")));
         }
         
         animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
@@ -24,11 +28,11 @@
         }
             
         
-        for(var i=0; i<=16; i++)
+        for(var i=0; i<=28; i++)
             beatlineEnabled[i] = 0;
-        var l = array_length(beatlineModes[beatlineNowMode]);
+        var l = array_length(beatlineModes[beatlineNowGroup][beatlineNowMode]);
         for(var i=0; i<l; i++)
-            beatlineEnabled[beatlineModes[beatlineNowMode][i]] = 1;
+            beatlineEnabled[beatlineModes[beatlineNowGroup][beatlineNowMode][i]] = 1;
         
         
         var _nw = global.resolutionW, _nh = global.resolutionH;
@@ -67,8 +71,8 @@
         
         while((_nowtime - nowTime) * playbackSpeed <= _nh) {
             for(var i = _nowbeats; i * _nowtp.beatLength + _nowtime < _nexttime && (i * _nowtp.beatLength + _nowtime - nowTime) * playbackSpeed <= _nh; i++) {
-                for(var j = 16; j >= 1; j--) if(beatlineEnabled[j]) {
-                    for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowtp.beatLength + _nowtime < _nexttime; k += (j == 1 || j == 3? 1:2)/j) {
+                for(var j = 28; j >= 1; j--) if(beatlineEnabled[j]) {
+                    for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowtp.beatLength + _nowtime < _nexttime; k += ((j&1)? 1:2)/j) {
                         _ny = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 0);
                         _nyl = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 1);
                         _nyr = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 2);
