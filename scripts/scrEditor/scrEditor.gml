@@ -81,16 +81,18 @@ function editor_snap_to_grid_y(_y, _side) {
         var _ry = note_time_to_y(_rt, min(_side, 1));
         var _rby = note_time_to_y(_rbt, min(_side, 1));
         
+        var _eps = 1;	// Prevent some precision problems
+        
         if(_side == 0) {
-            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt <= _nexttime)
+            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
                 _ret = _ry;
-            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt <= _nexttime)
+            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
                 _ret = _rby;
         }
         else {
-            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt <= _nexttime)
+            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
                 _ret = _side == 1?_ry:_nw - _ry;
-            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt <= _nexttime)
+            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
                 _ret = _side == 1?_rby:_nw - _rby;
         }
     }
