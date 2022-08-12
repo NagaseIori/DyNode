@@ -11,6 +11,17 @@ function editor_get_editmode() {
     return objEditor.editorMode;
 }
 
+function editor_set_editside(side) {
+	var _sidename = ["正面", "左侧", "右侧"];
+	
+	objEditor.editorSide = side;
+	
+	announcement_play("编辑侧切换至："+_sidename[side]);
+	
+	if(editor_get_editmode() == 5)
+		editor_set_editmode(4);
+}
+
 function editor_get_editside() {
     return objEditor.editorSide;
 }

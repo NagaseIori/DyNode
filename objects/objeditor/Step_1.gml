@@ -74,13 +74,10 @@ editorSelectMultiple = editorSelectCount > 1;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
-    editorSide += keycheck_down(vk_up);
-    if(keycheck_down(vk_up)) {
+    editor_set_editside((editor_get_editside() + keycheck_down(vk_up)) % 3);
+    if(editorSide != editorLastSide) {
         _attach_sync_request = true;
-        if(editorMode == 5)
-            editorMode = 4;
     }
-    if(editorSide == 3) editorSide = 0;
     
     // Editor Mode Switch
     for(var i=1; i<=5; i++)
@@ -136,6 +133,8 @@ editorSelectMultiple = editorSelectCount > 1;
                 editorNoteAttaching[i].side = editorSide;
         }
     }
+    
+    editorLastSide = editorSide;
    
 
     switch editorMode {

@@ -153,7 +153,7 @@ function string_real(str) {
 }
 
 function cjk_prefix() {
-	return "[sprMsdfNotoSans]";
+	return "[sprMsdfNotoSans][scale,1.5]";
 }
 
 

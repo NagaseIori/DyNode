@@ -7,6 +7,7 @@ depth = -500000000;
 editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play 0 copy
 editorModeBeforeCopy = 5;
 editorSide = 0;                             // 0 down 1 left 2 right
+editorLastSide = 0;
 editorNoteAttaching = -1;                   // instances that attached to cursor now
 editorNoteAttachingCenter = 0;           // attached instances' center
 editorDefaultWidth = 1.0;

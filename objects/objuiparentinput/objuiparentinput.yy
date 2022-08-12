@@ -29,8 +29,8 @@
   ],
   "overriddenProperties": [],
   "parent": {
-    "name": "UI",
-    "path": "folders/Objects/UI.yy",
+    "name": "Parents",
+    "path": "folders/Objects/UI/Parents.yy",
   },
   "resourceVersion": "1.0",
   "name": "objUIParentInput",

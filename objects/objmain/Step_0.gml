@@ -2,6 +2,9 @@
 _position_update();
 
 #region Functions Control
+
+	if(mouse_check_button_pressed(mb_right))
+		instance_create(mouse_x, mouse_y, objUISideSwitcher);
     
     if(keycheck_down(vk_f3))
         music_load();
