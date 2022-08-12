@@ -272,7 +272,7 @@ function get_blur_appsurf() {
 		shader_reset();
 	surface_reset_target();
 	
-	surface_free(_pong);
+	surface_free_f(_pong);
 	return _ret;
 }
 
@@ -296,7 +296,7 @@ function get_blur_shapesurf(func) {
 		gpu_set_blendmode(bm_normal);
 	surface_reset_target();
 	
-	surface_free(_temp);
+	surface_free_f(_temp);
 	
 	return _surf;
 }
