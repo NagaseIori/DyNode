@@ -3,8 +3,8 @@ _position_update();
 
 #region Functions Control
 
-	if(mouse_check_button_pressed(mb_right))
-		instance_create(mouse_x, mouse_y, objUISideSwitcher);
+	if(mouse_ishold_r())
+		instance_create(mouse_get_last_pos(1)[0], mouse_get_last_pos(1)[1], objUISideSwitcher);
     
     if(keycheck_down(vk_f3))
         music_load();

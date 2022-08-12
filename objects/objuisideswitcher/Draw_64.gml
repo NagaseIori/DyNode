@@ -2,6 +2,8 @@
 var _col = theme_get().color;
 var _cont = ["L", "D", "R"];
 
+
+
 for(var i=0; i<3; i++) {
     scribble(_cont[i])
         .starting_format("fDynamix20", c_white)

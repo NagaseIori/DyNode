@@ -10,10 +10,21 @@ function mouse_get_delta_y() {
 
 // Get mouse's delta x from last pressed mb_left frame
 function mouse_get_delta_last_x_l() {
-    return mouse_x - objInput.last_mouse_pressedl_x;
+    return mouse_x - objInput.lastMousePressedPos[0][0];
 }
 function mouse_get_delta_last_y_l() {
-    return mouse_y - objInput.last_mouse_pressedl_y;
+    return mouse_y - objInput.lastMousePressedPos[0][1];
+}
+
+function mouse_get_delta_last_x_r() {
+    return mouse_x - objInput.lastMousePressedPos[1][0];
+}
+function mouse_get_delta_last_y_r() {
+    return mouse_y - objInput.lastMousePressedPos[1][1];
+}
+
+function mouse_get_last_pos(button) {
+    return objInput.lastMousePressedPos[button];
 }
 
 function mouse_inbound(x1, y1, x2, y2) {
@@ -23,13 +34,13 @@ function mouse_square_inbound(x, y, a) {
     return pos_inbound(mouse_x, mouse_y, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 function mouse_inbound_last_l(x1, y1, x2, y2) {
-    var _nx = objInput.last_mouse_pressedl_x;
-    var _ny = objInput.last_mouse_pressedl_y;
+    var _nx = objInput.lastMousePressedPos[0][0];
+    var _ny = objInput.lastMousePressedPos[0][1];
     return pos_inbound(_nx, _ny, x1, y1, x2, y2);
 }
 function mouse_square_inbound_last_l(x, y, a) {
-    var _nx = objInput.last_mouse_pressedl_x;
-    var _ny = objInput.last_mouse_pressedl_y;
+    var _nx = objInput.lastMousePressedPos[0][0];
+    var _ny = objInput.lastMousePressedPos[0][1];
     return pos_inbound(_nx, _ny, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 
@@ -38,10 +49,16 @@ function mouse_clear_hold() {
 }
 
 function mouse_ishold_l() {
-    return objInput.mouseHoldTimeL > objInput.mouseHoldThreshold;
+    return objInput.mouseHoldTime[0] > objInput.mouseHoldThreshold;
 }
 function mouse_isclick_l() {
-    return objInput.mouseClickL;
+    return objInput.mouseClick[0];
+}
+function mouse_ishold_r() {
+    return objInput.mouseHoldTime[1] > objInput.mouseHoldThreshold;
+}
+function mouse_isclick_r() {
+    return objInput.mouseClick[1];
 }
 
 function ctrl_ishold() {

@@ -74,7 +74,8 @@ editorSelectMultiple = editorSelectCount > 1;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
-    editor_set_editside((editor_get_editside() + keycheck_down(vk_up)) % 3);
+    if(keycheck_down(vk_up))
+        editor_set_editside((editor_get_editside() + 1) % 3);
     if(editorSide != editorLastSide) {
         _attach_sync_request = true;
     }

@@ -12,7 +12,7 @@ if (async_load[? "id"] == _update_get) {
 			}
 			else if(_result.tag_name != global.version) {
 				_update_url = _result.html_url;
-				announcement_play("[scale, 2]收取到新版本 DyNode：[#aed581]" + _result.tag_name + "[/c][/scale]\n[region,update][cycle,130,150]前往更新页面[/cycle][/region]\n\n" +
+				announcement_play("[scale, 2]收取到新版本 DyNode：[#aed581]" + _result.tag_name + "[/c][scale,1.5]\n[region,update][cycle,130,150]前往更新页面[/cycle][/region]\n\n" +
 					"[c_ltgrey][scale, 1.2]"+format_markdown(_result.body)+"\n", 5000);
 			}
 		}
