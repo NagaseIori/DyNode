@@ -246,6 +246,61 @@ function compress_sprite(_spr, _scale, _center = false){
 	return _rspr; 
 }
 
+// Get a blured application surface
+function get_blur_appsurf() {
+	var _w = surface_get_width(application_surface);
+	var _h = surface_get_height(application_surface);
+	var u_size = shader_get_uniform(shd_gaussian_blur_2pass, "size");
+    var u_blur_vector = shader_get_uniform(shd_gaussian_blur_2pass, "blur_vector");
+	
+	var _ret = surface_create(_w, _h);
+	var _pong = surface_create(_w, _h);
+	
+	surface_set_target(_pong);
+		shader_set(shd_gaussian_blur_2pass);
+			shader_set_uniform_f_array(u_size, [_w, _h, 20, 10]);
+			shader_set_uniform_f_array(u_blur_vector, [0, 1]);
+			draw_surface(application_surface, 0, 0);
+		shader_reset();
+	surface_reset_target();
+	
+	surface_set_target(_ret);
+		shader_set(shd_gaussian_blur_2pass);
+			shader_set_uniform_f_array(u_size, [_w, _h, 20, 10]);
+			shader_set_uniform_f_array(u_blur_vector, [1, 0]);
+			draw_surface(_pong, 0, 0);
+		shader_reset();
+	surface_reset_target();
+	
+	surface_free(_pong);
+	return _ret;
+}
+
+// Draw some shapes on blurred application surface and return
+function get_blur_shapesurf(func) {
+	if(!is_method(func))
+		show_error("func must be a method.", true);
+	
+	var _surf = get_blur_appsurf();
+	var _w = surface_get_width(application_surface);
+	var _h = surface_get_height(application_surface);
+	var _temp = surface_create(_w, _h)
+	surface_set_target(_temp);
+		draw_clear_alpha(c_black, 0);
+		func();
+	surface_reset_target();
+	
+	surface_set_target(_surf);
+		gpu_set_blendmode_ext(bm_zero, bm_src_alpha);
+		draw_surface(_temp, 0, 0);
+		gpu_set_blendmode(bm_normal);
+	surface_reset_target();
+	
+	surface_free(_temp);
+	
+	return _surf;
+}
+
 // Array Fast Unstable Sort
 function array_sort_f(array, compare) {
     var length = array_length(array);

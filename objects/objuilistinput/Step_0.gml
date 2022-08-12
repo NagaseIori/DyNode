@@ -10,3 +10,5 @@ if(mouse_isclick_l() && _inbound) {
 
 animTargetGradAlpha = _inbound;
 gradAlpha = lerp_a(gradAlpha, animTargetGradAlpha, animSpeed);
+
+if(gradAlpha < 0.01) gradAlpha = 0;

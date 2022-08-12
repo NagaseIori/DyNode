@@ -6,7 +6,7 @@ scriElement
     .draw(x, y);
 
 if(input != "") {
-    scribble("[sprMsdfNotoSans][scale, 1.5]"+input)
+    scribble(cjk_prefix()+input)
         .starting_format("fDynamix16", c_white)
         .align(fa_left, fa_top)
         .gradient(_col, gradAlpha)
