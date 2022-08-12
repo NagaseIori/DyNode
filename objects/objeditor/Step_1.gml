@@ -78,6 +78,10 @@ editorSelectMultiple = editorSelectCount > 1;
         editor_set_editside((editor_get_editside() + 1) % 3);
     if(editorSide != editorLastSide) {
         _attach_sync_request = true;
+        with(objNote) {
+            if(state == stateSelected)
+                state = stateNormal;
+        }
     }
     
     // Editor Mode Switch

@@ -7,7 +7,7 @@ animTargetGradAlpha = [0, 0, 0];
 animSpeed = 0.2;
 shadowDistance = 3;
 
-sideButtonWidth = 60;
+sideButtonWidth = 100;
 choosing = 1;
 side = [1, 0, 2];
 
