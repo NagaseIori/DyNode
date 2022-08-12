@@ -71,7 +71,7 @@ function editor_snap_to_grid_y(_y, _side) {
         var _nowtp = timingPoints[_nowat];
         var _nowbeats = floor((_time - _nowtp.time) / _nowtp.beatLength);
         var _nexttime = (_nowat + 1 == _l ? objMain.musicLength:timingPoints[_nowat+1].time)
-        var _nowdiv = 1 / beatlineDivs[beatlineNowMode] * _nowtp.beatLength;
+        var _nowdiv = 1 / beatlineDivs[beatlineNowGroup][beatlineNowMode] * _nowtp.beatLength;
         
         var _ntime = (_time - _nowbeats * _nowtp.beatLength - _nowtp.time) / _nowdiv;
         var _rt = round(_ntime) * _nowdiv;
@@ -277,7 +277,7 @@ function timing_point_add(_t, _l, _b) {
 }
 
 function timing_point_create() {
-	var _time = string_digits(get_string("请输入该 Timing Point 的时间位置（毫秒）：", ""));
+	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
 	var _bpm = string_real(get_string("请输入 BPM ：", ""));
 	if(_bpm == "") return;

@@ -17,8 +17,8 @@
   "width": 5364,
   "height": 5364,
   "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default",
+    "name": "texFonts",
+    "path": "texturegroups/texFonts",
   },
   "swatchColours": null,
   "gridX": 0,
