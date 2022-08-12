@@ -10,6 +10,8 @@ Yet another Dynamix chart tool.
 
 如果你不想使用 DyNode，你也可以在 [这里](https://dym.iorinn.moe/app/src) 使用由 Jmak, OmegaPi 等人开发的 Dynamaker 网页版修改版本。该网页一次加载过后可以离线使用。
 
+目前 DyNode 仍处在不稳定的阶段，使用的过程建议视情况开启自动保存功能以及定期进行手动保存。
+
 ## Screenshots ... 截图
 
 ![](https://user-images.githubusercontent.com/31349569/183392671-49dc874b-9519-4521-928a-c32cf71c887a.png)
@@ -55,3 +57,7 @@ FMODGMS (under [BSD 2-Clause "Simplified" License](https://github.com/mstop4/FMO
 DyNode uses assets & designs from the following projects.
 
 Dynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd
+
+Dynamaker (under MIT License) Copyright (c) 2019 omegaPi
+
+Dynamix produced by C4Cat Entertainment Limited
