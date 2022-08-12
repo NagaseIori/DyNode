@@ -57,3 +57,7 @@ FMODGMS (under [BSD 2-Clause "Simplified" License](https://github.com/mstop4/FMO
 DyNode uses assets & designs from the following projects.
 
 Dynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd
+
+Dynamaker (under MIT License) Copyright (c) 2019 omegaPi
+
+Dynamix produced by C4Cat Entertainment Limited
