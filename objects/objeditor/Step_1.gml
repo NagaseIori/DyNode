@@ -183,7 +183,7 @@ editorSelectMultiple = editorSelectCount > 1;
         var _cnt = 0;
         copyStack = [];
         with(objNote) {
-            if(state == stateSelected) {
+            if(state == stateSelected && noteType <= 2) {
                 array_push(objEditor.copyStack, get_prop());
                 _cnt ++;
                 if(keycheck_down_ctrl(ord("X"))) {
