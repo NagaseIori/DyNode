@@ -9,13 +9,10 @@ if(topBarTimeA > 0) {
 	if(topBarMouseInbound || topBarMousePressed)
 		_ntime = mouse_x / global.resolutionW * musicLength;
 	
-	var _ele = scribble(format_time_string(nowTime) + " / "+format_time_string(_ntime))
-		.starting_format("fMono16", c_white)
-		.align(fa_center, fa_top)
-		.blend(c_white, topBarTimeA)
-		.gradient(themeColor, topBarTimeGradA);
-	
-	_ele.draw(_nx, _ny);
+	draw_set_font(fMono16);
+	draw_set_color_alpha(merge_color(c_white, themeColor, topBarTimeGradA * 0.5), topBarTimeA);
+	draw_set_halign(fa_center); draw_set_valign(fa_top);
+	draw_text(_nx, _ny, format_time_string(nowTime) + " / "+format_time_string(_ntime))
 }
 
 
