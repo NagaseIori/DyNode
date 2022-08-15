@@ -82,9 +82,13 @@ function map_load_xml(_file, _import_info) {
     var _in_left = 0;
     var _in_right = 0;
     var _in_assets = 0;
+    var _in_argument = 0;
+    var _in_bpm = 0;
+    var _import_tp = false;
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
     var _barpm, _offset;
+    var _tp_lists = [], _nbpm;
     while DerpXmlRead_Read() {
         _line ++;
         switch DerpXmlRead_CurType() {
@@ -100,9 +104,16 @@ function map_load_xml(_file, _import_info) {
                     case "m_notesRight":
                         _in_right ++;
                         break;
+                    case "m_argument":
+                    	_in_argument ++;
+                    	_import_tp = show_question("是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？");
+                    	break;
                     case "CMapNoteAsset":
                         _in_assets ++;
                         break;
+                    case "CBpmchange":
+                    	_in_bpm ++;
+                    	break;
                 }
                 break;
             case DerpXmlType_CloseTag:
@@ -122,6 +133,9 @@ function map_load_xml(_file, _import_info) {
                     case "m_notesRight":
                         _in_right --;
                         break;
+                    case "m_argument":
+                    	_in_argument --;
+                    	break;
                     case "CMapNoteAsset":
                         _in_assets --;
                         var _err = build_note(_note_id+"_imported", _note_type, _note_time,
@@ -129,6 +143,13 @@ function map_load_xml(_file, _import_info) {
                             _in_left + _in_right*2, true);
                         if(_err < 0) return;
                         break;
+                     case "CBpmchange":
+                    	_in_bpm --;
+                    	array_push(_tp_lists, {
+                    		time: _note_time,
+                    		barpm: _nbpm
+                    	});
+                    	break;
                 }
                 break;
             case DerpXmlType_Text:
@@ -181,6 +202,16 @@ function map_load_xml(_file, _import_info) {
                                     break;
                             }
                         }
+                        else if(_in_bpm) {
+                        	switch array_top(_stack) {
+                        		case "m_time":
+                        			_note_time = real(_val);
+                        			break;
+                        		case "m_value":
+                        			_nbpm = real(_val);
+                        			break;
+                        	}
+                        }
                         break;
                 }
                 break;
@@ -189,8 +220,10 @@ function map_load_xml(_file, _import_info) {
     
     DerpXmlRead_CloseFile();
     
+    
     if(_import_info) {
     	with(objMain) {
+    		
     		chartBarPerMin = _barpm;
     		chartBeatPerMin = _barpm * 4;
     		chartBarOffset = _offset;
@@ -214,18 +247,49 @@ function map_load_xml(_file, _import_info) {
     	}
     }
     
-    // Fix every note's time
+    // Fix every note's & tp's time
     _offset = bar_to_time(_offset, _barpm);
     if(instance_exists(objNote)) {
         with(objNote) {
         	if(string_last_pos("_imported", nid) > 0) {
-        		time = bar_to_time(bar, _barpm);        	// Bar to Chart Time in ms
+        		
+        		if(array_length(_tp_lists) > 1) {
+        			var _ntime = bar;
+        			var _rtime = 0;
+	        		for(var i=1, l=array_length(_tp_lists); i<=l; i++) {
+	        			if(i == l || _tp_lists[i].time > _ntime) {
+	        				_rtime += bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+	        				break;
+	        			}
+        				_rtime += bar_to_time(_tp_lists[i].time - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+	        		}
+	        		time = _rtime;
+        		}
+        		else
+        			time = bar_to_time(bar, _barpm);    	 // Bar to Chart Time in ms
+        		
 	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)
-	            
 	            if(noteType == 2)
 	            	_prop_hold_update();			// Hold prop init
         	}
         }
+    }
+    
+    // Import timing points info from dynamaker-modified
+    if(_import_tp && _import_info) {
+    	timing_point_reset();
+    	var _rtime = 0;
+    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
+    		var _ntime = _tp_lists[i].time;
+    		if(i>0)
+    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+    		// _ntime = time_to_mtime(_ntime, _offset);
+    		_rtime = _ntime;
+    		
+    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
+    	}
+    	
+    	timing_point_sort();
     }
 }
 
