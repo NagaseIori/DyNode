@@ -43,7 +43,22 @@ _position_update();
     if(keycheck_down_ctrl(ord("F"))) {
     	if(editor_get_editside() > 0) {
     		var _side = editor_get_editside() - 1;
-	    	chartSideType[_side] = chartSideType[_side] == "MIXER"? "MULTI": "MIXER";
+    		var _type = chartSideType[_side];
+    		
+    		switch (_type) {
+    			case "MIXER":
+    				_type = "MULTI";
+    				break;
+    			case "MULTI":
+    				_type = "PAD";
+    				break;
+    			default:
+    			case "PAD":
+    				_type = "MIXER";
+    				break;
+    		}
+    		
+	    	chartSideType[_side] = _type;
 	    	announcement_play("切换侧面类型至："+chartSideType[_side]);
     	}
     	else {

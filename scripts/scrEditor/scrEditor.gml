@@ -382,7 +382,7 @@ function timing_point_load_from_osz() {
             		break;
                 case "[TimingPoints]":
                     var _time = real(_grid[# 0, i]) + _delay_time;
-                    var _mspb = real(_grid[# 1, i]);
+                    var _mspb = string_letters(_grid[# 1, i]) != ""?-1:real(_grid[# 1, i]);
                     var _meter = real(_grid[# 2, i]);
                     if(_mspb > 0)
                         timing_point_add(_time, _mspb, _meter);
