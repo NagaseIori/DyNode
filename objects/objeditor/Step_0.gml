@@ -80,7 +80,7 @@
                         _noww = _nowhard ? beatlineHardWidth : beatlineWidth;
                         _nowl = _nowhard ? beatlineHardLength : beatlineLength;
                         _nowh = _nowhard ? beatlineHardHeight : beatlineHeight;
-                        _noww = _noww * 2 + 1;
+                        _noww = _noww * 2 + 2;
                         _nowl += beatlineLengthOffset[j];
                         if(_ny < 0 && _nyl > _nw / 2)
                             break;

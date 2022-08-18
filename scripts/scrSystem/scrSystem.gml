@@ -809,7 +809,7 @@ function switch_autosave() {
 		}
 		else {
 			announcement_play("自动保存已关闭。", 2000);
-			time_source_start(tsAutosave);
+			time_source_stop(tsAutosave);
 		}
 		global.autosave = !global.autosave;
 	}
