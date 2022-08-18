@@ -6,6 +6,8 @@ if(windowNFocusTime > windowNFocusTimeThreshold) {
     io_clear_diag();
     
     _ioclear();
+    
+    show_debug_message("IO Cleared.");
 }
 
 last_mouse_x = mouse_x;
@@ -13,13 +15,17 @@ last_mouse_y = mouse_y;
 
 for(var i=0; i<mouseButtonCount; i++) {
     var _nbut = mouseButtons[i];
-    if(mouse_check_button_pressed(mouseButtons[i]))
+    if(mouseClick[i] == 1) mouseClick[i] = -1;
+    if(mouse_check_button_pressed(_nbut)) {
         lastMousePressedPos[i] = [mouse_x, mouse_y];
+        mouseClick[i] = 0;
+    }
+        
     
-    if(mouse_check_button_released(_nbut) && !mouseHoldClear) {
+    if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
         mouseClick[i] = !mouse_ishold_l();
     }
-    else mouseClick[i] = false;
+    else if(mouseHoldClear) mouseClick[i] = -1;
     
     if(mouse_check_button(_nbut) && !mouseHoldClear) {
         mouseHoldTime[i] += delta_time / 1000;

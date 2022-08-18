@@ -12,11 +12,11 @@ _ioclear = function() {
     mouseButtonCount = array_length(mouseButtons);
     lastMousePressedPos = array_create(mouseButtonCount, 0);
     mouseHoldTime = array_create(mouseButtonCount, 0);
-    mouseClick = array_create(mouseButtonCount, 0);
+    mouseClick = array_create(mouseButtonCount, -1);
     
     mouseHoldThreshold = 125;
     mouseHoldDistanceThreshold = 20;
-    mouseHoldClear = false;
+    mouseHoldClear = true;
 }
 
 last_mouse_x = 0;
@@ -26,7 +26,7 @@ mouseButtons = [mb_left, mb_right];
 mouseButtonCount = array_length(mouseButtons);
 lastMousePressedPos = array_create(mouseButtonCount, 0);
 mouseHoldTime = array_create(mouseButtonCount, 0);
-mouseClick = array_create(mouseButtonCount, 0);
+mouseClick = array_create(mouseButtonCount, -1);
 
 mouseHoldThreshold = 125;
 mouseHoldDistanceThreshold = 20;
