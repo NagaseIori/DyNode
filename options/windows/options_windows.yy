@@ -19,7 +19,7 @@
   "option_windows_borderless": false,
   "option_windows_scale": 0,
   "option_windows_copy_exe_to_dest": false,
-  "option_windows_sleep_margin": 200,
+  "option_windows_sleep_margin": 15,
   "option_windows_texture_page": "8192x8192",
   "option_windows_installer_finished": "${base_options_dir}/windows/installer/finished.bmp",
   "option_windows_installer_header": "${base_options_dir}/windows/installer/header.bmp",

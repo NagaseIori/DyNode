@@ -57,6 +57,7 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
+gc_target_frame_time(50);
 
 // DyCore Initialization
 
