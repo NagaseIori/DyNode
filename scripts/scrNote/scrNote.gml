@@ -25,6 +25,10 @@ function _outbound_check_t(_time, _side) {
         return false;
 }
 
+function _outscreen_check(_x, _y, _side) {
+	return _side == 0? !in_between(_x, 0, global.resolutionW) : !in_between(_y, 0, global.resolutionH);
+}
+
 function note_sort_all() {
 	notes_array_update();
     var _f = function(_a, _b) {

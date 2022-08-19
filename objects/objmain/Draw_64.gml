@@ -38,8 +38,14 @@ _debug_str += "FPS: " + string(fps) + "\nRFPS: "+string(fps_real)+"\n";
 _debug_str += "DSPD: " + string(animTargetPlaybackSpeed)+"\n";
 _debug_str += "MSPD: " + string(musicSpeed)+"\n";
 _debug_str += "TIME: " + string(nowTime)+"\n";
-_debug_str += "MUSICTIME: " + string(FMODGMS_Chan_Get_Position(channel)) + "\n";
-_debug_str += "MUSICDELAY: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) + "\n";
+// _debug_str += "MUSICTIME: " + string(FMODGMS_Chan_Get_Position(channel)) + "\n";
+// _debug_str += "MUSICDELAY: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) + "\n";
+_debug_str += "FMOD CPU Usage: " + string(FMODGMS_Sys_Get_CPUUsage()) + "\n";
+
+var _stat = gc_get_stats();
+_debug_str += "T_TIME: " + string(_stat.traversal_time) + "\n";
+_debug_str += "C_TIME: " + string(_stat.collection_time) + "\n";
+_debug_str += "INST_C: " + string(instance_count) + "\n";
 // _debug_str += "SAMPLERATE: " + string(sampleRate)+ "\n";
 if(instance_exists(editor))
 	_debug_str += "EDITMODE: " + string(editor.editorMode)+ "\n";

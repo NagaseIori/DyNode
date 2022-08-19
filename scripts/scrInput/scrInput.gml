@@ -52,13 +52,13 @@ function mouse_ishold_l() {
     return objInput.mouseHoldTime[0] > objInput.mouseHoldThreshold;
 }
 function mouse_isclick_l() {
-    return objInput.mouseClick[0];
+    return objInput.mouseClick[0] > 0;
 }
 function mouse_ishold_r() {
     return objInput.mouseHoldTime[1] > objInput.mouseHoldThreshold;
 }
 function mouse_isclick_r() {
-    return objInput.mouseClick[1];
+    return objInput.mouseClick[1] > 0;
 }
 
 function ctrl_ishold() {

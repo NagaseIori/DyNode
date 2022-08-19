@@ -15,7 +15,7 @@
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.3"
+global.version = "v0.1.4"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -57,6 +57,7 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
+gc_target_frame_time(50);
 
 // DyCore Initialization
 
