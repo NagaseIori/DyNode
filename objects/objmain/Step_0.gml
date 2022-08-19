@@ -1,5 +1,5 @@
 
-_position_update();
+// _position_update();
 
 #region Functions Control
 
