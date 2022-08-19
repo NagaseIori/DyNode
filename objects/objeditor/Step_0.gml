@@ -73,14 +73,14 @@
             for(var i = _nowbeats; i * _nowtp.beatLength + _nowtime < _nexttime && (i * _nowtp.beatLength + _nowtime - nowTime) * playbackSpeed <= _nh; i++) {
                 for(var j = 28; j >= 1; j--) if(beatlineEnabled[j]) {
                     for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowtp.beatLength + _nowtime < _nexttime; k += ((j&1)? 1:2)/j) {
-                        _ny = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 0);
-                        _nyl = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 1);
-                        _nyr = note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 2);
+                        _ny = round(note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 0));
+                        _nyl = round(note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 1));
+                        _nyr = round(note_time_to_y(_nowtime + (i + k) * _nowtp.beatLength, 2));
                         _nowhard = (k == 0 && i % _nowtp.meter == 0);
                         _noww = _nowhard ? beatlineHardWidth : beatlineWidth;
                         _nowl = _nowhard ? beatlineHardLength : beatlineLength;
                         _nowh = _nowhard ? beatlineHardHeight : beatlineHeight;
-                        _noww = _noww * 2 + 2;
+                        _noww = _noww * 3;
                         _nowl += beatlineLengthOffset[j];
                         if(_ny < 0 && _nyl > _nw / 2)
                             break;
