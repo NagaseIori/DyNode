@@ -21,7 +21,7 @@ global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
 
-global.FMOD_MP3_DELAY = 50;
+global.FMOD_MP3_DELAY = 60;
 
 // Themes Init
 
@@ -29,7 +29,8 @@ theme_init();
 
 // Load Settings
 
-load_config();
+if(!debug_mode)
+	load_config();
 
 // Global Variables
 

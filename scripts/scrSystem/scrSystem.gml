@@ -815,6 +815,8 @@ function load_config() {
 		global.autosave = _con.autosave;
 	if(variable_struct_exists(_con, "autoupdate"))
 		global.autoupdate = _con.autoupdate;
+	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
+		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
 }
 
 function save_config() {
@@ -827,7 +829,8 @@ function save_config() {
 		resolutionH: global.resolutionH,
 		version: global.version,
 		autosave: global.autosave,
-		autoupdate: global.autoupdate
+		autoupdate: global.autoupdate,
+		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY
 	}));
 	
 	file_text_close(_f);
