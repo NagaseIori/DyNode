@@ -574,7 +574,7 @@ function map_set_global_bar() {
 	
 }
 
-function map_add_offset(_offset = "") {
+function map_add_offset(_offset = "", record = false) {
 	var _record = false;
 	if(_offset == "") {
 		var _nega = 1;
@@ -595,17 +595,15 @@ function map_add_offset(_offset = "") {
 	instance_activate_object(objNote);
 	with(objMain) {
 		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
-			var _inst = chartNotesArray[i].inst;
-			with(_inst) {
-				origProp = get_prop();
-				time += _offset;
-				operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-			}
+			chartNotesArray[i].inst.time += _offset;
 		}
 	}
-	note_sort_request();
+	notes_array_update();
 	
 	announcement_play("添加全局时间偏置完毕。");
+	
+	if(record)
+		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
 }
 
 #endregion
@@ -653,7 +651,7 @@ function project_load(_file = "") {
 	    if(_contents.version < "v0.1.5") {
 	    	var _question = show_question("检测到来自特定旧版本的项目。\n该谱面是否使用了从 .osu 中导入校时信息并添加了 64ms 的延迟？\n这个延迟在新的版本中建议被撤销。如果你选择“是”，则所有放置的 Note 和 Timing Point 都会被提前 64ms 。\n在调整之前我们建议你先对 .dyn 文件进行备份。你也可以在之后手动进行调整。\n这个警告不会出现第二遍。");
 			if(_question)
-				map_add_offset(-64);
+				map_add_offset(-64, true);
 	    }
 		
 	/////

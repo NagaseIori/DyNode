@@ -78,7 +78,7 @@
     }
     
     if(keycheck_down(ord("U")))
-    	map_add_offset();
+    	map_add_offset("", true);
     
     if(mouse_check_button_pressed(mb_middle)) {
     	showStats = !showStats;

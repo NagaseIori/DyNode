@@ -79,8 +79,7 @@ image_yscale = global.scaleYAdjust;
         if(noteType == 3 && instance_exists(finst))
         	depth = finst.depth;
         
-        var _vec2 = noteprop_to_xy(position, time, side);
-		x = _vec2[0]; y = _vec2[1];
+        noteprop_set_xy(position, time, side);
     }
     _prop_init();
 

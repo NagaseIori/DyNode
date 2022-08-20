@@ -10,7 +10,8 @@ enum OPERATION_TYPE {
     ADD,
     REMOVE,
     TPADD,
-    TPREMOVE
+    TPREMOVE,
+    OFFSET
 }
 
 function sOperation(_type, _from, _to) constructor {

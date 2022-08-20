@@ -102,9 +102,26 @@ function note_time_to_y(_time, _side) {
 }
 function noteprop_to_xy(_pos, _time, _side) {
 	if(_side == 0)
-		return [note_pos_to_x(_pos, _side), note_time_to_y(_time, _side)];
+		return {
+			x : note_pos_to_x(_pos, _side), 
+			y : note_time_to_y(_time, _side)
+		};
 	else
-		return [note_time_to_y(_time, _side), note_pos_to_x(_pos, _side)];
+		return {
+			x : note_time_to_y(_time, _side),
+			y : note_pos_to_x(_pos, _side)
+		};
+}
+// Struct is slow.
+function noteprop_set_xy(_pos, _time, _side) {
+	if(_side == 0) {
+		x = note_pos_to_x(_pos, _side);
+		y = note_time_to_y(_time, _side);
+	}
+	else {
+		x = note_time_to_y(_time, _side);
+		y = note_pos_to_x(_pos, _side);
+	}
 }
 function resor_to_x(ratio) {
     return global.resolutionW * ratio;

@@ -192,6 +192,9 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.TPREMOVE:
 			timing_point_delete_at(_from.time);
 			break;
+		case OPERATION_TYPE.OFFSET:
+			map_add_offset(_from);
+			break;
 	}
 }
 
@@ -233,6 +236,9 @@ function operation_undo() {
 			case OPERATION_TYPE.TPREMOVE:
 				operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
 				break;
+			case OPERATION_TYPE.OFFSET:
+				operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
+				break;
 			default:
 				show_error("Unknown operation type.", true);
 		}
@@ -262,6 +268,7 @@ function operation_redo() {
 			case OPERATION_TYPE.REMOVE:
 			case OPERATION_TYPE.TPADD:
 			case OPERATION_TYPE.TPREMOVE:
+			case OPERATION_TYPE.OFFSET:
 				operation_do(_ops[i].opType, _ops[i].fromProp);
 				break;
 			default:
