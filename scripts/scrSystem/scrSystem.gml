@@ -595,10 +595,15 @@ function map_add_offset(_offset = "") {
 	instance_activate_object(objNote);
 	with(objMain) {
 		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
-			chartNotesArray[i].time += _offset;
-			chartNotesArray[i].inst.set_prop(chartNotesArray[i], _record);
+			var _inst = chartNotesArray[i].inst;
+			with(_inst) {
+				origProp = get_prop();
+				time += _offset;
+				operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+			}
 		}
 	}
+	note_sort_request();
 	
 	announcement_play("添加全局时间偏置完毕。");
 }

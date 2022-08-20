@@ -193,10 +193,7 @@ image_yscale = global.scaleYAdjust;
         };
     }
     
-    set_prop = function (props, record = false) {
-    	if(record)
-    		operation_step_add(OPERATION_TYPE.MOVE, get_prop(), props);
-    	
+    set_prop = function (props) {
     	if(!is_struct(props))
     		show_error("property must be a struct.", true);
     	
