@@ -332,7 +332,9 @@ function music_load(_file = "") {
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
-        
+        usingMP3 = string_lower(filename_ext(_file)) == ".mp3";
+        if(usingMP3)
+        	show_debug_message("The music file is using the mp3 format")
         
     }
     objManager.musicPath = _file;
@@ -571,6 +573,32 @@ function map_set_global_bar() {
 	
 }
 
+function map_add_offset(_offset = undefined) {
+	if(_offset == undefined) {
+		var _nega = 1;
+		_offset = get_string("请输入你想要添加的全局时间偏置值（以毫秒记，正数代表增加延迟）。\n这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
+		if(_offset == "") return;
+		if(string_char_at(_offset, 1) == "-")
+			_nega = -1;
+		_offset = real(string_real(_offset))*_nega;
+	}
+	
+	with(objEditor) {
+		for(var i=0, l=array_length(timingPoints); i<l; i++)
+			timingPoints[i].time += _offset;
+	}
+	
+	instance_activate_object(objNote);
+	with(objMain) {
+		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
+			chartNotesArray[i].time += _offset;
+			chartNotesArray[i].inst.set_prop(chartNotesArray[i]);
+		}
+	}
+	
+	announcement_play("添加全局时间偏置完毕。");
+}
+
 #endregion
 
 #region PROJECT FUNCTIONS
@@ -609,6 +637,17 @@ function project_load(_file = "") {
     timing_point_sort();
     
     projectPath = _file;
+    
+    
+    ///// Old version workaround
+    
+	    if(_contents.version < "v0.1.5") {
+	    	var _question = show_question("检测到来自特定旧版本的项目。\n该谱面是否使用了从 .osu 中导入校时信息并添加了 64ms 的延迟？\n这个延迟在新的版本中建议被撤销。如果你选择“是”，则所有放置的 Note 和 Timing Point 都会被提前 64ms 。\n在调整之前我们建议你先对 .dyn 文件进行备份。你也可以在之后手动进行调整。\n这个警告不会出现第二遍。");
+			if(_question)
+				map_add_offset(-64);
+	    }
+		
+	/////
     
     announcement_play("打开项目完毕。");
     
@@ -829,12 +868,12 @@ function reset_scoreboard() {
 
 function sfmod_channel_get_position(channel, spr) {
     var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = _ret - FMOD_SOUND_DELAY;
+    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3;
     return _ret;
 }
 
 function sfmod_channel_set_position(pos, channel, spr) {
-    pos = pos + FMOD_SOUND_DELAY;
+    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3;
     FMODGMS_Chan_Set_Position(channel, pos);
 }
 

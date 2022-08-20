@@ -6,8 +6,6 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
-#macro FMOD_SOUND_DELAY 0
-#macro FMOD_SAMPLE_DELAY 0
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 
@@ -15,13 +13,15 @@
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.4"
+global.version = "v0.2.0-dev"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
+
+global.FMOD_MP3_DELAY = 50;
 
 // Themes Init
 
@@ -86,6 +86,8 @@ DerpXml_Init();
     // Initialize the system
     FMODGMS_Sys_Set_DSPBufferSize(512, 4);
     FMODGMS_Sys_Initialize(32);
+    // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
+    
 
 // Input Initialization
 
