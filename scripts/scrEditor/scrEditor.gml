@@ -186,6 +186,12 @@ function operation_do(_type, _from, _to = -1) {
 			instance_activate_object(_from.inst);
 			instance_destroy(_from.inst);
 			break;
+		case OPERATION_TYPE.TPADD:
+			timing_point_add(_from.time, _from.beatLength, _from.meter);
+			break;
+		case OPERATION_TYPE.TPREMOVE:
+			timing_point_delete_at(_from.time);
+			break;
 	}
 }
 
@@ -193,7 +199,7 @@ function operation_refresh_inst(_origi, _nowi) {
 	with(objEditor) {
 		for(var i=0, l=array_length(operationStack); i<l; i++) {
 			var _ops = operationStack[i];
-			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) {
+			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) if(variable_struct_exists(_ops[ii].fromProp, "inst")) {
 				if(_ops[ii].fromProp.inst == _origi)
 					_ops[ii].fromProp.inst = _nowi;
 				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
@@ -220,6 +226,12 @@ function operation_undo() {
 			case OPERATION_TYPE.REMOVE:
 				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			case OPERATION_TYPE.TPADD:
+				operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.TPREMOVE:
+				operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
 				break;
 			default:
 				show_error("Unknown operation type.", true);
@@ -248,7 +260,9 @@ function operation_redo() {
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
 				break;
 			case OPERATION_TYPE.REMOVE:
-				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+			case OPERATION_TYPE.TPADD:
+			case OPERATION_TYPE.TPREMOVE:
+				operation_do(_ops[i].opType, _ops[i].fromProp);
 				break;
 			default:
 				show_error("Unknown operation type.", true);
@@ -262,6 +276,7 @@ function operation_redo() {
 #endregion
 
 #region TIMING POINT FUNCTION
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
@@ -271,14 +286,16 @@ function timing_point_sort() {
 }
 
 // Add a timing point to "timingPoints" array
-function timing_point_add(_t, _l, _b) {
+function timing_point_add(_t, _l, _b, record = false) {
     with(objEditor) {
         array_push(timingPoints, new sTimingPoint(_t, _l, _b));
         timing_point_sort();
     }
+    if(record)
+    	operation_step_add(OPERATION_TYPE.TPADD, new sTimingPoint(_t, _l, _b), -1);
 }
 
-function timing_point_create() {
+function timing_point_create(record = false) {
 	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
 	var _bpm = string_real(get_string("请输入 BPM ：", ""));
@@ -291,14 +308,14 @@ function timing_point_create() {
 	_meter = real(_meter);
 	
 	_bpm = bpm_to_mspb(_bpm);
-	timing_point_add(_time, _bpm, _meter);
+	timing_point_add(_time, _bpm, _meter, record);
 	
 	announcement_play("添加 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_bpm)) +
     		"\n节拍："+string(_meter)+"/4", 5000);
-	
+    
 }
 
-function timing_point_delete_at(_time) {
+function timing_point_delete_at(_time, record = false) {
 	with(objEditor) {
 		for(var i=0, l=array_length(timingPoints); i<l; i++)
 			if(int64(timingPoints[i].time) == _time) {
@@ -306,8 +323,11 @@ function timing_point_delete_at(_time) {
 				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
 					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +
     				"\n节拍："+string(_tp.meter)+"/4", 5000);
+    			if(record)
+    				operation_step_add(OPERATION_TYPE.TPREMOVE, _tp, -1);
 				array_delete(timingPoints, i, 1);
-				return;
+				l--;
+				i--;
 			}
 	}
 }
@@ -320,7 +340,7 @@ function timing_point_duplicate(_time) {
 			return;
 		}
 		var _tp = timingPoints[array_length(timingPoints) - 1];
-    	timing_point_add(_time, _tp.beatLength, _tp.meter);
+    	timing_point_add(_time, _tp.beatLength, _tp.meter, true);
     	
     	announcement_play("复制末尾 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
     		"\n节拍："+string(_tp.meter)+"/4", 5000);
@@ -424,4 +444,5 @@ function timing_point_load_from_osz() {
     
     announcement_play("导入谱面信息完毕。", 1000);
 }
+
 #endregion

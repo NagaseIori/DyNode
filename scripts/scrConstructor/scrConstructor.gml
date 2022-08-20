@@ -8,7 +8,9 @@ function sTimingPoint(_time, _beatlength, _beats) constructor {
 enum OPERATION_TYPE {
     MOVE,
     ADD,
-    REMOVE
+    REMOVE,
+    TPADD,
+    TPREMOVE
 }
 
 function sOperation(_type, _from, _to) constructor {

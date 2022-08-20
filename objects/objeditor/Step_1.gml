@@ -61,7 +61,7 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     if(keycheck_down(ord("Y"))) {
-        timing_point_create();
+        timing_point_create(true);
     }
     
     if(keycheck_down_ctrl(ord("Z"))) {

@@ -506,7 +506,7 @@ image_yscale = global.scaleYAdjust;
             	timing_point_duplicate(time);
 		    }
 		    if(keycheck_down_ctrl(vk_delete)) {
-		    	timing_point_delete_at(time);
+		    	timing_point_delete_at(time, true);
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	objEditor.editorDefaultWidth = width;

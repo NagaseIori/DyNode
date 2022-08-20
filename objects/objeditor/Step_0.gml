@@ -2,10 +2,9 @@
 
 #region Beatlines
     
+    animBeatlineTargetAlphaM = editorMode != 5 && array_length(timingPoints);
+    beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);
     if(array_length(timingPoints)) {
-        animBeatlineTargetAlphaM = editorMode != 5;
-        beatlineAlphaMul = lerp_a(beatlineAlphaMul, animBeatlineTargetAlphaM, animSpeed);
-    
         var _modchg = keycheck_down(ord("V")) - keycheck_down(ord("C"));
         var _groupchg = keycheck_down(ord("G"));
         beatlineNowGroup += _groupchg;
