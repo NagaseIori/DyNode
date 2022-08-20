@@ -322,6 +322,7 @@ function music_load(_file = "") {
         // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
+        	announcement_error("音乐文件加载失败，可能原因为类型不支持或文件损坏。\nFMOD 错误信息："+FMODGMS_Util_GetErrorMessage());
         	music = undefined;
         	return;
         }
