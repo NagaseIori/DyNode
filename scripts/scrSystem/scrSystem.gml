@@ -574,14 +574,17 @@ function map_set_global_bar() {
 	
 }
 
-function map_add_offset(_offset = undefined) {
-	if(_offset == undefined) {
+function map_add_offset(_offset = "") {
+	var _record = false;
+	if(_offset == "") {
 		var _nega = 1;
-		_offset = get_string("请输入你想要添加的全局时间偏置值（以毫秒记，正数代表增加延迟）。\n这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
+		_offset = get_string("请输入你想要添加的全局时间偏置值（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
+		show_debug_message("OFFSET:"+_offset);
 		if(_offset == "") return;
 		if(string_char_at(_offset, 1) == "-")
 			_nega = -1;
 		_offset = real(string_real(_offset))*_nega;
+		_record = true;
 	}
 	
 	with(objEditor) {
@@ -593,7 +596,7 @@ function map_add_offset(_offset = undefined) {
 	with(objMain) {
 		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
 			chartNotesArray[i].time += _offset;
-			chartNotesArray[i].inst.set_prop(chartNotesArray[i]);
+			chartNotesArray[i].inst.set_prop(chartNotesArray[i], _record);
 		}
 	}
 	

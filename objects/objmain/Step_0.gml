@@ -77,6 +77,9 @@
     	reset_scoreboard();
     }
     
+    if(keycheck_down(ord("U")))
+    	map_add_offset();
+    
     if(mouse_check_button_pressed(mb_middle)) {
     	showStats = !showStats;
     }
