@@ -185,6 +185,7 @@ function notes_reallocate_id() {
 }
 
 function note_check_and_activate(_struct) {
+	if(instance_exists(_struct.inst)) return 0;
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
