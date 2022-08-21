@@ -64,7 +64,7 @@ function map_load(_file = "") {
     var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
     
     if(filename_ext(_file) == ".xml")
-        map_load_xml(_file, _import_info);
+        map_import_xml(_file, _import_info);
     
     objManager.chartPath = _file;
     
@@ -291,6 +291,221 @@ function map_load_xml(_file, _import_info) {
     	
     	timing_point_sort();
     }
+}
+
+function map_import_xml(_file, _import_info) {
+	notes_reallocate_id();
+    
+    var _f = file_text_open_read(_file);
+    var _str = snap_alter_from_xml(snap_from_xml(file_text_read_all(_f)));
+    file_text_close(_f);
+
+    var _import_tp = false;
+    var _note_id, _note_type, _note_time,
+        _note_position, _note_width, _note_subid;
+    var _barpm, _offset;
+    var _tp_lists = [], _nbpm;
+    
+    // Import Information & bpm
+    var _main = _str.CMap;
+    if(_import_info) {
+    	objMain.chartTitle = _main.m_path.text;
+    	objMain.chartSideType[0] = _main.m_leftRegion.text;
+    	objMain.chartSideType[1] = _main.m_rightRegion.text;
+    	objMain.chartID = _main.m_mapID.text;
+    }
+    _barpm = real(_main.m_barPerMin.text);
+	_offset = real(_main.m_timeOffset.text);
+	
+	// Import 3 sides Notes
+	
+	var _import_fun = function (_arr, _side) {
+		if(!is_array(_arr)) _arr = [_arr];
+		for(var i=0, l=array_length(_arr); i<l; i++) {
+			_note_id = _arr[i].m_id.text;
+			_note_type = _arr[i].m_type.text;
+			_note_time = _arr[i].m_time.text;
+			_note_position = _arr[i].m_position.text;
+			_note_width = _arr[i].m_width.text;
+			_note_subid = _arr[i].m_subId.text;
+	
+			var _err = build_note(_note_id+"_imported", _note_type, _note_time,
+	            _note_position, _note_width, _note_subid+"_imported",
+	            _side, true);
+	        if(_err < 0) return;
+		}
+	}
+	
+	_import_fun(_main.m_notes.m_notes.CMapNoteAsset, 0);
+	_import_fun(_main.m_notesLeft.m_notes.CMapNoteAsset, 1);
+	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
+	
+	if(variable_struct_exists(_main, "m_argument")) {
+		_import_tp = show_question("是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？");
+		var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
+		if(!is_array(_bpms)) _bpms = [_bpms];
+		for(var i=0, l=array_length(_bpms); i<l; i++) {
+			_note_time = real(_bpms[i].m_time.text);
+			_nbpm = real(_bpms[i].m_value.text);
+		
+			array_push(_tp_lists, {
+	    		time: _note_time,
+	    		barpm: _nbpm
+	    	});
+		}
+	}
+	
+    if(_import_info) {
+    	with(objMain) {
+    		
+    		chartBarPerMin = _barpm;
+    		chartBeatPerMin = _barpm * 4;
+    		chartBarOffset = _offset;
+    		chartTimeOffset = bar_to_time(_offset);
+    		chartBarUsed = true;
+        
+	        // Reset to the beginning
+	        nowTime = 0;
+	        animTargetTime = nowTime;
+	        
+	        // Sort Notes Array base on time
+	        note_sort_all();
+	        
+	        // Get the chart's difficulty
+	        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
+	        
+	        // Initialize Timing Points
+	    	timing_point_reset();
+	        timing_point_add(
+	            0, bpm_to_mspb(chartBeatPerMin), 4);
+    	}
+    }
+    
+    // Fix every note's & tp's time
+    _offset = bar_to_time(_offset, _barpm);
+    if(instance_exists(objNote)) {
+        with(objNote) {
+        	if(string_last_pos("_imported", nid) > 0) {
+        		
+        		if(array_length(_tp_lists) > 1) {
+        			var _ntime = bar;
+        			var _rtime = 0;
+	        		for(var i=1, l=array_length(_tp_lists); i<=l; i++) {
+	        			if(i == l || _tp_lists[i].time > _ntime) {
+	        				_rtime += bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+	        				break;
+	        			}
+        				_rtime += bar_to_time(_tp_lists[i].time - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+	        		}
+	        		time = _rtime;
+        		}
+        		else
+        			time = bar_to_time(bar, _barpm);    	 // Bar to Chart Time in ms
+        		
+	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)
+	            if(noteType == 2)
+	            	_prop_hold_update();			// Hold prop init
+        	}
+        }
+    }
+    
+    // Import timing points info from dynamaker-modified
+    if(_import_tp && _import_info) {
+    	timing_point_reset();
+    	var _rtime = 0;
+    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
+    		var _ntime = _tp_lists[i].time;
+    		if(i>0)
+    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+    		// _ntime = time_to_mtime(_ntime, _offset);
+    		_rtime = _ntime;
+    		
+    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
+    	}
+    	
+    	timing_point_sort();
+    }
+}
+
+function map_import_osu() {
+    var _file = "";
+    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
+        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
+        
+    if(_file == "") return;
+    
+    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
+    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear_notes) note_delete_all();
+    var _delay_time = 0;
+    
+    timing_point_reset();
+    var _f = file_text_open_read(_file);
+    var _grid = snap_from_csv(file_text_read_all(_f));
+    file_text_close(_f);
+	
+    show_debug_message("CSV Load Finished.");
+    
+    var _type = "";
+    var _h = array_length(_grid);
+    var _mode = 0;				// Osu Game Mode
+    
+    for(var i=0; i<_h; i++) {
+        if(string_last_pos("[", _grid[i][0]) != 0) {
+        	_type = _grid[i][0];
+        }
+            
+        else if(_grid[i][0] != ""){
+            switch _type {
+            	case "[General]":
+            		if(string_last_pos("Mode", _grid[i][0]) != 0)
+            			_mode = real(string_digits(_grid[i][0]));
+            		break;
+                case "[TimingPoints]":
+					if(array_length(_grid[i]) < 3) break;
+                    var _time = real(_grid[i][0]) + _delay_time;
+                    var _mspb = string_letters(_grid[i][1]) != ""?-1:real(_grid[i][1]);
+                    var _meter = real(_grid[i][2]);
+                    if(_mspb > 0)
+                        timing_point_add(_time, _mspb, _meter);
+                    break;
+                case "[HitObjects]":
+                	if(_import_hitobj) {
+						if(array_length(_grid[i]) < 6) break;
+                		var _ntime = real(_grid[i][2]) + _delay_time;
+                		var _ntype = real(_grid[i][3]);
+                		if(_ntime > 0) {
+	                		switch _mode {
+	                			case 0:
+	                			case 1:
+	                			case 2:
+	                				var _x = real(_grid[i][0]);
+	                				var _y = real(_grid[i][1]);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
+	                				break;
+	                			case 3: // Mania Mode
+	                				var _x = real(_grid[i][0]);
+	                				if(_ntype & 128) { // If is a Mania Hold
+	                					var _subtim = real(string_copy(_grid[i][5], 1, string_pos(":", _grid[i][5])-1)) + _delay_time;
+	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
+	                				} 
+	                				else
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
+	                				break;
+	                		}
+                		}
+                	}
+                	break;
+				default:
+					break;
+            }
+        }
+    }
+    
+    timing_point_sort();
+    note_sort_all();
+    
+    announcement_play("导入谱面信息完毕。", 1000);
 }
 
 function map_set_title() {
