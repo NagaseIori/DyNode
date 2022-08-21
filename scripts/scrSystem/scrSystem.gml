@@ -100,7 +100,7 @@ function map_import_xml(_file, _import_info) {
 	
 	var _import_fun = function (_arr, _side) {
 		if(!is_array(_arr)) _arr = [_arr];
-		for(var i=0, l=array_length(_arr); i<l; i++) {
+		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
 			_note_id = _arr[i].m_id.text;
 			_note_type = _arr[i].m_type.text;
 			_note_time = _arr[i].m_time.text;
@@ -196,7 +196,6 @@ function map_import_xml(_file, _import_info) {
     		var _ntime = _tp_lists[i].time;
     		if(i>0)
     			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
-    		// _ntime = time_to_mtime(_ntime, _offset);
     		_rtime = _ntime;
     		
     		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
@@ -400,76 +399,54 @@ function map_export_xml() {
     	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
-    DerpXmlWrite_New();
-    DerpXmlWrite_OpenTag("CMap");
-        DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);
-        DerpXmlWrite_LeafElement("m_barPerMin", string_format(objMain.chartBarPerMin, 1, 9));
-        DerpXmlWrite_LeafElement("m_timeOffset", string_format(objMain.chartBarOffset, 1, 9));
-        DerpXmlWrite_LeafElement("m_leftRegion", objMain.chartSideType[0]);
-        DerpXmlWrite_LeafElement("m_rightRegion", objMain.chartSideType[1]);
-        DerpXmlWrite_LeafElement("m_mapID", _mapid);
-        
-        // Down Side Notes
-        var l = array_length(objMain.chartNotesArray);
-        DerpXmlWrite_OpenTag("m_notes");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 0) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-        
-        // Left Side Notes
-        DerpXmlWrite_OpenTag("m_notesLeft");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 1) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-        
-        // Right Side Notes
-        DerpXmlWrite_OpenTag("m_notesRight");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 2) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-    DerpXmlWrite_CloseTag();
+    var _gen_narray = function (_side) {
+    	var _ret = []
+		var l = array_length(objMain.chartNotesArray);
+    	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
+            if(side == _side) {
+                array_push(_ret, {
+                	m_id : { text : nid },
+                	m_type : { text : note_type_num_to_string(noteType) },
+                	m_time : { text : string_format(time_to_bar(mtime_to_time(time)), 1, 9) },
+                	m_position : { text : string_format(position - width / 2, 1, 4) },
+                	m_width : { text : width },
+                	m_subId: { text : sid }
+                });
+            }
+        }
+        if(array_length(_ret) == 0)
+        	_ret = { text : "" };
+        return _ret;
+    }
     
-    var xmlString = DerpXmlWrite_GetString()
-	DerpXmlWrite_UnloadString() // free DerpXml's internal copy of the xml string
-	
+    var _str = {
+    	CMap : {
+    		m_path : { text : objMain.chartTitle },
+	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, 9) },
+	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, 9) },
+	    	m_leftRegion : { text : objMain.chartSideType[0] },
+	    	m_rightRegion : { text : objMain.chartSideType[1] },
+	    	m_mapID : { text : _mapid },
+	    	m_notes : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(0)
+	    		}
+	    	},
+	    	m_notesLeft : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(1)
+	    		}
+	    	},
+	    	m_notesRight : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(2)
+	    		}
+	    	}
+    	}
+    }
+    
 	var f = file_text_open_write(_file);
-	file_text_write_string(f, xmlString);
+	file_text_write_string(f, snap_to_xml(snap_alter_to_xml(_str)));
 	file_text_close(f);
 	
 	objManager.chartPath = _file;

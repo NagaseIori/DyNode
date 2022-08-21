@@ -397,24 +397,3 @@ function io_clear_diag() {
 	io_clear();
 }
 
-function snap_alter_from_xml(_struct) {
-	if(variable_struct_exists(_struct, "children")) {
-		var l = array_length(_struct.children);
-		for(var i=0; i<l; i++) {
-			_struct.children[i] = snap_alter_from_xml(_struct.children[i]);
-			if(variable_struct_exists(_struct, _struct.children[i].type)) {
-				var _cont = variable_struct_get(_struct, _struct.children[i].type)
-				if(!is_array(_cont)) {
-					_cont = [_cont];
-					variable_struct_set(_struct, _struct.children[i].type, _cont);
-				}
-				array_push(_cont, _struct.children[i])
-			}
-			else {
-				variable_struct_set(_struct, _struct.children[i].type, _struct.children[i]);
-			}
-		}
-		variable_struct_remove(_struct, "children");
-	}
-	return _struct;
-}
