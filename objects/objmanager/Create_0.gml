@@ -41,7 +41,7 @@ global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
-global.difficultyString = "CNMHGT";
+global.difficultyString = "CNHMGT";
 global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
