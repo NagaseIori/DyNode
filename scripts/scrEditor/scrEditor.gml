@@ -386,50 +386,53 @@ function timing_point_load_from_osz() {
     var _delay_time = 0;
     
     timing_point_reset();
-    var _grid = csv_to_grid(_file, true);
-    
+    var _f = file_text_open_read(_file);
+    var _grid = snap_from_csv(file_text_read_all(_f));
+    file_text_close(_f);
+	
     show_debug_message("CSV Load Finished.");
     
     var _type = "";
-    var _w = ds_grid_width(_grid);
-    var _h = ds_grid_height(_grid);
+    var _h = array_length(_grid);
     var _mode = 0;				// Osu Game Mode
     
     for(var i=0; i<_h; i++) {
-        if(string_last_pos("[", _grid[# 0, i]) != 0) {
-        	_type = _grid[# 0, i];
+        if(string_last_pos("[", _grid[i][0]) != 0) {
+        	_type = _grid[i][0];
         }
             
-        else if(_grid[# 0, i] != ""){
+        else if(_grid[i][0] != ""){
             switch _type {
             	case "[General]":
-            		if(string_last_pos("Mode", _grid[# 0, i]) != 0)
-            			_mode = real(string_digits(_grid[# 0, i]));
+            		if(string_last_pos("Mode", _grid[i][0]) != 0)
+            			_mode = real(string_digits(_grid[i][0]));
             		break;
                 case "[TimingPoints]":
-                    var _time = real(_grid[# 0, i]) + _delay_time;
-                    var _mspb = string_letters(_grid[# 1, i]) != ""?-1:real(_grid[# 1, i]);
-                    var _meter = real(_grid[# 2, i]);
+					if(array_length(_grid[i]) < 3) break;
+                    var _time = real(_grid[i][0]) + _delay_time;
+                    var _mspb = string_letters(_grid[i][1]) != ""?-1:real(_grid[i][1]);
+                    var _meter = real(_grid[i][2]);
                     if(_mspb > 0)
                         timing_point_add(_time, _mspb, _meter);
                     break;
                 case "[HitObjects]":
                 	if(_import_hitobj) {
-                		var _ntime = real(_grid[# 2, i]) + _delay_time;
-                		var _ntype = real(_grid[# 3, i]);
+						if(array_length(_grid[i]) < 6) break;
+                		var _ntime = real(_grid[i][2]) + _delay_time;
+                		var _ntype = real(_grid[i][3]);
                 		if(_ntime > 0) {
 	                		switch _mode {
 	                			case 0:
 	                			case 1:
 	                			case 2:
-	                				var _x = real(_grid[# 0, i]);
-	                				var _y = real(_grid[# 1, i]);
+	                				var _x = real(_grid[i][0]);
+	                				var _y = real(_grid[i][1]);
 	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
 	                				break;
 	                			case 3: // Mania Mode
-	                				var _x = real(_grid[# 0, i]);
+	                				var _x = real(_grid[i][0]);
 	                				if(_ntype & 128) { // If is a Mania Hold
-	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
+	                					var _subtim = real(string_copy(_grid[i][5], 1, string_pos(":", _grid[i][5])-1)) + _delay_time;
 	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
 	                				} 
 	                				else
@@ -447,7 +450,6 @@ function timing_point_load_from_osz() {
     
     timing_point_sort();
     note_sort_all();
-    ds_grid_destroy(_grid);
     
     announcement_play("导入谱面信息完毕。", 1000);
 }
