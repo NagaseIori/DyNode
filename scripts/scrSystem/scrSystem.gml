@@ -550,8 +550,10 @@ function map_load_struct(_str) {
 }
 
 function map_get_alt_title() {
+	var _forbidden_chars = "?*:\"<>\\/|"
 	var _title = objMain.chartTitle;
-	_title = string_replace_all(_title, "\"", "");
+	for(var i=1, l=string_length(_forbidden_chars); i<l; i++)
+		_title = string_replace_all(_title, string_char_at(_forbidden_chars, i), "_");
 	
 	return _title;
 }
