@@ -159,7 +159,7 @@ function string_real(str) {
 	for(var i=1, l=string_length(str); i<=l; i++) {
 		_ch = string_char_at(str, i);
 		_ch = ord(_ch);
-		if(_ch >= ord("0") || _ch <=ord("9"))
+		if(_ch >= ord("0") && _ch <=ord("9"))
 			_ret += chr(_ch);
 		else if(!_dot && _ch == ord(".")) {
 			_dot = true;

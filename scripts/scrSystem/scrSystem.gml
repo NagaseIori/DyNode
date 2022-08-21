@@ -574,8 +574,7 @@ function map_add_offset(_offset = "", record = false) {
 	var _record = false;
 	if(_offset == "") {
 		var _nega = 1;
-		_offset = get_string("请输入你想要添加的全局时间偏置值（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
-		show_debug_message("OFFSET:"+_offset);
+		_offset = get_string("请输入你想要添加的全局时间偏移量（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
 		if(_offset == "") return;
 		if(string_char_at(_offset, 1) == "-")
 			_nega = -1;
@@ -596,7 +595,7 @@ function map_add_offset(_offset = "", record = false) {
 	}
 	notes_array_update();
 	
-	announcement_play("添加全局时间偏置完毕。");
+	announcement_play("全局时间偏移添加完毕。");
 	
 	if(record)
 		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
