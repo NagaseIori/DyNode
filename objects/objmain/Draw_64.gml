@@ -45,7 +45,8 @@ _debug_str += "FMOD CPU Usage: " + string(FMODGMS_Sys_Get_CPUUsage()) + "\n";
 // var _stat = gc_get_stats();
 // _debug_str += "T_TIME: " + string(_stat.traversal_time) + "\n";
 // _debug_str += "C_TIME: " + string(_stat.collection_time) + "\n";
-// _debug_str += "INST_C: " + string(instance_count) + "\n";
+_debug_str += "INST_C: " + string(instance_count) + "\n";
+_debug_str += "V_STATUS: " + string(video_get_status()) + "\n";
 // _debug_str += "SAMPLERATE: " + string(sampleRate)+ "\n";
 if(instance_exists(editor))
 	_debug_str += "EDITMODE: " + string(editor.editorMode)+ "\n";

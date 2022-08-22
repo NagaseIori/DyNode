@@ -117,7 +117,10 @@ _update_url = "";
 
 // Init finished
 
-room_goto(rStartPage);
+if(debug_mode)
+	room_goto(rMain);
+else
+	room_goto(rStartPage);
 
 #region Project Properties
 
@@ -125,6 +128,7 @@ room_goto(rStartPage);
 	backgroundPath = "";
 	musicPath = "";
 	chartPath = "";
+	videoPath = "";
 	
 #endregion
 

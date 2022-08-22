@@ -242,6 +242,7 @@ function random_id(_length) {
 }
 
 // Compress sprite using better scaling
+
 function compress_sprite(_spr, _scale, _center = false){
 	var _w = sprite_get_width(_spr);
 	var _h = sprite_get_height(_spr);

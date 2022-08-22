@@ -2,31 +2,52 @@
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
-// Draw Background Image
+// Draw Background
 
+	
     if(bgImageSpr != -1) {
         draw_sprite(bgImageSpr, 0, _nw/2, _nh/2);
-        
-        // Dim background
-        draw_set_color(c_black);
-        draw_set_alpha(bgDim);
-        draw_rectangle(0, 0, _nw, _nh, false);
-        draw_set_alpha(1.0);
     }
     else {
-        draw_clear(c_black);
+        draw_clear(c_white);
     }
+    
+    if(bgVideoLoaded && nowPlaying) {
+    	var _status = video_draw();
+    	if(_status[0] == -1) {
+    		announcement_error("视频播放出现错误。");
+    		video_close();
+    		bgVideoLoaded = false;
+    	}
+    	else {
+    		var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
+    		var _wscl = global.resolutionW / _w;
+		    var _hscl = global.resolutionH / _h;
+		    var _scl = max(_wscl, _hscl); // Centre & keep ratios
+		    var _nx = global.resolutionW/2 - _scl * _w / 2;
+		    var _ny = global.resolutionH/2 - _scl * _h / 2;
+		    draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
+    	}
+    }
+    
+    // Dim background
+    draw_set_color(c_black);
+    draw_set_alpha(bgDim);
+    draw_rectangle(0, 0, _nw, _nh, false);
+    draw_set_alpha(1.0);
 
 	// Draw bottom blured bg
     
-    if(bgImageSpr != -1) {
+    if(bgImageSpr != -1 || bgVideoLoaded) {
         // show_debug_message("Draw below bg");
-        if(!surface_exists(bottomBgSurf)) {
+        if(!surface_exists(bottomBgSurf) || bgVideoLoaded) {
+        	surface_free_f(bottomBgSurf);
             bottomBgSurf = surface_create(_nw, targetLineBelow);
             
             // gpu_set_blendmode(bm_normal);
             surface_set_target(bottomBgSurf);
-                draw_sprite(bgImageSpr, 0, _nw / 2, targetLineBelow - _nh / 2);
+                // draw_sprite(bgImageSpr, 0, _nw / 2, targetLineBelow - _nh / 2);
+                draw_surface(application_surface, 0, targetLineBelow - _nh);
             surface_reset_target();
             
             if(!surface_exists(bottomBgSurfPing))
@@ -55,10 +76,10 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         
         draw_surface(bottomBgSurf, 0, _nh - targetLineBelow);
         
-        draw_set_color(c_black);
-        draw_set_alpha(bottomDim);
-        draw_rectangle(0, _nh - targetLineBelow, _nw, _nh, false);
-        draw_set_alpha(1.0);
+        // draw_set_color(c_black);
+        // draw_set_alpha(bottomDim);
+        // draw_rectangle(0, _nh - targetLineBelow, _nw, _nh, false);
+        // draw_set_alpha(1.0);
     }
 
 	// Draw Bottom Right

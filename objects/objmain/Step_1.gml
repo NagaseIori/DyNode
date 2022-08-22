@@ -168,6 +168,12 @@ var _music_resync_request = false;
     if(_music_resync_request) {
         sfmod_channel_set_position(nowTime, channel, sampleRate);
         nowTime = sfmod_channel_get_position(channel, sampleRate);
+        
+        if(bgVideoLoaded) {
+        	video_seek_to(clamp(nowTime, 0, bgVideoLength)*1000);
+        	show_debug_message("VIDEO SEEKING TO: "+ string(clamp(nowTime, 0, bgVideoLength)));
+        }
+        	
     }
 
 #endregion

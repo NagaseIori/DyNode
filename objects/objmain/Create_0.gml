@@ -140,6 +140,13 @@ depth = 0;
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
+        
+        // Video
+        bgVideoLoaded = false;
+        bgVideoLength = 0;
+        bgVideoPath = "";
+        
+        // Faint
         bgFaintAlpha = 1;
         animCurvFaintChan = animcurve_get_channel(curvBgGlow, "curve1");
         animCurvFaintEval = 0.5;
