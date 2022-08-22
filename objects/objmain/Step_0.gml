@@ -1,5 +1,5 @@
 
-_position_update();
+// _position_update();
 
 #region Functions Control
 
@@ -76,6 +76,9 @@ _position_update();
     	animTargetTime = 0;
     	reset_scoreboard();
     }
+    
+    if(keycheck_down(ord("U")))
+    	map_add_offset("", true);
     
     if(mouse_check_button_pressed(mb_middle)) {
     	showStats = !showStats;

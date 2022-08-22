@@ -15,9 +15,7 @@ if(announcementAlpha > 0) {
 	.align(fa_right, fa_bottom)
 	.blend(c_white, announcementAlpha)
 	.transform(0.8, 0.8)
-	// .msdf_border(c_black, 2)
 	.msdf_shadow(c_black, announcementAlpha * 0.5, 0, 3);
-	// _ele.region_set_active("update", c_white, 1);
 	
 	var _bbox = _ele.get_bbox(_nx, _ny);
 	if(mouse_inbound(_bbox.left, _bbox.top, _bbox.right, _bbox.bottom))

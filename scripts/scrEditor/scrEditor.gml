@@ -186,6 +186,15 @@ function operation_do(_type, _from, _to = -1) {
 			instance_activate_object(_from.inst);
 			instance_destroy(_from.inst);
 			break;
+		case OPERATION_TYPE.TPADD:
+			timing_point_add(_from.time, _from.beatLength, _from.meter);
+			break;
+		case OPERATION_TYPE.TPREMOVE:
+			timing_point_delete_at(_from.time);
+			break;
+		case OPERATION_TYPE.OFFSET:
+			map_add_offset(_from);
+			break;
 	}
 }
 
@@ -193,7 +202,7 @@ function operation_refresh_inst(_origi, _nowi) {
 	with(objEditor) {
 		for(var i=0, l=array_length(operationStack); i<l; i++) {
 			var _ops = operationStack[i];
-			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) {
+			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) if(variable_struct_exists(_ops[ii].fromProp, "inst")) {
 				if(_ops[ii].fromProp.inst == _origi)
 					_ops[ii].fromProp.inst = _nowi;
 				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
@@ -220,6 +229,15 @@ function operation_undo() {
 			case OPERATION_TYPE.REMOVE:
 				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				break;
+			case OPERATION_TYPE.TPADD:
+				operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.TPREMOVE:
+				operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
+				break;
+			case OPERATION_TYPE.OFFSET:
+				operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
 				break;
 			default:
 				show_error("Unknown operation type.", true);
@@ -248,7 +266,10 @@ function operation_redo() {
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
 				break;
 			case OPERATION_TYPE.REMOVE:
-				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+			case OPERATION_TYPE.TPADD:
+			case OPERATION_TYPE.TPREMOVE:
+			case OPERATION_TYPE.OFFSET:
+				operation_do(_ops[i].opType, _ops[i].fromProp);
 				break;
 			default:
 				show_error("Unknown operation type.", true);
@@ -262,6 +283,7 @@ function operation_redo() {
 #endregion
 
 #region TIMING POINT FUNCTION
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
@@ -271,14 +293,16 @@ function timing_point_sort() {
 }
 
 // Add a timing point to "timingPoints" array
-function timing_point_add(_t, _l, _b) {
+function timing_point_add(_t, _l, _b, record = false) {
     with(objEditor) {
         array_push(timingPoints, new sTimingPoint(_t, _l, _b));
         timing_point_sort();
     }
+    if(record)
+    	operation_step_add(OPERATION_TYPE.TPADD, new sTimingPoint(_t, _l, _b), -1);
 }
 
-function timing_point_create() {
+function timing_point_create(record = false) {
 	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
 	var _bpm = string_real(get_string("请输入 BPM ：", ""));
@@ -291,14 +315,14 @@ function timing_point_create() {
 	_meter = real(_meter);
 	
 	_bpm = bpm_to_mspb(_bpm);
-	timing_point_add(_time, _bpm, _meter);
+	timing_point_add(_time, _bpm, _meter, record);
 	
 	announcement_play("添加 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_bpm)) +
     		"\n节拍："+string(_meter)+"/4", 5000);
-	
+    
 }
 
-function timing_point_delete_at(_time) {
+function timing_point_delete_at(_time, record = false) {
 	with(objEditor) {
 		for(var i=0, l=array_length(timingPoints); i<l; i++)
 			if(int64(timingPoints[i].time) == _time) {
@@ -306,8 +330,11 @@ function timing_point_delete_at(_time) {
 				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
 					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +
     				"\n节拍："+string(_tp.meter)+"/4", 5000);
+    			if(record)
+    				operation_step_add(OPERATION_TYPE.TPREMOVE, _tp, -1);
 				array_delete(timingPoints, i, 1);
-				return;
+				l--;
+				i--;
 			}
 	}
 }
@@ -320,7 +347,7 @@ function timing_point_duplicate(_time) {
 			return;
 		}
 		var _tp = timingPoints[array_length(timingPoints) - 1];
-    	timing_point_add(_time, _tp.beatLength, _tp.meter);
+    	timing_point_add(_time, _tp.beatLength, _tp.meter, true);
     	
     	announcement_play("复制末尾 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
     		"\n节拍："+string(_tp.meter)+"/4", 5000);
@@ -346,83 +373,4 @@ function timing_point_sync_with_chart_prop() {
 	}
 }
 
-function timing_point_load_from_osz() {
-    var _file = "";
-    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
-        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
-        
-    if(_file == "") return;
-    
-    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
-    var _delay_import = show_question("是否为所有 Timing Points / 物件 添加 64ms 的延迟？");
-    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
-    if(_clear_notes) note_delete_all();
-    var _delay_time = 64 * _delay_import;
-    
-    timing_point_reset();
-    var _grid = csv_to_grid(_file, true);
-    
-    show_debug_message("CSV Load Finished.");
-    
-    var _type = "";
-    var _w = ds_grid_width(_grid);
-    var _h = ds_grid_height(_grid);
-    var _mode = 0;				// Osu Game Mode
-    
-    for(var i=0; i<_h; i++) {
-        if(string_last_pos("[", _grid[# 0, i]) != 0) {
-        	_type = _grid[# 0, i];
-        }
-            
-        else if(_grid[# 0, i] != ""){
-            switch _type {
-            	case "[General]":
-            		if(string_last_pos("Mode", _grid[# 0, i]) != 0)
-            			_mode = real(string_digits(_grid[# 0, i]));
-            		break;
-                case "[TimingPoints]":
-                    var _time = real(_grid[# 0, i]) + _delay_time;
-                    var _mspb = string_letters(_grid[# 1, i]) != ""?-1:real(_grid[# 1, i]);
-                    var _meter = real(_grid[# 2, i]);
-                    if(_mspb > 0)
-                        timing_point_add(_time, _mspb, _meter);
-                    break;
-                case "[HitObjects]":
-                	if(_import_hitobj) {
-                		var _ntime = real(_grid[# 2, i]) + _delay_time;
-                		var _ntype = real(_grid[# 3, i]);
-                		if(_ntime > 0) {
-	                		switch _mode {
-	                			case 0:
-	                			case 1:
-	                			case 2:
-	                				var _x = real(_grid[# 0, i]);
-	                				var _y = real(_grid[# 1, i]);
-	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
-	                				break;
-	                			case 3: // Mania Mode
-	                				var _x = real(_grid[# 0, i]);
-	                				if(_ntype & 128) { // If is a Mania Hold
-	                					var _subtim = real(string_copy(_grid[# 5, i], 1, string_pos(":", _grid[# 5, i])-1)) + _delay_time;
-	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
-	                				} 
-	                				else
-	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
-	                				break;
-	                		}
-                		}
-                	}
-                	break;
-				default:
-					break;
-            }
-        }
-    }
-    
-    timing_point_sort();
-    note_sort_all();
-    ds_grid_destroy(_grid);
-    
-    announcement_play("导入谱面信息完毕。", 1000);
-}
 #endregion

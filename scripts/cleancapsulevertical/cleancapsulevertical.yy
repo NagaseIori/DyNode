@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Shapes",
-    "path": "folders/Clean Shapes/Shapes.yy",
+    "path": "folders/Extensions/Clean Shapes/Shapes.yy",
   },
   "resourceVersion": "1.0",
   "name": "CleanCapsuleVertical",

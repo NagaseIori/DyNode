@@ -57,8 +57,6 @@ var _music_resync_request = false;
     
         
     if(music != undefined) {
-        var _cor_tim = sfmod_channel_get_position(channel, sampleRate);
-        
         // Play music at chart's beginning
         if(nowTime < 0) {
             FMODGMS_Chan_PauseChannel(channel);
@@ -121,12 +119,6 @@ var _music_resync_request = false;
                     }
                 }
             }
-        
-        // Reduce Chart to Music's Latency
-        // (Bad Performance)
-        // if(nowPlaying && nowTime >= 0 && abs(_cor_tim - nowTime) > MAXIMUM_DELAY_OF_SOUND) {
-        //     nowTime = _cor_tim;
-        // }
         
         // If music ends then stop
         if(FMODGMS_Chan_Is_Playing(channel)<=0 && nowPlaying) {

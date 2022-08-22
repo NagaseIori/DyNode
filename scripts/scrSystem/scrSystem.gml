@@ -64,7 +64,7 @@ function map_load(_file = "") {
     var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
     
     if(filename_ext(_file) == ".xml")
-        map_load_xml(_file, _import_info);
+        map_import_xml(_file, _import_info);
     
     objManager.chartPath = _file;
     
@@ -72,155 +72,68 @@ function map_load(_file = "") {
     announcement_play("导入谱面完毕。");
 }
 
-function map_load_xml(_file, _import_info) {
+function map_import_xml(_file, _import_info) {
 	notes_reallocate_id();
-    DerpXmlRead_OpenFile(_file);
     
-    var _stack = [];
-    var _line = 0;
-    var _in_notes = 0;
-    var _in_left = 0;
-    var _in_right = 0;
-    var _in_assets = 0;
-    var _in_argument = 0;
-    var _in_bpm = 0;
+    var _f = file_text_open_read(_file);
+    var _str = snap_alter_from_xml(snap_from_xml(file_text_read_all(_f)));
+    file_text_close(_f);
+
     var _import_tp = false;
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
     var _barpm, _offset;
     var _tp_lists = [], _nbpm;
-    while DerpXmlRead_Read() {
-        _line ++;
-        switch DerpXmlRead_CurType() {
-            case DerpXmlType_OpenTag:
-                array_push(_stack, DerpXmlRead_CurValue());
-                switch DerpXmlRead_CurValue() {
-                    case "m_notes":
-                        _in_notes ++;
-                        break;
-                    case "m_notesLeft":
-                        _in_left ++;
-                        break;
-                    case "m_notesRight":
-                        _in_right ++;
-                        break;
-                    case "m_argument":
-                    	_in_argument ++;
-                    	_import_tp = show_question("是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？");
-                    	break;
-                    case "CMapNoteAsset":
-                        _in_assets ++;
-                        break;
-                    case "CBpmchange":
-                    	_in_bpm ++;
-                    	break;
-                }
-                break;
-            case DerpXmlType_CloseTag:
-                var _top = array_pop(_stack);
-                if(_top != DerpXmlRead_CurValue()) {
-                    show_error("Closetag error\nLine: " + string(_line) +
-                        "\nWrong Tag Match: " + _top + " --- " + 
-                        DerpXmlRead_CurValue(), true);
-                }
-                switch DerpXmlRead_CurValue() {
-                    case "m_notes":
-                        _in_notes --;
-                        break;
-                    case "m_notesLeft":
-                        _in_left --;
-                        break;
-                    case "m_notesRight":
-                        _in_right --;
-                        break;
-                    case "m_argument":
-                    	_in_argument --;
-                    	break;
-                    case "CMapNoteAsset":
-                        _in_assets --;
-                        var _err = build_note(_note_id+"_imported", _note_type, _note_time,
-                            _note_position, _note_width, _note_subid+"_imported",
-                            _in_left + _in_right*2, true);
-                        if(_err < 0) return;
-                        break;
-                     case "CBpmchange":
-                    	_in_bpm --;
-                    	array_push(_tp_lists, {
-                    		time: _note_time,
-                    		barpm: _nbpm
-                    	});
-                    	break;
-                }
-                break;
-            case DerpXmlType_Text:
-                var _val = DerpXmlRead_CurValue();
-                switch array_top(_stack) {
-                    case "m_path":
-                    	if(_import_info)
-                        objMain.chartTitle = _val;
-                        break;
-                    case "m_barPerMin":
-                        _barpm = real(_val);
-                        break;
-                    case "m_timeOffset":
-                        _offset = real(_val);
-                        break;
-                    case "m_leftRegion":
-                    	if(_import_info)
-                        objMain.chartSideType[0] = _val;
-                        break;
-                    case "m_rightRegion":
-                    	if(_import_info)
-                        objMain.chartSideType[1] = _val;
-                        break;
-                    case "m_mapID":
-                    	if(_import_info)
-                        objMain.chartID = _val;
-                        break;
-                    default:
-                        if(_in_assets) {
-                            switch array_top(_stack) {
-                                case "m_id":
-                                    _note_id = _val;
-                                    break;
-                                case "m_type":
-                                    _note_type = _val;
-                                    break;
-                                case "m_time":
-                                    _note_time = _val;
-                                    break;
-                                case "m_position":
-                                    _note_position = _val;
-                                    break;
-                                case "m_width":
-                                    _note_width = _val;
-                                    break;
-                                case "m_subId":
-                                    _note_subid = _val;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        else if(_in_bpm) {
-                        	switch array_top(_stack) {
-                        		case "m_time":
-                        			_note_time = real(_val);
-                        			break;
-                        		case "m_value":
-                        			_nbpm = real(_val);
-                        			break;
-                        	}
-                        }
-                        break;
-                }
-                break;
-        }
+    
+    // Import Information & bpm
+    var _main = _str.CMap;
+    if(_import_info) {
+    	objMain.chartTitle = _main.m_path.text;
+    	objMain.chartSideType[0] = _main.m_leftRegion.text;
+    	objMain.chartSideType[1] = _main.m_rightRegion.text;
+    	objMain.chartID = _main.m_mapID.text;
     }
-    
-    DerpXmlRead_CloseFile();
-    
-    
+    _barpm = real(_main.m_barPerMin.text);
+	_offset = real(_main.m_timeOffset.text);
+	
+	// Import 3 sides Notes
+	
+	var _import_fun = function (_arr, _side) {
+		if(!is_array(_arr)) _arr = [_arr];
+		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
+			_note_id = _arr[i].m_id.text;
+			_note_type = _arr[i].m_type.text;
+			_note_time = _arr[i].m_time.text;
+			_note_position = _arr[i].m_position.text;
+			_note_width = _arr[i].m_width.text;
+			_note_subid = _arr[i].m_subId.text;
+	
+			var _err = build_note(_note_id+"_imported", _note_type, _note_time,
+	            _note_position, _note_width, _note_subid+"_imported",
+	            _side, true);
+	        if(_err < 0) return;
+		}
+	}
+	
+	_import_fun(_main.m_notes.m_notes.CMapNoteAsset, 0);
+	_import_fun(_main.m_notesLeft.m_notes.CMapNoteAsset, 1);
+	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
+	
+	if(variable_struct_exists(_main, "m_argument")) {
+		_import_tp = show_question("是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？");
+		var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
+		if(!is_array(_bpms)) _bpms = [_bpms];
+		for(var i=0, l=array_length(_bpms); i<l; i++) {
+			_note_time = real(_bpms[i].m_time.text);
+			_nbpm = real(_bpms[i].m_value.text);
+		
+			array_push(_tp_lists, {
+	    		time: _note_time,
+	    		barpm: _nbpm
+	    	});
+		}
+	}
+	
     if(_import_info) {
     	with(objMain) {
     		
@@ -283,7 +196,6 @@ function map_load_xml(_file, _import_info) {
     		var _ntime = _tp_lists[i].time;
     		if(i>0)
     			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
-    		// _ntime = time_to_mtime(_ntime, _offset);
     		_rtime = _ntime;
     		
     		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
@@ -291,6 +203,87 @@ function map_load_xml(_file, _import_info) {
     	
     	timing_point_sort();
     }
+}
+
+function map_import_osu() {
+    var _file = "";
+    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
+        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
+        
+    if(_file == "") return;
+    
+    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
+    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    if(_clear_notes) note_delete_all();
+    var _delay_time = 0;
+    
+    timing_point_reset();
+    var _f = file_text_open_read(_file);
+    var _grid = snap_from_csv(file_text_read_all(_f));
+    file_text_close(_f);
+	
+    show_debug_message("CSV Load Finished.");
+    
+    var _type = "";
+    var _h = array_length(_grid);
+    var _mode = 0;				// Osu Game Mode
+    
+    for(var i=0; i<_h; i++) {
+        if(string_last_pos("[", _grid[i][0]) != 0) {
+        	_type = _grid[i][0];
+        }
+            
+        else if(_grid[i][0] != ""){
+            switch _type {
+            	case "[General]":
+            		if(string_last_pos("Mode", _grid[i][0]) != 0)
+            			_mode = real(string_digits(_grid[i][0]));
+            		break;
+                case "[TimingPoints]":
+					if(array_length(_grid[i]) < 3) break;
+                    var _time = real(_grid[i][0]) + _delay_time;
+                    var _mspb = string_letters(_grid[i][1]) != ""?-1:real(_grid[i][1]);
+                    var _meter = real(_grid[i][2]);
+                    if(_mspb > 0)
+                        timing_point_add(_time, _mspb, _meter);
+                    break;
+                case "[HitObjects]":
+                	if(_import_hitobj) {
+						if(array_length(_grid[i]) < 6) break;
+                		var _ntime = real(_grid[i][2]) + _delay_time;
+                		var _ntype = real(_grid[i][3]);
+                		if(_ntime > 0) {
+	                		switch _mode {
+	                			case 0:
+	                			case 1:
+	                			case 2:
+	                				var _x = real(_grid[i][0]);
+	                				var _y = real(_grid[i][1]);
+	                				build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
+	                				break;
+	                			case 3: // Mania Mode
+	                				var _x = real(_grid[i][0]);
+	                				if(_ntype & 128) { // If is a Mania Hold
+	                					var _subtim = real(string_copy(_grid[i][5], 1, string_pos(":", _grid[i][5])-1)) + _delay_time;
+	                					build_hold(random_id(9), _ntime, _x / 512 * 5, 1.0, random_id(9), _subtim, 0);
+	                				} 
+	                				else
+	                					build_note(random_id(9), 0, _ntime, _x / 512 * 5, 1.0, -1, 0, false);
+	                				break;
+	                		}
+                		}
+                	}
+                	break;
+				default:
+					break;
+            }
+        }
+    }
+    
+    timing_point_sort();
+    note_sort_all();
+    
+    announcement_play("导入谱面信息完毕。", 1000);
 }
 
 function map_set_title() {
@@ -322,6 +315,7 @@ function music_load(_file = "") {
         // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
+        	announcement_error("音乐文件加载失败，可能原因为类型不支持或文件损坏。\nFMOD 错误信息："+FMODGMS_Util_GetErrorMessage());
         	music = undefined;
         	return;
         }
@@ -332,7 +326,9 @@ function music_load(_file = "") {
         }
         sampleRate = FMODGMS_Chan_Get_Frequency(channel);
         musicLength = FMODGMS_Snd_Get_Length(music);
-        
+        usingMP3 = string_lower(filename_ext(_file)) == ".mp3";
+        if(usingMP3)
+        	show_debug_message("The music file is using the mp3 format")
         
     }
     objManager.musicPath = _file;
@@ -403,76 +399,54 @@ function map_export_xml() {
     	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
-    DerpXmlWrite_New();
-    DerpXmlWrite_OpenTag("CMap");
-        DerpXmlWrite_LeafElement("m_path", objMain.chartTitle);
-        DerpXmlWrite_LeafElement("m_barPerMin", string_format(objMain.chartBarPerMin, 1, 9));
-        DerpXmlWrite_LeafElement("m_timeOffset", string_format(objMain.chartBarOffset, 1, 9));
-        DerpXmlWrite_LeafElement("m_leftRegion", objMain.chartSideType[0]);
-        DerpXmlWrite_LeafElement("m_rightRegion", objMain.chartSideType[1]);
-        DerpXmlWrite_LeafElement("m_mapID", _mapid);
-        
-        // Down Side Notes
-        var l = array_length(objMain.chartNotesArray);
-        DerpXmlWrite_OpenTag("m_notes");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 0) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-        
-        // Left Side Notes
-        DerpXmlWrite_OpenTag("m_notesLeft");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 1) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-        
-        // Right Side Notes
-        DerpXmlWrite_OpenTag("m_notesRight");
-            DerpXmlWrite_OpenTag("m_notes");
-                for(var i=0; i<l; i++) with objMain.chartNotesArray[i].inst {
-                    if(side == 2) {
-                        DerpXmlWrite_OpenTag("CMapNoteAsset");
-                            DerpXmlWrite_LeafElement("m_id", nid);
-                            DerpXmlWrite_LeafElement("m_type", note_type_num_to_string(noteType));
-                            DerpXmlWrite_LeafElement("m_time", string_format(time_to_bar(mtime_to_time(time)), 1, 9));
-                            DerpXmlWrite_LeafElement("m_position", string_format(position - width / 2, 1, 4));
-                            DerpXmlWrite_LeafElement("m_width", width);
-                            DerpXmlWrite_LeafElement("m_subId", sid);
-                        DerpXmlWrite_CloseTag();
-                    }
-                }
-            DerpXmlWrite_CloseTag();
-        DerpXmlWrite_CloseTag();
-    DerpXmlWrite_CloseTag();
+    var _gen_narray = function (_side) {
+    	var _ret = []
+		var l = array_length(objMain.chartNotesArray);
+    	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
+            if(side == _side) {
+                array_push(_ret, {
+                	m_id : { text : nid },
+                	m_type : { text : note_type_num_to_string(noteType) },
+                	m_time : { text : string_format(time_to_bar(mtime_to_time(time)), 1, 9) },
+                	m_position : { text : string_format(position - width / 2, 1, 4) },
+                	m_width : { text : width },
+                	m_subId: { text : sid }
+                });
+            }
+        }
+        if(array_length(_ret) == 0)
+        	_ret = { text : "" };
+        return _ret;
+    }
     
-    var xmlString = DerpXmlWrite_GetString()
-	DerpXmlWrite_UnloadString() // free DerpXml's internal copy of the xml string
-	
+    var _str = {
+    	CMap : {
+    		m_path : { text : objMain.chartTitle },
+	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, 9) },
+	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, 9) },
+	    	m_leftRegion : { text : objMain.chartSideType[0] },
+	    	m_rightRegion : { text : objMain.chartSideType[1] },
+	    	m_mapID : { text : _mapid },
+	    	m_notes : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(0)
+	    		}
+	    	},
+	    	m_notesLeft : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(1)
+	    		}
+	    	},
+	    	m_notesRight : {
+	    		m_notes : {
+	    			CMapNoteAsset : _gen_narray(2)
+	    		}
+	    	}
+    	}
+    }
+    
 	var f = file_text_open_write(_file);
-	file_text_write_string(f, xmlString);
+	file_text_write_string(f, snap_to_xml(snap_alter_to_xml(_str)));
 	file_text_close(f);
 	
 	objManager.chartPath = _file;
@@ -547,8 +521,10 @@ function map_load_struct(_str) {
 }
 
 function map_get_alt_title() {
+	var _forbidden_chars = "?*:\"<>\\/|"
 	var _title = objMain.chartTitle;
-	_title = string_replace_all(_title, "\"", "");
+	for(var i=1, l=string_length(_forbidden_chars); i<l; i++)
+		_title = string_replace_all(_title, string_char_at(_forbidden_chars, i), "_");
 	
 	return _title;
 }
@@ -569,6 +545,37 @@ function map_set_global_bar() {
 	
 	announcement_play("已更改全局 BarPM 与 Offset 至："+_barpm+"/"+string(_offset));
 	
+}
+
+function map_add_offset(_offset = "", record = false) {
+	var _record = false;
+	if(_offset == "") {
+		var _nega = 1;
+		_offset = get_string("请输入你想要添加的全局时间偏移量（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
+		if(_offset == "") return;
+		if(string_char_at(_offset, 1) == "-")
+			_nega = -1;
+		_offset = real(string_real(_offset))*_nega;
+		_record = true;
+	}
+	
+	with(objEditor) {
+		for(var i=0, l=array_length(timingPoints); i<l; i++)
+			timingPoints[i].time += _offset;
+	}
+	
+	instance_activate_object(objNote);
+	with(objMain) {
+		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
+			chartNotesArray[i].inst.time += _offset;
+		}
+	}
+	notes_array_update();
+	
+	announcement_play("全局时间偏移添加完毕。");
+	
+	if(record)
+		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
 }
 
 #endregion
@@ -609,6 +616,17 @@ function project_load(_file = "") {
     timing_point_sort();
     
     projectPath = _file;
+    
+    
+    ///// Old version workaround
+    
+	    if(_contents.version < "v0.1.5") {
+	    	var _question = show_question("检测到来自特定旧版本的项目。\n该谱面是否使用了从 .osu 中导入校时信息并添加了 64ms 的延迟？\n这个延迟在新的版本中建议被撤销。如果你选择“是”，则所有放置的 Note 和 Timing Point 都会被提前 64ms 。\n在调整之前我们建议你先对 .dyn 文件进行备份。你也可以在之后手动进行调整。\n这个警告不会出现第二遍。");
+			if(_question)
+				map_add_offset(-64, true);
+	    }
+		
+	/////
     
     announcement_play("打开项目完毕。");
     
@@ -775,6 +793,8 @@ function load_config() {
 		global.autosave = _con.autosave;
 	if(variable_struct_exists(_con, "autoupdate"))
 		global.autoupdate = _con.autoupdate;
+	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
+		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
 }
 
 function save_config() {
@@ -787,7 +807,8 @@ function save_config() {
 		resolutionH: global.resolutionH,
 		version: global.version,
 		autosave: global.autosave,
-		autoupdate: global.autoupdate
+		autoupdate: global.autoupdate,
+		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY
 	}));
 	
 	file_text_close(_f);
@@ -829,12 +850,12 @@ function reset_scoreboard() {
 
 function sfmod_channel_get_position(channel, spr) {
     var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = _ret - FMOD_SOUND_DELAY;
+    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3;
     return _ret;
 }
 
 function sfmod_channel_set_position(pos, channel, spr) {
-    pos = pos + FMOD_SOUND_DELAY;
+    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3;
     FMODGMS_Chan_Set_Position(channel, pos);
 }
 

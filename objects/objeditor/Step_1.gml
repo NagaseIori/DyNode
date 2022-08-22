@@ -44,7 +44,7 @@ editorSelectMultiple = editorSelectCount > 1;
     var _attach_reset_request = false, _attach_sync_request = false;
     
     if(keycheck_down(vk_f10))
-        timing_point_load_from_osz();
+        map_import_osu();
     if(keycheck_down(ord("Z"))) {
         editorGridYEnabled = !editorGridYEnabled;
         announcement_adjust("时间方向网格吸附", editorGridYEnabled);
@@ -61,7 +61,7 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     if(keycheck_down(ord("Y"))) {
-        timing_point_create();
+        timing_point_create(true);
     }
     
     if(keycheck_down_ctrl(ord("Z"))) {

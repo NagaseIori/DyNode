@@ -6,8 +6,6 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
-#macro FMOD_SOUND_DELAY 0
-#macro FMOD_SAMPLE_DELAY 0
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 
@@ -15,7 +13,7 @@
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.4"
+global.version = "v0.1.5"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -23,13 +21,16 @@ global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
 
+global.FMOD_MP3_DELAY = 60;
+
 // Themes Init
 
 theme_init();
 
 // Load Settings
 
-load_config();
+if(!debug_mode)
+	load_config();
 
 // Global Variables
 
@@ -40,7 +41,7 @@ global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
-global.difficultyString = "CNMHGT";
+global.difficultyString = "CNHMGT";
 global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
@@ -57,7 +58,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
-gc_target_frame_time(50);
 
 // DyCore Initialization
 
@@ -86,6 +86,8 @@ DerpXml_Init();
     // Initialize the system
     FMODGMS_Sys_Set_DSPBufferSize(512, 4);
     FMODGMS_Sys_Initialize(32);
+    // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
+    
 
 // Input Initialization
 

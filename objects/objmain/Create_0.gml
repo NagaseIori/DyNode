@@ -252,5 +252,6 @@ depth = 0;
     channel = FMODGMS_Chan_CreateChannel();
     music = undefined;
     sampleRate = 0;
-    channelPaused = false; // Only used for time correction
+    channelPaused = false;	// Only used for time correction
     musicLength = 0;
+    usingMP3 = false;		// For Latency Workaround
