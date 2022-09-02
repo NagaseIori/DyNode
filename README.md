@@ -1,6 +1,6 @@
 # DyNode
 
-[![Crowdin](https://badges.crowdin.net/dynode/localized.svg)](https://crowdin.com/project/dynode)
+[![GitHub license](https://img.shields.io/github/license/NagaseIori/DyNode?style=flat&logo=appveyor)](https://github.com/NagaseIori/DyNode/blob/main/LICENSE) [![Crowdin](https://badges.crowdin.net/dynode/localized.svg)](https://crowdin.com/project/dynode)
 
 Yet another Dynamix chart tool.
 
