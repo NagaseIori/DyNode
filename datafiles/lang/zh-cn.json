@@ -1,0 +1,29 @@
+{
+    "lang" : "zh-cn",
+    "title" : "简体中文",
+    "content" : {
+        "title_new_project" : "项目创建",
+        "title_start_page" : "开始页面",
+        "button_project_create" : "新建项目",
+        "button_project_open" : "打开已有项目",
+        "button_goback" : "返回上一页",
+        "button_project_create_confirm" : "创建项目",
+        "input_music_file" : "音乐文件 *",
+        "input_bg_file" : "背景文件",
+        "input_chart_file" : "导入谱面文件",
+        "input_leftType" : "左侧下落类型",
+        "input_rightType" : "右侧下落类型",
+        "input_difficulty" : "谱面难度",
+        "input_title" : "谱面标题",
+        "input_title_desc" : "请输入谱面标题",
+        "FMOD_load_err" : "FMOD 未能正确加载。所有音乐相关功能将无法正常运作。请检查文件完整性。",
+        "FMOD_create_sys_err" : "FMOD 创建系统失败。\n 错误信息：",
+        "autosave_complete" : "自动保存项目完毕。",
+        "fullscreen_warn" : "在全屏模式下使用会弹出窗口的功能键是危险的操作,某些情况下可能会导致程序无法响应或谱面丢失。这个问题暂时无法修复。请关闭全屏或使用自动保存功能。",
+        "screenshot_save" : "已保存截图到:",
+        "autoupdate_warn" : "未收取到 DyNode 的任何正式版本。",
+        "autoupdate_err" : "更新检查错误。请检查与 Github 页面的网络连通性。",
+        "autoupdate_found_1" : "收取到新版本 DyNode：",
+        "autoupdate_found_2" : "前往更新页面"
+    }
+}

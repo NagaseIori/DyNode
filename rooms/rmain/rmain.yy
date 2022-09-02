@@ -23,7 +23,7 @@
   "creationCodeFile": "",
   "inheritCode": false,
   "instanceCreationOrder": [
-    {"name":"inst_176E215A","path":"rooms/rMain/rMain.yy",},
+    {"name":"rMain","path":"rooms/rMain/rMain.yy",},
   ],
   "inheritCreationOrder": false,
   "sequenceId": null,

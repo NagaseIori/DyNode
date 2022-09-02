@@ -15,10 +15,7 @@
   "layers": [
     {"instances":[
         {"properties":[
-            {"propertyId":{"name":"title","path":"objects/objUITitle/objUITitle.yy",},"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"value":"项目创建","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
-            {"propertyId":{"name":"engTitle","path":"objects/objUITitle/objUITitle.yy",},"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"value":"New Project","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
-            {"propertyId":{"name":"title","path":"objects/objUITitle/objUITitle.yy",},"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"value":"开始页面","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
-            {"propertyId":{"name":"engTitle","path":"objects/objUITitle/objUITitle.yy",},"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"value":"Start Page","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
+            {"propertyId":{"name":"title","path":"objects/objUITitle/objUITitle.yy",},"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"value":"title_start_page","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},
           ],"isDnd":false,"objectId":{"name":"objUITitle","path":"objects/objUITitle/objUITitle.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":0.0,"y":-32.0,"resourceVersion":"1.0","name":"inst_42D9604A_1","tags":[],"resourceType":"GMRInstance",},
         {"properties":[
             {"propertyId":{"name":"scale","path":"objects/objUIButton/objUIButton.yy",},"objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"value":"2","resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMOverriddenProperty",},

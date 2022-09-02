@@ -27,6 +27,10 @@ global.FMOD_MP3_DELAY = 60;
 
 theme_init();
 
+// Localization Init
+
+i18n_init();
+
 // Load Settings
 
 if(!debug_mode)
