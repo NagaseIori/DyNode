@@ -1,5 +1,7 @@
 # DyNode
 
+[![Crowdin](https://badges.crowdin.net/dynode/localized.svg)](https://crowdin.com/project/dynode)
+
 Yet another Dynamix chart tool.
 
 **[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)**
