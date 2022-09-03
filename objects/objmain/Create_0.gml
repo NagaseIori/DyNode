@@ -123,9 +123,9 @@ depth = 0;
     
     // For 3 sides targetline's glow
     lazerAlpha = [1.0, 1.0, 1.0];
-    animTargetLazerAlpha = lazerAlpha;
+    animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
-    animTargetLineMix = lineMix;
+    animTargetLineMix = [1.0, 1.0, 1.0];
     
     // Bottom
         bottomDim = 0.75;

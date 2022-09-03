@@ -16,12 +16,13 @@ function i18n_load(lname) {
 }
 
 function i18n_init() {
-    global.i18nLang = 0;
+    global.i18nLang = 1;
     global.i18nCont = [];
     global.i18nDefault = 0;
     global.i18nCount = 0;
     
     i18n_load("zh-cn");
+    i18n_load("en");
 }
 
 function i18n_set_lang(language) {

@@ -17,6 +17,11 @@ function generate_lazer_sprite(_height) {
 	return _spr;
 }
 
+function array_fill(arr, val, index, num) {
+	for(var i=index; i<index+num; i++)
+		arr[i] = val;
+}
+
 #region DRAW
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);

@@ -166,12 +166,14 @@
 
 #region Targetline Animation
 
-	animTargetLineMix = [1.0, 1.0, 1.0];
+	// animTargetLineMix = [1.0, 1.0, 1.0];
+	array_fill(animTargetLineMix, 1, 0, 3);
 	if(editor_get_editmode() == 5) {
-		animTargetLazerAlpha = [1.0, 1.0, 1.0];
+		// animTargetLazerAlpha = [1.0, 1.0, 1.0];
+		array_fill(animTargetLazerAlpha, 1, 0, 3);
 	}
 	else {
-		animTargetLazerAlpha = [0.0, 0.0, 0.0];
+		array_fill(animTargetLazerAlpha, 0, 0, 3);
 		animTargetLazerAlpha[editor_get_editside()] = 1.0;
 		animTargetLineMix[editor_get_editside()] = 0.5;
 	}

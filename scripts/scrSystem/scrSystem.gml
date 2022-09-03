@@ -521,6 +521,7 @@ function map_load_struct(_str) {
 }
 
 function map_get_alt_title() {
+	if(!instance_exists(objMain)) return "example";
 	var _forbidden_chars = "?*:\"<>\\/|"
 	var _title = objMain.chartTitle;
 	for(var i=1, l=string_length(_forbidden_chars); i<l; i++)
@@ -759,11 +760,11 @@ function announcement_play(str, time = 3000) {
 }
 
 function announcement_warning(str, time = 5000) {
-	announcement_play("[c_warning][[警告] [/c]" + str, time);
+	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time);
 }
 
 function announcement_error(str, time = 8000) {
-	announcement_play("[#f44336][[错误] " + str, time);
+	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time);
 }
 
 function announcement_adjust(str, val) {
