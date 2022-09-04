@@ -11,6 +11,8 @@ if(_outroom_check(x, y)) {
 	infoAlpha = 0;
 }
 
+state();
+
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 	var _factor = 1;
 	if(editor_get_editmode() < 5 && objMain.fadeOtherNotes && side != editor_get_editside())
@@ -20,11 +22,15 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     lastAlpha = lerp_a(lastAlpha, animTargetLstA * _factor,
         animSpeed * (objMain.nowPlaying ? objMain.musicSpeed * animPlaySpeedMul : 1));
     
+    if(keycheck(ord("A")) || keycheck(ord("D")) || 
+    	objMain.topBarMousePressed || (side == 0 && objMain.nowPlaying)) {
+		image_alpha = animTargetA;
+		lastAlpha = animTargetLstA;
+	}
+    
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
     infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
 }
-
-state();
 
 // If no longer visible then deactivate self
 if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {

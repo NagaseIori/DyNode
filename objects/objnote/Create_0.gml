@@ -292,16 +292,7 @@ image_yscale = global.scaleYAdjust;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
 	        drawVisible = true;
-	        // In Some situations no need for fading in
-	        if(keycheck(ord("A")) || keycheck(ord("D")) || 
-	            objMain.topBarMousePressed ||
-	            (side == 0 && objMain.nowPlaying)) {
-	            image_alpha = 1;
-	            animTargetA = 1;
-	            state = stateNormal;
-	        }
-	        else 
-	            state = stateNormal;
+	        state = stateNormal;
 	        state();
 	    }
 	    
