@@ -11,12 +11,14 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         .align(fa_left, fa_middle)
 	    .transform(global.scaleXAdjust * 1.5, global.scaleYAdjust * 1.5)
 	    .msdf_shadow(c_black, 0.4, 0, 3, 0.1)
+	    .blend(c_white, titleAlpha)
 	    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 47 * global.scaleYAdjust);
 	}
 	else {
 		scribble(chartTitle).starting_format("fOrbitron48s", c_white)
         .align(fa_left, fa_middle)
 	    .transform(global.scaleXAdjust * 0.7, global.scaleYAdjust * 0.7)
+	    .blend(c_white, titleAlpha)
 	    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 42 * global.scaleYAdjust);
 	}
     
@@ -25,7 +27,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
         resor_to_x(0.019), global.resolutionH - targetLineBelow + 77 * global.scaleYAdjust,
         0.2 * global.scaleXAdjust, 0.2 * global.scaleYAdjust, 0, c_white,
-        1, 0);
+        titleAlpha, 0);
 
 // Draw targetline
 

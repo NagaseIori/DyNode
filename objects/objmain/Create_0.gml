@@ -31,8 +31,8 @@ depth = 0;
 
     targetLineBelow = 137*global.resolutionH/1080;
     targetLineBeside = 112*global.resolutionW/1920;
-    targetLineBelowH = 8;
-    targetLineBesideW = 6;
+    targetLineBelowH = 5;
+    targetLineBesideW = 3;
     
     _position_update = function () {
         targetLineBelow = 137*global.resolutionH/1080;
@@ -126,6 +126,8 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
+    titleAlpha = 0.5;
+    animTargetTitleAlpha = 0.5;
     
     // Bottom
         bottomDim = 0.75;

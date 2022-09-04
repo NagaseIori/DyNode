@@ -182,6 +182,12 @@
 		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
 		lineMix[i] = lerp_a(lineMix[i], animTargetLineMix[i], animSpeed);
 	}
-		
 
+#endregion
+
+#region Other Animation
+	
+	animTargetTitleAlpha = editor_get_editmode() == 5? 0.5: 1.0;
+	titleAlpha = lerp_a(titleAlpha, animTargetTitleAlpha, animSpeed);
+	
 #endregion

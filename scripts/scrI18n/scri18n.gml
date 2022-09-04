@@ -16,7 +16,7 @@ function i18n_load(lname) {
 }
 
 function i18n_init() {
-    global.i18nLang = 1;
+    global.i18nLang = 0;
     global.i18nCont = [];
     global.i18nDefault = 0;
     global.i18nCount = 0;
@@ -24,12 +24,14 @@ function i18n_init() {
     i18n_load("zh-cn");
     i18n_load("zh-tw");
     i18n_load("en-us");
+    
+    i18n_set_lang("zh-cn");
 }
 
 function i18n_set_lang(language) {
     if(is_string(language)) {
         for(var i=0, l=global.i18nCount; i<l; i++)
-            if(language == global.i18Cont[i].lang) {
+            if(language == global.i18nCont[i].lang) {
                 language = i;
                 break;
             }
