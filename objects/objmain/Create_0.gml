@@ -63,6 +63,11 @@ depth = 0;
     mixerSpeed = 0.5;
     mixerMaxSpeed = 250; // px per frame
     mixerNextNote = [-1, -1]
+    mixerShadow = [];
+    mixerShadow[0] = instance_create(0, 0, objShadowMIX);
+    mixerShadow[1] = instance_create(0, 0, objShadowMIX);
+    mixerShadow[0].image_angle = 270;
+    mixerShadow[1].image_angle = 90;
 
 #endregion
 

@@ -145,26 +145,28 @@ image_yscale = global.scaleYAdjust;
             audio_play_sound(sndHit, 0, 0);
         
         // Create Shadow
-        var _x, _y;
-        if(side == 0) {
-            _x = x;
-            _y = global.resolutionH - objMain.targetLineBelow;
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
+            objMain.mixerShadow[side-1]._hit();
         }
         else {
-            _x = side == 1 ? objMain.targetLineBeside : 
-                             global.resolutionW - objMain.targetLineBeside;
-            _y = y;
+        	var _x, _y;
+	        if(side == 0) {
+	            _x = x;
+	            _y = global.resolutionH - objMain.targetLineBelow;
+	        }
+	        else {
+	            _x = side == 1 ? objMain.targetLineBeside : 
+	                             global.resolutionW - objMain.targetLineBeside;
+	            _y = y;
+	        }
+	        var _shadow = objShadow;
+	        
+	        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
+	        _inst.nowWidth = pWidth;
+	        _inst.visible = true;
+	        _inst.image_angle = image_angle;
+	        _inst._prop_init();
         }
-        var _shadow = objShadow;
-        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
-            _shadow = objShadowMIX;
-            _y = objMain.mixerX[side-1];
-        }
-            
-        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
-        _inst.nowWidth = pWidth;
-        _inst.visible = true;
-        _inst.image_angle = image_angle;
         
         _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }

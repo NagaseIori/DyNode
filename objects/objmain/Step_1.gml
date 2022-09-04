@@ -2,7 +2,7 @@
 
 // Mixer
     
-    mixerNextNote = [-1, -1]
+    array_fill(mixerNextNote, -1, 0, 2);
     
 #region TIME UPDATE
 

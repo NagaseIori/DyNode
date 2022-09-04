@@ -11,6 +11,7 @@ function map_close() {
 		instance_destroy(objScoreBoard);
 		instance_destroy(objPerfectIndc);
 		instance_destroy(objEditor);
+		instance_destroy(objShadow);
 		
 		time_source_destroy(timesourceResumeDelay);
 		part_emitter_destroy_all(partSysNote);
