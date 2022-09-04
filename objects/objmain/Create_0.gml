@@ -126,11 +126,11 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
-    titleAlpha = 0.5;
-    animTargetTitleAlpha = 0.5;
+    titleAlpha = 0.7;
+    animTargetTitleAlpha = 0.7;
     
     // Bottom
-        bottomDim = 0.75;
+        bottomDim = 0.3;
         bottomBgSurf = -1;
         bottomBgSurfPing = -1;
         bottomBgBlurAmount = 20;

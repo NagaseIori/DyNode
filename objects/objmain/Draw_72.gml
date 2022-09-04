@@ -2,21 +2,16 @@
 
 var _nw = global.resolutionW, _nh = global.resolutionH;
 
-// Draw Background Image
+// Draw Background
+
 
     if(bgImageSpr != -1) {
         draw_sprite(bgImageSpr, 0, _nw/2, _nh/2);
-        
-        // Dim background
-        draw_set_color(c_black);
-        draw_set_alpha(bgDim);
-        draw_rectangle(0, 0, _nw, _nh, false);
-        draw_set_alpha(1.0);
     }
     else {
-        draw_clear(c_black);
+        draw_clear(c_white);
     }
-
+    
 	// Draw bottom blured bg
     
     if(bgImageSpr != -1) {
@@ -26,7 +21,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
             
             // gpu_set_blendmode(bm_normal);
             surface_set_target(bottomBgSurf);
-                draw_sprite(bgImageSpr, 0, _nw / 2, targetLineBelow - _nh / 2);
+                draw_surface(application_surface, 0, targetLineBelow - _nh);
             surface_reset_target();
             
             if(!surface_exists(bottomBgSurfPing))
@@ -54,12 +49,18 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         }
         
         draw_surface(bottomBgSurf, 0, _nh - targetLineBelow);
+    }
+    
+    // Dim background
+	    draw_set_color(c_black);
+	    draw_set_alpha(bgDim);
+	    draw_rectangle(0, 0, _nw, _nh, false);
+	    draw_set_alpha(1.0);
         
         draw_set_color(c_black);
         draw_set_alpha(bottomDim);
         draw_rectangle(0, _nh - targetLineBelow, _nw, _nh, false);
         draw_set_alpha(1.0);
-    }
 
 	// Draw Bottom Right
     

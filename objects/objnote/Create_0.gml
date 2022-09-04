@@ -35,8 +35,8 @@ image_yscale = global.scaleYAdjust;
     // For Hold & Sub
     lastTime = 0;
     beginTime = 999999999;
-    lastAlphaL = 0.4;
-    lastAlphaR = 1.0;
+    lastAlphaL = 0;
+    lastAlphaR = 0.7;
     lastAlpha = lastAlphaL;
     
     pWidth = (width * 300 - 30)*2; // Width In Pixels

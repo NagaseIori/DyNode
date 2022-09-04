@@ -20,22 +20,38 @@ if(!drawVisible) return;
     var _h = sprite_get_height(sprHold), _th = pHeight - dFromBottom - uFromTop,
     _w = sprite_get_width(sprHold), _rw = pWidth - lFromLeft - rFromRight;
     var _scl = _rw / _w;
+    
+    // Optimization
+    if(side == 0 && _th > global.resolutionH)
+    	_th -= floor((_th - global.resolutionH) / _h) * _h;
+    else if(side == 1 && _th > global.resolutionW)
+    	_th -= floor((_th - global.resolutionW) / _h) * _h;
+    
+    // Draw Green Blend
+    
+    draw_set_color_alpha(c_green, lastAlpha);
+    if(side == 0)
+    	draw_rectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny, false);
+    else
+    	draw_rectangle(_nx , _ny - _rw/2, _nx + _th * (side == 1 ? 1 : -1), _ny + _rw / 2, false);
+    
+    // Draw Sprites
+    
     if(side == 0) {
-        for(var _i = _th; _i >= 0; _i -= _h) if(_ny - _i + _h >= 0){
+        for(var _i = _th; _i >= 0; _i -= _h) {
             draw_sprite_part_ext(_spr, 0, 0, 0, 
                 _w, min(_h, _i), _nx - _rw/2, _ny - _i,
-                _scl, 1, c_white, lastAlpha * image_alpha);
+                _scl, 1, c_white, holdAlpha * image_alpha);
         }
     }
     else {
         // var _spr = side == 1? sprHoldL:sprHoldR;
-        for(var _i = _th; _i >= 0; _i -= _h)
-        	if(in_between(_nx + (_i-_h) * (side == 1 ? 1 : -1), -_h, global.resolutionW+_h)) {
-	            draw_sprite_part_ext(_spr, 0, 0, 0, 
-	                min(_h, _i), _w,
-	                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
-	                side == 2 ? 1 : -1, _scl, c_white, lastAlpha * image_alpha);
-	        }
+        for(var _i = _th; _i >= 0; _i -= _h) {
+            draw_sprite_part_ext(_spr, 0, 0, 0, 
+                min(_h, _i), _w,
+                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
+                side == 2 ? 1 : -1, _scl, c_white, holdAlpha * image_alpha);
+        }
     }
 
 // Draw Edge
