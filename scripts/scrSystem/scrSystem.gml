@@ -52,16 +52,16 @@ function map_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        announcement_error("谱面文件不存在。导入中止。");
+        announcement_error(i18n_get("anno_chart_not_exists"));
         return;
     }
     
-    var _confirm = _direct? true:show_question("确认导入谱面？所有操作将不可撤销。");
+    var _confirm = _direct? true:show_question_i18n("box_q_import_confirm");
     if(!_confirm) return;
-    var _clear = _direct? true:show_question("是否清除所有原谱面物件？");
+    var _clear = _direct? true:show_question_i18n("box_q_import_clear");
     if(_clear) note_delete_all();
     
-    var _import_info = show_question("是否导入谱面信息（标题、难度、Timing等）？");
+    var _import_info = show_question_i18n("box_q_import_info");
     
     if(filename_ext(_file) == ".xml")
         map_import_xml(_file, _import_info);
@@ -69,7 +69,7 @@ function map_load(_file = "") {
     objManager.chartPath = _file;
     
     show_debug_message("Import map sucessfully.");
-    announcement_play("导入谱面完毕。");
+    announcement_play("anno_import_chart_complete");
 }
 
 function map_import_xml(_file, _import_info) {
@@ -120,7 +120,7 @@ function map_import_xml(_file, _import_info) {
 	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
 	
 	if(variable_struct_exists(_main, "m_argument")) {
-		_import_tp = show_question("是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？");
+		_import_tp = show_question_i18n(i18n_get("box_q_import_dymm_bpm"));
 		var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
 		if(!is_array(_bpms)) _bpms = [_bpms];
 		for(var i=0, l=array_length(_bpms); i<l; i++) {
@@ -212,8 +212,8 @@ function map_import_osu() {
         
     if(_file == "") return;
     
-    var _import_hitobj = show_question("是否导入 .osu 中的物件？（要进行转谱吗？）");
-    var _clear_notes = show_question("是否清除所有原谱面物件？此操作不可撤销！");
+    var _import_hitobj = show_question_i18n(i18n_get("box_q_osu_import_objects"));
+    var _clear_notes = show_question_i18n(i18n_get("box_q_clear_objects"));
     if(_clear_notes) note_delete_all();
     var _delay_time = 0;
     
@@ -283,11 +283,11 @@ function map_import_osu() {
     timing_point_sort();
     note_sort_all();
     
-    announcement_play("导入谱面信息完毕。", 1000);
+    announcement_play("anno_import_info_complete", 1000);
 }
 
 function map_set_title() {
-	var _title = get_string("请输入新的谱面标题：", objMain.chartTitle);
+	var _title = get_string_i18n(i18n_get("box_set_chart_title") + ": ", objMain.chartTitle);
 	
 	if(_title == "") return;
 	
@@ -315,7 +315,7 @@ function music_load(_file = "") {
         // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
         	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
-        	announcement_error("音乐文件加载失败，可能原因为类型不支持或文件损坏。\nFMOD 错误信息："+FMODGMS_Util_GetErrorMessage());
+        	announcement_error(i18n_get("anno_music_load_err")+FMODGMS_Util_GetErrorMessage());
         	music = undefined;
         	return;
         }
@@ -334,7 +334,7 @@ function music_load(_file = "") {
     objManager.musicPath = _file;
     show_debug_message("Load sucessfully.");
     
-    announcement_play("音乐加载完毕。", 1000);
+    announcement_play("anno_music_load_complete", 1000);
 }
 
 function image_load(_file = "") {
@@ -345,13 +345,13 @@ function image_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        announcement_error("图片文件不存在。\n[scale, 0.8]路径："+_file);
+        announcement_error(i18n_get("anno_graph_not_exists")+_file);
         return;
     }
     
     var _spr = sprite_add(_file, 1, 0, 0, 0, 0);
     if(_spr < 0) {
-        announcement_error("图片文件读取失败。图片可能过大或损坏。");
+        announcement_error("anno_graph_load_err");
         return;
     }
     
@@ -451,7 +451,7 @@ function map_export_xml() {
 	
 	objManager.chartPath = _file;
 	
-	announcement_play("谱面导出完毕。");
+	announcement_play("anno_export_complete");
 }
 
 function map_get_struct() {
@@ -532,10 +532,10 @@ function map_get_alt_title() {
 
 function map_set_global_bar() {
 	
-	var _barpm = get_string("请输入自定义的全局 Bar Per Minute :", "");
+	var _barpm = get_string_i18n(i18n_get("box_set_global_bar_1")+ " :", "");
 	_barpm = string_real(_barpm);
 	if(_barpm == "") return;
-	var _offset = string_digits(get_string("请输入用于 Bar 显示与导出的全局 Offset （毫秒）:", ""));
+	var _offset = string_digits(get_string_i18n(i18n_get("box_set_global_bar_2")+":", ""));
 	if(_offset == "") return;
 	with(objMain) {
 		chartBarPerMin = real(_barpm);
@@ -544,7 +544,7 @@ function map_set_global_bar() {
 		chartBarOffset = time_to_bar(chartTimeOffset);
 	}
 	
-	announcement_play("已更改全局 BarPM 与 Offset 至："+_barpm+"/"+string(_offset));
+	announcement_play(i18n_get("anno_set_global_bar_complete") + ": " +_barpm+"/"+string(_offset));
 	
 }
 
@@ -552,7 +552,7 @@ function map_add_offset(_offset = "", record = false) {
 	var _record = false;
 	if(_offset == "") {
 		var _nega = 1;
-		_offset = get_string("请输入你想要添加的全局时间偏移量（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。", "");
+		_offset = get_string_i18n(i18n_get("box_add_offset"), "");
 		if(_offset == "") return;
 		if(string_char_at(_offset, 1) == "-")
 			_nega = -1;
@@ -573,7 +573,7 @@ function map_add_offset(_offset = "", record = false) {
 	}
 	notes_array_update();
 	
-	announcement_play("全局时间偏移添加完毕。");
+	announcement_play("anno_add_offset_complete");
 	
 	if(record)
 		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
@@ -622,14 +622,14 @@ function project_load(_file = "") {
     ///// Old version workaround
     
 	    if(_contents.version < "v0.1.5") {
-	    	var _question = show_question("检测到来自特定旧版本的项目。\n该谱面是否使用了从 .osu 中导入校时信息并添加了 64ms 的延迟？\n这个延迟在新的版本中建议被撤销。如果你选择“是”，则所有放置的 Note 和 Timing Point 都会被提前 64ms 。\n在调整之前我们建议你先对 .dyn 文件进行备份。你也可以在之后手动进行调整。\n这个警告不会出现第二遍。");
+	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
 			if(_question)
 				map_add_offset(-64, true);
 	    }
 		
 	/////
     
-    announcement_play("打开项目完毕。");
+    announcement_play("anno_project_load_complete");
     
     return 1;
 }
@@ -663,14 +663,14 @@ function project_save_as(_file = "") {
 	
 	objManager.projectPath = _file;
 	
-	announcement_play("项目保存完毕。");
+	announcement_play("anno_project_save_complete");
 	
 	return 1;
 }
 
 function project_new() {
 	
-	var _confirm = show_question("确定要创建新的工程吗？所有未保存的更改都将丢失。");
+	var _confirm = show_question_i18n(i18n_get("new_project_warn"));
 	if(!_confirm) return;
 	
 	with(objManager) {
@@ -740,7 +740,7 @@ function theme_next() {
 	if(instance_exists(objMain))
 		objMain.themeColor = global.themes[global.themeAt].color;
 	
-	announcement_play("已切换到主题 [[" + global.themes[global.themeAt].title + "]", 1000);
+	announcement_play(i18n_get("anno_switch_theme_to") + " [[" + global.themes[global.themeAt].title + "]", 1000);
 }
 
 function theme_get() {
@@ -772,7 +772,7 @@ function announcement_error(str, time = 8000) {
 
 function announcement_adjust(str, val) {
 	str = i18n_get(str);
-	announcement_play(str + "：" + (val?"开启":"关闭"));
+	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"));
 }
 
 #endregion
@@ -826,18 +826,18 @@ function save_config() {
 function switch_debug_info() {
 	with(objMain) {
 		showDebugInfo = !showDebugInfo;
-		announcement_play("调试信息："+(showDebugInfo?"打开":"关闭"));
+		announcement_adjust("anno_debug_info", showDebugInfo);
 	}
 }
 
 function switch_autosave() {
 	with(objManager) {
 		if(!global.autosave) {
-			announcement_play("自动保存已开启。", 2000);
+			announcement_play("autosave_enable", 2000);
 			time_source_start(tsAutosave);
 		}
 		else {
-			announcement_play("自动保存已关闭。", 2000);
+			announcement_play("autosave_disable", 2000);
 			time_source_stop(tsAutosave);
 		}
 		global.autosave = !global.autosave;

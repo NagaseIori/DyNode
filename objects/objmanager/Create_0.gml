@@ -66,7 +66,7 @@ gpu_set_tex_filter(true);
 // DyCore Initialization
 
 // if(DyCore_Init() != "success") {
-//     show_error("DyCore 核心初始化失败。", true);
+//     show_error_i18n("DyCore 核心初始化失败。", true);
 // }
 
 // DerpXML Initialization

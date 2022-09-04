@@ -303,11 +303,11 @@ function timing_point_add(_t, _l, _b, record = false) {
 }
 
 function timing_point_create(record = false) {
-	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
+	var _time = string_digits(get_string_i18n("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
-	var _bpm = string_real(get_string("请输入 BPM ：", ""));
+	var _bpm = string_real(get_string_i18n("请输入 BPM ：", ""));
 	if(_bpm == "") return;
-	var _meter = string_digits(get_string("请输入节拍（x/4）：", ""));
+	var _meter = string_digits(get_string_i18n("请输入节拍（x/4）：", ""));
 	if(_meter == "") return;
 	
 	_time = real(_time);

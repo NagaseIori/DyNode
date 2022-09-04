@@ -18,24 +18,24 @@
     	switch_debug_info();
     if(keycheck_down_ctrl(ord("B"))) {
     	if(!chartBarUsed) {
-    		announcement_warning("你还未设置全局 Bar Per Minute 与 Offset 。无法切换 Bar/Time 显示。\n使用 F6 即可进行设置。");
+    		announcement_warning("anno_show_bar_warn");
     	}
     	else {
     		showBar = !showBar;
-    		announcement_adjust("以 Bar 代替 Time 显示", showBar);
+    		announcement_adjust("anno_show_bar", showBar);
     	}
     }
     if(keycheck_down(ord("P"))) {
     	hideScoreboard = !hideScoreboard;
-    	announcement_adjust("编辑模式下隐藏分数显示", hideScoreboard);
+    	announcement_adjust("anno_hide_scoreboard", hideScoreboard);
     }
     if(keycheck_down(ord("O"))) {
     	particlesEnabled = !particlesEnabled;
-    	announcement_adjust("粒子效果", particlesEnabled);
+    	announcement_adjust("anno_particles_effect", particlesEnabled);
     }
     if(keycheck_down_ctrl(ord("M"))) {
     	hitSoundOn = !hitSoundOn;
-    	announcement_adjust("打击音", hitSoundOn);
+    	announcement_adjust("anno_hitsound", hitSoundOn);
     }
     	
     if(keycheck_down_ctrl(ord("T")))
@@ -59,15 +59,15 @@
     		}
     		
 	    	chartSideType[_side] = _type;
-	    	announcement_play("切换侧面类型至："+chartSideType[_side]);
+	    	announcement_play("anno_switch_sidetype"+chartSideType[_side]);
     	}
     	else {
-    		announcement_warning("你只有正在编辑侧面才可以切换侧面类型。");
+    		announcement_warning("anno_switch_sidetype_warn");
     	}
     }
     if(keycheck_down(ord("F"))) {
     	fadeOtherNotes = !fadeOtherNotes;
-    	announcement_adjust("透明化非编辑侧音符", fadeOtherNotes);
+    	announcement_adjust("anno_fade_other_notes", fadeOtherNotes);
     }
     
     if(keycheck_down(vk_enter)) {		// Replay Mode

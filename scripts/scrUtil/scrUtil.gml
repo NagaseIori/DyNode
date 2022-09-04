@@ -402,3 +402,14 @@ function io_clear_diag() {
 	io_clear();
 }
 
+function show_question_i18n(str) {
+	return show_question(i18n_get(str));
+}
+
+function show_error_i18n(str, abort) {
+	return show_error(i18n_get(str), abort);
+}
+
+function get_string_i18n(str, def) {
+	return get_string(i18n_get(str), def);
+}
