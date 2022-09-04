@@ -381,7 +381,8 @@
     {"CopyToMask":3035461389054378222,"filePath":"datafiles","resourceVersion":"1.0","name":"inigo quilez 2d sdf license.txt","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"sprMsdfNotoSans.json","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/lang","resourceVersion":"1.0","name":"zh-cn.json","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles/lang","resourceVersion":"1.0","name":"en.json","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/lang","resourceVersion":"1.0","name":"en-US.json","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/lang","resourceVersion":"1.0","name":"zh-TW.json","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2022.6.1.26",

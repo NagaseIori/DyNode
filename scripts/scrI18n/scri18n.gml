@@ -22,7 +22,8 @@ function i18n_init() {
     global.i18nCount = 0;
     
     i18n_load("zh-cn");
-    i18n_load("en");
+    i18n_load("zh-tw");
+    i18n_load("en-us");
 }
 
 function i18n_set_lang(language) {
