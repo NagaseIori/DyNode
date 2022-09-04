@@ -115,7 +115,7 @@ randomize();
 
 // Check For Update
 
-if(global.autoupdate)
+if(global.autoupdate && !string_last_pos("dev", global.version))
 	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
 

@@ -31,8 +31,8 @@ depth = 0;
 
     targetLineBelow = 137*global.resolutionH/1080;
     targetLineBeside = 112*global.resolutionW/1920;
-    targetLineBelowH = 5;
-    targetLineBesideW = 3;
+    targetLineBelowH = 6;
+    targetLineBesideW = 4;
     
     _position_update = function () {
         targetLineBelow = 137*global.resolutionH/1080;
