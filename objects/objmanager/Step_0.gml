@@ -57,7 +57,7 @@ if(keycheck_down(vk_f7)) {
 if(keycheck_down(vk_f12)) {
 	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
-	announcement_play("screenshot_save" + _file)
+	announcement_play(i18n_get("screenshot_save") + _file)
 }
 if(keycheck_down(vk_f8))
 	switch_autosave();

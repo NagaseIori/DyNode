@@ -372,8 +372,6 @@ function image_load(_file = "") {
         
         surface_free_f(bottomBgSurf);
         bottomBgSurf = -1;
-        
-        
     }
     objManager.backgroundPath = _file;
     sprite_delete(_spr);

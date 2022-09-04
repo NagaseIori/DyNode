@@ -14,42 +14,39 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
 	// Draw bottom blured bg
     
-    if(bgImageSpr != -1) {
-        // show_debug_message("Draw below bg");
-        if(!surface_exists(bottomBgSurf)) {
-            bottomBgSurf = surface_create(_nw, targetLineBelow);
-            
-            // gpu_set_blendmode(bm_normal);
-            surface_set_target(bottomBgSurf);
-                draw_surface(application_surface, 0, targetLineBelow - _nh);
-            surface_reset_target();
-            
-            if(!surface_exists(bottomBgSurfPing))
-                bottomBgSurfPing = surface_create(_nw, targetLineBelow);
-            
-            surface_set_target(bottomBgSurfPing);
-                shader_set(shaderBlur);
-                    shader_set_uniform_f_array(u_size, [_nw, targetLineBelow,
-                        bottomBgBlurAmount, bottomBgBlurSigma]);
-                    shader_set_uniform_f_array(u_blur_vector, [1, 0]);
-                    draw_surface(bottomBgSurf, 0, 0);
-                shader_reset();
-            surface_reset_target();
-            
-            gpu_set_blendmode_ext(bm_one, bm_zero);
-            surface_set_target(bottomBgSurf);
-                shader_set(shaderBlur);
-                    shader_set_uniform_f_array(u_size, [_nw, targetLineBelow,
-                        bottomBgBlurAmount, bottomBgBlurSigma]);
-                    shader_set_uniform_f_array(u_blur_vector, [0, 1]);
-                    draw_surface(bottomBgSurfPing, 0, 0);
-                shader_reset();
-            surface_reset_target();
-            gpu_set_blendmode(bm_normal);
-        }
+    if(!surface_exists(bottomBgSurf)) {
+        bottomBgSurf = surface_create(_nw, targetLineBelow);
         
-        draw_surface(bottomBgSurf, 0, _nh - targetLineBelow);
+        // gpu_set_blendmode(bm_normal);
+        surface_set_target(bottomBgSurf);
+            draw_surface(application_surface, 0, targetLineBelow - _nh);
+        surface_reset_target();
+        
+        if(!surface_exists(bottomBgSurfPing))
+            bottomBgSurfPing = surface_create(_nw, targetLineBelow);
+        
+        surface_set_target(bottomBgSurfPing);
+            shader_set(shaderBlur);
+                shader_set_uniform_f_array(u_size, [_nw, targetLineBelow,
+                    bottomBgBlurAmount, bottomBgBlurSigma]);
+                shader_set_uniform_f_array(u_blur_vector, [1, 0]);
+                draw_surface(bottomBgSurf, 0, 0);
+            shader_reset();
+        surface_reset_target();
+        
+        gpu_set_blendmode_ext(bm_one, bm_zero);
+        surface_set_target(bottomBgSurf);
+            shader_set(shaderBlur);
+                shader_set_uniform_f_array(u_size, [_nw, targetLineBelow,
+                    bottomBgBlurAmount, bottomBgBlurSigma]);
+                shader_set_uniform_f_array(u_blur_vector, [0, 1]);
+                draw_surface(bottomBgSurfPing, 0, 0);
+            shader_reset();
+        surface_reset_target();
+        gpu_set_blendmode(bm_normal);
     }
+    
+    draw_surface(bottomBgSurf, 0, _nh - targetLineBelow);
     
     // Dim background
 	    draw_set_color(c_black);
