@@ -796,6 +796,8 @@ function load_config() {
 		global.autoupdate = _con.autoupdate;
 	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
 		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
+	if(variable_struct_exists(_con, "language"))
+		i18n_set_lang(_con.language);
 }
 
 function save_config() {
@@ -809,7 +811,8 @@ function save_config() {
 		version: global.version,
 		autosave: global.autosave,
 		autoupdate: global.autoupdate,
-		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY
+		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY,
+		language: i18n_get_lang()
 	}));
 	
 	file_text_close(_f);

@@ -41,6 +41,10 @@ function i18n_set_lang(language) {
     global.i18nLang = language%global.i18nCount;
 }
 
+function i18n_get_lang() {
+    return global.i18nCont[global.i18nLang].lang;
+}
+
 function i18n_get(context) {
     var _lang = global.i18nLang;
     if(!variable_struct_exists(global.i18nCont[_lang].content, context))
