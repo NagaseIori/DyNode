@@ -77,13 +77,13 @@ DerpXml_Init();
 
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
-        announcement_error("FMOD 未能正确加载。所有音乐相关功能将无法正常运作。请检查文件完整性。");
+        announcement_error("FMOD_load_err");
         exit;
     }
     
     // Create the system
     if (FMODGMS_Sys_Create() < 0) {
-        show_error_async("FMOD 创建系统失败。\n 错误信息：" + FMODGMS_Util_GetErrorMessage(), false);
+        show_error_async(i18n_get("FMOD_create_sys_err") + FMODGMS_Util_GetErrorMessage(), false);
         exit;
     }
     
@@ -147,7 +147,7 @@ room_goto(rStartPage);
 	var _auto_save = function () {
 		if(projectPath != "")
 			project_save();
-		announcement_play("自动保存项目完毕。");
+		announcement_play("autosave_complete");
 	}
 	tsAutosave = time_source_create(time_source_game, 60*5, time_source_units_seconds, _auto_save, [], -1);
 	if(global.autosave) {

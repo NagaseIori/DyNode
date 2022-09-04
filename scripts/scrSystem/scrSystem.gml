@@ -752,6 +752,7 @@ function theme_get() {
 #region ANNOUNCEMENT FUNCTIONS
 
 function announcement_play(str, time = 3000) {
+	str = i18n_get(str);
 	with(objManager) {
 		announcementString = str;
 		announcementLastTime = time;
@@ -760,14 +761,17 @@ function announcement_play(str, time = 3000) {
 }
 
 function announcement_warning(str, time = 5000) {
+	str = i18n_get(str);
 	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time);
 }
 
 function announcement_error(str, time = 8000) {
+	str = i18n_get(str);
 	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time);
 }
 
 function announcement_adjust(str, val) {
+	str = i18n_get(str);
 	announcement_play(str + "：" + (val?"开启":"关闭"));
 }
 

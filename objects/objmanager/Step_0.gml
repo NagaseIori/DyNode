@@ -49,7 +49,7 @@ if(room == rMain) {
 
 if(keycheck_down(vk_f7)) {
 	if(!window_get_fullscreen())
-		announcement_warning("在全屏模式下使用会弹出窗口的功能键是危险的操作,某些情况下可能会导致程序无法响应或谱面丢失。这个问题暂时无法修复。请关闭全屏或使用自动保存功能。");
+		announcement_warning("fullscreen_warn");
 	window_set_fullscreen(!window_get_fullscreen());
 }
     
@@ -57,7 +57,7 @@ if(keycheck_down(vk_f7)) {
 if(keycheck_down(vk_f12)) {
 	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
-	announcement_play("已保存截图到: " + _file)
+	announcement_play("screenshot_save" + _file)
 }
 if(keycheck_down(vk_f8))
 	switch_autosave();
