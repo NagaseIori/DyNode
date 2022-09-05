@@ -14,3 +14,5 @@ alphaMul = 1;
 _hit = function () {
     animLast = 0;
 }
+
+depth = -80000000;

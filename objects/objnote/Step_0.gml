@@ -24,8 +24,8 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     
     if(keycheck(ord("A")) || keycheck(ord("D")) || 
     	objMain.topBarMousePressed || (side == 0 && objMain.nowPlaying)) {
-		image_alpha = animTargetA;
-		lastAlpha = animTargetLstA;
+		image_alpha = animTargetA * _factor;
+		lastAlpha = animTargetLstA * _factor;
 	}
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
