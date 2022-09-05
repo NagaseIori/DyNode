@@ -70,6 +70,7 @@ image_yscale = global.scaleYAdjust;
 // In-Functions
 
     _prop_init = function () {
+    	origDepth = side == 0? -20000000 : -10000000;
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
