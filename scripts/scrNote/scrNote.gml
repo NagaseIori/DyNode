@@ -189,11 +189,39 @@ function note_check_and_activate(_struct) {
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
-		instance_activate_object(_str.inst);
+		// instance_activate_object(_str.inst);
+		note_activate(_str.inst);
 		return 1;
 	}
 	else if(_flag && _outbound_check_t(_str.time, !(_str.side))) {
 		return -1;
 	}
 	return 0;
+}
+
+function note_deactivate_request(inst) {
+	objMain.deactivationQueue[? inst] = true;
+}
+
+function note_activate(inst) {
+	instance_activate_object(inst);
+	if(ds_map_exists(objMain.deactivationQueue, inst))
+		ds_map_delete(objMain.deactivationQueue, inst);
+}
+
+function note_deactivate_flush() {
+	with(objMain) {
+		var q=deactivationQueue;
+		var k=ds_map_find_first(q), s=ds_map_size(q);
+		if(debug_mode && s)
+			show_debug_message("DEACTIVATED "+string(s)+" NOTES.");
+		for(; s>0; s--) {
+			if(instance_exists(k.sinst))
+				instance_deactivate_object(k.sinst);
+			instance_deactivate_object(k);
+			k=ds_map_find_next(q, k);
+		}
+		
+		ds_map_clear(q);
+	}
 }

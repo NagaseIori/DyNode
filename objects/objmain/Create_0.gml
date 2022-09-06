@@ -10,6 +10,12 @@ depth = 0;
 // Make Original Background Layer Invisible
 
     layer_set_visible(layer_get_id("Background"), false);
+    
+#region Optimization
+
+	deactivationQueue = ds_map_create();
+	
+#endregion
 
 #region Time Sources
 	
@@ -22,6 +28,10 @@ depth = 0;
 	timesourceResumeDelay =
 		time_source_create(time_source_game, resumeDelay/1000,
 		time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
+	timesourceDeactivateFlush =
+		time_source_create(time_source_game, NOTE_DEACTIVATION_TIME/1000,
+		time_source_units_seconds, function() {note_deactivate_flush();}, [], -1, time_source_expire_after);
+	time_source_start(timesourceDeactivateFlush);
 	
 #endregion
 

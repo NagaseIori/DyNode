@@ -14,6 +14,7 @@ function map_close() {
 		instance_destroy(objShadow);
 		
 		time_source_destroy(timesourceResumeDelay);
+		time_source_destroy(timesourceDeactivateFlush);
 		part_emitter_destroy_all(partSysNote);
 		part_system_destroy(partSysNote);
 		part_type_destroy(partTypeNoteDL);
@@ -24,6 +25,7 @@ function map_close() {
 		
 		for(var i=0; i<3; i++)
 		    ds_map_destroy(chartNotesMap[i]);
+		ds_map_destroy(deactivationQueue);
 		
 		if(!is_undefined(music)) {
 			FMODGMS_Snd_Unload(music);
