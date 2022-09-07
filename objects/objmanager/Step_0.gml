@@ -1,4 +1,17 @@
-/// @description Input check & FMOD Update
+/// @description Input check & Exts update
+
+#region Window frame related
+
+window_frame_update();
+
+if (window_frame_get_visible()) {
+	var w, h;
+	w = window_frame_get_width();
+	h = window_frame_get_height();
+    window_frame_set_region(0, 0, w, h);
+}
+
+#endregion
 
 if(delta_time / 1000 < 100)
 	announcementTime += delta_time / 1000;
@@ -48,9 +61,7 @@ if(room == rMain) {
 
 
 if(keycheck_down(vk_f7)) {
-	if(!window_get_fullscreen())
-		announcement_warning("fullscreen_warn");
-	window_set_fullscreen(!window_get_fullscreen());
+	window_frame_set_fakefullscreen(!window_frame_get_fakefullscreen());
 }
     
     

@@ -99,6 +99,7 @@
     {"id":{"name":"CleanTransformAddRotate","path":"scripts/CleanTransformAddRotate/CleanTransformAddRotate.yy",},"order":1,},
     {"id":{"name":"scribble_font_bake_shader","path":"scripts/scribble_font_bake_shader/scribble_font_bake_shader.yy",},"order":3,},
     {"id":{"name":"shd_lazer","path":"shaders/shd_lazer/shd_lazer.yy",},"order":11,},
+    {"id":{"name":"window_frame","path":"extensions/window_frame/window_frame.yy",},"order":8,},
     {"id":{"name":"rMain","path":"rooms/rMain/rMain.yy",},"order":1,},
     {"id":{"name":"sh_better_scaling_supersampling_2x2","path":"shaders/sh_better_scaling_supersampling_2x2/sh_better_scaling_supersampling_2x2.yy",},"order":6,},
     {"id":{"name":"sprManager","path":"sprites/sprManager/sprManager.yy",},"order":13,},
