@@ -8,7 +8,7 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
-#macro NOTE_DEACTIVATION_TIME 10000			// Every fixed time than deactivated notes in queue
+#macro NOTE_DEACTIVATION_TIME 500			// Every fixed time than deactivated notes in queue
 #macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
