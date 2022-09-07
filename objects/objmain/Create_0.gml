@@ -150,6 +150,7 @@ depth = 0;
         bottomBgSurfPing = -1;
         bottomBgBlurAmount = 20;
         bottomBgBlurSigma = 10;
+        bottomInfoSurf = -1;
     
     // Background
         bgDim = 0.65;

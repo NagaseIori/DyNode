@@ -90,6 +90,8 @@
 
 	// Adjust Difficulty
 	var _diff_delta = keycheck_down_ctrl(ord("P")) - keycheck_down_ctrl(ord("O"));
+	if(_diff_delta != 0)
+		surface_free_f(bottomInfoSurf);
 	chartDifficulty += _diff_delta;
 	chartDifficulty = clamp(chartDifficulty, 0, global.difficultyCount - 1);
 

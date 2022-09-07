@@ -6,6 +6,7 @@ function map_close() {
 	with(objMain) {
 		surface_free_f(bottomBgSurf);
 		surface_free_f(bottomBgSurfPing);
+		surface_free_f(bottomInfoSurf);
 		
 		note_delete_all();
 		instance_destroy(objScoreBoard);
@@ -295,6 +296,7 @@ function map_set_title() {
 	if(_title == "") return;
 	
 	objMain.chartTitle = _title;
+	surface_free_f(objMain.bottomInfoSurf);
 }
 
 function music_load(_file = "") {
