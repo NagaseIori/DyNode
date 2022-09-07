@@ -210,7 +210,7 @@ image_yscale = global.scaleYAdjust;
     	beginTime = props.beginTime;
     	
     	if(noteType == 2 && sinst > 0) {
-    		instance_activate_object(sinst);
+    		note_activate(sinst);
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
@@ -302,7 +302,7 @@ image_yscale = global.scaleYAdjust;
 	    }
 	    
 	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
-	    	instance_activate_object(finst);
+	    	note_activate(finst);
     }
     
     // Editors

@@ -566,7 +566,7 @@ function map_add_offset(_offset = "", record = false) {
 			timingPoints[i].time += _offset;
 	}
 	
-	instance_activate_object(objNote);
+	note_activate(objNote);
 	with(objMain) {
 		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
 			chartNotesArray[i].inst.time += _offset;

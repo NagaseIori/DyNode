@@ -23,7 +23,7 @@ _prop_init();
 		        sinst = objMain.chartNotesMap[side][? sid]
 		    
 		    if(state != stateOut)
-		    	instance_activate_object(sinst);
+		    	note_activate(sinst);
     
 		    // Being destroyed
 		    if(!instance_exists(sinst))

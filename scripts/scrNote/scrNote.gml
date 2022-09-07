@@ -210,6 +210,7 @@ function note_activate(inst) {
 }
 
 function note_deactivate_flush() {
+	// return;
 	with(objMain) {
 		var q=deactivationQueue;
 		var k=ds_map_find_first(q), s=ds_map_size(q);

@@ -179,11 +179,11 @@ function operation_do(_type, _from, _to = -1) {
 			return build_note_withprop(_from);
 			break;
 		case OPERATION_TYPE.MOVE:
-			instance_activate_object(_from.inst);
+			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
 			break;
 		case OPERATION_TYPE.REMOVE:
-			instance_activate_object(_from.inst);
+			note_activate(_from.inst);
 			instance_destroy(_from.inst);
 			break;
 		case OPERATION_TYPE.TPADD:

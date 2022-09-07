@@ -8,8 +8,8 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
-#macro NOTE_DEACTIVATION_TIME 1000			// Every fixed time than deactivated notes in queue
-#macro NOTE_DEACTIVATION_LIMIT 300			// if notes' being deactivated number exceeds the limit than excecute immediately
+#macro NOTE_DEACTIVATION_TIME 200			// Every fixed time than deactivated notes in queue
+#macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
 
@@ -102,6 +102,7 @@ instance_create(x, y, objInput);
 
 // Fonts Initialization
 
+global._notoFont = font_add("fonts/NotoSansCJKkr-Black.otf", 30, false, false, 32, 65535);
 scribble_anim_cycle(0.2, 255, 255);
 scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 10, c_black, 0.4, 0, true);
 scribble_font_bake_shadow("fDynamix16", "fDynamix16s", 0, 2, c_black, 0.3, 0, true);

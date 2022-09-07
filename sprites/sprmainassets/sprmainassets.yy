@@ -17,8 +17,8 @@
   "width": 1500,
   "height": 960,
   "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default",
+    "name": "texNotload",
+    "path": "texturegroups/texNotload",
   },
   "swatchColours": null,
   "gridX": 0,

@@ -7,12 +7,22 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // Draw Title
 
 	if(has_cjk(chartTitle)) {
-		scribble(cjk_prefix()+chartTitle).starting_format("fOrbitron48", c_white)
-        .align(fa_left, fa_middle)
-	    .transform(global.scaleXAdjust * 1.5, global.scaleYAdjust * 1.5)
-	    .msdf_shadow(c_black, 0.4, 0, 3, 0.1)
-	    .blend(c_white, titleAlpha)
-	    .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 47 * global.scaleYAdjust);
+		// scribble(cjk_prefix()+chartTitle).starting_format("fOrbitron48", c_white)
+  //      .align(fa_left, fa_middle)
+	 //   .transform(global.scaleXAdjust * 1.5, global.scaleYAdjust * 1.5)
+	 //   .msdf_shadow(c_black, 0.4, 0, 3, 0.1)
+	 //   .blend(c_white, titleAlpha)
+	 //   .draw(resor_to_x(0.021), global.resolutionH - targetLineBelow + 47 * global.scaleYAdjust);
+	 
+		draw_set_halign(fa_left); draw_set_valign(fa_middle);
+		
+		draw_set_font(global._notoFont);
+		// Shadow
+		draw_set_color_alpha(c_black, titleAlpha*0.4);
+		draw_text(resor_to_x(0.021), global.resolutionH - targetLineBelow + 44 * global.scaleYAdjust, chartTitle);
+		draw_set_color_alpha(c_white, titleAlpha);
+		draw_text(resor_to_x(0.021), global.resolutionH - targetLineBelow + 37 * global.scaleYAdjust, chartTitle);
+		draw_set_alpha(1.0);
 	}
 	else {
 		scribble(chartTitle).starting_format("fOrbitron48s", c_white)
@@ -26,7 +36,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     // Draw Difficulty
     better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
         resor_to_x(0.019), global.resolutionH - targetLineBelow + 77 * global.scaleYAdjust,
-        0.2 * global.scaleXAdjust, 0.2 * global.scaleYAdjust, 0, c_white,
+        0.67 * global.scaleXAdjust, 0.67 * global.scaleYAdjust, 0, c_white,
         titleAlpha, 0);
 
 // Draw targetline
