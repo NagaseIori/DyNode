@@ -112,7 +112,12 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 	for(var i=0, l=array_length(_texarr); i<l; i++) {
 		texture_prefetch(_texarr[i]);
 	}
-    
+
+// Window Frame Init
+
+window_frame_update();
+_windowframe_inited = false;
+
 // Randomize
 
 randomize();

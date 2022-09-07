@@ -9,6 +9,17 @@ if (window_frame_get_visible()) {
 	w = window_frame_get_width();
 	h = window_frame_get_height();
     window_frame_set_region(0, 0, w, h);
+    
+    if(!_windowframe_inited) {
+    	_windowframe_inited = true;
+    	window_command_hook(window_command_close);
+    }
+}
+
+if(window_command_check(window_command_close)) {
+	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
+	if(_confirm_exit)
+		game_end();
 }
 
 #endregion

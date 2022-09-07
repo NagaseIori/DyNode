@@ -66,6 +66,7 @@
         "box_q_import_confirm" : "确认导入谱面？所有操作将不可撤销。",
         "box_q_import_clear" : "是否清除所有原谱面物件？",
         "box_q_import_info" : "是否导入谱面信息（标题、难度、Timing等）？",
-        "anno_import_chart_complete" : "导入谱面完毕。"
+        "anno_import_chart_complete" : "导入谱面完毕。",
+        "confirm_close" : "确定要退出吗？所有未保存的进度将会丢失。"
     }
 }
