@@ -187,7 +187,7 @@
 
 #region Other Animation
 	
-	animTargetTitleAlpha = editor_get_editmode() == 5? 0.7: 1.0;
+	animTargetTitleAlpha = editor_get_editmode() == 5? titleAlphaL: 1.0;
 	titleAlpha = lerp_a(titleAlpha, animTargetTitleAlpha, animSpeed);
 	
 #endregion
