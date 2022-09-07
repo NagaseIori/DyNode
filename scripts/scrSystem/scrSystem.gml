@@ -613,7 +613,7 @@ function project_load(_file = "") {
     else
     	map_load(chartPath);
     music_load(musicPath);
-    image_load(backgroundPath);
+    if(backgroundPath != "") image_load(backgroundPath);
     
     timing_point_reset();
     objEditor.timingPoints = _contents.timingPoints;
