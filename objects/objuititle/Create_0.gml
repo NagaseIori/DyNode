@@ -1,5 +1,5 @@
 
-scriElement = scribble("DyNode[/] [fDynamix20]"+global.version+"[/scale]\n[c_ltgrey]"+"[sprMsdfNotoSans][scale, 2]"+i18n_get(title))
+scriElement = scribble("DyNode[/] [fDynamix20]"+global.version+"[/scale]\n[c_ltgrey]"+"[sprMsdfNotoSans][scale, 1.5]"+i18n_get(title))
                 .starting_format("fDynamix48", c_white)
                 .align(fa_left, fa_top);
 scriTypist = scribble_typist().in(1, 10);
