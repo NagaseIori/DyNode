@@ -1,5 +1,5 @@
 
-scriElement = scribble("[sprMsdfNotoSans][scale, 1.5]"+i18n_get(content))
+scriElement = scribble(cjk_prefix()+i18n_get(content))
     .starting_format("fDynamix16", c_white)
     .transform(scale, scale)
     .align(fa_left, fa_top);
