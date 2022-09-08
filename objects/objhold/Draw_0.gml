@@ -34,7 +34,8 @@ if(!drawVisible) return;
     	draw_rectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny, false);
     else
     	draw_rectangle(_nx , _ny - _rw/2, _nx + _th * (side == 1 ? 1 : -1), _ny + _rw / 2, false);
-    
+    draw_set_alpha(1);
+
     // Draw Sprites
     
     if(side == 0) {

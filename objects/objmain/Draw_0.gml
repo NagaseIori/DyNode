@@ -29,7 +29,6 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 			    .draw(_nx, 42 * global.scaleYAdjust);
 			}
 		    
-		    
 		    // Draw Difficulty
 		    better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
 		        _nx, 77 * global.scaleYAdjust,
@@ -41,6 +40,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
     draw_surface_ext(bottomInfoSurf, 0, global.resolutionH - targetLineBelow,
     	1.0, 1.0, 0, c_white, titleAlpha);
+    	
 
 // Draw targetline
 

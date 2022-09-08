@@ -62,7 +62,6 @@ if(room == rMain) {
 	}
 	
 	// Or there is a init project
-	
 	if(initWithProject) {
 		initWithProject = false;
 		
