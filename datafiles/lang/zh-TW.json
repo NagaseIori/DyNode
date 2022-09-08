@@ -67,6 +67,10 @@
         "box_q_import_clear": "是否清除所有原谱面物件？",
         "box_q_import_info": "是否导入谱面信息（标题、难度、Timing等）？",
         "anno_import_chart_complete": "导入谱面完毕。",
-        "confirm_close": "确定要退出吗？所有未保存的进度将会丢失。"
+        "confirm_close": "确定要退出吗？所有未保存的进度将会丢失。",
+        "anno_editside_switch": "编辑侧切换至",
+        "editside_down": "正面",
+        "editside_left": "左侧",
+        "editside_right": "右侧"
     }
 }
