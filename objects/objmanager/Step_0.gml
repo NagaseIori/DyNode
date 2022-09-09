@@ -4,12 +4,17 @@
 
 window_frame_update();
 
+if(keycheck_down(vk_f7)) {
+	window_frame_set_fakefullscreen(!window_frame_get_fakefullscreen());
+}
+
 if (window_frame_get_visible()) {
 	var w, h;
 	w = window_frame_get_width();
 	h = window_frame_get_height();
-    window_frame_set_region(0, 0, w, h);
-    
+	if(window_get_width() != w || window_get_height() != h || window_get_x() != 320) {
+		window_frame_set_region(0, 0, w, h);
+	}
     if(!_windowframe_inited) {
     	_windowframe_inited = true;
     	window_command_hook(window_command_close);
@@ -67,13 +72,7 @@ if(room == rMain) {
 		
 		if(!project_load()) room_goto(rStartPage);
 	}
-}
-
-
-if(keycheck_down(vk_f7)) {
-	window_frame_set_fakefullscreen(!window_frame_get_fakefullscreen());
-}
-    
+}    
     
 if(keycheck_down(vk_f12)) {
 	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
