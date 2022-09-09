@@ -870,3 +870,8 @@ function sfmod_channel_set_position(pos, channel, spr) {
     FMODGMS_Chan_Set_Position(channel, pos);
 }
 
+function game_end_confirm() {
+	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
+	if(_confirm_exit)
+		game_end();
+}

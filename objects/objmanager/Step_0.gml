@@ -22,9 +22,7 @@ if (window_frame_get_visible()) {
 }
 
 if(window_command_check(window_command_close)) {
-	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
-	if(_confirm_exit)
-		game_end();
+	game_end_confirm();
 }
 
 #endregion
