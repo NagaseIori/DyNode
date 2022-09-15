@@ -6,11 +6,6 @@ if(state == stateOut && image_alpha<EPS) {
 else
     drawVisible = true;
 
-if(_outroom_check(x, y)) {
-	nodeAlpha = 0;
-	infoAlpha = 0;
-}
-
 state();
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {

@@ -450,6 +450,9 @@ image_yscale = global.scaleYAdjust;
                     	if(state == stateSelected) {
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
                     	}
+                    	
+                    	if(_outscreen_check(x, y, side))
+                			announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
                     }
                     
                     note_sort_request();
