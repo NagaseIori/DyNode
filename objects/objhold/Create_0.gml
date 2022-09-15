@@ -5,8 +5,8 @@ event_inherited();
 
 noteType = 2;
 edgeScaleY = 1;
+holdAlpha = 0.8;
 
-origDepth /= 2;
 image_yscale = 0.6 * global.scaleYAdjust;
 
 originalHeight = sprite_get_height(sprHoldEdge);
@@ -23,7 +23,7 @@ _prop_init();
 		        sinst = objMain.chartNotesMap[side][? sid]
 		    
 		    if(state != stateOut)
-		    	instance_activate_object(sinst);
+		    	note_activate(sinst);
     
 		    // Being destroyed
 		    if(!instance_exists(sinst))

@@ -10,6 +10,12 @@ depth = 0;
 // Make Original Background Layer Invisible
 
     layer_set_visible(layer_get_id("Background"), false);
+    
+#region Optimization
+
+	deactivationQueue = ds_map_create();
+	
+#endregion
 
 #region Time Sources
 	
@@ -22,6 +28,10 @@ depth = 0;
 	timesourceResumeDelay =
 		time_source_create(time_source_game, resumeDelay/1000,
 		time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
+	timesourceDeactivateFlush =
+		time_source_create(time_source_game, NOTE_DEACTIVATION_TIME/1000,
+		time_source_units_seconds, function() {note_deactivate_flush();}, [], -1, time_source_expire_after);
+	time_source_start(timesourceDeactivateFlush);
 	
 #endregion
 
@@ -31,8 +41,8 @@ depth = 0;
 
     targetLineBelow = 137*global.resolutionH/1080;
     targetLineBeside = 112*global.resolutionW/1920;
-    targetLineBelowH = 8;
-    targetLineBesideW = 6;
+    targetLineBelowH = 6;
+    targetLineBesideW = 4;
     
     _position_update = function () {
         targetLineBelow = 137*global.resolutionH/1080;
@@ -63,6 +73,11 @@ depth = 0;
     mixerSpeed = 0.5;
     mixerMaxSpeed = 250; // px per frame
     mixerNextNote = [-1, -1]
+    mixerShadow = [];
+    mixerShadow[0] = instance_create(0, 0, objShadowMIX);
+    mixerShadow[1] = instance_create(0, 0, objShadowMIX);
+    mixerShadow[0].image_angle = 270;
+    mixerShadow[1].image_angle = 90;
 
 #endregion
 
@@ -123,16 +138,20 @@ depth = 0;
     
     // For 3 sides targetline's glow
     lazerAlpha = [1.0, 1.0, 1.0];
-    animTargetLazerAlpha = lazerAlpha;
+    animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
-    animTargetLineMix = lineMix;
+    animTargetLineMix = [1.0, 1.0, 1.0];
+    titleAlphaL = 0.5;
+    titleAlpha = titleAlphaL;
+    animTargetTitleAlpha = titleAlphaL;
     
     // Bottom
-        bottomDim = 0.75;
+        bottomDim = 0.3;
         bottomBgSurf = -1;
         bottomBgSurfPing = -1;
         bottomBgBlurAmount = 20;
         bottomBgBlurSigma = 10;
+        bottomInfoSurf = -1;
     
     // Background
         bgDim = 0.65;

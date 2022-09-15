@@ -1,4 +1,33 @@
-/// @description Input check & FMOD Update
+/// @description Input check & Exts update
+
+#region Window frame related
+
+window_frame_update();
+
+if(keycheck_down(vk_f7) || window_frame_get_fakefullscreen() != global.fullscreen) {
+	window_frame_set_fakefullscreen(global.fullscreen);
+	if(keycheck_down(vk_f7))
+		global.fullscreen = !global.fullscreen;
+}
+
+if (window_frame_get_visible()) {
+	var w, h;
+	w = window_frame_get_width();
+	h = window_frame_get_height();
+	if(window_get_width() != w || window_get_height() != h || window_get_x() != 320) {
+		window_frame_set_region(0, 0, w, h);
+	}
+    if(!_windowframe_inited) {
+    	_windowframe_inited = true;
+    	window_command_hook(window_command_close);
+    }
+}
+
+if(window_command_check(window_command_close)) {
+	game_end_confirm();
+}
+
+#endregion
 
 if(delta_time / 1000 < 100)
 	announcementTime += delta_time / 1000;
@@ -38,26 +67,17 @@ if(room == rMain) {
 	}
 	
 	// Or there is a init project
-	
 	if(initWithProject) {
 		initWithProject = false;
 		
 		if(!project_load()) room_goto(rStartPage);
 	}
-}
-
-
-if(keycheck_down(vk_f7)) {
-	if(!window_get_fullscreen())
-		announcement_warning("在全屏模式下使用会弹出窗口的功能键是危险的操作,某些情况下可能会导致程序无法响应或谱面丢失。这个问题暂时无法修复。请关闭全屏或使用自动保存功能。");
-	window_set_fullscreen(!window_get_fullscreen());
-}
-    
+}    
     
 if(keycheck_down(vk_f12)) {
 	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
-	announcement_play("已保存截图到: " + _file)
+	announcement_play(i18n_get("screenshot_save") + _file)
 }
 if(keycheck_down(vk_f8))
 	switch_autosave();

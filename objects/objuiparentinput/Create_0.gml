@@ -6,7 +6,7 @@ objUIInputManager.register_input(inputID, id);
 
 input = "";
 
-scriElement = scribble(cjk_prefix()+title)
+scriElement = scribble(cjk_prefix()+i18n_get(title))
     .starting_format("fDynamix16", c_white)
     .align(fa_left, fa_top);
 scriHeight = scriElement.get_height();

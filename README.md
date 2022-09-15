@@ -1,5 +1,7 @@
 # DyNode
 
+[![GitHub license](https://img.shields.io/github/license/NagaseIori/DyNode?style=flat)](https://github.com/NagaseIori/DyNode/blob/main/LICENSE) [![Crowdin](https://badges.crowdin.net/dynode/localized.svg)](https://crowdin.com/project/dynode)
+
 Yet another Dynamix chart tool.
 
 **[Documentation](https://github.com/NagaseIori/DyNode/wiki) | [Homepage](https://dyn.iorinn.moe)**
@@ -30,7 +32,11 @@ Yet another Dynamix chart tool.
 
 Any issues & ideas are welcomed! [Open an issue](https://github.com/NagaseIori/DyNode/issues/new) or submit PRs.
 
-欢迎发现问题/提出建议/翻译文档等，可以在此处 [提交 issue](https://github.com/NagaseIori/DyNode/issues/new) 或提交 PR ，也可以通过各种途径联系我进行反馈。
+If you wish to help with localization, see [crowdin](https://crwd.in/dynode).
+
+欢迎发现问题/提出建议等，可以在此处 [提交 issue](https://github.com/NagaseIori/DyNode/issues/new) 或提交 PR ，也可以通过各种途径联系我进行反馈。
+
+如果你想帮助翻译 DyNode，请前往 [crowdin](https://crwd.in/dynode)。
 
 ## License ... 许可
 

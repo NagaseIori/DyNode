@@ -12,11 +12,11 @@ function editor_get_editmode() {
 }
 
 function editor_set_editside(side) {
-	var _sidename = ["正面", "左侧", "右侧"];
+	var _sidename = ["editside_down", "editside_left", "editside_right"];
 	
 	objEditor.editorSide = side;
 	
-	announcement_play("编辑侧切换至："+_sidename[side]);
+	announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
 	
 	if(editor_get_editmode() == 5)
 		editor_set_editmode(4);
@@ -179,11 +179,11 @@ function operation_do(_type, _from, _to = -1) {
 			return build_note_withprop(_from);
 			break;
 		case OPERATION_TYPE.MOVE:
-			instance_activate_object(_from.inst);
+			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
 			break;
 		case OPERATION_TYPE.REMOVE:
-			instance_activate_object(_from.inst);
+			note_activate(_from.inst);
 			instance_destroy(_from.inst);
 			break;
 		case OPERATION_TYPE.TPADD:
@@ -303,11 +303,11 @@ function timing_point_add(_t, _l, _b, record = false) {
 }
 
 function timing_point_create(record = false) {
-	var _time = string_digits(get_string("请输入该 Timing Point 的 offset（毫秒）：", ""));
+	var _time = string_digits(get_string_i18n("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
-	var _bpm = string_real(get_string("请输入 BPM ：", ""));
+	var _bpm = string_real(get_string_i18n("请输入 BPM ：", ""));
 	if(_bpm == "") return;
-	var _meter = string_digits(get_string("请输入节拍（x/4）：", ""));
+	var _meter = string_digits(get_string_i18n("请输入节拍（x/4）：", ""));
 	if(_meter == "") return;
 	
 	_time = real(_time);

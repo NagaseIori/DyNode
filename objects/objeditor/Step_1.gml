@@ -97,9 +97,13 @@ editorSelectMultiple = editorSelectCount > 1;
         editorMode = 0; // Paste Mode
         _attach_reset_request = true;
     }
-    if(keycheck_down(vk_escape) && editorMode == 0) {
-        editorMode = editorModeBeforeCopy;
-        _attach_reset_request = true;
+    if(keycheck_down(vk_escape)) {
+        if(editorMode == 0) {
+            editorMode = editorModeBeforeCopy;
+            _attach_reset_request = true;
+        }
+        else
+			game_end_confirm();
     }
     
     // Copies Mirror

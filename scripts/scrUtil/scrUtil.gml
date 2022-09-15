@@ -17,6 +17,11 @@ function generate_lazer_sprite(_height) {
 	return _spr;
 }
 
+function array_fill(arr, val, index, num) {
+	for(var i=index; i<index+num; i++)
+		arr[i] = val;
+}
+
 #region DRAW
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);
@@ -170,7 +175,7 @@ function string_real(str) {
 }
 
 function cjk_prefix() {
-	return "[sprMsdfNotoSans][scale,1.5]";
+	return "[sprMsdfNotoSans]";
 }
 
 
@@ -397,3 +402,14 @@ function io_clear_diag() {
 	io_clear();
 }
 
+function show_question_i18n(str) {
+	return show_question(i18n_get(str));
+}
+
+function show_error_i18n(str, abort) {
+	return show_error(i18n_get(str), abort);
+}
+
+function get_string_i18n(str, def) {
+	return get_string(i18n_get(str), def);
+}

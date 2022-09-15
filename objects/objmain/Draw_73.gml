@@ -19,7 +19,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
     part_system_drawit(partSysNote);
 
-// Draw Mixer
+// Draw Mixer & Shadow's Position
 
     for(var i=0; i<2; i++) {
         if(chartSideType[i] == "MIXER") {

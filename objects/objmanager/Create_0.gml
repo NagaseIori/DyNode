@@ -8,24 +8,30 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
+#macro NOTE_DEACTIVATION_TIME 500			// Every fixed time than deactivated notes in queue
+#macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.5"
+global.version = "v0.1.6"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
-
+global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
 
 // Themes Init
 
 theme_init();
+
+// Localization Init
+
+i18n_init();
 
 // Load Settings
 
@@ -58,11 +64,12 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
+gc_target_frame_time(50);
 
 // DyCore Initialization
 
 // if(DyCore_Init() != "success") {
-//     show_error("DyCore 核心初始化失败。", true);
+//     show_error_i18n("DyCore 核心初始化失败。", true);
 // }
 
 // DerpXML Initialization
@@ -73,13 +80,13 @@ DerpXml_Init();
 
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
-        announcement_error("FMOD 未能正确加载。所有音乐相关功能将无法正常运作。请检查文件完整性。");
+        announcement_error("FMOD_load_err");
         exit;
     }
     
     // Create the system
     if (FMODGMS_Sys_Create() < 0) {
-        show_error_async("FMOD 创建系统失败。\n 错误信息：" + FMODGMS_Util_GetErrorMessage(), false);
+        show_error_async(i18n_get("FMOD_create_sys_err") + FMODGMS_Util_GetErrorMessage(), false);
         exit;
     }
     
@@ -95,6 +102,7 @@ instance_create(x, y, objInput);
 
 // Fonts Initialization
 
+global._notoFont = font_add("fonts/NotoSansCJKkr-Black.otf", 30, false, false, 32, 65535);
 scribble_anim_cycle(0.2, 255, 255);
 scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 10, c_black, 0.4, 0, true);
 scribble_font_bake_shadow("fDynamix16", "fDynamix16s", 0, 2, c_black, 0.3, 0, true);
@@ -104,20 +112,27 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 	for(var i=0, l=array_length(_texarr); i<l; i++) {
 		texture_prefetch(_texarr[i]);
 	}
-    
+
+// Window Frame Init
+
+window_frame_update();
+_windowframe_inited = false;
+
 // Randomize
 
 randomize();
 
 // Check For Update
 
-if(global.autoupdate)
+if(global.autoupdate && !string_last_pos("dev", global.version))
 	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
 
 // Init finished
 
-room_goto(rStartPage);
+if(debug_mode) room_goto(rMain);
+else
+	room_goto(rStartPage);
 
 #region Project Properties
 
@@ -143,7 +158,7 @@ room_goto(rStartPage);
 	var _auto_save = function () {
 		if(projectPath != "")
 			project_save();
-		announcement_play("自动保存项目完毕。");
+		announcement_play("autosave_complete");
 	}
 	tsAutosave = time_source_create(time_source_game, 60*5, time_source_units_seconds, _auto_save, [], -1);
 	if(global.autosave) {

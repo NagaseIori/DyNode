@@ -5,8 +5,6 @@ event_inherited();
 
 noteType = 1;
 
-origDepth *= 2;
-
 // Correction Values
 lFromLeft = 7;
 rFromRight = 7;

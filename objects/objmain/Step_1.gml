@@ -2,7 +2,7 @@
 
 // Mixer
     
-    mixerNextNote = [-1, -1]
+    array_fill(mixerNextNote, -1, 0, 2);
     
 #region TIME UPDATE
 
@@ -16,7 +16,7 @@ var _music_resync_request = false;
         musicSpeed = max(musicSpeed, 0.1);
         FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
         
-        announcement_play("音乐倍速：x" + string_format(musicSpeed, 1, 1));
+        announcement_play(i18n_get("anno_music_speed") + ": x" + string_format(musicSpeed, 1, 1));
     }
 
 // Keyboard Time & Speed Adjust
@@ -26,10 +26,10 @@ var _music_resync_request = false;
     animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     if(_spdchange != 0) {
-    	announcement_play("下落速度：x" + string_format(animTargetPlaybackSpeed, 1, 2));
+    	announcement_play(i18n_get("anno_note_speed") + ": x" + string_format(animTargetPlaybackSpeed, 1, 2));
     	
     	if(animTargetPlaybackSpeed == 0.2 && _spdchange < 0)
-    		announcement_warning("你现在的下落速度为：x0.2。过低的下落速度可能导致严重的性能问题。");
+    		announcement_warning("anno_note_speed_warn");
     }
     
     playbackSpeed = lerp_a(playbackSpeed, animTargetPlaybackSpeed, animSpeed);
@@ -172,7 +172,10 @@ var _music_resync_request = false;
 
 #endregion
 
-#region NOTES ACTIVATE
+#region NOTES ACTIVATE & DEACTIVATE
+
+	if(ds_map_size(deactivationQueue) > NOTE_DEACTIVATION_LIMIT)
+		note_deactivate_flush();
 
 	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount;
 	

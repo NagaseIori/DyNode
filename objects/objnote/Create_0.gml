@@ -35,8 +35,8 @@ image_yscale = global.scaleYAdjust;
     // For Hold & Sub
     lastTime = 0;
     beginTime = 999999999;
-    lastAlphaL = 0.4;
-    lastAlphaR = 1.0;
+    lastAlphaL = 0;
+    lastAlphaR = 0.7;
     lastAlpha = lastAlphaL;
     
     pWidth = (width * 300 - 30)*2; // Width In Pixels
@@ -70,6 +70,10 @@ image_yscale = global.scaleYAdjust;
 // In-Functions
 
     _prop_init = function () {
+    	origDepth = -20000000;
+    	if(noteType == 1) origDepth *= 2;
+    	else if(noteType == 2) origDepth /= 2;
+    	if(side != 0) origDepth += 5000000;
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
@@ -145,26 +149,28 @@ image_yscale = global.scaleYAdjust;
             audio_play_sound(sndHit, 0, 0);
         
         // Create Shadow
-        var _x, _y;
-        if(side == 0) {
-            _x = x;
-            _y = global.resolutionH - objMain.targetLineBelow;
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
+            objMain.mixerShadow[side-1]._hit();
         }
         else {
-            _x = side == 1 ? objMain.targetLineBeside : 
-                             global.resolutionW - objMain.targetLineBeside;
-            _y = y;
+        	var _x, _y;
+	        if(side == 0) {
+	            _x = x;
+	            _y = global.resolutionH - objMain.targetLineBelow;
+	        }
+	        else {
+	            _x = side == 1 ? objMain.targetLineBeside : 
+	                             global.resolutionW - objMain.targetLineBeside;
+	            _y = y;
+	        }
+	        var _shadow = objShadow;
+	        
+	        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
+	        _inst.nowWidth = pWidth;
+	        _inst.visible = true;
+	        _inst.image_angle = image_angle;
+	        _inst._prop_init();
         }
-        var _shadow = objShadow;
-        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
-            _shadow = objShadowMIX;
-            _y = objMain.mixerX[side-1];
-        }
-            
-        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
-        _inst.nowWidth = pWidth;
-        _inst.visible = true;
-        _inst.image_angle = image_angle;
         
         _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
@@ -205,7 +211,7 @@ image_yscale = global.scaleYAdjust;
     	beginTime = props.beginTime;
     	
     	if(noteType == 2 && sinst > 0) {
-    		instance_activate_object(sinst);
+    		note_activate(sinst);
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
@@ -292,21 +298,12 @@ image_yscale = global.scaleYAdjust;
         
         if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
 	        drawVisible = true;
-	        // In Some situations no need for fading in
-	        if(keycheck(ord("A")) || keycheck(ord("D")) || 
-	            objMain.topBarMousePressed ||
-	            (side == 0 && objMain.nowPlaying)) {
-	            image_alpha = 1;
-	            animTargetA = 1;
-	            state = stateNormal;
-	        }
-	        else 
-	            state = stateNormal;
+	        state = stateNormal;
 	        state();
 	    }
 	    
 	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
-	    	instance_activate_object(finst);
+	    	note_activate(finst);
     }
     
     // Editors
@@ -453,6 +450,9 @@ image_yscale = global.scaleYAdjust;
                     	if(state == stateSelected) {
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
                     	}
+                    	
+                    	if(_outscreen_check(x, y, side))
+                			announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
                     }
                     
                     note_sort_request();

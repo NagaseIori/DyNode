@@ -18,24 +18,24 @@
     	switch_debug_info();
     if(keycheck_down_ctrl(ord("B"))) {
     	if(!chartBarUsed) {
-    		announcement_warning("你还未设置全局 Bar Per Minute 与 Offset 。无法切换 Bar/Time 显示。\n使用 F6 即可进行设置。");
+    		announcement_warning("anno_show_bar_warn");
     	}
     	else {
     		showBar = !showBar;
-    		announcement_adjust("以 Bar 代替 Time 显示", showBar);
+    		announcement_adjust("anno_show_bar", showBar);
     	}
     }
     if(keycheck_down(ord("P"))) {
     	hideScoreboard = !hideScoreboard;
-    	announcement_adjust("编辑模式下隐藏分数显示", hideScoreboard);
+    	announcement_adjust("anno_hide_scoreboard", hideScoreboard);
     }
     if(keycheck_down(ord("O"))) {
     	particlesEnabled = !particlesEnabled;
-    	announcement_adjust("粒子效果", particlesEnabled);
+    	announcement_adjust("anno_particles_effect", particlesEnabled);
     }
     if(keycheck_down_ctrl(ord("M"))) {
     	hitSoundOn = !hitSoundOn;
-    	announcement_adjust("打击音", hitSoundOn);
+    	announcement_adjust("anno_hitsound", hitSoundOn);
     }
     	
     if(keycheck_down_ctrl(ord("T")))
@@ -59,15 +59,15 @@
     		}
     		
 	    	chartSideType[_side] = _type;
-	    	announcement_play("切换侧面类型至："+chartSideType[_side]);
+	    	announcement_play("anno_switch_sidetype"+chartSideType[_side]);
     	}
     	else {
-    		announcement_warning("你只有正在编辑侧面才可以切换侧面类型。");
+    		announcement_warning("anno_switch_sidetype_warn");
     	}
     }
     if(keycheck_down(ord("F"))) {
     	fadeOtherNotes = !fadeOtherNotes;
-    	announcement_adjust("透明化非编辑侧音符", fadeOtherNotes);
+    	announcement_adjust("anno_fade_other_notes", fadeOtherNotes);
     }
     
     if(keycheck_down(vk_enter)) {		// Replay Mode
@@ -90,6 +90,8 @@
 
 	// Adjust Difficulty
 	var _diff_delta = keycheck_down_ctrl(ord("P")) - keycheck_down_ctrl(ord("O"));
+	if(_diff_delta != 0)
+		surface_free_f(bottomInfoSurf);
 	chartDifficulty += _diff_delta;
 	chartDifficulty = clamp(chartDifficulty, 0, global.difficultyCount - 1);
 
@@ -166,12 +168,12 @@
 
 #region Targetline Animation
 
-	animTargetLineMix = [1.0, 1.0, 1.0];
+	array_fill(animTargetLineMix, 1, 0, 3);
 	if(editor_get_editmode() == 5) {
-		animTargetLazerAlpha = [1.0, 1.0, 1.0];
+		array_fill(animTargetLazerAlpha, 1, 0, 3);
 	}
 	else {
-		animTargetLazerAlpha = [0.0, 0.0, 0.0];
+		array_fill(animTargetLazerAlpha, 0, 0, 3);
 		animTargetLazerAlpha[editor_get_editside()] = 1.0;
 		animTargetLineMix[editor_get_editside()] = 0.5;
 	}
@@ -180,6 +182,12 @@
 		lazerAlpha[i] = lerp_a(lazerAlpha[i], animTargetLazerAlpha[i], animSpeed);
 		lineMix[i] = lerp_a(lineMix[i], animTargetLineMix[i], animSpeed);
 	}
-		
 
+#endregion
+
+#region Other Animation
+	
+	animTargetTitleAlpha = editor_get_editmode() == 5? titleAlphaL: 1.0;
+	titleAlpha = lerp_a(titleAlpha, animTargetTitleAlpha, animSpeed);
+	
 #endregion
