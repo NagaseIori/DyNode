@@ -4,13 +4,13 @@
 
 window_frame_update();
 
-if(keycheck_down(vk_f7) || window_frame_get_fakefullscreen() != global.fullscreen) {
-	window_frame_set_fakefullscreen(global.fullscreen);
+if(keycheck_down(vk_f7)) {
 	if(keycheck_down(vk_f7))
 		global.fullscreen = !global.fullscreen;
+	window_frame_set_fakefullscreen(global.fullscreen);
 }
 
-if (window_frame_get_visible()) {
+if (window_frame_get_visible() && window_has_focus()) {
 	var w, h;
 	w = window_frame_get_width();
 	h = window_frame_get_height();
@@ -20,6 +20,7 @@ if (window_frame_get_visible()) {
     if(!_windowframe_inited) {
     	_windowframe_inited = true;
     	window_command_hook(window_command_close);
+    	call_later(2, 1, function() {window_frame_set_fakefullscreen(global.fullscreen);});
     }
 }
 
