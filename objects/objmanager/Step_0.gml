@@ -4,8 +4,10 @@
 
 window_frame_update();
 
-if(keycheck_down(vk_f7)) {
-	window_frame_set_fakefullscreen(!window_frame_get_fakefullscreen());
+if(keycheck_down(vk_f7) || window_frame_get_fakefullscreen() != global.fullscreen) {
+	window_frame_set_fakefullscreen(global.fullscreen);
+	if(keycheck_down(vk_f7))
+		global.fullscreen = !global.fullscreen;
 }
 
 if (window_frame_get_visible()) {

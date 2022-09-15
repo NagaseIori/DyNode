@@ -22,7 +22,7 @@ global.resolutionH = 1080
 global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
-
+global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
 
 // Themes Init
