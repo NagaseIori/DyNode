@@ -81,13 +81,11 @@ DerpXml_Init();
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
         announcement_error("FMOD_load_err");
-        exit;
     }
     
     // Create the system
     if (FMODGMS_Sys_Create() < 0) {
         show_error_async(i18n_get("FMOD_create_sys_err") + FMODGMS_Util_GetErrorMessage(), false);
-        exit;
     }
     
     // Initialize the system
