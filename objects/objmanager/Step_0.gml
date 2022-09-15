@@ -20,7 +20,7 @@ if (window_frame_get_visible() && window_has_focus()) {
     if(!_windowframe_inited) {
     	_windowframe_inited = true;
     	window_command_hook(window_command_close);
-    	window_frame_set_fakefullscreen(global.fullscreen);
+    	call_later(2, 1, function() {window_frame_set_fakefullscreen(global.fullscreen);});
     }
 }
 
