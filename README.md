@@ -4,7 +4,7 @@
 
 Yet another Dynamix chart tool.
 
-**[Documentation](dyn-docs.iorinn.moe) | [Homepage](https://dyn.iorinn.moe)**
+**[Documentation](https://dyn-docs.iorinn.moe) | [Homepage](https://dyn.iorinn.moe)**
 
 另一个 Dynamix 谱面编辑器。
 
