@@ -73,3 +73,5 @@ Dynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd
 Dynamaker (under MIT License) Copyright (c) 2019 omegaPi
 
 Dynamix produced by C4Cat Entertainment Limited
+
+Arcaea produced by lowiro
