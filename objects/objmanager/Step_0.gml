@@ -67,6 +67,12 @@ if(_fmoderr < 0) {
     show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
 }
 
+if(keycheck_down(vk_f10)) {
+	load_config();
+	announcement_play("配置已重载。一部分配置可能需要重启游戏来生效。");
+}
+	
+
 if(room == rMain) {
 	if(keycheck_down(vk_f2))
     	map_load();
@@ -76,8 +82,7 @@ if(room == rMain) {
 	    project_load();
 	if(keycheck_down_ctrl(ord("N")))
 		project_new();
-	if(keycheck_down(vk_f10))
-		load_config();
+	
 	
 	
 	// If there is a init struct
