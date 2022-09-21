@@ -752,34 +752,54 @@ function theme_get() {
 
 #region ANNOUNCEMENT FUNCTIONS
 
-function announcement_play(_str, time = 3000) {
+function announcement_play(_str, time = 3000, _uniqueID = "null") {
 	_str = i18n_get(_str);
 	
 	var _below = 10;
 	var _beside = 10;
 	var _nx = global.resolutionW - _beside;
 	var _ny = global.resolutionH - _below;
+	
+	if(_uniqueID == "null")
+		_uniqueID = random_id(8);
+	
+	var _found = false;
+	with(objManager) {
+		var arr = announcements;
+		for(var i=0, l=array_length(arr); i<l; i++) if(arr[i].uniqueID == _uniqueID) {
+			_found = true;
+			with(arr[i]) {
+				str = _str;
+				lastTime = timer + time;
+				_generate_element();
+			}
+		}
+	}
+	if(_found) return;
+	
 	var _inst = instance_create_depth(_nx, _ny, 0, objAnnouncement, {
 		str: _str,
-		lastTime: time
+		lastTime: time,
+		uniqueID: _uniqueID
 	});
 	
 	array_push(objManager.announcements, _inst);
+	show_debug_message("NEW MD5 ANNO: " + _uniqueID);
 }
 
 function announcement_warning(str, time = 5000) {
 	str = i18n_get(str);
-	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time);
+	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time, md5_string_unicode(str));
 }
 
 function announcement_error(str, time = 8000) {
 	str = i18n_get(str);
-	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time);
+	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time, md5_string_unicode(str));
 }
 
 function announcement_adjust(str, val) {
 	str = i18n_get(str);
-	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"));
+	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
 }
 
 #endregion

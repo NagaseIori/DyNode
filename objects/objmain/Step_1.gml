@@ -16,7 +16,7 @@ var _music_resync_request = false;
         musicSpeed = max(musicSpeed, 0.1);
         FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
         
-        announcement_play(i18n_get("anno_music_speed") + ": x" + string_format(musicSpeed, 1, 1));
+        announcement_play(i18n_get("anno_music_speed") + ": x" + string_format(musicSpeed, 1, 1), 3000, "music_speed");
     }
 
 // Keyboard Time & Speed Adjust
@@ -26,7 +26,7 @@ var _music_resync_request = false;
     animTargetPlaybackSpeed += 0.1 * _spdchange;
     
     if(_spdchange != 0) {
-    	announcement_play(i18n_get("anno_note_speed") + ": x" + string_format(animTargetPlaybackSpeed, 1, 2));
+    	announcement_play(i18n_get("anno_note_speed") + ": x" + string_format(animTargetPlaybackSpeed, 1, 2), 3000, "anno_note_speed");
     	
     	if(animTargetPlaybackSpeed == 0.2 && _spdchange < 0)
     		announcement_warning("anno_note_speed_warn");
