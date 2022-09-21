@@ -24,6 +24,7 @@ global.autosave = false;
 global.autoupdate = true;
 global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
+global.ANNOUNCEMENT_MAX_LIMIT = 7;
 
 // Themes Init
 

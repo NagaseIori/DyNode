@@ -809,6 +809,8 @@ function load_config() {
 		global.autoupdate = _con.autoupdate;
 	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
 		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
+	if(variable_struct_exists(_con, "ANNOUNCEMENT_MAX_LIMIT"))
+		global.ANNOUNCEMENT_MAX_LIMIT = _con.ANNOUNCEMENT_MAX_LIMIT;
 	if(variable_struct_exists(_con, "fullscreen"))
 		global.fullscreen = _con.fullscreen;
 	if(variable_struct_exists(_con, "language"))
@@ -831,6 +833,7 @@ function save_config() {
 		autosave: global.autosave,
 		autoupdate: global.autoupdate,
 		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY,
+		ANNOUNCEMENT_MAX_LIMIT: global.ANNOUNCEMENT_MAX_LIMIT,
 		fullscreen: global.fullscreen,
 		language: i18n_get_lang()
 	}));
