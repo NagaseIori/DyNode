@@ -71,6 +71,7 @@
         "anno_editside_switch" : "编辑侧切换至",
         "editside_down" : "正面",
         "editside_left" : "左侧",
-        "editside_right" : "右侧"
+        "editside_right" : "右侧",
+        "fileformat_chart": "支持的谱面文件"
     }
 }

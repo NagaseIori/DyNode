@@ -43,8 +43,6 @@ editorSelectMultiple = editorSelectCount > 1;
 
     var _attach_reset_request = false, _attach_sync_request = false;
     
-    if(keycheck_down(vk_f10))
-        map_import_osu();
     if(keycheck_down(ord("Z"))) {
         editorGridYEnabled = !editorGridYEnabled;
         announcement_adjust("时间方向网格吸附", editorGridYEnabled);

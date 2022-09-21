@@ -167,6 +167,6 @@
             }
         }
     }
-    editorWidthAdjustTime = min(editorWidthAdjustTime, 1000);
+    editorWidthAdjustTime = min(editorWidthAdjustTime, 10000);
 
 #endregion

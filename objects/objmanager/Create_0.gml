@@ -37,15 +37,10 @@ i18n_init();
 
 if(debug_mode) save_config();
 
-load_config();
+_lastConfig_md5 = load_config();
 
 // Global Variables
 
-if(debug_mode) global.fps = 165;
-game_set_speed(global.fps, gamespeed_fps);
-global.fpsAdjust = BASE_FPS / global.fps;
-global.scaleXAdjust = global.resolutionW / BASE_RES_W;
-global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 global.difficultyString = "CNHMGT";
@@ -164,6 +159,19 @@ else
 		global.autosave = false;
 		switch_autosave();
 	}
-		
+	
+	// For config.json update
+	
+	tsConfigLiveChange = time_source_create(time_source_game, 1, time_source_units_seconds, 
+		function() {
+			with(objManager)
+				if(_lastConfig_md5 != md5_config()) {
+					_lastConfig_md5 = load_config();
+					show_debug_message("MD5: "+_lastConfig_md5);
+					announcement_play("检测到配置被更改，改变后的一部分配置已经生效。");
+				}
+		}
+		, [], -1);
+	// time_source_start(tsConfigLiveChange);
 
 #endregion

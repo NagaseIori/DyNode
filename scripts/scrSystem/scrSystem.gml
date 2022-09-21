@@ -50,7 +50,7 @@ function map_load(_file = "") {
 	}
 	var _direct = _file != "";
 	if(_file == "")
-	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
+	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.osu)|*.xml;*.osu", "example.xml", 
 	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
@@ -65,24 +65,26 @@ function map_load(_file = "") {
     var _clear = _direct? true:show_question_i18n("box_q_import_clear");
     if(_clear) note_delete_all();
     
-    var _import_info = show_question_i18n("box_q_import_info");
+    switch filename_ext(_file) {
+    	case ".xml":
+    		map_import_xml(_file);
+    		break;
+    	case ".osu":
+    		map_import_osu(_file);
+    		break;
+    }
     
-    if(filename_ext(_file) == ".xml")
-        map_import_xml(_file, _import_info);
-    
-    objManager.chartPath = _file;
-    
-    show_debug_message("Import map sucessfully.");
     announcement_play("anno_import_chart_complete");
 }
 
-function map_import_xml(_file, _import_info) {
+function map_import_xml(_file) {
 	notes_reallocate_id();
     
     var _f = file_text_open_read(_file);
     var _str = snap_alter_from_xml(snap_from_xml(file_text_read_all(_f)));
     file_text_close(_f);
 
+	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = false;
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
@@ -209,16 +211,14 @@ function map_import_xml(_file, _import_info) {
     }
 }
 
-function map_import_osu() {
-    var _file = "";
-    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
-        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
+function map_import_osu(_file = "") {
+    if(_file == "")
+	    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
+	        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
         
     if(_file == "") return;
     
     var _import_hitobj = show_question_i18n(i18n_get("box_q_osu_import_objects"));
-    var _clear_notes = show_question_i18n(i18n_get("box_q_clear_objects"));
-    if(_clear_notes) note_delete_all();
     var _delay_time = 0;
     
     timing_point_reset();
@@ -226,8 +226,6 @@ function map_import_osu() {
     var _grid = snap_from_csv(file_text_read_all(_f));
     file_text_close(_f);
 	
-    show_debug_message("CSV Load Finished.");
-    
     var _type = "";
     var _h = array_length(_grid);
     var _mode = 0;				// Osu Game Mode
@@ -783,13 +781,12 @@ function announcement_adjust(str, val) {
 #region SYSTEM FUNCTIONS
 
 function load_config() {
-	if(!file_exists(global.configPath)) {
+	if(!file_exists(global.configPath))
 		save_config();
-		return;
-	}
 	
 	var _f = file_text_open_read(global.configPath);
-	var _con = snap_from_json(file_text_read_all(_f));
+	var _str = file_text_read_all(_f);
+	var _con = snap_from_json(_str);
 	file_text_close(_f);
 	
 	if(variable_struct_exists(_con, "theme"))
@@ -810,6 +807,10 @@ function load_config() {
 		global.fullscreen = _con.fullscreen;
 	if(variable_struct_exists(_con, "language"))
 		i18n_set_lang(_con.language);
+		
+	vars_init();
+	
+	return md5_file(global.configPath);
 }
 
 function save_config() {
@@ -830,6 +831,23 @@ function save_config() {
 	
 	file_text_close(_f);
 	
+}
+
+function md5_config() {
+	if(!file_exists(global.configPath))
+		save_config();
+	
+	return md5_file(global.configPath);
+}
+
+function vars_init() {
+	// Some variables that will take changes immediately
+	
+	if(debug_mode) global.fps = 165;
+	game_set_speed(global.fps, gamespeed_fps);
+	global.fpsAdjust = BASE_FPS / global.fps;
+	global.scaleXAdjust = global.resolutionW / BASE_RES_W;
+	global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 }
 
 function switch_debug_info() {
