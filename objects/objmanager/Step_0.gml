@@ -30,8 +30,34 @@ if(window_command_check(window_command_close)) {
 
 #endregion
 
-if(delta_time / 1000 < 100)
-	announcementTime += delta_time / 1000;
+#region Announcement update
+
+// Clear removed annos
+for(var i=0, l=array_length(announcements); i<l; i++) {
+	if(!instance_exists(announcements[i])) {
+		array_delete(announcements, i, 1);
+		i--;
+		l--;
+	}
+}
+
+// Caculate annos' Y
+var _h = 0;
+var _margin = 10;
+var _l = array_length(announcements);
+for(var i=array_length(announcements)-1; i>=0; i--) {
+	with(announcements[i]) {
+		targetY = _h;
+		_h += element.get_height() + _margin;
+		
+		if(_l - i > objManager.annoThresholdNumber)
+			lastTime = min(lastTime, timer + objManager.annoThresholdTime);
+	}
+}
+
+
+#endregion
+
 
 camera_set_view_size(view_camera[0], global.resolutionW, global.resolutionH);
 
@@ -50,6 +76,8 @@ if(room == rMain) {
 	    project_load();
 	if(keycheck_down_ctrl(ord("N")))
 		project_new();
+	if(keycheck_down(vk_f10))
+		load_config();
 	
 	
 	// If there is a init struct

@@ -752,13 +752,19 @@ function theme_get() {
 
 #region ANNOUNCEMENT FUNCTIONS
 
-function announcement_play(str, time = 3000) {
-	str = i18n_get(str);
-	with(objManager) {
-		announcementString = str;
-		announcementLastTime = time;
-		announcementTime = 0;
-	}
+function announcement_play(_str, time = 3000) {
+	_str = i18n_get(_str);
+	
+	var _below = 10;
+	var _beside = 10;
+	var _nx = global.resolutionW - _beside;
+	var _ny = global.resolutionH - _below;
+	var _inst = instance_create_depth(_nx, _ny, 0, objAnnouncement, {
+		str: _str,
+		lastTime: time
+	});
+	
+	array_push(objManager.announcements, _inst);
 }
 
 function announcement_warning(str, time = 5000) {

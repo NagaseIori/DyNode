@@ -140,10 +140,10 @@ else
 #region Inner Variables
 
 	// For Announcement
-	announcementString = "";
-	announcementLastTime = 0;
-	announcementTime = 0;
-	announcementAlpha = 0;
+	announcements = [];
+	annoThresholdNumber = 7;
+	annoThresholdTime = 400;
+	annosY = [];
 	animAnnoSpeed = 1 / room_speed;
 	
 	initVars = undefined;
