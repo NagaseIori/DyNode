@@ -789,12 +789,12 @@ function announcement_play(_str, time = 3000, _uniqueID = "null") {
 
 function announcement_warning(str, time = 5000) {
 	str = i18n_get(str);
-	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time, md5_string_unicode(str));
+	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time);
 }
 
 function announcement_error(str, time = 8000) {
 	str = i18n_get(str);
-	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time, md5_string_unicode(str));
+	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time);
 }
 
 function announcement_adjust(str, val) {

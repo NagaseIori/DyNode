@@ -399,10 +399,10 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"inigo quilez 2d sdf license.txt","CopyToMask":-1,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"inigo quilez 2d sdf license.txt","CopyToMask":3035461389054378222,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"zh-cn.json","CopyToMask":-1,"filePath":"datafiles/lang",},
-    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"en-US.json","CopyToMask":-1,"filePath":"datafiles/lang",},
-    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"zh-TW.json","CopyToMask":-1,"filePath":"datafiles/lang",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"sprMsdfNotoSans.json","CopyToMask":-1,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"NotoSansCJKkr-Black.otf","CopyToMask":-1,"filePath":"datafiles/fonts",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"en-US.json","CopyToMask":-1,"filePath":"datafiles/lang",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"zh-TW.json","CopyToMask":-1,"filePath":"datafiles/lang",},
   ],
   "MetaData": {
     "IDEVersion": "2022.8.1.37",
