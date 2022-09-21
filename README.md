@@ -2,9 +2,14 @@
 
 <h1 align="center">DyNode</h1>
 <p align="center">Yet another Dynamix chart tool.</b></p>
-
-[![GitHub license](https://img.shields.io/github/license/NagaseIori/DyNode?style=flat)](https://github.com/NagaseIori/DyNode/blob/main/LICENSE) [![Crowdin](https://badges.crowdin.net/dynode/localized.svg)](https://crowdin.com/project/dynode)
-
-
-
-**[Documentation](https://dyn.iorinn.moe/guide) | [Homepage](https://dyn.iorinn.moe)**
+<br>
+<br>
+<p align="center">
+<a href="https://github.com/NagaseIori/DyNode/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NagaseIori/DyNode?style=flat"></a> 
+<a href="https://crowdin.com/project/dynode"><img src="https://badges.crowdin.net/dynode/localized.svg"></a>
+<br>
+  <strong>
+  <a href="https://dyn.iorinn.moe/guide">Documentation</a> |
+  <a href="https://dyn.iorinn.moe">Homepage</a>
+  </strong>
+</p>
