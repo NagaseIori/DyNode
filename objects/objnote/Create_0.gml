@@ -499,7 +499,7 @@ image_yscale = global.scaleYAdjust;
             	origProp = get_prop();
             	position = 5 - position;
             	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-            	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+            	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处", "mirror"+string(get_timer()));
             }
             if(keycheck_down(ord("T"))) {
             	timing_point_duplicate(time);
