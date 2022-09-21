@@ -334,7 +334,6 @@
       ],"ProxyFiles":[
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libFMODGMS.dylib","TargetMask":1,},
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libfmodgms.so","TargetMask":7,},
-        {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"FMODGMS_x64.dll","TargetMask":6,},
       ],"copyToTargets":202375362,"order":[
         {"name":"FMODGMS_Sys_Create","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Sys_Initialize","path":"extensions/FMODGMS/FMODGMS.yy",},
@@ -415,9 +414,7 @@
         {"name":"FMODGMS_Snd_Get_DLS","path":"extensions/FMODGMS/FMODGMS.yy",},
         {"name":"FMODGMS_Chan_Is_Playing","path":"extensions/FMODGMS/FMODGMS.yy",},
       ],},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"fmod.dll","origname":"extensions\\fmod.dll","init":"","final":"","kind":1,"uncompress":false,"functions":[],"constants":[],"ProxyFiles":[
-        {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"fmod64.dll","TargetMask":6,},
-      ],"copyToTargets":64,"order":[],},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"fmod.dll","origname":"extensions\\fmod.dll","init":"","final":"","kind":1,"uncompress":false,"functions":[],"constants":[],"ProxyFiles":[],"copyToTargets":64,"order":[],},
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"libfmod.so.10","origname":"","init":"","final":"","kind":4,"uncompress":false,"functions":[],"constants":[],"ProxyFiles":[],"copyToTargets":128,"order":[],},
     {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","filename":"libfmod.dylib","origname":"","init":"","final":"","kind":1,"uncompress":false,"functions":[],"constants":[],"ProxyFiles":[],"copyToTargets":2,"order":[],},
   ],

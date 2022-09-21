@@ -29,8 +29,8 @@ editorHighlightTime = 0;
 editorHighlightPosition = 0;
 editorHighlightSide = 0;
 
-editorWidthAdjustTime = 999;
-editorWidthAdjustTimeThreshold = 100;
+editorWidthAdjustTime = 9999;
+editorWidthAdjustTimeThreshold = 300;
 
     // Grid Settings
     editorGridXEnabled = true;

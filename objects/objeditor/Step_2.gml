@@ -25,7 +25,7 @@ if(editorMode == 4) {
     if(editorSelectResetRequest) {
         // For wheel width adjust undo
         if(editorWidthAdjustTime < editorWidthAdjustTimeThreshold) {
-            editorWidthAdjustTime = 1000;
+            editorWidthAdjustTime = editorWidthAdjustTimeThreshold + 1;
             with(objNote) if(state == stateSelected) {
                 operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             }

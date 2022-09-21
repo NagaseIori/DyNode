@@ -35,8 +35,9 @@ i18n_init();
 
 // Load Settings
 
-if(!debug_mode)
-	load_config();
+if(debug_mode) save_config();
+
+load_config();
 
 // Global Variables
 

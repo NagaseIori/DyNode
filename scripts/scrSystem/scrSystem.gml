@@ -783,10 +783,13 @@ function announcement_adjust(str, val) {
 #region SYSTEM FUNCTIONS
 
 function load_config() {
-	if(!file_exists(global.configPath)) return;
+	if(!file_exists(global.configPath)) {
+		save_config();
+		return;
+	}
 	
 	var _f = file_text_open_read(global.configPath);
-	var _con = json_parse(file_text_read_all(_f));
+	var _con = snap_from_json(file_text_read_all(_f));
 	file_text_close(_f);
 	
 	if(variable_struct_exists(_con, "theme"))
@@ -812,7 +815,7 @@ function load_config() {
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, json_stringify({
+	file_text_write_string(_f, snap_to_json({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
