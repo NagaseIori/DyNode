@@ -68,6 +68,72 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down_ctrl(ord("Y"))) {
         operation_redo();
     }
+    
+    
+    // Notes operation
+    
+    if(editor_select_count() > 0) {
+    	if(keycheck_down(ord("M"))) {
+	    	with(objNote) {
+	    		if(state == stateSelected) {
+	    			origProp = get_prop();
+	    			position = 5 - position;
+	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+	    		}
+	    		
+	    	}
+	    	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+	    }
+	    if(keycheck_down(ord("R"))) {
+	    	var _found = 0;
+	    	with(objNote) {
+	    		if(state == stateSelected)
+		    		if(side > 0) {
+		    			origProp = get_prop();
+			    		side = 1 + (!(side - 1));
+			    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+			    		_found ++;
+			    	}
+	    	}
+	    	if(_found>0) {
+	    		announcement_play("侧面对称音符共 " + string(_found) + " 处");
+	    		editorSide = 1 + (!(editorSide - 1));
+	    	}
+	    		
+	    	else
+	    		announcement_warning("仅侧面音符能够被对称。");
+	    }
+	    if(keycheck_down_ctrl(ord("V"))) {
+	    	with(objNote)
+	    		if(state == stateSelected) {
+	    			origProp = get_prop();
+			    	width = objEditor.editorDefaultWidth;
+			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+	    		}
+	    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+	    }
+	    if(keycheck_down_ctrl(ord("1"))) {
+	    	with(objNote)
+	    		if(state == stateSelected)
+			    	if(noteType < 2) {
+			    		recordRequest = true;
+			    		instance_destroy();
+			    		build_note(nid, 0, time, position, width, sid, side, false, true);
+			    	}
+			announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
+	    }
+	    if(keycheck_down_ctrl(ord("2"))) {
+	    	with(objNote)
+	    		if(state == stateSelected)
+			    	if(noteType < 2) {
+			    		recordRequest = true;
+			    		instance_destroy();
+			    		build_note(nid, 1, time, position, width, sid, side, false, true);
+			    	}
+			announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
+	    }
+    }
+    
         
     editorGridWidthEnabled = !ctrl_ishold();
     
@@ -76,10 +142,6 @@ editorSelectMultiple = editorSelectCount > 1;
         editor_set_editside((editor_get_editside() + 1) % 3);
     if(editorSide != editorLastSide) {
         _attach_sync_request = true;
-        with(objNote) {
-            if(state == stateSelected)
-                state = stateNormal;
-        }
     }
     
     // Editor Mode Switch

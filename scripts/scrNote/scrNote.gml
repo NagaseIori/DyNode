@@ -115,6 +115,7 @@ function note_delete(_id, _record = false) {
         var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].inst.nid == _id) {
+            	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
             	if(_record)
             		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i], -1);
             	
