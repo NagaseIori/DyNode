@@ -20,15 +20,19 @@ if (window_frame_get_visible() && window_has_focus()) {
     if(!_windowframe_inited) {
     	_windowframe_inited = true;
     	window_command_hook(window_command_close);
-    	call_later(2, 1, function() {window_frame_set_fakefullscreen(global.fullscreen);});
-    	var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
-    	
-    	window_frame_set_rect(
-    		(display_get_width() - global.resolutionW * _ratio) * 0.5,
-    		(display_get_height() - global.resolutionH * _ratio) * 0.5,
-    		global.resolutionW * _ratio,
-    		global.resolutionH * _ratio
-    		);
+    	call_later(2, 1, function() {
+    		if(global.fullscreen)
+    			window_frame_set_fakefullscreen(global.fullscreen);
+    		else {
+				var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
+    			window_frame_set_rect(
+		    		(display_get_width() - global.resolutionW * _ratio) * 0.5,
+		    		(display_get_height() - global.resolutionH * _ratio) * 0.5,
+		    		global.resolutionW * _ratio,
+		    		global.resolutionH * _ratio
+		    		);
+    		}
+    	});
     }
 }
 
