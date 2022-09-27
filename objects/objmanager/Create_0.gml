@@ -57,7 +57,6 @@ global.sprLazer = generate_lazer_sprite(2000);
 
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
 display_set_gui_size(global.resolutionW, global.resolutionH);
-window_set_size(global.resolutionW * 0.7, global.resolutionH * 0.7);
 
 // Smoother
 
@@ -111,7 +110,6 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 
 // Window Frame Init
 
-window_frame_update();
 _windowframe_inited = false;
 
 // Randomize
