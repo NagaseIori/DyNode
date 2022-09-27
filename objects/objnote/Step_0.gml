@@ -29,10 +29,8 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 
 // If no longer visible then deactivate self
 if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
-	// if(instance_exists(sinst))
-	// 	instance_deactivate_object(sinst);
-	// instance_deactivate_object(id);
 	note_deactivate_request(id);
+	return;
 }
 
 // Update Highlight Line's Position

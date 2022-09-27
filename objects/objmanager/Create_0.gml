@@ -53,10 +53,11 @@ global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
 global.sprLazer = generate_lazer_sprite(2000);
 
-// Set GUI Resolution
+// Set GUI & Window Resolution
 
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
 display_set_gui_size(global.resolutionW, global.resolutionH);
+window_set_size(global.resolutionW * 0.7, global.resolutionH * 0.7);
 
 // Smoother
 
