@@ -110,7 +110,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	width = objEditor.editorDefaultWidth;
 			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
-	    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+	    	announcement_play("设置宽度："+string_format(objEditor.editorDefaultWidth, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
 	    }
 	    if(keycheck_down_ctrl(ord("1"))) {
 	    	with(objNote)

@@ -325,7 +325,7 @@ function timing_point_create(record = false) {
 function timing_point_delete_at(_time, record = false) {
 	with(objEditor) {
 		for(var i=0, l=array_length(timingPoints); i<l; i++)
-			if(int64(timingPoints[i].time) == _time) {
+			if(abs(timingPoints[i].time-_time) <= 1) {
 				var _tp = timingPoints[i];
 				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
 					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +
