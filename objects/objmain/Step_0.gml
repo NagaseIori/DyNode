@@ -33,7 +33,7 @@
     	particlesEnabled = !particlesEnabled;
     	announcement_adjust("anno_particles_effect", particlesEnabled);
     }
-    if(keycheck_down_ctrl(ord("M"))) {
+    if(keycheck_down_ctrl(ord("H"))) {
     	hitSoundOn = !hitSoundOn;
     	announcement_adjust("anno_hitsound", hitSoundOn);
     }

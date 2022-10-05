@@ -31,12 +31,7 @@ if(editorMode == 4) {
             }
         }
         
-        with(objNote) {
-            if(state == stateSelected) {
-                state = stateNormal;
-                state();
-            }
-        }
+        note_select_reset();
         editorSelectResetRequest = false;
     }
     

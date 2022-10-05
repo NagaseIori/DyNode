@@ -84,6 +84,17 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	}
 	    	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
 	    }
+	    if(keycheck_down_ctrl(ord("M"))) {
+	    	with(objNote) {
+	    		if(state == stateSelected) {
+	    			var prop = get_prop();
+	    			prop.position = 5 - prop.position;
+	    			note_select_reset(true);
+	    			build_note_withprop(prop, true, true);
+	    		}
+	    	}
+	    	announcement_play("镜像复制音符共 " + string(editor_select_count()) + " 处");
+	    }
 	    if(keycheck_down(ord("R"))) {
 	    	var _found = 0;
 	    	with(objNote) {
@@ -102,6 +113,26 @@ editorSelectMultiple = editorSelectCount > 1;
 	    		
 	    	else
 	    		announcement_warning("仅侧面音符能够被对称。");
+	    }
+	    if(keycheck_down_ctrl(ord("R"))) {
+	    	var _found = 0;
+	    	with(objNote) {
+	    		if(state == stateSelected)
+		    		if(side > 0) {
+		    			var prop = get_prop();
+			    		prop.side = 1 + (!(prop.side - 1));
+			    		note_select_reset(true);
+			    		build_note_withprop(prop, true, true);
+			    		_found ++;
+			    	}
+	    	}
+	    	if(_found>0) {
+	    		announcement_play("侧面对称复制音符共 " + string(_found) + " 处");
+	    		editorSide = 1 + (!(editorSide - 1));
+	    	}
+	    		
+	    	else
+	    		announcement_warning("仅侧面音符能够被对称复制。");
 	    }
 	    if(keycheck_down_ctrl(ord("V"))) {
 	    	with(objNote)

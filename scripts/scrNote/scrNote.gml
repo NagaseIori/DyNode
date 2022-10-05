@@ -240,3 +240,11 @@ function note_deactivate_flush() {
 		ds_map_clear(q);
 	}
 }
+
+function note_select_reset(isself = false) {
+	with(isself?id:objNote)
+		if(state == stateSelected) {
+			state = stateNormal;
+			state();
+		}
+}
