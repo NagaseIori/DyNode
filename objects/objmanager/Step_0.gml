@@ -138,3 +138,8 @@ if(keycheck_down(vk_f8))
 
 if(keycheck_down(vk_f9))
 	theme_next();
+
+if(keycheck_down(vk_escape)) {
+	if(!(instance_exists(objEditor) && editor_get_editmode() == 0))
+		game_end_confirm();
+}
