@@ -755,14 +755,15 @@ function announcement_play(_str, time = 3000, _uniqueID = "null") {
 	var _found = false;
 	with(objManager) {
 		var arr = announcements;
-		for(var i=0, l=array_length(arr); i<l; i++) if(arr[i].uniqueID == _uniqueID) {
-			_found = true;
-			with(arr[i]) {
-				str = _str;
-				lastTime = timer + time;
-				_generate_element();
+		for(var i=0, l=array_length(arr); i<l; i++)
+			if(instance_exists(arr[i]) && arr[i].uniqueID == _uniqueID) {
+				_found = true;
+				with(arr[i]) {
+					str = _str;
+					lastTime = timer + time;
+					_generate_element();
+				}
 			}
-		}
 	}
 	if(_found) return;
 	

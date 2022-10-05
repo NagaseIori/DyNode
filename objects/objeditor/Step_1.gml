@@ -80,7 +80,6 @@ editorSelectMultiple = editorSelectCount > 1;
 	    			position = 5 - position;
 	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
-	    		
 	    	}
 	    	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
 	    }
