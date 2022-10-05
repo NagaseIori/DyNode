@@ -2,10 +2,7 @@
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
   "name": "objEditor",
-  "spriteId": {
-    "name": "sprEditor",
-    "path": "sprites/sprEditor/sprEditor.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "managed": true,

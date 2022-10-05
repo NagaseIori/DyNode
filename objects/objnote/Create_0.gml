@@ -417,13 +417,14 @@ image_yscale = global.scaleYAdjust;
         
         // State Selected
         stateSelected = function() {
+        	animTargetA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
                 origSubTime = sinst.time;
             }
             stateString = "SEL";
             
-            if(editor_get_editmode() != 4)
+            if(editor_get_editmode() != 4 || editor_get_editside() != side)
                 state = stateNormal;
             
             if(editor_select_is_multiple() && noteType == 3)
@@ -495,12 +496,7 @@ image_yscale = global.scaleYAdjust;
             	instance_destroy();
             }
                 
-            if(keycheck_down(ord("M"))) {
-            	origProp = get_prop();
-            	position = 5 - position;
-            	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-            	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
-            }
+            
             if(keycheck_down(ord("T"))) {
             	timing_point_duplicate(time);
 		    }
@@ -511,28 +507,7 @@ image_yscale = global.scaleYAdjust;
 		    	objEditor.editorDefaultWidth = width;
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
-		    if(keycheck_down_ctrl(ord("V"))) {
-		    	origProp = get_prop();
-		    	width = objEditor.editorDefaultWidth;
-		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-		    	announcement_play("设置宽度："+string_format(width, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
-		    }
-		    if(keycheck_down_ctrl(ord("1"))) {
-		    	if(noteType < 2) {
-		    		recordRequest = true;
-		    		instance_destroy();
-		    		build_note(nid, 0, time, position, width, sid, side, false, true);
-		    		announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
-		    	}
-		    }
-		    if(keycheck_down_ctrl(ord("2"))) {
-		    	if(noteType < 2) {
-		    		recordRequest = true;
-		    		instance_destroy();
-		    		build_note(nid, 1, time, position, width, sid, side, false, true);
-		    		announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
-		    	}
-		    }
+		    
 		    
 		    // Pos / Time Adjustment
 		    var _poschg = (keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left)) * (shift_ishold() ? 0.05: 0.01);

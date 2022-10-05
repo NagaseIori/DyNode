@@ -41,7 +41,7 @@ function draw_scribble_box(_ele, x, y, alpha) {
 	
 	CleanRectangle(_bbox.left-5, _bbox.top-5, _bbox.right+5, _bbox.bottom+5)
 		.Blend(theme_get().color, alpha)
-		.Rounding(5)
+		.Rounding(10)
 		.Draw();
 }
 #endregion

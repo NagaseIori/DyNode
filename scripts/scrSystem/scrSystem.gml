@@ -50,7 +50,7 @@ function map_load(_file = "") {
 	}
 	var _direct = _file != "";
 	if(_file == "")
-	    _file = get_open_filename_ext("XML Files (*.xml)|*.xml", "example.xml", 
+	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.osu)|*.xml;*.osu", "example.xml", 
 	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
@@ -65,24 +65,26 @@ function map_load(_file = "") {
     var _clear = _direct? true:show_question_i18n("box_q_import_clear");
     if(_clear) note_delete_all();
     
-    var _import_info = show_question_i18n("box_q_import_info");
+    switch filename_ext(_file) {
+    	case ".xml":
+    		map_import_xml(_file);
+    		break;
+    	case ".osu":
+    		map_import_osu(_file);
+    		break;
+    }
     
-    if(filename_ext(_file) == ".xml")
-        map_import_xml(_file, _import_info);
-    
-    objManager.chartPath = _file;
-    
-    show_debug_message("Import map sucessfully.");
     announcement_play("anno_import_chart_complete");
 }
 
-function map_import_xml(_file, _import_info) {
+function map_import_xml(_file) {
 	notes_reallocate_id();
     
     var _f = file_text_open_read(_file);
     var _str = snap_alter_from_xml(snap_from_xml(file_text_read_all(_f)));
     file_text_close(_f);
 
+	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = false;
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
@@ -209,16 +211,14 @@ function map_import_xml(_file, _import_info) {
     }
 }
 
-function map_import_osu() {
-    var _file = "";
-    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
-        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
+function map_import_osu(_file = "") {
+    if(_file == "")
+	    _file = get_open_filename_ext("OSU Files (*.osu)|*.osu", "", 
+	        program_directory, "Load osu! Chart File 加载 osu! 谱面文件");
         
     if(_file == "") return;
     
     var _import_hitobj = show_question_i18n(i18n_get("box_q_osu_import_objects"));
-    var _clear_notes = show_question_i18n(i18n_get("box_q_clear_objects"));
-    if(_clear_notes) note_delete_all();
     var _delay_time = 0;
     
     timing_point_reset();
@@ -226,8 +226,6 @@ function map_import_osu() {
     var _grid = snap_from_csv(file_text_read_all(_f));
     file_text_close(_f);
 	
-    show_debug_message("CSV Load Finished.");
-    
     var _type = "";
     var _h = array_length(_grid);
     var _mode = 0;				// Osu Game Mode
@@ -382,6 +380,11 @@ function image_load(_file = "") {
 }
 
 function map_export_xml() {
+	if(array_length(objEditor.timingPoints) == 0) {
+		announcement_error("export_timing_error");
+		return;
+	}
+	
     var _file = "";
     var _mapid = "_map_" + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
     var _default_file_name = _mapid + "-";
@@ -402,7 +405,8 @@ function map_export_xml() {
     	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
-    var _gen_narray = function (_side) {
+    var _fix_dec = show_question_i18n("export_fix_decimal_question");
+    var _gen_narray = function (_side, _fix_dec) {
     	var _ret = []
 		var l = array_length(objMain.chartNotesArray);
     	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
@@ -410,7 +414,7 @@ function map_export_xml() {
                 array_push(_ret, {
                 	m_id : { text : nid },
                 	m_type : { text : note_type_num_to_string(noteType) },
-                	m_time : { text : string_format(time_to_bar(mtime_to_time(time)), 1, 9) },
+                	m_time : { text : string_format(time_to_bar(mtime_to_time(_fix_dec?round(time):time)), 1, 9) },
                 	m_position : { text : string_format(position - width / 2, 1, 4) },
                 	m_width : { text : width },
                 	m_subId: { text : sid }
@@ -432,17 +436,17 @@ function map_export_xml() {
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0)
+	    			CMapNoteAsset : _gen_narray(0, _fix_dec)
 	    		}
 	    	},
 	    	m_notesLeft : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1)
+	    			CMapNoteAsset : _gen_narray(1, _fix_dec)
 	    		}
 	    	},
 	    	m_notesRight : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2)
+	    			CMapNoteAsset : _gen_narray(2, _fix_dec)
 	    		}
 	    	}
     	}
@@ -489,17 +493,6 @@ function map_get_struct() {
 	}
 	
 	return _str;
-}
-
-function build_note_withprop(prop) {
-	if(prop.noteType < 2) {
-		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
-			prop.width, "-1", prop.side);
-	}
-	else {
-		return build_hold(random_id(9), prop.time, prop.position, prop.width,
-			random_id(9), prop.time + prop.lastTime, prop.side);
-	}
 }
 
 function map_load_struct(_str) {
@@ -754,13 +747,40 @@ function theme_get() {
 
 #region ANNOUNCEMENT FUNCTIONS
 
-function announcement_play(str, time = 3000) {
-	str = i18n_get(str);
+function announcement_play(_str, time = 3000, _uniqueID = "null") {
+	_str = i18n_get(_str);
+	
+	var _below = 10;
+	var _beside = 10;
+	var _nx = global.resolutionW - _beside;
+	var _ny = global.resolutionH - _below;
+	
+	if(_uniqueID == "null")
+		_uniqueID = random_id(8);
+	
+	var _found = false;
 	with(objManager) {
-		announcementString = str;
-		announcementLastTime = time;
-		announcementTime = 0;
+		var arr = announcements;
+		for(var i=0, l=array_length(arr); i<l; i++)
+			if(instance_exists(arr[i]) && arr[i].uniqueID == _uniqueID) {
+				_found = true;
+				with(arr[i]) {
+					str = _str;
+					lastTime = timer + time;
+					_generate_element();
+				}
+			}
 	}
+	if(_found) return;
+	
+	var _inst = instance_create_depth(_nx, _ny, 0, objAnnouncement, {
+		str: _str,
+		lastTime: time,
+		uniqueID: _uniqueID
+	});
+	
+	array_push(objManager.announcements, _inst);
+	show_debug_message("NEW MD5 ANNO: " + _uniqueID);
 }
 
 function announcement_warning(str, time = 5000) {
@@ -775,7 +795,7 @@ function announcement_error(str, time = 8000) {
 
 function announcement_adjust(str, val) {
 	str = i18n_get(str);
-	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"));
+	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
 }
 
 #endregion
@@ -783,10 +803,12 @@ function announcement_adjust(str, val) {
 #region SYSTEM FUNCTIONS
 
 function load_config() {
-	if(!file_exists(global.configPath)) return;
+	if(!file_exists(global.configPath))
+		save_config();
 	
 	var _f = file_text_open_read(global.configPath);
-	var _con = json_parse(file_text_read_all(_f));
+	var _str = file_text_read_all(_f);
+	var _con = snap_from_json(_str);
 	file_text_close(_f);
 	
 	if(variable_struct_exists(_con, "theme"))
@@ -803,16 +825,22 @@ function load_config() {
 		global.autoupdate = _con.autoupdate;
 	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
 		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
+	if(variable_struct_exists(_con, "ANNOUNCEMENT_MAX_LIMIT"))
+		global.ANNOUNCEMENT_MAX_LIMIT = _con.ANNOUNCEMENT_MAX_LIMIT;
 	if(variable_struct_exists(_con, "fullscreen"))
 		global.fullscreen = _con.fullscreen;
 	if(variable_struct_exists(_con, "language"))
 		i18n_set_lang(_con.language);
+		
+	vars_init();
+	
+	return md5_file(global.configPath);
 }
 
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, json_stringify({
+	file_text_write_string(_f, snap_to_json({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -821,12 +849,30 @@ function save_config() {
 		autosave: global.autosave,
 		autoupdate: global.autoupdate,
 		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY,
+		ANNOUNCEMENT_MAX_LIMIT: global.ANNOUNCEMENT_MAX_LIMIT,
 		fullscreen: global.fullscreen,
 		language: i18n_get_lang()
 	}));
 	
 	file_text_close(_f);
 	
+}
+
+function md5_config() {
+	if(!file_exists(global.configPath))
+		save_config();
+	
+	return md5_file(global.configPath);
+}
+
+function vars_init() {
+	// Some variables that will take changes immediately
+	
+	if(debug_mode) global.fps = 165;
+	game_set_speed(global.fps, gamespeed_fps);
+	global.fpsAdjust = BASE_FPS / global.fps;
+	global.scaleXAdjust = global.resolutionW / BASE_RES_W;
+	global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 }
 
 function switch_debug_info() {

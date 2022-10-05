@@ -43,8 +43,6 @@ editorSelectMultiple = editorSelectCount > 1;
 
     var _attach_reset_request = false, _attach_sync_request = false;
     
-    if(keycheck_down(vk_f10))
-        map_import_osu();
     if(keycheck_down(ord("Z"))) {
         editorGridYEnabled = !editorGridYEnabled;
         announcement_adjust("时间方向网格吸附", editorGridYEnabled);
@@ -70,6 +68,106 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down_ctrl(ord("Y"))) {
         operation_redo();
     }
+    
+    
+    // Notes operation
+    
+    if(editor_select_count() > 0) {
+    	if(keycheck_down(ord("M"))) {
+	    	with(objNote) {
+	    		if(state == stateSelected) {
+	    			origProp = get_prop();
+	    			position = 5 - position;
+	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+	    		}
+	    	}
+	    	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+	    }
+	    if(keycheck_down_ctrl(ord("M"))) {
+	    	with(objNote) {
+	    		if(state == stateSelected) {
+	    			var prop = get_prop();
+	    			prop.position = 5 - prop.position;
+	    			note_select_reset(true);
+	    			build_note_withprop(prop, true, true);
+	    		}
+	    	}
+	    	announcement_play("镜像复制音符共 " + string(editor_select_count()) + " 处");
+	    }
+	    if(keycheck_down(ord("R"))) {
+	    	var _found = 0;
+	    	with(objNote) {
+	    		if(state == stateSelected)
+		    		if(side > 0) {
+		    			origProp = get_prop();
+			    		side = 1 + (!(side - 1));
+			    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+			    		_found ++;
+			    	}
+	    	}
+	    	if(_found>0) {
+	    		announcement_play("侧面对称音符共 " + string(_found) + " 处");
+	    		editorSide = 1 + (!(editorSide - 1));
+	    	}
+	    		
+	    	else
+	    		announcement_warning("仅侧面音符能够被对称。");
+	    }
+	    if(keycheck_down_ctrl(ord("R"))) {
+	    	var _found = 0;
+	    	with(objNote) {
+	    		if(state == stateSelected)
+		    		if(side > 0) {
+		    			var prop = get_prop();
+			    		prop.side = 1 + (!(prop.side - 1));
+			    		note_select_reset(true);
+			    		build_note_withprop(prop, true, true);
+			    		_found ++;
+			    	}
+	    	}
+	    	if(_found>0) {
+	    		announcement_play("侧面对称复制音符共 " + string(_found) + " 处");
+	    		editorSide = 1 + (!(editorSide - 1));
+	    	}
+	    		
+	    	else
+	    		announcement_warning("仅侧面音符能够被对称复制。");
+	    }
+	    if(keycheck_down_ctrl(ord("V"))) {
+	    	with(objNote)
+	    		if(state == stateSelected) {
+	    			origProp = get_prop();
+			    	width = objEditor.editorDefaultWidth;
+			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+	    		}
+	    	announcement_play("设置宽度："+string_format(objEditor.editorDefaultWidth, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+	    }
+	    if(keycheck_down_ctrl(ord("1"))) {
+	    	with(objNote)
+	    		if(state == stateSelected)
+			    	if(noteType < 2) {
+			    		recordRequest = true;
+			    		instance_destroy();
+			    		var _prop = get_prop();
+			    		_prop.noteType = 0;
+			    		build_note_withprop(_prop, true, true);
+			    	}
+			announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
+	    }
+	    if(keycheck_down_ctrl(ord("2"))) {
+	    	with(objNote)
+	    		if(state == stateSelected)
+			    	if(noteType < 2) {
+			    		recordRequest = true;
+			    		instance_destroy();
+			    		var _prop = get_prop();
+			    		_prop.noteType = 1;
+			    		build_note_withprop(_prop, true, true);
+			    	}
+			announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
+	    }
+    }
+    
         
     editorGridWidthEnabled = !ctrl_ishold();
     
@@ -78,10 +176,6 @@ editorSelectMultiple = editorSelectCount > 1;
         editor_set_editside((editor_get_editside() + 1) % 3);
     if(editorSide != editorLastSide) {
         _attach_sync_request = true;
-        with(objNote) {
-            if(state == stateSelected)
-                state = stateNormal;
-        }
     }
     
     // Editor Mode Switch
@@ -102,8 +196,6 @@ editorSelectMultiple = editorSelectCount > 1;
             editorMode = editorModeBeforeCopy;
             _attach_reset_request = true;
         }
-        else
-			game_end_confirm();
     }
     
     // Copies Mirror

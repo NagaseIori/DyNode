@@ -15,7 +15,7 @@
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.6"
+global.version = "v0.1.7"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -24,6 +24,7 @@ global.autosave = false;
 global.autoupdate = true;
 global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
+global.ANNOUNCEMENT_MAX_LIMIT = 7;
 
 // Themes Init
 
@@ -35,16 +36,12 @@ i18n_init();
 
 // Load Settings
 
-if(!debug_mode)
-	load_config();
+// if(debug_mode) save_config();
+
+_lastConfig_md5 = load_config();
 
 // Global Variables
 
-if(debug_mode) global.fps = 165;
-game_set_speed(global.fps, gamespeed_fps);
-global.fpsAdjust = BASE_FPS / global.fps;
-global.scaleXAdjust = global.resolutionW / BASE_RES_W;
-global.scaleYAdjust = global.resolutionH / BASE_RES_H;
 global.difficultyName = ["CASUAL", "NORMAL", "HARD", "MEGA", "GIGA", "TERA"];
 global.difficultySprite = [sprCasual, sprNormal, sprHard, sprMega, sprGiga, sprTera];
 global.difficultyString = "CNHMGT";
@@ -56,7 +53,7 @@ global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
 global.sprLazer = generate_lazer_sprite(2000);
 
-// Set GUI Resolution
+// Set GUI & Window Resolution
 
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
 display_set_gui_size(global.resolutionW, global.resolutionH);
@@ -81,13 +78,11 @@ DerpXml_Init();
     // Optional: Check to see if FMODGMS has loaded properly
     if (FMODGMS_Util_Handshake() != "FMODGMS is working.") {
         announcement_error("FMOD_load_err");
-        exit;
     }
     
     // Create the system
     if (FMODGMS_Sys_Create() < 0) {
         show_error_async(i18n_get("FMOD_create_sys_err") + FMODGMS_Util_GetErrorMessage(), false);
-        exit;
     }
     
     // Initialize the system
@@ -115,7 +110,6 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 
 // Window Frame Init
 
-window_frame_update();
 _windowframe_inited = false;
 
 // Randomize
@@ -146,10 +140,10 @@ else
 #region Inner Variables
 
 	// For Announcement
-	announcementString = "";
-	announcementLastTime = 0;
-	announcementTime = 0;
-	announcementAlpha = 0;
+	announcements = [];
+	annoThresholdNumber = 7;
+	annoThresholdTime = 400;
+	annosY = [];
 	animAnnoSpeed = 1 / room_speed;
 	
 	initVars = undefined;
@@ -165,6 +159,19 @@ else
 		global.autosave = false;
 		switch_autosave();
 	}
-		
+	
+	// For config.json update
+	
+	tsConfigLiveChange = time_source_create(time_source_game, 1, time_source_units_seconds, 
+		function() {
+			with(objManager)
+				if(_lastConfig_md5 != md5_config()) {
+					_lastConfig_md5 = load_config();
+					show_debug_message("MD5: "+_lastConfig_md5);
+					announcement_play("检测到配置被更改，改变后的一部分配置已经生效。");
+				}
+		}
+		, [], -1);
+	// time_source_start(tsConfigLiveChange);
 
 #endregion

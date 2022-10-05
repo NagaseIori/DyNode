@@ -4,10 +4,24 @@
 
 window_frame_update();
 
+_set_window_frame_rect = function () {
+	var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
+    window_frame_set_rect(
+		(display_get_width() - global.resolutionW * _ratio) * 0.5,
+		(display_get_height() - global.resolutionH * _ratio) * 0.5,
+		global.resolutionW * _ratio,
+		global.resolutionH * _ratio
+		);
+}
+
+
 if(keycheck_down(vk_f7)) {
 	if(keycheck_down(vk_f7))
 		global.fullscreen = !global.fullscreen;
 	window_frame_set_fakefullscreen(global.fullscreen);
+	if(!global.fullscreen)
+		_set_window_frame_rect();
+	
 }
 
 if (window_frame_get_visible() && window_has_focus()) {
@@ -20,7 +34,13 @@ if (window_frame_get_visible() && window_has_focus()) {
     if(!_windowframe_inited) {
     	_windowframe_inited = true;
     	window_command_hook(window_command_close);
-    	call_later(2, 1, function() {window_frame_set_fakefullscreen(global.fullscreen);});
+    	call_later(2, 1, function() {
+    		if(global.fullscreen)
+    			window_frame_set_fakefullscreen(global.fullscreen);
+    		else {
+				_set_window_frame_rect();
+    		}
+    	});
     }
 }
 
@@ -30,8 +50,34 @@ if(window_command_check(window_command_close)) {
 
 #endregion
 
-if(delta_time / 1000 < 100)
-	announcementTime += delta_time / 1000;
+#region Announcement update
+
+// Clear removed annos
+for(var i=0, l=array_length(announcements); i<l; i++) {
+	if(!instance_exists(announcements[i])) {
+		array_delete(announcements, i, 1);
+		i--;
+		l--;
+	}
+}
+
+// Caculate annos' Y
+var _h = 0;
+var _margin = 10;
+var _l = array_length(announcements);
+for(var i=array_length(announcements)-1; i>=0; i--) {
+	with(announcements[i]) {
+		targetY = _h;
+		_h += element.get_height() + _margin;
+		
+		if(_l - i > objManager.annoThresholdNumber)
+			lastTime = min(lastTime, timer + objManager.annoThresholdTime);
+	}
+}
+
+
+#endregion
+
 
 camera_set_view_size(view_camera[0], global.resolutionW, global.resolutionH);
 
@@ -40,6 +86,12 @@ var _fmoderr = FMODGMS_Sys_Update();
 if(_fmoderr < 0) {
     show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
 }
+
+if(keycheck_down(vk_f10)) {
+	load_config();
+	announcement_play("配置已重载。一部分配置可能需要重启游戏来生效。");
+}
+	
 
 if(room == rMain) {
 	if(keycheck_down(vk_f2))
@@ -50,6 +102,7 @@ if(room == rMain) {
 	    project_load();
 	if(keycheck_down_ctrl(ord("N")))
 		project_new();
+	
 	
 	
 	// If there is a init struct
@@ -85,3 +138,8 @@ if(keycheck_down(vk_f8))
 
 if(keycheck_down(vk_f9))
 	theme_next();
+
+if(keycheck_down(vk_escape)) {
+	if(!(instance_exists(objEditor) && editor_get_editmode() == 0))
+		game_end_confirm();
+}

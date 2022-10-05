@@ -10,7 +10,9 @@ _ioclear = function() {
     
     mouseButtons = [mb_left, mb_right];
     mouseButtonCount = array_length(mouseButtons);
-    lastMousePressedPos = array_create(mouseButtonCount, 0);
+    lastMousePressedPos = [];
+    for(var i=0; i<mouseButtonCount; i++)
+        lastMousePressedPos[i] = [0, 0];
     mouseHoldTime = array_create(mouseButtonCount, 0);
     mouseClick = array_create(mouseButtonCount, -1);
     
@@ -24,13 +26,15 @@ last_mouse_y = 0;
 
 mouseButtons = [mb_left, mb_right];
 mouseButtonCount = array_length(mouseButtons);
-lastMousePressedPos = array_create(mouseButtonCount, 0);
+lastMousePressedPos = [];
+for(var i=0; i<mouseButtonCount; i++)
+    lastMousePressedPos[i] = [0, 0];
 mouseHoldTime = array_create(mouseButtonCount, 0);
 mouseClick = array_create(mouseButtonCount, -1);
 
 mouseHoldThreshold = 125;
 mouseHoldDistanceThreshold = 20;
-mouseHoldClear = false;
+mouseHoldClear = true;
 
 // For Input Reset
 windowNFocusTime = 0;

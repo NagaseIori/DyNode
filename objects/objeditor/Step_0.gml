@@ -14,7 +14,7 @@
         
         if(_modchg != 0 || _groupchg != 0) {
             announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowGroup][beatlineNowMode])
-            +"\n节拍细分组："+chr(beatlineNowGroup+ord("A")));
+            +"\n节拍细分组："+chr(beatlineNowGroup+ord("A")), 3000, "beatlineDiv");
         }
         
         animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
@@ -167,6 +167,6 @@
             }
         }
     }
-    editorWidthAdjustTime = min(editorWidthAdjustTime, 1000);
+    editorWidthAdjustTime = min(editorWidthAdjustTime, 10000);
 
 #endregion

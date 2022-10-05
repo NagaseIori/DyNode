@@ -303,7 +303,17 @@ function timing_point_add(_t, _l, _b, record = false) {
 }
 
 function timing_point_create(record = false) {
-	var _time = string_digits(get_string_i18n("请输入该 Timing Point 的 offset（毫秒）：", ""));
+	var _time = undefined;
+	if(editor_select_count() == 1) {
+		var _ntime = 0;
+		with(objNote)
+			if(state == stateSelected)
+				_ntime = time;
+		var _que = show_question_i18n("检测到你已经选择一个 Note，它的时间是："+string_format(_ntime, 1, 3)+" ms。要以这个时间作为 offset 吗？");
+		if(_que) _time = _ntime;
+	}
+	if(is_undefined(_time))
+		_time = string_digits(get_string_i18n("请输入该 Timing Point 的 offset（毫秒）：", ""));
 	if(_time == "") return;
 	var _bpm = string_real(get_string_i18n("请输入 BPM ：", ""));
 	if(_bpm == "") return;
@@ -325,7 +335,7 @@ function timing_point_create(record = false) {
 function timing_point_delete_at(_time, record = false) {
 	with(objEditor) {
 		for(var i=0, l=array_length(timingPoints); i<l; i++)
-			if(int64(timingPoints[i].time) == _time) {
+			if(abs(timingPoints[i].time-_time) <= 1) {
 				var _tp = timingPoints[i];
 				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
 					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +

@@ -41,7 +41,7 @@ function note_sort_request() {
 	objEditor.editorNoteSortRequest = true;
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false) {
+function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false, _selecting = false) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -81,6 +81,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     with(_inst) {
     	_prop_init();
     	if(noteType == 2) _prop_hold_update();
+    	if(_selecting) state = stateSelected;
     }
     with(objMain) {
         array_push(chartNotesArray, _inst.get_prop(_fromxml));
@@ -100,13 +101,25 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side);
-	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side);
+function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false, _selecting = false) {
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, false, _selecting);
+	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side, false, false, _selecting);
 	_sinst.beginTime = _time;
 	if(_record)
 		operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(), -1);
 	return _inst;
+}
+
+
+function build_note_withprop(prop, record = false, selecting = false) {
+	if(prop.noteType < 2) {
+		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
+			prop.width, "-1", prop.side, false, record, selecting);
+	}
+	else {
+		return build_hold(random_id(9), prop.time, prop.position, prop.width,
+			random_id(9), prop.time + prop.lastTime, prop.side, record, selecting);
+	}
 }
 
 function note_delete(_id, _record = false) {
@@ -115,6 +128,7 @@ function note_delete(_id, _record = false) {
         var found = false;
         for(var i=0; i<l; i++)
             if(chartNotesArray[i].inst.nid == _id) {
+            	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
             	if(_record)
             		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i], -1);
             	
@@ -225,4 +239,12 @@ function note_deactivate_flush() {
 		
 		ds_map_clear(q);
 	}
+}
+
+function note_select_reset(isself = false) {
+	with(isself?id:objNote)
+		if(state == stateSelected) {
+			state = stateNormal;
+			state();
+		}
 }
