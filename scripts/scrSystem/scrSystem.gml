@@ -400,6 +400,7 @@ function map_export_xml() {
     	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
+    var _fix_dec = show_question_i18n("export_fix_decimal_question");
     var _gen_narray = function (_side) {
     	var _ret = []
 		var l = array_length(objMain.chartNotesArray);
@@ -408,7 +409,7 @@ function map_export_xml() {
                 array_push(_ret, {
                 	m_id : { text : nid },
                 	m_type : { text : note_type_num_to_string(noteType) },
-                	m_time : { text : string_format(time_to_bar(mtime_to_time(time)), 1, 9) },
+                	m_time : { text : string_format(time_to_bar(mtime_to_time(_fix_dec?int64(time):time)), 1, 9) },
                 	m_position : { text : string_format(position - width / 2, 1, 4) },
                 	m_width : { text : width },
                 	m_subId: { text : sid }

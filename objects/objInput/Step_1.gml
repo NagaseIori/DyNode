@@ -17,7 +17,8 @@ for(var i=0; i<mouseButtonCount; i++) {
     var _nbut = mouseButtons[i];
     if(mouseClick[i] == 1) mouseClick[i] = -1;
     if(mouse_check_button_pressed(_nbut)) {
-        lastMousePressedPos[i] = [mouse_x, mouse_y];
+        lastMousePressedPos[i][0] = mouse_x;
+        lastMousePressedPos[i][1] = mouse_y;
         mouseClick[i] = 0;
     }
         
