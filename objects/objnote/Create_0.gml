@@ -417,6 +417,7 @@ image_yscale = global.scaleYAdjust;
         
         // State Selected
         stateSelected = function() {
+        	animTargetA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
                 origSubTime = sinst.time;

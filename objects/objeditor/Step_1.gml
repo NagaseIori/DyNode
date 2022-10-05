@@ -118,7 +118,9 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	if(noteType < 2) {
 			    		recordRequest = true;
 			    		instance_destroy();
-			    		build_note(nid, 0, time, position, width, sid, side, false, true);
+			    		var _prop = get_prop();
+			    		_prop.noteType = 0;
+			    		build_note_withprop(_prop, true, true);
 			    	}
 			announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
 	    }
@@ -128,7 +130,9 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	if(noteType < 2) {
 			    		recordRequest = true;
 			    		instance_destroy();
-			    		build_note(nid, 1, time, position, width, sid, side, false, true);
+			    		var _prop = get_prop();
+			    		_prop.noteType = 1;
+			    		build_note_withprop(_prop, true, true);
 			    	}
 			announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
 	    }

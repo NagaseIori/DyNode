@@ -489,17 +489,6 @@ function map_get_struct() {
 	return _str;
 }
 
-function build_note_withprop(prop) {
-	if(prop.noteType < 2) {
-		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
-			prop.width, "-1", prop.side);
-	}
-	else {
-		return build_hold(random_id(9), prop.time, prop.position, prop.width,
-			random_id(9), prop.time + prop.lastTime, prop.side);
-	}
-}
-
 function map_load_struct(_str) {
 	note_delete_all();
 	
