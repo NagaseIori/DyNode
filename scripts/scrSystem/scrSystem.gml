@@ -380,6 +380,11 @@ function image_load(_file = "") {
 }
 
 function map_export_xml() {
+	if(array_length(objEditor.timingPoints) == 0) {
+		announcement_error("export_timing_error");
+		return;
+	}
+	
     var _file = "";
     var _mapid = "_map_" + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
     var _default_file_name = _mapid + "-";
@@ -401,7 +406,7 @@ function map_export_xml() {
     instance_activate_object(objNote); // Temporarily activate all notes
     
     var _fix_dec = show_question_i18n("export_fix_decimal_question");
-    var _gen_narray = function (_side) {
+    var _gen_narray = function (_side, _fix_dec) {
     	var _ret = []
 		var l = array_length(objMain.chartNotesArray);
     	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
@@ -431,17 +436,17 @@ function map_export_xml() {
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0)
+	    			CMapNoteAsset : _gen_narray(0, _fix_dec)
 	    		}
 	    	},
 	    	m_notesLeft : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1)
+	    			CMapNoteAsset : _gen_narray(1, _fix_dec)
 	    		}
 	    	},
 	    	m_notesRight : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2)
+	    			CMapNoteAsset : _gen_narray(2, _fix_dec)
 	    		}
 	    	}
     	}

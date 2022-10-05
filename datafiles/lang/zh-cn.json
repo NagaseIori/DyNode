@@ -74,6 +74,7 @@
         "editside_right" : "右侧",
         "fileformat_chart": "支持的谱面文件",
         "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是：$0 ms。要以这个时间作为 offset 吗？",
-        "export_fix_decimal_question": "导出时是否将导出的时间转换为整数毫秒？\n如果你打算将此导出谱面测试或发布则我们建议选择“是”。"
+        "export_fix_decimal_question": "导出时是否将导出的时间转换为整数毫秒？\n如果你仅将此导出谱面用于测试或发布则我们建议选择“是”。",
+        "export_timing_error": "你还没有配置 Timing ，因此无法导出谱面。"
     }
 }
