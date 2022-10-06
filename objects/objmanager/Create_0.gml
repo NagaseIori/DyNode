@@ -15,7 +15,7 @@
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.7"
+global.version = "v0.1.7.1"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
