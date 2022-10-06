@@ -6,11 +6,12 @@ window_frame_update();
 
 _set_window_frame_rect = function () {
 	var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
+	var w = global.resolutionW * _ratio, h = global.resolutionH * _ratio
     window_frame_set_rect(
-		(display_get_width() - global.resolutionW * _ratio) * 0.5,
-		(display_get_height() - global.resolutionH * _ratio) * 0.5,
-		global.resolutionW * _ratio,
-		global.resolutionH * _ratio
+		(display_get_width() - w) * 0.5,
+		(display_get_height() - h) * 0.5,
+		w,
+		h
 		);
 }
 
@@ -19,9 +20,6 @@ if(keycheck_down(vk_f7)) {
 	if(keycheck_down(vk_f7))
 		global.fullscreen = !global.fullscreen;
 	window_frame_set_fakefullscreen(global.fullscreen);
-	if(!global.fullscreen)
-		_set_window_frame_rect();
-	
 }
 
 if (window_frame_get_visible() && window_has_focus()) {

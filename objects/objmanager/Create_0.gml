@@ -8,7 +8,7 @@
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
-#macro NOTE_DEACTIVATION_TIME 500			// Every fixed time than deactivated notes in queue
+#macro NOTE_DEACTIVATION_TIME 20			// Every fixed time than deactivated notes in queue
 #macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
@@ -62,16 +62,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 
 gpu_set_tex_filter(true);
 gc_target_frame_time(50);
-
-// DyCore Initialization
-
-// if(DyCore_Init() != "success") {
-//     show_error_i18n("DyCore 核心初始化失败。", true);
-// }
-
-// DerpXML Initialization
-
-DerpXml_Init();
 
 // FMODGMS Initialization
 
