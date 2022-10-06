@@ -63,16 +63,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 gpu_set_tex_filter(true);
 gc_target_frame_time(50);
 
-// DyCore Initialization
-
-// if(DyCore_Init() != "success") {
-//     show_error_i18n("DyCore 核心初始化失败。", true);
-// }
-
-// DerpXML Initialization
-
-DerpXml_Init();
-
 // FMODGMS Initialization
 
     // Optional: Check to see if FMODGMS has loaded properly
