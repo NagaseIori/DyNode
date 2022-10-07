@@ -29,7 +29,7 @@ if(!drawVisible) return;
     
     // Draw Green Blend
     
-    draw_set_color_alpha(c_green, lastAlpha);
+    draw_set_color_alpha(c_green, lastAlpha * 0.8);
     if(side == 0)
     	draw_rectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny, false);
     else

@@ -9,7 +9,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     	surface_set_target(bottomInfoSurf);
     	
     		draw_clear_alpha(c_black, 0);
-    		var _nx = resor_to_x(0.019);
+    		var _nx = resor_to_x(0.017);
 	    	// Draw Title
 			if(has_cjk(chartTitle)) {
 				draw_set_halign(fa_left); draw_set_valign(fa_middle);
