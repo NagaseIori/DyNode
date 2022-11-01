@@ -103,13 +103,13 @@
         chartNotesArray[chartNotesArrayAt].time <= nowTime) {
             chartNotesArrayAt ++;
             if(chartNotesArrayAt < chartNotesCount)
-                note_check_and_activate(chartNotesArray[chartNotesArrayAt]);
+                note_check_and_activate(chartNotesArrayAt);
         }
 
     while(chartNotesArrayAt > 0 &&
         chartNotesArray[chartNotesArrayAt-1].time > nowTime){
             chartNotesArrayAt --;
-            note_check_and_activate(chartNotesArray[chartNotesArrayAt]);
+            note_check_and_activate(chartNotesArrayAt);
         }
 
 #endregion

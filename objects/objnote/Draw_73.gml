@@ -89,7 +89,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 else animTargetNodeA = 0;
 
 if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
-    scribble(stateString)
+    scribble(stateString + " " + string(depth) + " " + string(arrayPos))
     	.starting_format("fDynamix16", c_white)
     	.align(fa_center, fa_top)
     	.draw(x, y)
