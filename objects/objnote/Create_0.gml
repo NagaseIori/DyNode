@@ -17,6 +17,7 @@ image_yscale = global.scaleYAdjust;
     sinst = -999; // Sub instance id
     finst = -999; // Father instance id
     noteType = 0; // 0 Note 1 Chain 2 Hold
+    arrayPos = 0; // Position in chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -79,7 +80,7 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - time;
+        depth = origDepth - arrayPos*2;
         if(noteType == 3 && instance_exists(finst))
         	depth = finst.depth;
         

@@ -32,7 +32,7 @@ function _outscreen_check(_x, _y, _side) {
 function note_sort_all() {
 	notes_array_update();
     var _f = function(_a, _b) {
-        return _a.time < _b.time;
+        return _a.time == _b.time ? _a.inst < _b.inst : _a.time < _b.time;
     }
     array_sort_f(objMain.chartNotesArray, _f);
 }
@@ -198,13 +198,18 @@ function notes_reallocate_id() {
 	}
 }
 
-function note_check_and_activate(_struct) {
-	if(instance_exists(_struct.inst)) return 0;
+function note_check_and_activate(_posistion_in_array) {
+	var _struct = objMain.chartNotesArray[_posistion_in_array];
+	if(instance_exists(_struct.inst)) {
+		_struct.inst.arrayPos = _posistion_in_array;
+		return 0;
+	}
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
+		_str.inst.arrayPos = _posistion_in_array;
 		return 1;
 	}
 	else if(_flag && _outbound_check_t(_str.time, !(_str.side))) {
