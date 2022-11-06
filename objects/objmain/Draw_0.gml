@@ -6,7 +6,9 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     
     if(!surface_exists(bottomInfoSurf)) {
     	bottomInfoSurf = surface_create(global.resolutionW, targetLineBelow);
-    	surface_set_target(bottomInfoSurf);
+    }
+    
+    surface_set_target(bottomInfoSurf);
     	
     		draw_clear_alpha(c_black, 0);
     		var _nx = resor_to_x(0.017);
@@ -35,8 +37,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 		        0.67 * global.scaleXAdjust, 0.67 * global.scaleYAdjust, 0, c_white,
 		        1, 0);
 	    
-	    surface_reset_target();
-    }
+    surface_reset_target();
     
     draw_surface_ext(bottomInfoSurf, 0, global.resolutionH - targetLineBelow,
     	1.0, 1.0, 0, c_white, titleAlpha);

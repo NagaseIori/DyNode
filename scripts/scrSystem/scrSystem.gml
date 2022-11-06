@@ -294,7 +294,6 @@ function map_set_title() {
 	if(_title == "") return;
 	
 	objMain.chartTitle = _title;
-	surface_free_f(objMain.bottomInfoSurf);
 }
 
 function music_load(_file = "") {
