@@ -127,17 +127,21 @@ function map_import_xml(_file) {
 	
 	if(variable_struct_exists(_main, "m_argument")) {
 		_import_tp = show_question_i18n(i18n_get("box_q_import_dymm_bpm"));
-		var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
-		if(!is_array(_bpms)) _bpms = [_bpms];
-		for(var i=0, l=array_length(_bpms); i<l; i++) {
-			_note_time = real(_bpms[i].m_time.text);
-			_nbpm = real(_bpms[i].m_value.text);
-		
-			array_push(_tp_lists, {
-	    		time: _note_time,
-	    		barpm: _nbpm
-	    	});
+		if(variable_struct_exists(_main.m_argument, "m_bpmchange") && variable_struct_exists(_main.m_argument.m_bpmchange, "CBpmchange")) {
+			var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
+			if(!is_array(_bpms)) _bpms = [_bpms];
+			for(var i=0, l=array_length(_bpms); i<l; i++) {
+				_note_time = real(_bpms[i].m_time.text);
+				_nbpm = real(_bpms[i].m_value.text);
+			
+				array_push(_tp_lists, {
+		    		time: _note_time,
+		    		barpm: _nbpm
+		    	});
+			}
 		}
+		else
+			announcement_warning("未能读取谱面中的变 BPM 信息。\n建议使用最新版本 Dynamaker-modified 来导出谱面的变 BPM 数据。")
 	}
 	
     if(_import_info) {
