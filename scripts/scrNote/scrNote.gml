@@ -194,6 +194,8 @@ function notes_reallocate_id() {
 			var _inst = chartNotesArray[i].inst;
 			if(_inst.noteType == 2)
 				_inst.sid = _inst.sinst.nid;
+			else
+				_inst.sid = "-1";
 		}
 	}
 }
