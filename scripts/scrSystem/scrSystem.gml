@@ -834,6 +834,8 @@ function load_config() {
 		global.fullscreen = _con.fullscreen;
 	if(variable_struct_exists(_con, "language"))
 		i18n_set_lang(_con.language);
+	if(variable_struct_exists(_con, "simplify"))
+		global.simplify = _con.simplify;
 		
 	vars_init();
 	
@@ -854,7 +856,8 @@ function save_config() {
 		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY,
 		ANNOUNCEMENT_MAX_LIMIT: global.ANNOUNCEMENT_MAX_LIMIT,
 		fullscreen: global.fullscreen,
-		language: i18n_get_lang()
+		language: i18n_get_lang(),
+		simplify: global.simplify
 	}));
 	
 	file_text_close(_f);

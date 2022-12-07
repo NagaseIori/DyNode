@@ -37,7 +37,7 @@
     	hitSoundOn = !hitSoundOn;
     	announcement_adjust("anno_hitsound", hitSoundOn);
     }
-    	
+    
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
     if(keycheck_down_ctrl(ord("F"))) {
@@ -79,6 +79,11 @@
     
     if(keycheck_down(ord("U")))
     	map_add_offset("", true);
+    
+    if(keycheck_down(ord("N"))) {
+    	global.simplify = !global.simplify;
+    	announcement_adjust("anno_simplify", global.simplify);
+    }
     
     if(mouse_check_button_pressed(mb_middle)) {
     	showStats = !showStats;
