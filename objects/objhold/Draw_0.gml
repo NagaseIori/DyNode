@@ -63,7 +63,7 @@ var _ica0 = inColorAlp[0] * image_alpha;
 var _ica1 = inColorAlp[1] * image_alpha;
 var _oca0 = outColorAlp[0] * image_alpha;
 var _oca1 = outColorAlp[1] * image_alpha;
-
+_th = max(_th, 10);
 if(side == 0) {
 	if(global.simplify)
 		CleanRectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny)
