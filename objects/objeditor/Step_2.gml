@@ -7,6 +7,8 @@ if(editorMode == 4) {
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
             editorSelectArea = true;
+            editorSelectAreaPosition[0] = mouse_get_last_pos(0)[0];
+            editorSelectAreaPosition[1] = mouse_get_last_pos(0)[1];
             if(!ctrl_ishold()) {
                 editorSelectResetRequest = true;
             }

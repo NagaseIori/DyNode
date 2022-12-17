@@ -29,7 +29,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
         else animTargetNodeA = 0;
     }
     if(state == stateSelected) {
-    	if(editor_select_is_area() && editor_select_inbound(x, y, side, noteType))
+    	if(selectInbound)
     		_col = scribble_rgb_to_bgr(0xff1744);
     	else 
         	_col = c_white;

@@ -6,6 +6,7 @@ if(state == stateOut && image_alpha<EPS) {
 else
     drawVisible = true;
 
+selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, noteType);
 state();
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {

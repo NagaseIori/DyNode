@@ -51,6 +51,7 @@ image_yscale = global.scaleYAdjust;
     animTargetNodeA = 0;
     animTargetInfoA = 0;
     recordRequest = false;
+    selectInbound = false;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
@@ -242,15 +243,20 @@ image_yscale = global.scaleYAdjust;
 	    }
         
         var _limTime = min(objMain.nowTime, objMain.animTargetTime);
-        if(time <= _limTime) {
-            _create_shadow();
-            state = stateLast;
-            state();
+        
+        // If inbound then the state wont change
+        if(!selectInbound) {
+        	if(time <= _limTime) {
+	            _create_shadow();
+	            state = stateLast;
+	            state();
+	        }
+	        if(_outbound_check(x, y, side)) {
+	            state = stateOut;
+	            state();
+	        }
         }
-        if(_outbound_check(x, y, side)) {
-            state = stateOut;
-            state();
-        }
+        
         
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
@@ -266,7 +272,6 @@ image_yscale = global.scaleYAdjust;
                     editor_select_compare(objEditor.editorSelectSingleTargetInbound, id);
             }
         }
-        
     }
     
     // State Last
