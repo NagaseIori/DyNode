@@ -206,6 +206,9 @@ editorSelectMultiple = editorSelectCount > 1;
             editorMode = editorModeBeforeCopy;
             _attach_reset_request = true;
         }
+        else {
+            game_end_confirm();
+        }
     }
     
     // Copies Mirror

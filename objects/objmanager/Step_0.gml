@@ -87,7 +87,7 @@ if(_fmoderr < 0) {
 
 if(keycheck_down(vk_f10)) {
 	load_config();
-	announcement_play("配置已重载。一部分配置可能需要重启游戏来生效。");
+	announcement_play("anno_reload_config");
 }
 	
 
@@ -144,6 +144,6 @@ if(keycheck_down(vk_f9))
 	theme_next();
 
 if(keycheck_down(vk_escape)) {
-	if(!(instance_exists(objEditor) && editor_get_editmode() == 0))
+	if(!instance_exists(objEditor))
 		game_end_confirm();
 }
