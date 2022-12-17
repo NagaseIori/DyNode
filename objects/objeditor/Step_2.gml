@@ -7,8 +7,8 @@ if(editorMode == 4) {
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
             editorSelectArea = true;
-            editorSelectAreaPosition[0] = mouse_get_last_pos(0)[0];
-            editorSelectAreaPosition[1] = mouse_get_last_pos(0)[1];
+            var _pos = mouse_get_last_pos(0);
+            editorSelectAreaPosition = xy_to_noteprop(_pos[0], _pos[1], editorSide);
             if(!ctrl_ishold()) {
                 editorSelectResetRequest = true;
             }
@@ -46,23 +46,13 @@ if(editorMode == 4) {
     
     // Selecting Area part
     if(editorSelectArea) {
-        
-        editorSelectAreaPosition = [
-            mouse_get_last_pos(0)[0],
-            mouse_get_last_pos(0)[1],
-            mouse_x,
-            mouse_y
-            ];
-        
-        var _pos = editorSelectAreaPosition;
-        
         if(!mouse_ishold_l()) {
             editorSelectArea = false;
             
             with(objNote) {
-                if(side == editor_get_editside() && noteType != 3 && 
+                if(side == editor_get_editside() && 
                     (state == stateNormal || state == stateSelected) && 
-                    pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])) {
+                    editor_select_inbound(x, y, side, noteType)) {
                         state = (state == stateSelected ? stateNormal : stateSelected);
                         state();
                     }

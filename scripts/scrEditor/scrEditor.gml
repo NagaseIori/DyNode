@@ -95,7 +95,14 @@ function editor_select_is_area() {
 	return objEditor.editorSelectArea;
 }
 function editor_select_get_area_position() {
-	return objEditor.editorSelectAreaPosition;
+	var _pos;
+	with(objEditor) {
+		_pos = noteprop_to_xy(editorSelectAreaPosition.pos, editorSelectAreaPosition.time, editorSide);
+		_pos = [_pos.x, _pos.y];
+		_pos[2] = mouse_x;
+		_pos[3] = mouse_y;
+	}
+	return _pos;
 }
 function editor_select_inbound(x, y, side, type) {
 	var _pos = editor_select_get_area_position();

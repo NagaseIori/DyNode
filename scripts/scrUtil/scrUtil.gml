@@ -128,6 +128,19 @@ function noteprop_set_xy(_pos, _time, _side) {
 		y = note_pos_to_x(_pos, _side);
 	}
 }
+function xy_to_noteprop(_x, _y, _side) {
+	if(_side == 0) {
+		return {
+			pos: x_to_note_pos(_x, _side),
+			time: y_to_note_time(_y, _side)
+		};
+	}
+	else
+		return {
+			pos: x_to_note_pos(_y, _side),
+			time: y_to_note_time(_x, _side)
+		};
+}
 function resor_to_x(ratio) {
     return global.resolutionW * ratio;
 }
