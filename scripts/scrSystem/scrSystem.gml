@@ -80,9 +80,9 @@ function map_load(_file = "") {
 function map_import_xml(_file) {
 	notes_reallocate_id();
     
-    var _f = file_text_open_read(_file);
-    var _str = snap_alter_from_xml(SnapFromXML(file_text_read_all(_f)));
-    file_text_close(_f);
+    var _buf = buffer_load(_file);
+    var _str = snap_alter_from_xml(SnapBufferReadXML(_buf, 0, buffer_get_size(_buf)));
+    buffer_delete(_buf);
 
 	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = false;
@@ -226,9 +226,9 @@ function map_import_osu(_file = "") {
     var _delay_time = 0;
     
     timing_point_reset();
-    var _f = file_text_open_read(_file);
-    var _grid = snap_from_csv(file_text_read_all(_f));
-    file_text_close(_f);
+    var _buf = buffer_load(_file);
+    var _grid = SnapBufferReadCSV(_buf, 0);
+    buffer_delete(_buf);
 	
     var _type = "";
     var _h = array_length(_grid);
@@ -589,9 +589,9 @@ function project_load(_file = "") {
     
     if(_file == "") return 0;
     
-    var _f = file_text_open_read(_file);
-    var _contents = json_parse(file_text_read_all(_f));
-    file_text_close(_f);
+    var _buf = buffer_load(_file);
+    var _contents = json_parse(buffer_read(_buf, buffer_text));
+    buffer_delete(_buf);
     
     map_reset();
     
@@ -608,6 +608,7 @@ function project_load(_file = "") {
     }
     else
     	map_load(chartPath);
+    
     music_load(musicPath);
     if(backgroundPath != "") image_load(backgroundPath);
     
@@ -617,6 +618,8 @@ function project_load(_file = "") {
     
     projectPath = _file;
     
+    if(variable_struct_exists(_contents, "settings"))
+    	project_set_settings(_contents.settings);
     
     ///// Old version workaround
     
@@ -651,7 +654,8 @@ function project_save_as(_file = "") {
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
 		timingPoints: objEditor.timingPoints,
-		charts: []
+		charts: [],
+		settings: project_get_settings()
 	};
 	
 	_contents.charts = map_get_struct();
@@ -665,6 +669,29 @@ function project_save_as(_file = "") {
 	announcement_play("anno_project_save_complete");
 	
 	return 1;
+}
+
+function project_get_settings() {
+	return {
+		editside: editor_get_editside(),
+		editmode: editor_get_editmode(),
+		defaultWidth: objEditor.editorDefaultWidth,
+		defaultWidthMode: objEditor.editorDefaultWidthMode,
+		ntime: objMain.nowTime
+	};
+}
+
+function project_set_settings(str) {
+	editor_set_editmode(str.editmode);
+	editor_set_editside(str.editside);
+	with(objEditor) {
+		editorDefaultWidth = str.defaultWidth;
+		editorDefaultWidthMode = str.defaultWidthMode;
+	}
+	if(variable_struct_exists(str, "ntime")) {
+		objMain.nowTime = str.ntime;
+		objMain.animTargetTime = str.ntime;
+	}
 }
 
 function project_new() {
@@ -812,14 +839,13 @@ function load_config() {
 	if(!file_exists(global.configPath))
 		save_config();
 	
-	var _f = file_text_open_read(global.configPath);
-	var _str = file_text_read_all(_f);
-	var _con = SnapFromJSON(_str);
-	
-	file_text_close(_f);
+	var _buf = buffer_load(global.configPath);
+	var _con = SnapBufferReadJSON(_buf, 0);
+	buffer_delete(_buf);
 	
 	// If config file is corrupted
 	if(!is_struct(_con)) {
+		show_error_i18n("error_config_file_corrupted", false);
 		file_delete(global.configPath);
 		load_config();
 		return;

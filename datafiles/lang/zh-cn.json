@@ -81,6 +81,7 @@
         "default_width_mode_name_2": "侧面两倍锁定",
         "default_width_mode_name_3": "正侧面分离",
         "default_width_mode_name_4": "三面分离",
-        "default_width_mode": "宽度设置模式"
+        "default_width_mode": "宽度设置模式",
+        "error_config_file_corrupted": "检测到配置文件损坏。将还原所有的配置为默认值。"
     }
 }

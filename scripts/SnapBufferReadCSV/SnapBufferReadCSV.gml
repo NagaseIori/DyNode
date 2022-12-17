@@ -17,7 +17,9 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
         var _oldOffset = buffer_tell(_buffer);
         buffer_seek(_buffer, buffer_seek_start, _inOffset);
     }
-	
+	if (_inSize == undefined) {
+		_inSize = buffer_get_size(_buffer);
+	}
     var _size = _inSize + buffer_tell(_buffer);
     _size -= buffer_tell(_buffer);
     

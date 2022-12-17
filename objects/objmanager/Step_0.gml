@@ -103,27 +103,28 @@ if(room == rMain) {
 	
 	
 	
-	// If there is a init struct
-	if(initVars != undefined) {
-		var _str = initVars;
-		with(objMain) {
-			chartTitle = _str.title;
-			chartSideType[0] = _str.ltype;
-			chartSideType[1] = _str.rtype;
-			chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
+	//// For New Project Initialization --- related codes in rStartPage or somewhere else.
+		// If there is a init struct
+		if(initVars != undefined) {
+			var _str = initVars;
+			with(objMain) {
+				chartTitle = _str.title;
+				chartSideType[0] = _str.ltype;
+				chartSideType[1] = _str.rtype;
+				chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
+			}
+			music_load(_str.mus);
+			if(_str.bg != "") image_load(_str.bg);
+			if(_str.chart != "") map_load(_str.chart);
+			initVars = undefined;
 		}
-		music_load(_str.mus);
-		if(_str.bg != "") image_load(_str.bg);
-		if(_str.chart != "") map_load(_str.chart);
-		initVars = undefined;
-	}
-	
-	// Or there is a init project
-	if(initWithProject) {
-		initWithProject = false;
 		
-		if(!project_load()) room_goto(rStartPage);
-	}
+		// Or there is a init project
+		if(initWithProject) {
+			initWithProject = false;
+			
+			if(!project_load()) room_goto(rStartPage);
+		}
 }    
     
 if(keycheck_down_ctrl(vk_f12)) {
