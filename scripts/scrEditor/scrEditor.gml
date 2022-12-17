@@ -104,9 +104,9 @@ function editor_select_get_area_position() {
 	}
 	return _pos;
 }
-function editor_select_inbound(x, y, side, type) {
+function editor_select_inbound(x, y, side, type, onlytime = -1) {
 	var _pos = editor_select_get_area_position();
-	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])
+	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
 }
 
 function editor_select_count() {

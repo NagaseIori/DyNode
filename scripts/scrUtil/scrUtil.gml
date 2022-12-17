@@ -217,7 +217,11 @@ function format_time_string(_time) {
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }
-function pos_inbound(xo, yo, x1, y1, x2, y2) {
+function pos_inbound(xo, yo, x1, y1, x2, y2, onlytime = -1) {
+	if(onlytime == 0)
+		return in_between(yo, y1, y2);
+	else if(onlytime > 0)
+		return in_between(xo, x1, x2);
 	return in_between(xo, x1, x2) && in_between(yo, y1, y2);
 }
 
