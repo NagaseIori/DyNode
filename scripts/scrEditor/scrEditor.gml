@@ -1,14 +1,54 @@
 
-function editor_set_width_default(_width) {
-    objEditor.editorDefaultWidth = _width;
-}
-
 function editor_set_editmode(mode) {
 	objEditor.editorMode = mode;
 }
 
 function editor_get_editmode() {
     return objEditor.editorMode;
+}
+
+function editor_get_default_width() {
+	var _res = 0;
+	with(objEditor) {
+		switch(editorDefaultWidthMode) {
+			case 0:
+				_res = editorDefaultWidth[0];
+				break;
+			case 1:
+				_res = editorDefaultWidth[1];
+				if(editor_get_editside() > 0)
+					_res *= 2;
+				break;
+			case 2:
+				_res = editorDefaultWidth[2][min(editor_get_editside(), 1)];
+				break;
+			case 3:
+				_res = editorDefaultWidth[3][editor_get_editside()];
+				break;
+		}
+	}
+	return _res;
+}
+
+function editor_set_default_width(width) {
+	with(objEditor) {
+		switch(editorDefaultWidthMode) {
+			case 0:
+				editorDefaultWidth[0] = width;
+				break;
+			case 1:
+				if(editor_get_editside() > 0)
+					width /= 2;
+				editorDefaultWidth[1] = width;
+				break;
+			case 2:
+				editorDefaultWidth[2][min(editor_get_editside(), 1)] = width;
+				break;
+			case 3:
+				editorDefaultWidth[3][editor_get_editside()] = width;
+				break;
+		}
+	}
 }
 
 function editor_set_editside(side) {

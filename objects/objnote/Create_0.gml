@@ -358,7 +358,7 @@ image_yscale = global.scaleYAdjust;
             
             if(mouse_check_button_released(mb_left)) {
             	if(editor_get_editmode() > 0)
-                	editor_set_width_default(width);
+                	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
                 		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
@@ -505,7 +505,7 @@ image_yscale = global.scaleYAdjust;
 		    	timing_point_delete_at(time, true);
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
-		    	objEditor.editorDefaultWidth = width;
+		    	editor_set_default_width(width);
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
 		    

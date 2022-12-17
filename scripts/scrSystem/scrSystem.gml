@@ -798,7 +798,10 @@ function announcement_error(str, time = 8000) {
 
 function announcement_adjust(str, val) {
 	str = i18n_get(str);
-	announcement_play(str + "：" + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
+	if(is_bool(val))
+		announcement_play(str + ": " + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
+	else
+		announcement_play(str + ": " + i18n_get(string(val)), 3000, md5_string_unicode(str));
 }
 
 #endregion

@@ -69,6 +69,13 @@ editorSelectMultiple = editorSelectCount > 1;
         operation_redo();
     }
     
+    if(keycheck_down(ord("L"))) {
+    	editorDefaultWidthMode ++;
+    	editorDefaultWidthMode %= 4;
+    	announcement_adjust("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
+    	_attach_sync_request = true;
+    }
+    
     
     // Notes operation
     
@@ -137,10 +144,10 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	with(objNote)
 	    		if(state == stateSelected) {
 	    			origProp = get_prop();
-			    	width = objEditor.editorDefaultWidth;
+			    	width = editor_get_default_width();
 			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
-	    	announcement_play("设置宽度："+string_format(objEditor.editorDefaultWidth, 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+	    	announcement_play("设置宽度："+string_format(editor_get_default_width(), 1, 2)+"\n共 "+string(editor_select_count())+" 处");
 	    }
 	    if(keycheck_down_ctrl(ord("1"))) {
 	    	with(objNote)
@@ -230,8 +237,13 @@ editorSelectMultiple = editorSelectCount > 1;
         }
         if(_attach_sync_request) {
             var i=0, l=array_length(editorNoteAttaching);
-            for(; i<l; i++)
-                editorNoteAttaching[i].side = editorSide;
+            for(; i<l; i++) {
+            	editorNoteAttaching[i].side = editorSide;
+            	if(editorMode != 0)
+            		editorNoteAttaching[i].width = editor_get_default_width();
+            }
+                
+            
         }
     }
     
@@ -264,7 +276,7 @@ editorSelectMultiple = editorSelectCount > 1;
         case 2:
         case 3:
             if(editorNoteAttaching == -1) {
-                editorNoteAttaching = [note_build_attach(editorMode - 1, editorSide, editorDefaultWidth)];
+                editorNoteAttaching = [note_build_attach(editorMode - 1, editorSide, editor_get_default_width())];
                 editorNoteAttachingCenter = 0;
             }
             break;

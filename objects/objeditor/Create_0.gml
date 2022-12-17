@@ -10,7 +10,22 @@ editorSide = 0;                             // 0 down 1 left 2 right
 editorLastSide = 0;
 editorNoteAttaching = -1;                   // instances that attached to cursor now
 editorNoteAttachingCenter = 0;           // attached instances' center
-editorDefaultWidth = 1.0;
+
+// Width for different modes
+editorDefaultWidth = [
+	1.0,
+	1.0,
+	[1.0, 1.0],
+	[1.0, 1.0, 1.0]
+	];
+editorDefaultWidthModeName = [
+	"default_width_mode_name_1",
+	"default_width_mode_name_2",
+	"default_width_mode_name_3",
+	"default_width_mode_name_4"
+	];
+editorDefaultWidthMode = 0;
+
 editorSelectSingleTarget = -999;            // instance for single selection target
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;               // selecting note
