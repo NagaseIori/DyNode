@@ -7,7 +7,7 @@ if(windowNFocusTime > windowNFocusTimeThreshold) {
     
     _ioclear();
     
-    show_debug_message("IO Cleared.");
+    show_debug_message_safe("IO Cleared.");
 }
 
 last_mouse_x = mouse_x;

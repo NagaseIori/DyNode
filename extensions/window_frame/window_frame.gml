@@ -54,8 +54,10 @@ if (global.__window_frame_init_timer > 0) {
 			global.__window_frame_ready = true;
 			global.__window_frame_bound = true;
 			global.__window_frame_visible = true;
-			show_debug_message("window_frame_init succeeded!");
-		} else show_debug_message("window_frame_init failed!");
+			show_debug_message_safe("window_frame_init succeeded!");
+		}
+		else
+			show_debug_message_safe("window_frame_init failed!");
 	}
 }
 

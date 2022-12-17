@@ -413,3 +413,8 @@ function show_error_i18n(str, abort) {
 function get_string_i18n(str, def) {
 	return get_string(i18n_get(str), def);
 }
+
+function show_debug_message_safe(str) {
+	if(debug_mode)
+		show_debug_message(str);
+}

@@ -169,7 +169,7 @@ function operation_step_flush(_array) {
 		array_push(operationStack, _array);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
-		// show_debug_message("New operation: "+string(array_length(_array)));
+		// show_debug_message_safe("New operation: "+string(array_length(_array)));
 	}
 }
 
@@ -248,7 +248,7 @@ function operation_undo() {
 	
 	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
 	note_sort_request();
-	// show_debug_message("POINTER: "+ string(operationPointer));
+	// show_debug_message_safe("POINTER: "+ string(operationPointer));
 }
 
 function operation_redo() {

@@ -334,11 +334,11 @@ function music_load(_file = "") {
         musicLength = FMODGMS_Snd_Get_Length(music);
         usingMP3 = string_lower(filename_ext(_file)) == ".mp3";
         if(usingMP3)
-        	show_debug_message("The music file is using the mp3 format")
+        	show_debug_message_safe("The music file is using the mp3 format")
         
     }
     objManager.musicPath = _file;
-    show_debug_message("Load sucessfully.");
+    show_debug_message_safe("Load sucessfully.");
     
     announcement_play("anno_music_load_complete", 1000);
 }
@@ -516,7 +516,7 @@ function map_load_struct(_str) {
 	for(var i=0, l=array_length(_arr); i<l; i++) 
 		build_note_withprop(_arr[i]);
 	
-	show_debug_message("Load map from struct sucessfully.");
+	show_debug_message_safe("Load map from struct sucessfully.");
 }
 
 function map_get_alt_title() {
@@ -783,7 +783,7 @@ function announcement_play(_str, time = 3000, _uniqueID = "null") {
 	});
 	
 	array_push(objManager.announcements, _inst);
-	show_debug_message("NEW MD5 ANNO: " + _uniqueID);
+	show_debug_message_safe("NEW MD5 ANNO: " + _uniqueID);
 }
 
 function announcement_warning(str, time = 5000) {

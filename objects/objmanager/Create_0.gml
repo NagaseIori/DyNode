@@ -9,7 +9,7 @@
 #macro EPS 0.001
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro NOTE_DEACTIVATION_TIME 200			// Every fixed time than deactivated notes in queue
-#macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
+#macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
 
@@ -158,7 +158,7 @@ else
 			with(objManager)
 				if(_lastConfig_md5 != md5_config()) {
 					_lastConfig_md5 = load_config();
-					show_debug_message("MD5: "+_lastConfig_md5);
+					show_debug_message_safe("MD5: "+_lastConfig_md5);
 					announcement_play("检测到配置被更改，改变后的一部分配置已经生效。");
 				}
 		}
