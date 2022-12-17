@@ -677,7 +677,8 @@ function project_get_settings() {
 		editmode: editor_get_editmode(),
 		defaultWidth: objEditor.editorDefaultWidth,
 		defaultWidthMode: objEditor.editorDefaultWidthMode,
-		ntime: objMain.nowTime
+		ntime: objMain.nowTime,
+		fade: objMain.fadeOtherNotes
 	};
 }
 
@@ -691,6 +692,9 @@ function project_set_settings(str) {
 	if(variable_struct_exists(str, "ntime")) {
 		objMain.nowTime = str.ntime;
 		objMain.animTargetTime = str.ntime;
+	}
+	if(variable_struct_exists(str, "fade")) {
+		objMain.fadeOtherNotes = str.fade;
 	}
 }
 
