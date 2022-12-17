@@ -81,7 +81,7 @@ function map_import_xml(_file) {
 	notes_reallocate_id();
     
     var _f = file_text_open_read(_file);
-    var _str = snap_alter_from_xml(snap_from_xml(file_text_read_all(_f)));
+    var _str = snap_alter_from_xml(SnapFromXML(file_text_read_all(_f)));
     file_text_close(_f);
 
 	var _import_info = show_question_i18n("box_q_import_info");
@@ -456,7 +456,7 @@ function map_export_xml() {
     }
     
 	var f = file_text_open_write(_file);
-	file_text_write_string(f, snap_to_xml(snap_alter_to_xml(_str)));
+	file_text_write_string(f, SnapToXML(snap_alter_to_xml(_str)));
 	file_text_close(f);
 	
 	objManager.chartPath = _file;
@@ -811,8 +811,16 @@ function load_config() {
 	
 	var _f = file_text_open_read(global.configPath);
 	var _str = file_text_read_all(_f);
-	var _con = snap_from_json(_str);
+	var _con = SnapFromJSON(_str);
+	
 	file_text_close(_f);
+	
+	// If config file is corrupted
+	if(!is_struct(_con)) {
+		file_delete(global.configPath);
+		load_config();
+		return;
+	}
 	
 	if(variable_struct_exists(_con, "theme"))
 		global.themeAt = _con.theme;
@@ -845,7 +853,7 @@ function load_config() {
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, snap_to_json({
+	file_text_write_string(_f, SnapToJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -858,7 +866,7 @@ function save_config() {
 		fullscreen: global.fullscreen,
 		language: i18n_get_lang(),
 		simplify: global.simplify
-	}));
+	}, true));
 	
 	file_text_close(_f);
 	
