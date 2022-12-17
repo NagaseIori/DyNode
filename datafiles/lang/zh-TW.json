@@ -76,6 +76,11 @@
         "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是：$0 ms。要以这个时间作为 offset 吗？",
         "export_fix_decimal_question": "导出时是否将导出的时间转换为整数毫秒？\n如果你仅将此导出谱面用于测试或发布则我们建议选择“是”。",
         "export_timing_error": "你还没有配置 Timing ，因此无法导出谱面。",
-        "anno_simplify": "简化模式"
+        "anno_simplify": "简化模式",
+        "default_width_mode_name_1": "正侧面锁定",
+        "default_width_mode_name_2": "侧面两倍锁定",
+        "default_width_mode_name_3": "正侧面分离",
+        "default_width_mode_name_4": "三面分离",
+        "default_width_mode": "宽度设置模式"
     }
 }
