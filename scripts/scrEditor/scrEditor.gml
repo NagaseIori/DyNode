@@ -40,7 +40,7 @@ function editor_set_default_width_qbox() {
 	}
 	if(is_real(_val)) {
 		editor_set_default_width(_val);
-		announcement_adjust("anno_default_width", string(_val));
+		announcement_set("anno_default_width", string(_val));
 		return true;
 	}
 	return false;

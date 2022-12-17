@@ -829,10 +829,14 @@ function announcement_error(str, time = 8000) {
 
 function announcement_adjust(str, val) {
 	str = i18n_get(str);
-	if(is_bool(val))
-		announcement_play(str + ": " + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
-	else
-		announcement_play(str + ": " + i18n_get(string(val)), 3000, md5_string_unicode(str));
+	announcement_play(str + ": " + i18n_get(val?"anno_adjust_enabled":"anno_adjust_disabled"), 3000, md5_string_unicode(str));
+}
+
+function announcement_set(str, val) {
+	str = i18n_get(str);
+	if(is_real(val))
+		val = string_format(val, 1, 2);
+	announcement_play(str + ": " + i18n_get(string(val)), 3000, md5_string_unicode(str));
 }
 
 #endregion

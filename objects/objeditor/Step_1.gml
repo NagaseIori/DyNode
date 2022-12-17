@@ -72,7 +72,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down(ord("L"))) {
     	editorDefaultWidthMode ++;
     	editorDefaultWidthMode %= 4;
-    	announcement_adjust("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
+    	announcement_set("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
     	_attach_sync_request = true;
     }
     if(keycheck_down(ord("K"))) {
