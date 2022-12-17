@@ -75,6 +75,9 @@ editorSelectMultiple = editorSelectCount > 1;
     	announcement_adjust("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
     	_attach_sync_request = true;
     }
+    if(keycheck_down(ord("K"))) {
+    	_attach_sync_request = editor_set_default_width_qbox();
+    }
     
     
     // Notes operation

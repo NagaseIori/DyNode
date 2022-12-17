@@ -30,6 +30,22 @@ function editor_get_default_width() {
 	return _res;
 }
 
+function editor_set_default_width_qbox() {
+	var _val = get_string_i18n("box_set_change_default_width", string(editor_get_default_width()));
+	try {
+		_val = real(_val);
+	} catch (e) {
+		if(_val != "")
+			announcement_error("输入的默认宽度必须是一个实数。")
+	}
+	if(is_real(_val)) {
+		editor_set_default_width(_val);
+		announcement_adjust("anno_default_width", string(_val));
+		return true;
+	}
+	return false;
+}
+
 function editor_set_default_width(width) {
 	with(objEditor) {
 		switch(editorDefaultWidthMode) {
