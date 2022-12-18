@@ -202,7 +202,9 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
         fixedLastTime = _lasttime;
         origPosition = _pos;
         origTime = _time;
+        attaching = true;
         _prop_init();
+        
         
         if(_lasttime != -1 && _type == 2) {
         	sinst = instance_create(x, y, objHoldSub);

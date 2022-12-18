@@ -51,7 +51,8 @@ image_yscale = global.scaleYAdjust;
     animTargetNodeA = 0;
     animTargetInfoA = 0;
     recordRequest = false;
-    selectInbound = false;
+    selectInbound = false;			// If time inbound multi selection
+    attaching = false;				// If is a attaching note
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
@@ -76,6 +77,8 @@ image_yscale = global.scaleYAdjust;
     	if(noteType == 1) origDepth *= 2;
     	else if(noteType == 2) origDepth /= 2;
     	if(side != 0) origDepth += 5000000;
+    	
+    	if(attaching) origDepth = -100000000;
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
