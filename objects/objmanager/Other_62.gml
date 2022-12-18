@@ -10,9 +10,9 @@ if (async_load[? "id"] == _update_get) {
 			}
 			else if(_result.tag_name > global.version) {
 				_update_url = _result.html_url;
-				announcement_play("[scale, 2]"+i18n_get("autoupdate_found_1")+"[#aed581]" + _result.tag_name + 
-					"[/c][scale,1.5]\n[region,update][cycle,130,150]" + i18n_get("autoupdate_found_2") + "[/cycle][/region]\n\n" +
-					"[c_ltgrey][scale, 1.2]"+format_markdown(_result.body)+"\n", 5000);
+				announcement_play("[scale, 1.5]"+i18n_get("autoupdate_found_1")+"[#aed581]" + _result.tag_name + 
+					"[/c][scale,1]\n[region,update][cycle,130,150]" + i18n_get("autoupdate_found_2") + "[/cycle][/region]\n\n" +
+					"[c_ltgrey][scale, 1]"+format_markdown(_result.body)+"\n", 5000);
 			}
 		}
 	}
