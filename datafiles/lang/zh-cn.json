@@ -59,6 +59,7 @@
         "anno_music_load_err" : "音乐文件加载失败，可能原因为类型不支持或文件损坏。\nFMOD 错误信息: ",
         "anno_import_info_complete" : "导入谱面信息完毕。",
         "box_set_chart_title" : "请输入新的谱面标题",
+        "box_set_change_default_width": "请输入你想设置的默认宽度值",
         "box_q_osu_import_objects" : "是否导入 .osu 中的物件？（要进行转谱吗？）",
         "box_q_clear_objects" : "是否清除所有原谱面物件？此操作不可撤销！",
         "box_q_import_dymm_bpm" : "是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？",
@@ -75,6 +76,16 @@
         "fileformat_chart": "支持的谱面文件",
         "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是：$0 ms。要以这个时间作为 offset 吗？",
         "export_fix_decimal_question": "导出时是否将导出的时间转换为整数毫秒？\n如果你仅将此导出谱面用于测试或发布则我们建议选择“是”。",
-        "export_timing_error": "你还没有配置 Timing ，因此无法导出谱面。"
+        "export_timing_error": "你还没有配置 Timing ，因此无法导出谱面。",
+        "anno_simplify": "简化模式",
+        "default_width_mode_name_1": "宽度一致",
+        "default_width_mode_name_2": "视觉一致",
+        "default_width_mode_name_3": "正侧面分离",
+        "default_width_mode_name_4": "三面分离",
+        "default_width_mode": "宽度设置模式",
+        "anno_default_width": "设置默认宽度为",
+        "error_config_file_corrupted": "检测到配置文件损坏。将还原所有的配置为默认值。",
+        "anno_reload_config": "配置已重载。一部分配置可能需要重启游戏来生效。",
+        "start_page_hint": "F7: 切换无边框全屏\nF12: 查看全部快捷键\nDyNode目前仅支持1920x1080的渲染分辨率。"
     }
 }

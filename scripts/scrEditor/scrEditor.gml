@@ -1,14 +1,70 @@
 
-function editor_set_width_default(_width) {
-    objEditor.editorDefaultWidth = _width;
-}
-
 function editor_set_editmode(mode) {
 	objEditor.editorMode = mode;
 }
 
 function editor_get_editmode() {
     return objEditor.editorMode;
+}
+
+function editor_get_default_width() {
+	var _res = 0;
+	with(objEditor) {
+		switch(editorDefaultWidthMode) {
+			case 0:
+				_res = editorDefaultWidth[0];
+				break;
+			case 1:
+				_res = editorDefaultWidth[1];
+				if(editor_get_editside() > 0)
+					_res *= 2;
+				break;
+			case 2:
+				_res = editorDefaultWidth[2][min(editor_get_editside(), 1)];
+				break;
+			case 3:
+				_res = editorDefaultWidth[3][editor_get_editside()];
+				break;
+		}
+	}
+	return _res;
+}
+
+function editor_set_default_width_qbox() {
+	var _val = get_string_i18n("box_set_change_default_width", string(editor_get_default_width()));
+	try {
+		_val = real(_val);
+	} catch (e) {
+		if(_val != "")
+			announcement_error("输入的默认宽度必须是一个实数。")
+	}
+	if(is_real(_val)) {
+		editor_set_default_width(_val);
+		announcement_set("anno_default_width", string(_val));
+		return true;
+	}
+	return false;
+}
+
+function editor_set_default_width(width) {
+	with(objEditor) {
+		switch(editorDefaultWidthMode) {
+			case 0:
+				editorDefaultWidth[0] = width;
+				break;
+			case 1:
+				if(editor_get_editside() > 0)
+					width /= 2;
+				editorDefaultWidth[1] = width;
+				break;
+			case 2:
+				editorDefaultWidth[2][min(editor_get_editside(), 1)] = width;
+				break;
+			case 3:
+				editorDefaultWidth[3][editor_get_editside()] = width;
+				break;
+		}
+	}
 }
 
 function editor_set_editside(side) {
@@ -39,11 +95,18 @@ function editor_select_is_area() {
 	return objEditor.editorSelectArea;
 }
 function editor_select_get_area_position() {
-	return objEditor.editorSelectAreaPosition;
+	var _pos;
+	with(objEditor) {
+		_pos = noteprop_to_xy(editorSelectAreaPosition.pos, editorSelectAreaPosition.time, editorSide);
+		_pos = [_pos.x, _pos.y];
+		_pos[2] = mouse_x;
+		_pos[3] = mouse_y;
+	}
+	return _pos;
 }
-function editor_select_inbound(x, y, side, type) {
+function editor_select_inbound(x, y, side, type, onlytime = -1) {
 	var _pos = editor_select_get_area_position();
-	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3])
+	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
 }
 
 function editor_select_count() {
@@ -139,7 +202,9 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
         fixedLastTime = _lasttime;
         origPosition = _pos;
         origTime = _time;
+        attaching = true;
         _prop_init();
+        
         
         if(_lasttime != -1 && _type == 2) {
         	sinst = instance_create(x, y, objHoldSub);
@@ -169,7 +234,7 @@ function operation_step_flush(_array) {
 		array_push(operationStack, _array);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
-		// show_debug_message("New operation: "+string(array_length(_array)));
+		// show_debug_message_safe("New operation: "+string(array_length(_array)));
 	}
 }
 
@@ -248,7 +313,7 @@ function operation_undo() {
 	
 	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
 	note_sort_request();
-	// show_debug_message("POINTER: "+ string(operationPointer));
+	// show_debug_message_safe("POINTER: "+ string(operationPointer));
 }
 
 function operation_redo() {

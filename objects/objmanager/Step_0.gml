@@ -87,7 +87,7 @@ if(_fmoderr < 0) {
 
 if(keycheck_down(vk_f10)) {
 	load_config();
-	announcement_play("配置已重载。一部分配置可能需要重启游戏来生效。");
+	announcement_play("anno_reload_config");
 }
 	
 
@@ -103,34 +103,40 @@ if(room == rMain) {
 	
 	
 	
-	// If there is a init struct
-	if(initVars != undefined) {
-		var _str = initVars;
-		with(objMain) {
-			chartTitle = _str.title;
-			chartSideType[0] = _str.ltype;
-			chartSideType[1] = _str.rtype;
-			chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
+	//// For New Project Initialization --- related codes in rStartPage or somewhere else.
+		// If there is a init struct
+		if(initVars != undefined) {
+			var _str = initVars;
+			with(objMain) {
+				chartTitle = _str.title;
+				chartSideType[0] = _str.ltype;
+				chartSideType[1] = _str.rtype;
+				chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
+			}
+			music_load(_str.mus);
+			if(_str.bg != "") image_load(_str.bg);
+			if(_str.chart != "") map_load(_str.chart);
+			initVars = undefined;
 		}
-		music_load(_str.mus);
-		if(_str.bg != "") image_load(_str.bg);
-		if(_str.chart != "") map_load(_str.chart);
-		initVars = undefined;
-	}
-	
-	// Or there is a init project
-	if(initWithProject) {
-		initWithProject = false;
 		
-		if(!project_load()) room_goto(rStartPage);
-	}
+		// Or there is a init project
+		if(initWithProject) {
+			initWithProject = false;
+			
+			if(!project_load()) room_goto(rStartPage);
+		}
 }    
     
-if(keycheck_down(vk_f12)) {
+if(keycheck_down_ctrl(vk_f12)) {
 	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
 	announcement_play(i18n_get("screenshot_save") + _file)
 }
+
+if(keycheck_down(vk_f12)) {
+	url_open("https://dyn.iorinn.moe/shortcuts.html");
+}
+
 if(keycheck_down(vk_f8))
 	switch_autosave();
 
@@ -138,6 +144,6 @@ if(keycheck_down(vk_f9))
 	theme_next();
 
 if(keycheck_down(vk_escape)) {
-	if(!(instance_exists(objEditor) && editor_get_editmode() == 0))
+	if(!instance_exists(objEditor))
 		game_end_confirm();
 }

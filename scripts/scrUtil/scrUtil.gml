@@ -128,6 +128,19 @@ function noteprop_set_xy(_pos, _time, _side) {
 		y = note_pos_to_x(_pos, _side);
 	}
 }
+function xy_to_noteprop(_x, _y, _side) {
+	if(_side == 0) {
+		return {
+			pos: x_to_note_pos(_x, _side),
+			time: y_to_note_time(_y, _side)
+		};
+	}
+	else
+		return {
+			pos: x_to_note_pos(_y, _side),
+			time: y_to_note_time(_x, _side)
+		};
+}
 function resor_to_x(ratio) {
     return global.resolutionW * ratio;
 }
@@ -204,7 +217,11 @@ function format_time_string(_time) {
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }
-function pos_inbound(xo, yo, x1, y1, x2, y2) {
+function pos_inbound(xo, yo, x1, y1, x2, y2, onlytime = -1) {
+	if(onlytime == 0)
+		return in_between(yo, y1, y2);
+	else if(onlytime > 0)
+		return in_between(xo, x1, x2);
 	return in_between(xo, x1, x2) && in_between(yo, y1, y2);
 }
 
@@ -412,4 +429,9 @@ function show_error_i18n(str, abort) {
 
 function get_string_i18n(str, def) {
 	return get_string(i18n_get(str), def);
+}
+
+function show_debug_message_safe(str) {
+	if(debug_mode)
+		show_debug_message(str);
 }

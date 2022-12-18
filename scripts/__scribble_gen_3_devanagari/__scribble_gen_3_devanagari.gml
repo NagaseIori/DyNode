@@ -122,8 +122,8 @@ global.__scribble_krutidev_matra_lookup_map[? 2380] = true;
                                        ++_i;\
                                        ++_glyph_count;\
                                        ;\
-                                       _glyph_grid[# _i+1, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = 0x093C;\ //Nukta
-                                       _glyph_grid[# _i+1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
+                                       _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = 0x093C;\ //Nukta
+                                       _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
 
 
 function __scribble_gen_3_devanagari()
@@ -160,13 +160,13 @@ function __scribble_gen_3_devanagari()
             //Set up alternating single quote marks
             case ord("'"):
                 _in_single_quote = !_in_single_quote;
-                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = _in_single_quote? ord("^") : ord("*");
+                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = __SCRIBBLE_DEVANAGARI_OFFSET + (_in_single_quote? ord("^") : ord("*"));
             break;
             
             //Set up alternating double quote marks
             case ord("\""):
                 _in_double_quote = !_in_double_quote;
-                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = _in_double_quote? ord("ß") : ord("Þ");
+                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = __SCRIBBLE_DEVANAGARI_OFFSET + (_in_double_quote? ord("ß") : ord("Þ"));
             break;
             
             //Split up nukta ligatures into their componant parts
@@ -250,7 +250,7 @@ function __scribble_gen_3_devanagari()
             ds_grid_set_grid_region(_glyph_grid, _temp_grid, 0, 0, _i-1 - _j, __SCRIBBLE_GEN_GLYPH.__SIZE, _j+1, 0);
             
             //Insert ि  (encoded in Krutidev as f) into its new position
-            _glyph_grid[# _j, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = ord("f");
+            _glyph_grid[# _j, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = __SCRIBBLE_DEVANAGARI_OFFSET + ord("f");
             _glyph_grid[# _j, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _j+1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
         }
         
@@ -292,7 +292,7 @@ function __scribble_gen_3_devanagari()
             ds_grid_set_grid_region(_glyph_grid, _temp_grid, _i+2, 0, _newPosition, __SCRIBBLE_GEN_GLYPH.__SIZE, _i, 0);
             
             //Insert the new ra+virama combined character. Krutidev handles this as a single glyph (encoded as Z)
-            _glyph_grid[# _i + _copyCount, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = ord("Z");
+            _glyph_grid[# _i + _copyCount, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = __SCRIBBLE_DEVANAGARI_OFFSET + ord("Z");
             _glyph_grid[# _i + _copyCount, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _copyCount-1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
             
             //Second copy: Place the remainder of the glyphs after ra+virama
@@ -323,8 +323,8 @@ function __scribble_gen_3_devanagari()
     {
         _oneChar   = _twoChar   >> 16;
         _twoChar   = _threeChar >> 16;
-        _threeChar = _fourChar  >> 16;
-        _fourChar  = _threeChar | ((max(0, _glyph_grid[# _i+3, __SCRIBBLE_GEN_GLYPH.__UNICODE]) & 0xFFFF) << 48);
+        _threeChar = (_fourChar & 0x7FFFFFFFFFFFFFFF) >> 16; //Ensure the top bit is 0 so we get zeroes across the LHS
+        _fourChar  = _threeChar | ((_glyph_grid[# _i+3, __SCRIBBLE_GEN_GLYPH.__UNICODE] & 0xFFFF) << 48);
         
         //Try to find a matching substring
         var _foundLength = 4;
@@ -356,7 +356,7 @@ function __scribble_gen_3_devanagari()
             if ((_foundLength == 1) && (_replacementLength == 1))
             {
                 //Shortcut for the most common replacement operation
-                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = _replacementArray[0];
+                _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE] = __SCRIBBLE_DEVANAGARI_OFFSET + _replacementArray[0];
             }
             else
             {
@@ -367,7 +367,7 @@ function __scribble_gen_3_devanagari()
                 var _j = 0;
                 repeat(_copyCount)
                 {
-                    _glyph_grid[# _i + _j, __SCRIBBLE_GEN_GLYPH.__UNICODE] = _replacementArray[_j];
+                    _glyph_grid[# _i + _j, __SCRIBBLE_GEN_GLYPH.__UNICODE] = __SCRIBBLE_DEVANAGARI_OFFSET + _replacementArray[_j];
                     ++_j;
                 }
                 
@@ -391,16 +391,16 @@ function __scribble_gen_3_devanagari()
                     if (_replacementLength - _foundLength == 1)
                     {
                         //Adding one character
-                        _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = _replacementArray[_replacementLength-1];
+                        _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = __SCRIBBLE_DEVANAGARI_OFFSET + _replacementArray[_replacementLength-1];
                         _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _insertPos-1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
                     }
                     else if (_replacementLength - _foundLength == 2)
                     {
                         //Adding two characters
-                        _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = _replacementArray[_replacementLength-2];
+                        _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = __SCRIBBLE_DEVANAGARI_OFFSET + _replacementArray[_replacementLength-2];
                         _glyph_grid[# _insertPos, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _insertPos-1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
                         
-                        _glyph_grid[# _insertPos+1, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = _replacementArray[_replacementLength-1];
+                        _glyph_grid[# _insertPos+1, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = __SCRIBBLE_DEVANAGARI_OFFSET + _replacementArray[_replacementLength-1];
                         _glyph_grid[# _insertPos+1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT] = _glyph_grid[# _insertPos-1, __SCRIBBLE_GEN_GLYPH.__CONTROL_COUNT];
                     }
                     else
@@ -450,12 +450,14 @@ function __scribble_gen_3_devanagari()
         }
         
         var _found_glyph = _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE];
-        if (_found_glyph > 0) //Don't transform sprites or surfaces
+        if (_found_glyph == 0xFFFF)
         {
-            var _glyph_write = _found_glyph;
-            if (_glyph_write != 32) _glyph_write += __SCRIBBLE_DEVANAGARI_OFFSET;
-            
+            __scribble_trace("Warning! Devanagari parser extended beyond the end of the available characters");
+        }
+        else if (_found_glyph >= 32) //Don't transform sprite, surfaces, or stuff that's non-printable
+        {
             //Pull info out of the font's data structures
+            var _glyph_write = _found_glyph;
             var _data_index = _font_glyphs_map[? _glyph_write];
             
             //If our glyph is missing, choose the missing character glyph instead!
@@ -471,7 +473,7 @@ function __scribble_gen_3_devanagari()
                 //This should only happen if SCRIBBLE_MISSING_CHARACTER is missing for a font
                 __scribble_trace("Couldn't find glyph data for character code " + string(_glyph_write) + " (" + chr(_glyph_write) + ") in font \"" + string(_font_name) + "\"");
             }
-            else
+            else if (_font_glyph_data_grid[# _data_index, SCRIBBLE_GLYPH.BIDI] != __SCRIBBLE_BIDI.WHITESPACE) //Don't transform whitespace
             {
                 //Add this glyph to our grid by copying from the font's own glyph data grid
                 ds_grid_set_grid_region(_glyph_grid, _font_glyph_data_grid, _data_index, SCRIBBLE_GLYPH.UNICODE, _data_index, SCRIBBLE_GLYPH.BILINEAR, _i, __SCRIBBLE_GEN_GLYPH.__UNICODE);

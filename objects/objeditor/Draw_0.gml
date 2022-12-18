@@ -42,7 +42,11 @@ if(editorHighlightLine) {
 
 // Draw Selction Area
 if(editorSelectArea) {
-    var _pos = editorSelectAreaPosition;
+    var _pos = editor_select_get_area_position();
+    _pos[0] = clamp(_pos[0], -10, global.resolutionW+10);
+    _pos[2] = clamp(_pos[2], -10, global.resolutionW+10);
+    _pos[1] = clamp(_pos[1], -10, global.resolutionH+10);
+    _pos[3] = clamp(_pos[3], -10, global.resolutionH+10);
     CleanRectangle(min(_pos[0], _pos[2]), min(_pos[1], _pos[3]), max(_pos[0], _pos[2]), max(_pos[1], _pos[3]))
         .Blend(c_white, 0.2)
         .Border(5, c_white, 0.8)

@@ -6,17 +6,17 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
-#macro EPS 0.001
+#macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro NOTE_DEACTIVATION_TIME 200			// Every fixed time than deactivated notes in queue
-#macro NOTE_DEACTIVATION_LIMIT 100			// if notes' being deactivated number exceeds the limit than excecute immediately
+#macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
 
 // Global Configs
 
 global.configPath = program_directory + "config.json";
 
-global.version = "v0.1.7.1"
 
+global.version = "v0.1.8"
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
@@ -25,6 +25,7 @@ global.autoupdate = true;
 global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
+global.simplify = false;
 
 // Themes Init
 
@@ -157,7 +158,7 @@ else
 			with(objManager)
 				if(_lastConfig_md5 != md5_config()) {
 					_lastConfig_md5 = load_config();
-					show_debug_message("MD5: "+_lastConfig_md5);
+					show_debug_message_safe("MD5: "+_lastConfig_md5);
 					announcement_play("检测到配置被更改，改变后的一部分配置已经生效。");
 				}
 		}

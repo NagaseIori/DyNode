@@ -51,6 +51,8 @@ image_yscale = global.scaleYAdjust;
     animTargetNodeA = 0;
     animTargetInfoA = 0;
     recordRequest = false;
+    selectInbound = false;			// If time inbound multi selection
+    attaching = false;				// If is a attaching note
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
@@ -75,6 +77,8 @@ image_yscale = global.scaleYAdjust;
     	if(noteType == 1) origDepth *= 2;
     	else if(noteType == 2) origDepth /= 2;
     	if(side != 0) origDepth += 5000000;
+    	
+    	if(attaching) origDepth = -100000000;
         originalWidth = sprite_get_width(sprite);
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
@@ -242,15 +246,20 @@ image_yscale = global.scaleYAdjust;
 	    }
         
         var _limTime = min(objMain.nowTime, objMain.animTargetTime);
-        if(time <= _limTime) {
-            _create_shadow();
-            state = stateLast;
-            state();
+        
+        // If inbound then the state wont change
+        if(!selectInbound) {
+        	if(time <= _limTime) {
+	            _create_shadow();
+	            state = stateLast;
+	            state();
+	        }
+	        if(_outbound_check(x, y, side)) {
+	            state = stateOut;
+	            state();
+	        }
         }
-        if(_outbound_check(x, y, side)) {
-            state = stateOut;
-            state();
-        }
+        
         
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
@@ -266,7 +275,6 @@ image_yscale = global.scaleYAdjust;
                     editor_select_compare(objEditor.editorSelectSingleTargetInbound, id);
             }
         }
-        
     }
     
     // State Last
@@ -358,7 +366,7 @@ image_yscale = global.scaleYAdjust;
             
             if(mouse_check_button_released(mb_left)) {
             	if(editor_get_editmode() > 0)
-                	editor_set_width_default(width);
+                	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
                 		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
@@ -505,7 +513,7 @@ image_yscale = global.scaleYAdjust;
 		    	timing_point_delete_at(time, true);
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
-		    	objEditor.editorDefaultWidth = width;
+		    	editor_set_default_width(width);
 		    	announcement_play("复制宽度："+string_format(width, 1, 2));
 		    }
 		    

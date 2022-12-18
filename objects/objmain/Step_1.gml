@@ -146,9 +146,9 @@ var _music_resync_request = false;
     
 // Time Jump
 
-    if(keycheck_down(ord("L")) && chartNotesArrayAt<chartNotesCount)
+    if(keycheck_down_ctrl(ord("L")) && chartNotesArrayAt<chartNotesCount)
         animTargetTime = chartNotesArray[chartNotesArrayAt].time;
-    if(keycheck_down(ord("K")) && chartNotesArrayAt>0)
+    if(keycheck_down_ctrl(ord("K")) && chartNotesArrayAt>0)
         animTargetTime = chartNotesArray[chartNotesArrayAt-1].time;
 
 // Update and Sync Time & musicTime

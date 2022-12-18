@@ -44,10 +44,11 @@ _prop_init();
     
 		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
 		        + dFromBottom + uFromTop;
-		    pHeight = max(pHeight, originalHeight);
+		    if(!global.simplify)
+		    	pHeight = max(pHeight, originalHeight);
     
 		    lastTime = sinst.time - time;
-		    lastTime = max(lastTime, 0.0001);
+		    lastTime = max(lastTime, 1);
     
 		    edgeScaleY = min(pHeight, side==0?global.resolutionH:global.resolutionW) / originalHeight;
         }
@@ -59,3 +60,10 @@ _prop_init();
     uFromTop = 13; 
     lFromLeft = 12;
     rFromRight = 12;
+
+// Simplification Color Configuration
+
+	inColor = [c_green, c_green];
+	inColorAlp = [0.5, 0.7];
+	outColor = [scribble_rgb_to_bgr(0xe6ee9c), c_white];
+	outColorAlp = [1, 1];
