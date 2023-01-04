@@ -8,7 +8,7 @@
 /// @param [cellDelimiter]     Character to use to indicate where cells start and end. First 127 ASCII chars only. Defaults to a comma
 /// @param [stringDelimiter]   Character to use to indicate where strings start and end. First 127 ASCII chars only. Defaults to a double quote
 /// 
-/// @jujuadams 2022-10-30
+/// @jujuadams 2023-01-02
 
 function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimiter = ",", _stringDelimiter = "\"")
 {
@@ -17,11 +17,20 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
         var _oldOffset = buffer_tell(_buffer);
         buffer_seek(_buffer, buffer_seek_start, _inOffset);
     }
-	if (_inSize == undefined) {
-		_inSize = buffer_get_size(_buffer);
-	}
-    var _size = _inSize + buffer_tell(_buffer);
-    _size -= buffer_tell(_buffer);
+	
+    var _size = _inSize ?? buffer_get_size(_buffer) - buffer_tell(_buffer);
+    
+    var _restorePos  = _size + buffer_tell(_buffer);
+    var _restoreByte = undefined;
+    if (_restorePos < buffer_get_size(_buffer))
+    {
+        _restoreByte = buffer_peek(_buffer, _restorePos, buffer_u8);
+        buffer_poke(_buffer, _restorePos, buffer_u8, 0x00);
+    }
+    else
+    {
+        buffer_resize(_buffer, buffer_get_size(_buffer)+1);
+    }
     
     var _cellDelimiterOrd      = ord(_cellDelimiter);
     var _stringDelimiterDouble = _stringDelimiter + _stringDelimiter;
@@ -36,7 +45,7 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
     var _inString   = false;
     var _stringCell = false;
     
-    repeat(_size)
+    repeat(_size+1)
     {
         var _value = buffer_read(_buffer, buffer_u8);
         
@@ -56,6 +65,10 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
                 if ((_prev_value != _cellDelimiterOrd) && (_prev_value != 0x0A) && (_prev_value != 0x0D))
                 {
                     _read = true;
+                }
+                else
+                {
+                    break;
                 }
             }
             
@@ -85,7 +98,7 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
                 if (_read || (_value == _cellDelimiterOrd))
                 {
                     _read = false;
-                
+                    
                     var _tell = buffer_tell(_buffer);
                     var _old_value = buffer_peek(_buffer, _tell-1, buffer_u8);
                     buffer_poke(_buffer, _tell-1, buffer_u8, 0x00);
@@ -111,9 +124,11 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
                     }
                     
                     _rowArray[@ array_length(_rowArray)] = _string;
-                
+                    
                     _stringCell = false;
                     _wordStart = _tell;
+                    
+                    if (_value == 0x00) break;
                 }
             
                 if (_newline)
@@ -123,6 +138,15 @@ function SnapBufferReadCSV(_buffer, _inOffset, _inSize = undefined, _cellDelimit
                 }
             }
         }
+    }
+    
+    if (_restoreByte == undefined)
+    {
+        buffer_resize(_buffer, buffer_get_size(_buffer)-1);
+    }
+    else
+    {
+        buffer_poke(_buffer, _restorePos, buffer_u8, _restoreByte);
     }
     
     if (_inOffset != undefined)
