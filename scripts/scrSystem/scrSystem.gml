@@ -848,7 +848,7 @@ function load_config() {
 		save_config();
 	
 	var _buf = buffer_load(global.configPath);
-	var _con = SnapBufferReadJSON(_buf, 0);
+	var _con = SnapBufferReadLooseJSON(_buf, 0);
 	buffer_delete(_buf);
 	
 	// If config file is corrupted
@@ -890,7 +890,7 @@ function load_config() {
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, SnapToJSON({
+	file_text_write_string(_f, SnapToLooseJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
