@@ -17,6 +17,7 @@ if(!drawVisible) return;
 // Draw Bg
     
     var _spr = side == 0? sprHold: sprHoldR;
+    var _sprg = side == 0? sprHoldGrey: sprHoldGreyR;
     var _h = sprite_get_height(sprHold), _th = pHeight - dFromBottom - uFromTop,
     _w = sprite_get_width(sprHold), _rw = pWidth - lFromLeft - rFromRight;
     var _scl = _rw / _w;
@@ -27,16 +28,19 @@ if(!drawVisible) return;
     else if(side == 1 && _th > global.resolutionW)
     	_th -= floor((_th - global.resolutionW) / _h) * _h;
     
-    // Draw Green Blend
+    // Draw Green Blend (Old Solution)
     
-    draw_set_color_alpha(c_green, lastAlpha * 0.8);
-    if(side == 0)
-    	draw_rectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny, false);
-    else
-    	draw_rectangle(_nx , _ny - _rw/2, _nx + _th * (side == 1 ? 1 : -1), _ny + _rw / 2, false);
-    draw_set_alpha(1);
+    // gpu_set_blendmode(bm_add);
+    // draw_set_color_alpha(c_green, lastAlpha * 0.8);
+    // if(side == 0)
+    // 	draw_rectangle(_nx - _rw/2, _ny - _th, _nx + _rw/2, _ny, false);
+    // else
+    // 	draw_rectangle(_nx , _ny - _rw/2, _nx + _th * (side == 1 ? 1 : -1), _ny + _rw / 2, false);
+    // draw_set_alpha(1);
+    // gpu_set_blendmode(bm_normal);
 
     // Draw Sprites
+    
     
     if(!global.simplify) {
     	if(side == 0) {
@@ -44,6 +48,11 @@ if(!drawVisible) return;
 	            draw_sprite_part_ext(_spr, 0, 0, 0, 
 	                _w, min(_h, _i), _nx - _rw/2, _ny - _i,
 	                _scl, 1, c_white, holdAlpha * image_alpha);
+	            gpu_set_blendmode(bm_add);
+		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
+		                _w, min(_h, _i), _nx - _rw/2, _ny - _i,
+		                _scl, 1, c_green, lastAlpha * image_alpha * 0.5);
+	            gpu_set_blendmode(bm_normal);
 	        }
 	    }
 	    else {
@@ -53,6 +62,12 @@ if(!drawVisible) return;
 	                min(_h, _i), _w,
 	                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
 	                side == 2 ? 1 : -1, _scl, c_white, holdAlpha * image_alpha);
+	            gpu_set_blendmode(bm_add);
+		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
+		                min(_h, _i), _w,
+		                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
+		                side == 2 ? 1 : -1, _scl, c_green, lastAlpha * image_alpha * 0.5);
+	            gpu_set_blendmode(bm_normal);
 	        }
 	    }
     }
