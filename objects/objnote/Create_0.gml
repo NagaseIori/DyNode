@@ -232,6 +232,12 @@ image_yscale = global.scaleYAdjust;
         animTargetA = 1.0;
         animTargetLstA = lastAlphaL;
         
+        // Side Fading
+        if(editor_get_editmode() == 5 && side > 0) {
+        	animTargetA = lerp(0.25, 1, abs(x - resor_to_x(0.5)) / resor_to_x(0.5-0.2));
+        	animTargetA = clamp(animTargetA, 0, 1);
+        }
+        
         // Update Mixer's Position
 	    if(side > 0) {
 	        var _nside = side-1, _noff = time, _nx = y, _nid = id;

@@ -28,7 +28,7 @@ if(!drawVisible) return;
     else if(side == 1 && _th > global.resolutionW)
     	_th -= floor((_th - global.resolutionW) / _h) * _h;
     
-    // Draw Green Blend (Old Solution)
+    // Draw Green Blend (Old Workaround)
     
     // gpu_set_blendmode(bm_add);
     // draw_set_color_alpha(c_green, lastAlpha * 0.8);
