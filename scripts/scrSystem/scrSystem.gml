@@ -684,7 +684,8 @@ function project_get_settings() {
 
 function project_set_settings(str) {
 	editor_set_editmode(str.editmode);
-	editor_set_editside(str.editside);
+	if(str.editmode < 5)
+		editor_set_editside(str.editside);
 	with(objEditor) {
 		editorDefaultWidth = str.defaultWidth;
 		editorDefaultWidthMode = str.defaultWidthMode;
