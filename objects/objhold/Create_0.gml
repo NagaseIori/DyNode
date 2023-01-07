@@ -6,6 +6,7 @@ event_inherited();
 noteType = 2;
 edgeScaleY = 1;
 holdAlpha = 0.8;
+bgLightness = 0.4;
 
 image_yscale = 0.6 * global.scaleYAdjust;
 

@@ -51,7 +51,7 @@ if(!drawVisible) return;
 	            gpu_set_blendmode(bm_add);
 		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
 		                _w, min(_h, _i), _nx - _rw/2, _ny - _i,
-		                _scl, 1, c_green, lastAlpha * image_alpha * 0.5);
+		                _scl, 1, c_green, lastAlpha * image_alpha * bgLightness);
 	            gpu_set_blendmode(bm_normal);
 	        }
 	    }
@@ -66,7 +66,7 @@ if(!drawVisible) return;
 		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
 		                min(_h, _i), _w,
 		                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
-		                side == 2 ? 1 : -1, _scl, c_green, lastAlpha * image_alpha * 0.5);
+		                side == 2 ? 1 : -1, _scl, c_green, lastAlpha * image_alpha * bgLightness);
 	            gpu_set_blendmode(bm_normal);
 	        }
 	    }

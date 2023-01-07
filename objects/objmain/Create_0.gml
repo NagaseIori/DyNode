@@ -146,7 +146,7 @@ depth = 0;
     animTargetTitleAlpha = titleAlphaL;
     
     // Bottom
-        bottomDim = 0.3;
+        bottomDim = 0.5;
         bottomBgSurf = -1;
         bottomBgSurfPing = -1;
         bottomBgBlurAmount = 20;
