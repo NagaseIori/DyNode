@@ -136,6 +136,7 @@
     {"id":{"name":"__scribble_class_typist","path":"scripts/__scribble_class_typist/__scribble_class_typist.yy",},"order":6,},
     {"id":{"name":"scribble_anim_reset","path":"scripts/scribble_anim_reset/scribble_anim_reset.yy",},"order":5,},
     {"id":{"name":"__scribble_font_add_sprite","path":"scripts/__scribble_font_add_sprite/__scribble_font_add_sprite.yy",},"order":8,},
+    {"id":{"name":"shd_gaussian_blur_2pass","path":"shaders/shd_gaussian_blur_2pass/shd_gaussian_blur_2pass.yy",},"order":12,},
     {"id":{"name":"__scribble_font_add_from_project","path":"scripts/__scribble_font_add_from_project/__scribble_font_add_from_project.yy",},"order":6,},
     {"id":{"name":"sprHoldGreyR","path":"sprites/sprHoldGreyR/sprHoldGreyR.yy",},"order":14,},
     {"id":{"name":"CleanLine","path":"scripts/CleanLine/CleanLine.yy",},"order":5,},
