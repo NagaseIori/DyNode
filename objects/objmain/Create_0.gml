@@ -141,10 +141,7 @@ depth = 0;
     
     // Bottom
         bottomDim = 0.5;
-        bottomBgSurf = -1;
-        bottomBgSurfPing = -1;
-        bottomBgBlurAmount = 20;
-        bottomBgBlurSigma = 10;
+        bottomBgBlurIterations = 3;
         bottomInfoSurf = -1;
     
     // Background
@@ -163,9 +160,9 @@ depth = 0;
             bgFaintAlpha = 0.7;
         }
         
-        // Kawase Stuff
+        // Kawase Blur
 
-		kawaseArr = kawase_create(global.resolutionW, targetLineBelow, 3);
+		kawaseArr = kawase_create(global.resolutionW, targetLineBelow, bottomBgBlurIterations);
 
 #endregion
 

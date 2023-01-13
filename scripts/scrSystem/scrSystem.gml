@@ -4,8 +4,7 @@
 function map_close() {
 	
 	with(objMain) {
-		surface_free_f(bottomBgSurf);
-		surface_free_f(bottomBgSurfPing);
+		kawase_destroy(kawaseArr);
 		surface_free_f(bottomInfoSurf);
 		
 		note_delete_all();
@@ -372,11 +371,6 @@ function image_load(_file = "") {
             sprite_delete(bgImageSpr);
         
         bgImageSpr = _nspr;
-        
-        // Bottom reset
-        
-        surface_free_f(bottomBgSurf);
-        bottomBgSurf = -1;
     }
     objManager.backgroundPath = _file;
     sprite_delete(_spr);
