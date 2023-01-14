@@ -6,6 +6,10 @@ if(mouse_isclick_l() && _inbound) {
 	listPointer ++;
 	listPointer %= listCount;
 	input = lists[listPointer];
+	
+	if(listFunction != undefined) {
+		listFunction(input);
+	}
 }
 
 animTargetGradAlpha = _inbound;

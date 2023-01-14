@@ -1,14 +1,17 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objUIParentInput",
+  "name": "objUILangList",
   "spriteId": null,
   "solid": false,
   "visible": true,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "objUIListInput",
+    "path": "objects/objUIListInput/objUIListInput.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -24,15 +27,14 @@
   "eventList": [
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":64,"eventType":8,"collisionObjectId":null,},
-    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,},
   ],
-  "properties": [
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"inputID","varType":2,"value":"none","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],},
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"title","varType":2,"value":"untitled","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],},
+  "properties": [],
+  "overriddenProperties": [
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","propertyId":{"name":"lists","path":"objects/objUIListInput/objUIListInput.yy",},"objectId":{"name":"objUIListInput","path":"objects/objUIListInput/objUIListInput.yy",},"value":"[\"zh-cn\", \"en-us\"]",},
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","propertyId":{"name":"title","path":"objects/objUIParentInput/objUIParentInput.yy",},"objectId":{"name":"objUIParentInput","path":"objects/objUIParentInput/objUIParentInput.yy",},"value":"Language",},
   ],
-  "overriddenProperties": [],
   "parent": {
-    "name": "Parents",
-    "path": "folders/Objects/UI_OLD/Parents.yy",
+    "name": "UI_OLD",
+    "path": "folders/Objects/UI_OLD.yy",
   },
 }
