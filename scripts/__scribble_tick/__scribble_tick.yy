@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "__scribble_system_glyph_data",
+  "name": "__scribble_tick",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
