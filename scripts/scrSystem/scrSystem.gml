@@ -140,7 +140,7 @@ function map_import_xml(_file) {
 			}
 		}
 		else
-			announcement_warning("未能读取谱面中的变 BPM 信息。\n建议使用最新版本 Dynamaker-modified 来导出谱面的变 BPM 数据。")
+			announcement_warning("error_dym_bpm_load_failed");
 	}
 	
     if(_import_info) {

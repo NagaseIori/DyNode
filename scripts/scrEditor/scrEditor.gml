@@ -36,7 +36,7 @@ function editor_set_default_width_qbox() {
 		_val = real(_val);
 	} catch (e) {
 		if(_val != "")
-			announcement_error("输入的默认宽度必须是一个实数。")
+			announcement_error("error_default_width_must_be_real")
 	}
 	if(is_real(_val)) {
 		editor_set_default_width(_val);
@@ -311,7 +311,7 @@ function operation_undo() {
 	
 	operationPointer--;
 	
-	announcement_play("撤销操作 共 "+ string(array_length(_ops)) + " 处");
+	announcement_play(i18n_get("undo", string(array_length(_ops))));
 	note_sort_request();
 	// show_debug_message_safe("POINTER: "+ string(operationPointer));
 }
@@ -341,7 +341,7 @@ function operation_redo() {
 		}
 	}
 	
-	announcement_play("还原操作 共 "+ string(array_length(_ops)) + " 处");
+	announcement_play(i18n_get("redo", string(array_length(_ops))));
 	note_sort_request();
 }
 
@@ -374,15 +374,15 @@ function timing_point_create(record = false) {
 		with(objNote)
 			if(state == stateSelected)
 				_ntime = time;
-		var _que = show_question_i18n("检测到你已经选择一个 Note，它的时间是："+string_format(_ntime, 1, 3)+" ms。要以这个时间作为 offset 吗？");
+		var _que = show_question_i18n(i18n_get("tpc_extra_question", string_format(_ntime, 1, 3)));
 		if(_que) _time = _ntime;
 	}
 	if(is_undefined(_time))
-		_time = string_digits(get_string_i18n("请输入该 Timing Point 的 offset（毫秒）：", ""));
+		_time = string_digits(get_string_i18n("tpc_q1", ""));
 	if(_time == "") return;
-	var _bpm = string_real(get_string_i18n("请输入 BPM ：", ""));
+	var _bpm = string_real(get_string_i18n("tpc_q2", ""));
 	if(_bpm == "") return;
-	var _meter = string_digits(get_string_i18n("请输入节拍（x/4）：", ""));
+	var _meter = string_digits(get_string_i18n("tpc_q3", ""));
 	if(_meter == "") return;
 	
 	_time = real(_time);
@@ -392,8 +392,9 @@ function timing_point_create(record = false) {
 	_bpm = bpm_to_mspb(_bpm);
 	timing_point_add(_time, _bpm, _meter, record);
 	
-	announcement_play("添加 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_bpm)) +
-    		"\n节拍："+string(_meter)+"/4", 5000);
+    announcement_play(
+    	i18n_get("add_timing_point", format_time_ms(_time), string(mspb_to_bpm(_bpm)), string(_meter)), 
+    	5000);
     
 }
 
@@ -402,9 +403,12 @@ function timing_point_delete_at(_time, record = false) {
 		for(var i=0, l=array_length(timingPoints); i<l; i++)
 			if(abs(timingPoints[i].time-_time) <= 1) {
 				var _tp = timingPoints[i];
-				announcement_play("删除位于时间 "+ format_time_ms(_tp.time) + " 的 Timing Point\n"+
-					"BPM："+string(mspb_to_bpm(_tp.beatLength)) +
-    				"\n节拍："+string(_tp.meter)+"/4", 5000);
+				announcement_play(
+					i18n_get("remove_timing_point", format_time_ms(_tp.time),
+    					string(mspb_to_bpm(_tp.beatLength)), string(_tp.meter)),
+					5000);
+    			
+    			
     			if(record)
     				operation_step_add(OPERATION_TYPE.TPREMOVE, _tp, -1);
 				array_delete(timingPoints, i, 1);
@@ -418,14 +422,17 @@ function timing_point_delete_at(_time, record = false) {
 function timing_point_duplicate(_time) {
 	with(objEditor) {
 		if(array_length(timingPoints) == 0) {
-			announcement_error("你没有设置任何 Timing Point 。需按 Y 键放置至少一个 Timing Point 。");
+			announcement_error("error_no_timing_point");
 			return;
 		}
 		var _tp = timingPoints[array_length(timingPoints) - 1];
     	timing_point_add(_time, _tp.beatLength, _tp.meter, true);
     	
-    	announcement_play("复制末尾 Timing Point 至时间 "+format_time_ms(_time)+" 处\nBPM："+string(mspb_to_bpm(_tp.beatLength)) +
-    		"\n节拍："+string(_tp.meter)+"/4", 5000);
+    	announcement_play(
+    		i18n_get("copy_timing_point", format_time_ms(_time), 
+    			string(mspb_to_bpm(_tp.beatLength)), string(_tp.meter)), 
+			5000);
+    	
 	}
 }
 

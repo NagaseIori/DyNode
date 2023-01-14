@@ -45,17 +45,17 @@ editorSelectMultiple = editorSelectCount > 1;
     
     if(keycheck_down(ord("Z"))) {
         editorGridYEnabled = !editorGridYEnabled;
-        announcement_adjust("时间方向网格吸附", editorGridYEnabled);
+        announcement_adjust("adjust_grid_y", editorGridYEnabled);
     }
         
     if(keycheck_down(ord("X"))) {
         editorGridXEnabled = !editorGridXEnabled;
-        announcement_adjust("位置方向网格吸附", editorGridXEnabled);
+        announcement_adjust("adjust_grid_x", editorGridXEnabled);
     }
         
     if(keycheck_down(ord("H"))) {
         editorHighlightLineEnabled = !editorHighlightLineEnabled;
-        announcement_adjust("时间/位置高亮显示", editorHighlightLineEnabled);
+        announcement_adjust("adjust_highlight", editorHighlightLineEnabled);
     }
     
     if(keycheck_down(ord("Y"))) {
@@ -91,7 +91,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
 	    	}
-	    	announcement_play("镜像音符共 " + string(editor_select_count()) + " 处");
+	    	announcement_play(i18n_get("notes_mirror", string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("M"))) {
 	    	with(objNote) {
@@ -102,7 +102,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    			build_note_withprop(prop, true, true);
 	    		}
 	    	}
-	    	announcement_play("镜像复制音符共 " + string(editor_select_count()) + " 处");
+	    	announcement_play(i18n_get("notes_mirror_copy", string(editor_select_count())));
 	    }
 	    if(keycheck_down(ord("R"))) {
 	    	var _found = 0;
@@ -116,12 +116,12 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	}
 	    	}
 	    	if(_found>0) {
-	    		announcement_play("侧面对称音符共 " + string(_found) + " 处");
+	    		announcement_play(i18n_get("notes_rotate", string(_found)));
 	    		editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
-	    		announcement_warning("仅侧面音符能够被对称。");
+	    		announcement_warning("warning_notes_rotate");
 	    }
 	    if(keycheck_down_ctrl(ord("R"))) {
 	    	var _found = 0;
@@ -136,12 +136,12 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	}
 	    	}
 	    	if(_found>0) {
-	    		announcement_play("侧面对称复制音符共 " + string(_found) + " 处");
+	    		announcement_play(i18n_get("notes_rotate_copy", string(_found)));
 	    		editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
-	    		announcement_warning("仅侧面音符能够被对称复制。");
+	    		announcement_warning("warning_notes_rotate_copy");
 	    }
 	    if(keycheck_down_ctrl(ord("V"))) {
 	    	with(objNote)
@@ -150,7 +150,8 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	width = editor_get_default_width();
 			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
-	    	announcement_play("设置宽度："+string_format(editor_get_default_width(), 1, 2)+"\n共 "+string(editor_select_count())+" 处");
+	    	announcement_play(i18n_get("notes_set_width", string_format(editor_get_default_width(), 1, 2),
+	    		string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("1"))) {
 	    	with(objNote)
@@ -162,7 +163,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		_prop.noteType = 0;
 			    		build_note_withprop(_prop, true, true);
 			    	}
-			announcement_play("设置类型：NOTE\n共 "+string(editor_select_count())+" 处");
+			announcement_play(i18n_get("notes_set_type", "NOTE", string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("2"))) {
 	    	with(objNote)
@@ -174,7 +175,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		_prop.noteType = 1;
 			    		build_note_withprop(_prop, true, true);
 			    	}
-			announcement_play("设置类型：CHAIN\n共 "+string(editor_select_count())+" 处");
+			announcement_play(i18n_get("notes_set_type", "CHAIN", string(editor_select_count())));
 	    }
     }
     
@@ -309,9 +310,9 @@ editorSelectMultiple = editorSelectCount > 1;
         array_sort_f(copyStack, function (_a, _b) { return _a.time == _b.time? _a.position < _b.position : _a.time < _b.time; });
         
         if(keycheck_down_ctrl(ord("X")))
-            announcement_play("剪切音符共 " + string(_cnt) + " 处");
+            announcement_play(i18n_get("cut_notes", string(_cnt)));
         else
-            announcement_play("复制音符共 " + string(_cnt) + " 处");
+            announcement_play(i18n_get("copy_notes", string(_cnt)));
     }
 
 #endregion

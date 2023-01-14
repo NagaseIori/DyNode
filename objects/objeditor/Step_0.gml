@@ -13,8 +13,9 @@
         beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes[beatlineNowGroup])-1);
         
         if(_modchg != 0 || _groupchg != 0) {
-            announcement_play("节拍细分： 1/"+string(beatlineDivs[beatlineNowGroup][beatlineNowMode])
-            +"\n节拍细分组："+chr(beatlineNowGroup+ord("A")), 3000, "beatlineDiv");
+            announcement_play(i18n_get("beatline_divs", string(beatlineDivs[beatlineNowGroup][beatlineNowMode]),
+            	chr(beatlineNowGroup+ord("A"))), 3000, "beatlineDiv");
+            
         }
         
         animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);

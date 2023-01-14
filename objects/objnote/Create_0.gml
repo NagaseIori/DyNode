@@ -389,7 +389,7 @@ image_yscale = global.scaleYAdjust;
                 build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
                 
                 if(_outscreen_check(x, y, side))
-                	announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
+                	announcement_warning("warning_note_outbound");
                 
                 instance_destroy();
             }
@@ -468,7 +468,7 @@ image_yscale = global.scaleYAdjust;
                     	}
                     	
                     	if(_outscreen_check(x, y, side))
-                			announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
+                			announcement_warning("warning_note_outbound");
                     }
                     
                     note_sort_request();
@@ -520,7 +520,7 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	editor_set_default_width(width);
-		    	announcement_play("复制宽度："+string_format(width, 1, 2));
+		    	announcement_play(i18n_get("copy_width", string_format(width, 1, 2)));
 		    }
 		    
 		    
