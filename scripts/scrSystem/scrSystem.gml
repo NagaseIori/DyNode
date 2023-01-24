@@ -392,7 +392,7 @@ function map_export_xml() {
     _default_file_name += string(current_minute) + "-";
     _default_file_name += string(current_second);
     _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, 
-        "Export Dynamic Chart as XMl File 导出谱面XML文件");
+        "Export Dynamix Chart as XMl File 导出谱面XML文件");
     
     if(_file == "") return;
     

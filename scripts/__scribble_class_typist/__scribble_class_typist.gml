@@ -23,8 +23,9 @@ function __scribble_class_typist() constructor
     
     __ignore_delay = false;
     
-    __function       = undefined;
-    __function_scope = undefined;
+    __function_scope       = undefined;
+    __function_per_char    = undefined;
+    __function_on_complete = undefined;
     
     __ease_method         = SCRIBBLE_EASE.LINEAR;
     __ease_dx             = 0;
@@ -170,7 +171,21 @@ function __scribble_class_typist() constructor
     
     static function_per_char = function(_function)
     {
-        __function = _function;
+        __function_per_char = _function;
+        
+        return self;
+    }
+    
+    static function_on_complete = function(_function)
+    {
+        __function_on_complete = _function;
+        
+        return self;
+    }
+    
+    static execution_scope = function(_scope)
+    {
+        __function_scope = _scope;
         
         return self;
     }
@@ -215,13 +230,6 @@ function __scribble_class_typist() constructor
         __ease_yscale         = _yscale;
         __ease_rotation       = _rotation;
         __ease_alpha_duration = _alpha_duration;
-        
-        return self;
-    }
-    
-    static execution_scope = function(_scope)
-    {
-        __function_scope = _scope;
         
         return self;
     }
@@ -537,13 +545,26 @@ function __scribble_class_typist() constructor
     static __execute_function_per_character = function(_function_scope)
     {
         //Execute function per character
-        if (is_method(__function))
+        if (is_method(__function_per_char))
         {
-            __function(_function_scope, __last_character - 1, self);
+            __function_per_char(_function_scope, __last_character - 1, self);
         }
-        else if (is_real(__function) && script_exists(__function))
+        else if (is_real(__function_per_char) && script_exists(__function_per_char))
         {
-            script_execute(__function, _function_scope, __last_character - 1, self);
+            script_execute(__function_per_char, _function_scope, __last_character - 1, self);
+        }
+    }
+    
+    static __execute_function_on_complete = function(_function_scope)
+    {
+        //Execute function per character
+        if (is_method(__function_on_complete))
+        {
+            __function_on_complete(_function_scope, self);
+        }
+        else if (is_real(__function_on_complete) && script_exists(__function_on_complete))
+        {
+            script_execute(__function_on_complete, _function_scope, self);
         }
     }
     
@@ -651,9 +672,14 @@ function __scribble_class_typist() constructor
                         
                         //Get an array of events for this character from the text element
                         var _found_events = __last_element.ref.get_events(__last_character);
+                        var _found_size = array_length(_found_events);
                         
                         //Add a per-character delay if required
-                        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER && !__ignore_delay && __character_delay && (__last_character > 0))
+                        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER
+                        &&  !__ignore_delay
+                        &&  __character_delay
+                        &&  (__last_character >= 1) //Don't check character delay until we're on the first character (index=1)
+                        &&  ((__last_character < _page_character_count-1) || (_found_size > 0)))
                         {
                             var _glyph_ord = _page_data.__glyph_grid[# __last_character-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE];
                             var _delay = __character_delay_dict[$ _glyph_ord];
@@ -668,14 +694,17 @@ function __scribble_class_typist() constructor
                                 _delay = max(_delay, _double_char_delay);
                             }
                             
-                            if (_delay > 0) array_push(_found_events, new __scribble_class_event("delay", [_delay]));
+                            if (_delay > 0)
+                            {
+                                array_insert(_found_events, 0, new __scribble_class_event("delay", [_delay]));
+                                ++_found_size;
+                            }
                         }
                         
                         //Move to the next character
                         __last_character++;
                         if (__last_character > 1) __execute_function_per_character(_target_element);
                         
-                        var _found_size = array_length(_found_events);
                         if (_found_size > 0)
                         {
                             //Copy our found array of events onto our stack
@@ -694,10 +723,18 @@ function __scribble_class_typist() constructor
                     }
                 }
                 
-                //Only play sound once per frame if we're going reaaaally fast
-                if (_play_sound && (__last_character <= _page_character_count))
+                if (_play_sound)
                 {
-                    __play_sound(_head_pos, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
+                    if (__last_character <= _page_character_count)
+                    {
+                        //Only play sound once per frame if we're going reaaaally fast
+                        __play_sound(_head_pos, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
+                    }
+                    else
+                    {
+                        //Execute our on-complete callback when we finish
+                        __execute_function_on_complete(_function_scope);
+                    }
                 }
                 
                 //Set the typewriter head
