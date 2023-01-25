@@ -435,3 +435,36 @@ function show_debug_message_safe(str) {
 	if(debug_mode)
 		show_debug_message(str);
 }
+
+function version_cmp(vera, verb) {
+	var _version_deal = function (ver) {
+		ver = string_replace(ver, "-dev", ".-1");
+		ver = string_replace(ver, "v", "");
+		return string_split(ver, ".");
+	}
+	var arra = _version_deal(vera);
+	var arrb = _version_deal(verb);
+	var la = array_length(arra), lb = array_length(arrb);
+	try {
+		for(var i=0; i<la; i++)
+			arra[i] = int64(arra[i]);
+		for(var i=0; i<lb; i++)
+			arrb[i] = int64(arrb[i]);
+	} catch (e) {
+		announcement_error("Weird version number found in config/beatmap file.\n"+vera+"\n"+verb);
+		return 0;
+	}
+	
+	for(var i=0; i<la || i<lb; i++) {
+		if(i>=la && i<lb)
+			arra[i] = 0;
+		if(i<la && i>=lb)
+			arrb[i] = 0;
+		if(arra[i]<arrb[i])
+			return -1;
+		if(arra[i]>arrb[i])
+			return 1;
+	}
+	if(la!=lb) return la<lb?-1:1;
+	return 0;
+}

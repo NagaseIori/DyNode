@@ -617,7 +617,7 @@ function project_load(_file = "") {
     
     ///// Old version workaround
     
-	    if(_contents.version < "v0.1.5") {
+	    if(version_cmp(_contents.version, "v0.1.5") < 0) {
 	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
 			if(_question)
 				map_add_offset(-64, true);
