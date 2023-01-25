@@ -232,6 +232,12 @@ image_yscale = global.scaleYAdjust;
         animTargetA = 1.0;
         animTargetLstA = lastAlphaL;
         
+        // Side Fading
+        if(editor_get_editmode() == 5 && side > 0) {
+        	animTargetA = lerp(0.25, 1, abs(x - resor_to_x(0.5)) / resor_to_x(0.5-0.2));
+        	animTargetA = clamp(animTargetA, 0, 1);
+        }
+        
         // Update Mixer's Position
 	    if(side > 0) {
 	        var _nside = side-1, _noff = time, _nx = y, _nid = id;
@@ -383,7 +389,7 @@ image_yscale = global.scaleYAdjust;
                 build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
                 
                 if(_outscreen_check(x, y, side))
-                	announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
+                	announcement_warning("warning_note_outbound");
                 
                 instance_destroy();
             }
@@ -462,7 +468,7 @@ image_yscale = global.scaleYAdjust;
                     	}
                     	
                     	if(_outscreen_check(x, y, side))
-                			announcement_warning("你正在放置一个中心超出屏幕的音符。\n该音符可能在屏幕内不可见，并且之后将因此无法编辑。\n你可以使用撤销来退回上一步操作。");
+                			announcement_warning("warning_note_outbound");
                     }
                     
                     note_sort_request();
@@ -514,7 +520,7 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    if(keycheck_down_ctrl(ord("C")) && !editor_select_is_multiple()) {
 		    	editor_set_default_width(width);
-		    	announcement_play("复制宽度："+string_format(width, 1, 2));
+		    	announcement_play(i18n_get("copy_width", string_format(width, 1, 2)));
 		    }
 		    
 		    

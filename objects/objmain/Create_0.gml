@@ -1,12 +1,6 @@
 
 depth = 0;
 
-// Shaders
-
-    shaderBlur = shd_gaussian_blur_2pass;
-    u_size = shader_get_uniform(shaderBlur, "size");
-    u_blur_vector = shader_get_uniform(shaderBlur, "blur_vector");
-
 // Make Original Background Layer Invisible
 
     layer_set_visible(layer_get_id("Background"), false);
@@ -146,11 +140,8 @@ depth = 0;
     animTargetTitleAlpha = titleAlphaL;
     
     // Bottom
-        bottomDim = 0.3;
-        bottomBgSurf = -1;
-        bottomBgSurfPing = -1;
-        bottomBgBlurAmount = 20;
-        bottomBgBlurSigma = 10;
+        bottomDim = 0.5;
+        bottomBgBlurIterations = 3;
         bottomInfoSurf = -1;
     
     // Background
@@ -168,6 +159,10 @@ depth = 0;
         _faint_hit = function() {
             bgFaintAlpha = 0.7;
         }
+        
+        // Kawase Blur
+
+		kawaseArr = kawase_create(global.resolutionW, targetLineBelow, bottomBgBlurIterations);
 
 #endregion
 

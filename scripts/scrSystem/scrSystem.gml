@@ -4,8 +4,7 @@
 function map_close() {
 	
 	with(objMain) {
-		surface_free_f(bottomBgSurf);
-		surface_free_f(bottomBgSurfPing);
+		kawase_destroy(kawaseArr);
 		surface_free_f(bottomInfoSurf);
 		
 		note_delete_all();
@@ -141,7 +140,7 @@ function map_import_xml(_file) {
 			}
 		}
 		else
-			announcement_warning("未能读取谱面中的变 BPM 信息。\n建议使用最新版本 Dynamaker-modified 来导出谱面的变 BPM 数据。")
+			announcement_warning("error_dym_bpm_load_failed");
 	}
 	
     if(_import_info) {
@@ -372,11 +371,6 @@ function image_load(_file = "") {
             sprite_delete(bgImageSpr);
         
         bgImageSpr = _nspr;
-        
-        // Bottom reset
-        
-        surface_free_f(bottomBgSurf);
-        bottomBgSurf = -1;
     }
     objManager.backgroundPath = _file;
     sprite_delete(_spr);
@@ -398,7 +392,7 @@ function map_export_xml() {
     _default_file_name += string(current_minute) + "-";
     _default_file_name += string(current_second);
     _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, 
-        "Export Dynamic Chart as XMl File 导出谱面XML文件");
+        "Export Dynamix Chart as XMl File 导出谱面XML文件");
     
     if(_file == "") return;
     
@@ -623,7 +617,7 @@ function project_load(_file = "") {
     
     ///// Old version workaround
     
-	    if(_contents.version < "v0.1.5") {
+	    if(version_cmp(_contents.version, "v0.1.5") < 0) {
 	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
 			if(_question)
 				map_add_offset(-64, true);
@@ -684,7 +678,8 @@ function project_get_settings() {
 
 function project_set_settings(str) {
 	editor_set_editmode(str.editmode);
-	editor_set_editside(str.editside);
+	if(str.editmode < 5)
+		editor_set_editside(str.editside);
 	with(objEditor) {
 		editorDefaultWidth = str.defaultWidth;
 		editorDefaultWidthMode = str.defaultWidthMode;
@@ -848,7 +843,7 @@ function load_config() {
 		save_config();
 	
 	var _buf = buffer_load(global.configPath);
-	var _con = SnapBufferReadJSON(_buf, 0);
+	var _con = SnapBufferReadLooseJSON(_buf, 0);
 	buffer_delete(_buf);
 	
 	// If config file is corrupted
@@ -890,7 +885,7 @@ function load_config() {
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, SnapToJSON({
+	file_text_write_string(_f, SnapToLooseJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,

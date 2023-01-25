@@ -4,7 +4,7 @@
 /// 
 /// @param buffer  Buffer to read data from
 /// @param offset  Offset in the buffer to read data from
-/// @param size	   Size in the buffer to read data from
+/// @param size    Buffer size to read from
 /// 
 /// @jujuadams 2022-10-30
 

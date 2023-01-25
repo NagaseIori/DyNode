@@ -1,5 +1,7 @@
 function __scribble_class_typist() constructor
 {
+    static __scribble_state = __scribble_get_state();
+    
     __last_element = undefined;
     
     __speed      = 1;
@@ -21,8 +23,9 @@ function __scribble_class_typist() constructor
     
     __ignore_delay = false;
     
-    __function       = undefined;
-    __function_scope = undefined;
+    __function_scope       = undefined;
+    __function_per_char    = undefined;
+    __function_on_complete = undefined;
     
     __ease_method         = SCRIBBLE_EASE.LINEAR;
     __ease_dx             = 0;
@@ -47,7 +50,7 @@ function __scribble_class_typist() constructor
         __last_character       = 0;
         __last_audio_character = 0;
         
-        __last_tick_time = -infinity;
+        __last_tick_frame = -infinity;
         
         __window_index     = 0;
         __window_array     = array_create(2*__SCRIBBLE_WINDOW_COUNT, -__smoothness); __window_array[@ 0] = 0;
@@ -168,7 +171,21 @@ function __scribble_class_typist() constructor
     
     static function_per_char = function(_function)
     {
-        __function = _function;
+        __function_per_char = _function;
+        
+        return self;
+    }
+    
+    static function_on_complete = function(_function)
+    {
+        __function_on_complete = _function;
+        
+        return self;
+    }
+    
+    static execution_scope = function(_scope)
+    {
+        __function_scope = _scope;
         
         return self;
     }
@@ -213,13 +230,6 @@ function __scribble_class_typist() constructor
         __ease_yscale         = _yscale;
         __ease_rotation       = _rotation;
         __ease_alpha_duration = _alpha_duration;
-        
-        return self;
-    }
-    
-    static execution_scope = function(_scope)
-    {
-        __function_scope = _scope;
         
         return self;
     }
@@ -382,6 +392,8 @@ function __scribble_class_typist() constructor
     
     static __process_event_stack = function(_character_count, _target_element, _function_scope)
     {
+        static _typewriter_events_map = __scribble_get_typewriter_events_map();
+        
         //This method processes events on the stack (which is filled by copying data from the target element in .__tick())
         //We return <true> if there have been no pausing behaviours called i.e. [pause] and [delay]
         //We return <false> immediately if we do run into pausing behaviours
@@ -463,7 +475,7 @@ function __scribble_class_typist() constructor
                 //Porbably a current event
                 default:
                     //Otherwise try to find a custom event
-                    var _function = global.__scribble_typewriter_events[? _event_name];
+                    var _function = _typewriter_events_map[? _event_name];
                     if (is_method(_function))
                     {
                         with(_function_scope) _function(_target_element, _event_data, _event_position);
@@ -514,7 +526,11 @@ function __scribble_class_typist() constructor
                 __last_audio_character = _head_pos;
                 
                 var _audio_asset = _sound_array[floor(__scribble_random()*array_length(_sound_array))];
-                if (is_string(_audio_asset)) _audio_asset = global.__scribble_external_sound_map[? _audio_asset];
+                if (is_string(_audio_asset))
+                {
+                    var _external_sound_map = __scribble_get_external_sound_map();
+                    _audio_asset = _external_sound_map[? _audio_asset];
+                }
                 
                 if (_audio_asset != undefined)
                 {
@@ -529,13 +545,26 @@ function __scribble_class_typist() constructor
     static __execute_function_per_character = function(_function_scope)
     {
         //Execute function per character
-        if (is_method(__function))
+        if (is_method(__function_per_char))
         {
-            __function(_function_scope, __last_character - 1, self);
+            __function_per_char(_function_scope, __last_character - 1, self);
         }
-        else if (is_real(__function) && script_exists(__function))
+        else if (is_real(__function_per_char) && script_exists(__function_per_char))
         {
-            script_execute(__function, _function_scope, __last_character - 1, self);
+            script_execute(__function_per_char, _function_scope, __last_character - 1, self);
+        }
+    }
+    
+    static __execute_function_on_complete = function(_function_scope)
+    {
+        //Execute function per character
+        if (is_method(__function_on_complete))
+        {
+            __function_on_complete(_function_scope, self);
+        }
+        else if (is_real(__function_on_complete) && script_exists(__function_on_complete))
+        {
+            script_execute(__function_on_complete, _function_scope, self);
         }
     }
     
@@ -550,8 +579,8 @@ function __scribble_class_typist() constructor
         if (__skip) __drawn_since_skip = true;
         
         //Don't tick if it's been less than a frame since we were last updated
-        if (current_time - __last_tick_time < __SCRIBBLE_EXPECTED_FRAME_TIME) return undefined;
-        __last_tick_time = current_time;
+        if (__scribble_state.__frames < __last_tick_frame) return undefined;
+        __last_tick_frame = __scribble_state.__frames;
         
         //If __in hasn't been set yet (.in() / .out() haven't been set) then just nope out
         if (__in == undefined) return undefined;
@@ -643,9 +672,14 @@ function __scribble_class_typist() constructor
                         
                         //Get an array of events for this character from the text element
                         var _found_events = __last_element.ref.get_events(__last_character);
+                        var _found_size = array_length(_found_events);
                         
                         //Add a per-character delay if required
-                        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER && !__ignore_delay && __character_delay && (__last_character > 0))
+                        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER
+                        &&  !__ignore_delay
+                        &&  __character_delay
+                        &&  (__last_character >= 1) //Don't check character delay until we're on the first character (index=1)
+                        &&  ((__last_character < _page_character_count-1) || (_found_size > 0)))
                         {
                             var _glyph_ord = _page_data.__glyph_grid[# __last_character-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE];
                             var _delay = __character_delay_dict[$ _glyph_ord];
@@ -660,14 +694,17 @@ function __scribble_class_typist() constructor
                                 _delay = max(_delay, _double_char_delay);
                             }
                             
-                            if (_delay > 0) array_push(_found_events, new __scribble_class_event("delay", [_delay]));
+                            if (_delay > 0)
+                            {
+                                array_insert(_found_events, 0, new __scribble_class_event("delay", [_delay]));
+                                ++_found_size;
+                            }
                         }
                         
                         //Move to the next character
                         __last_character++;
                         if (__last_character > 1) __execute_function_per_character(_target_element);
                         
-                        var _found_size = array_length(_found_events);
                         if (_found_size > 0)
                         {
                             //Copy our found array of events onto our stack
@@ -686,10 +723,18 @@ function __scribble_class_typist() constructor
                     }
                 }
                 
-                //Only play sound once per frame if we're going reaaaally fast
-                if (_play_sound && (__last_character <= _page_character_count))
+                if (_play_sound)
                 {
-                    __play_sound(_head_pos, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
+                    if (__last_character <= _page_character_count)
+                    {
+                        //Only play sound once per frame if we're going reaaaally fast
+                        __play_sound(_head_pos, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER? (_page_data.__glyph_grid[# _head_pos-1, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE]) : 0);
+                    }
+                    else
+                    {
+                        //Execute our on-complete callback when we finish
+                        __execute_function_on_complete(_function_scope);
+                    }
                 }
                 
                 //Set the typewriter head
@@ -720,10 +765,19 @@ function __scribble_class_typist() constructor
     
     static __set_shader_uniforms = function()
     {
+        static _u_iTypewriterMethod        = shader_get_uniform(__shd_scribble, "u_iTypewriterMethod"       );
+        static _u_iTypewriterCharMax       = shader_get_uniform(__shd_scribble, "u_iTypewriterCharMax"      );
+        static _u_fTypewriterWindowArray   = shader_get_uniform(__shd_scribble, "u_fTypewriterWindowArray"  );
+        static _u_fTypewriterSmoothness    = shader_get_uniform(__shd_scribble, "u_fTypewriterSmoothness"   );
+        static _u_vTypewriterStartPos      = shader_get_uniform(__shd_scribble, "u_vTypewriterStartPos"     );
+        static _u_vTypewriterStartScale    = shader_get_uniform(__shd_scribble, "u_vTypewriterStartScale"   );
+        static _u_fTypewriterStartRotation = shader_get_uniform(__shd_scribble, "u_fTypewriterStartRotation");
+        static _u_fTypewriterAlphaDuration = shader_get_uniform(__shd_scribble, "u_fTypewriterAlphaDuration");
+        
         //If __in hasn't been set yet (.in() / .out() haven't been set) then just nope out
         if (__in == undefined)
         {
-            shader_set_uniform_i(global.__scribble_u_iTypewriterMethod, SCRIBBLE_EASE.NONE);
+            shader_set_uniform_i(_u_iTypewriterMethod, SCRIBBLE_EASE.NONE);
             return undefined;
         }
         
@@ -748,22 +802,31 @@ function __scribble_class_typist() constructor
             }
         }
         
-        shader_set_uniform_i(global.__scribble_u_iTypewriterMethod,            _method);
-        shader_set_uniform_i(global.__scribble_u_iTypewriterCharMax,           _char_max);
-        shader_set_uniform_f(global.__scribble_u_fTypewriterSmoothness,        __smoothness);
-        shader_set_uniform_f(global.__scribble_u_vTypewriterStartPos,          __ease_dx, __ease_dy);
-        shader_set_uniform_f(global.__scribble_u_vTypewriterStartScale,        __ease_xscale, __ease_yscale);
-        shader_set_uniform_f(global.__scribble_u_fTypewriterStartRotation,     __ease_rotation);
-        shader_set_uniform_f(global.__scribble_u_fTypewriterAlphaDuration,     __ease_alpha_duration);
-        shader_set_uniform_f_array(global.__scribble_u_fTypewriterWindowArray, __window_array);
+        shader_set_uniform_i(_u_iTypewriterMethod,            _method);
+        shader_set_uniform_i(_u_iTypewriterCharMax,           _char_max);
+        shader_set_uniform_f(_u_fTypewriterSmoothness,        __smoothness);
+        shader_set_uniform_f(_u_vTypewriterStartPos,          __ease_dx, __ease_dy);
+        shader_set_uniform_f(_u_vTypewriterStartScale,        __ease_xscale, __ease_yscale);
+        shader_set_uniform_f(_u_fTypewriterStartRotation,     __ease_rotation);
+        shader_set_uniform_f(_u_fTypewriterAlphaDuration,     __ease_alpha_duration);
+        shader_set_uniform_f_array(_u_fTypewriterWindowArray, __window_array);
     }
     
     static __set_msdf_shader_uniforms = function()
     {
+        static _msdf_u_iTypewriterMethod        = shader_get_uniform(__shd_scribble_msdf, "u_iTypewriterMethod"       );
+        static _msdf_u_iTypewriterCharMax       = shader_get_uniform(__shd_scribble_msdf, "u_iTypewriterCharMax"      );
+        static _msdf_u_fTypewriterWindowArray   = shader_get_uniform(__shd_scribble_msdf, "u_fTypewriterWindowArray"  );
+        static _msdf_u_fTypewriterSmoothness    = shader_get_uniform(__shd_scribble_msdf, "u_fTypewriterSmoothness"   );
+        static _msdf_u_vTypewriterStartPos      = shader_get_uniform(__shd_scribble_msdf, "u_vTypewriterStartPos"     );
+        static _msdf_u_vTypewriterStartScale    = shader_get_uniform(__shd_scribble_msdf, "u_vTypewriterStartScale"   );
+        static _msdf_u_fTypewriterStartRotation = shader_get_uniform(__shd_scribble_msdf, "u_fTypewriterStartRotation");
+        static _msdf_u_fTypewriterAlphaDuration = shader_get_uniform(__shd_scribble_msdf, "u_fTypewriterAlphaDuration");
+        
         //If __in hasn't been set yet (.in() / .out() haven't been set) then just nope out
         if (__in == undefined)
         {
-            shader_set_uniform_i(global.__scribble_msdf_u_iTypewriterMethod, SCRIBBLE_EASE.NONE);
+            shader_set_uniform_i(_msdf_u_iTypewriterMethod, SCRIBBLE_EASE.NONE);
             return undefined;
         }
         
@@ -788,14 +851,14 @@ function __scribble_class_typist() constructor
             }
         }
         
-        shader_set_uniform_i(global.__scribble_msdf_u_iTypewriterMethod,            _method);
-        shader_set_uniform_i(global.__scribble_msdf_u_iTypewriterCharMax,           _char_max);
-        shader_set_uniform_f(global.__scribble_msdf_u_fTypewriterSmoothness,        __smoothness);
-        shader_set_uniform_f(global.__scribble_msdf_u_vTypewriterStartPos,          __ease_dx, __ease_dy);
-        shader_set_uniform_f(global.__scribble_msdf_u_vTypewriterStartScale,        __ease_xscale, __ease_yscale);
-        shader_set_uniform_f(global.__scribble_msdf_u_fTypewriterStartRotation,     __ease_rotation);
-        shader_set_uniform_f(global.__scribble_msdf_u_fTypewriterAlphaDuration,     __ease_alpha_duration);
-        shader_set_uniform_f_array(global.__scribble_msdf_u_fTypewriterWindowArray, __window_array);
+        shader_set_uniform_i(_msdf_u_iTypewriterMethod,            _method);
+        shader_set_uniform_i(_msdf_u_iTypewriterCharMax,           _char_max);
+        shader_set_uniform_f(_msdf_u_fTypewriterSmoothness,        __smoothness);
+        shader_set_uniform_f(_msdf_u_vTypewriterStartPos,          __ease_dx, __ease_dy);
+        shader_set_uniform_f(_msdf_u_vTypewriterStartScale,        __ease_xscale, __ease_yscale);
+        shader_set_uniform_f(_msdf_u_fTypewriterStartRotation,     __ease_rotation);
+        shader_set_uniform_f(_msdf_u_fTypewriterAlphaDuration,     __ease_alpha_duration);
+        shader_set_uniform_f_array(_msdf_u_fTypewriterWindowArray, __window_array);
     }
     
     #endregion
