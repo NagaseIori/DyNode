@@ -1,7 +1,7 @@
 <p align="center"><img src="https://user-images.githubusercontent.com/31349569/191138861-2cf74238-67f6-49b3-9b75-e8fe7e192827.png" style="display:block; margin:auto; width:300px"></p>
 
 <h1 align="center">DyNode</h1>
-<p align="center">Yet another Dynamix chart tool.</b></p>
+<p align="center">Yet another Dynamix charting tool.</b></p>
 <br>
 <br>
 <p align="center">
