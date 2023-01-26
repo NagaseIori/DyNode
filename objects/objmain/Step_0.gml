@@ -153,17 +153,13 @@
             sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
             time_source_start(timesourceResumeDelay);
             // nowTime = sfmod_channel_get_position(channel, sampleRate);
-            
-            if(bgVideoLoaded) {
-            	time_source_start(timesourceSyncVideo);
-            }
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
             
             if(bgVideoLoaded) {
-            	video_pause();
+            	safe_video_pause();
             }
         }
     }
@@ -174,6 +170,11 @@
 
 	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
+    
+    if(editor_get_editmode()==5 && safe_video_check_loaded())
+    	bgVideoAlpha = lerp_a(bgVideoAlpha, 1, animSpeed);
+    else
+    	bgVideoAlpha = lerp_a(bgVideoAlpha, 0, animSpeed);
     
 #endregion
 

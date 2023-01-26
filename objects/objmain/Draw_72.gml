@@ -4,6 +4,7 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
 // Draw Background
 
+	// Image
     if(bgImageSpr != -1) {
         draw_sprite(bgImageSpr, 0, _nw/2, _nh/2);
     }
@@ -11,23 +12,11 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
         draw_clear(c_white);
     }
     
-    if(bgVideoLoaded && !bgVideoReloading && nowPlaying && video_get_status() == video_status_playing) {
-    	var _status = video_draw();
-    	if(_status[0] == -1) {
-    		announcement_error("视频播放出现错误。");
-    		video_close();
-    		bgVideoLoaded = false;
-    	}
-    	else {
-    		var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
-    		var _wscl = global.resolutionW / _w;
-		    var _hscl = global.resolutionH / _h;
-		    var _scl = max(_wscl, _hscl); // Centre & keep ratios
-		    var _nx = global.resolutionW/2 - _scl * _w / 2;
-		    var _ny = global.resolutionH/2 - _scl * _h / 2;
-		    draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
-    	}
-    }
+    // Video
+    if(bgVideoAlpha > EPS) 
+		safe_video_draw(0, 0, bgVideoAlpha);
+	else if(!bgVideoPaused && editor_get_editmode() != 5)
+		safe_video_pause();
 
 	// Draw bottom blured bg
     

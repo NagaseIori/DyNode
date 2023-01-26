@@ -30,11 +30,16 @@ depth = 0;
 		time_source_create(time_source_game, 0.1,
 		time_source_units_seconds, function() {
 			if(bgVideoLoaded) {
-	        	video_seek_to(clamp(nowTime, 0, bgVideoLength));
-	        	video_resume();
-	        	show_debug_message("VIDEO SEEKING TO: "+ string(clamp(nowTime, 0, bgVideoLength)));
+	        	safe_video_seek_to(clamp(nowTime, 0, bgVideoLength));
 	        }
 		}, [], 1);
+	timesourceUpdateVideo =
+		time_source_create(time_source_game, 1/120, time_source_units_seconds,
+		function() {
+			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
+				safe_video_update();
+		}, [], -1);
+	time_source_start(timesourceUpdateVideo);
 	
 #endregion
 
@@ -162,9 +167,15 @@ depth = 0;
         
         // Video
         bgVideoLoaded = false;
+        bgVideoDisplay = false;
+        bgVideoPaused = false;
         bgVideoLength = 0;
         bgVideoPath = "";
         bgVideoReloading = false;
+        bgVideoSurf = undefined;
+        bgVideoAlpha = 0;
+        
+        safe_video_init();
         
         // Faint
         bgFaintAlpha = 1;

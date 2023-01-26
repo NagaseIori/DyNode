@@ -31,7 +31,7 @@ function map_close() {
 			FMODGMS_Chan_RemoveChannel(channel);
 		}
 		
-		video_close();
+		safe_video_free();
 	}
 	
 	instance_destroy(objMain);
@@ -369,9 +369,7 @@ function video_load(_file) {
         announcement_error("视频文件不存在。\n[scale, 0.8]路径："+_file);
         return;
     }
-    
-	objMain.bgVideoLoaded = false;
-	video_close();
+	safe_video_free();
     
 	video_open(_file);
 	video_set_volume(0);
