@@ -7,7 +7,10 @@ else
     drawVisible = true;
 
 selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, noteType, side);
+
 state();
+
+selectUnlock = false;
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 	var _factor = 1;

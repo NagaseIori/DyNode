@@ -52,6 +52,7 @@ image_yscale = global.scaleYAdjust;
     animTargetInfoA = 0;
     recordRequest = false;
     selectInbound = false;			// If time inbound multi selection
+    selectUnlock = false;			// If the state in last step is select
     attaching = false;				// If is a attaching note
     
     animSpeed = 0.4;
@@ -228,6 +229,8 @@ image_yscale = global.scaleYAdjust;
     
     // State Normal
     stateNormal = function() {
+    	if(stateString == "SEL")
+    		selectUnlock = true;
         stateString = "NM";
         animTargetA = 1.0;
         animTargetLstA = lastAlphaL;
@@ -256,7 +259,9 @@ image_yscale = global.scaleYAdjust;
         // If inbound then the state wont change
         if(!selectInbound) {
         	if(time <= _limTime) {
-	            _create_shadow();
+        		// If the state in last step is SELECT then skip create_shadow
+        		if(!selectUnlock)
+	            	_create_shadow();
 	            state = stateLast;
 	            state();
 	        }
