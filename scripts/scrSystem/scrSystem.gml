@@ -370,13 +370,22 @@ function video_load(_file) {
     }
 	safe_video_free();
     
-    __tmp_handlevo = call_later(1, time_source_units_frames, function () {
-    	if(video_get_status() == video_status_closed) {
+    if(variable_global_exists("__tmp_handlevo") && global.__tmp_handlevo != undefined)
+    	call_cancel(global.__tmp_handlevo);
+    global.__tmp_handlevo_time = 0;
+    global.__tmp_handlevo = call_later(1, time_source_units_frames, function () {
+    	if(delta_time <= 1000000)
+    		global.__tmp_handlevo_time += delta_time / 1000;
+    	if(video_get_status() == video_status_closed && global.__tmp_handlevo_time < 3000) {
     		video_open(objManager.videoPath);
 			video_set_volume(0);
     	}
-    	else
-    		call_cancel(__tmp_handlevo);
+    	else {
+    		if(global.__tmp_handlevo_time >= 3000)
+    			announcement_error("打开视频文件超时。");
+    		call_cancel(global.__tmp_handlevo);
+    		global.__tmp_handlevo = undefined;
+    	}
     }, true);
 	
 	objManager.videoPath = _file;

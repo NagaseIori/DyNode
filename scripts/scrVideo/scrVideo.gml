@@ -55,7 +55,11 @@ function safe_video_free() {
         bgVideoDisplay = false;
         bgVideoDestroying = true;
         surface_free_f(bgVideoSurf);
-        video_close();
+        
+        if(video_get_status() != 0)
+            video_close();
+        
+        show_debug_message("VIDEO FREE!!");
     }
     
 }
