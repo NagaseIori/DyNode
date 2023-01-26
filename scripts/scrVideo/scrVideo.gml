@@ -7,6 +7,8 @@ function safe_video_init() {
 
 function safe_video_update() {
     with(objMain) {
+        bgVideoSurf = surface_checkate(bgVideoSurf, global.resolutionW, global.resolutionH);
+        
         if(bgVideoAlpha < EPS || !bgVideoLoaded)
             return false;
         if(video_get_status() <= 1)
@@ -15,14 +17,12 @@ function safe_video_update() {
         if(nowPlaying && editor_get_editmode() == 5 && bgVideoPaused)
             safe_video_seek_to(nowTime);
         
-        bgVideoSurf = surface_checkate(bgVideoSurf, global.resolutionW, global.resolutionH);
-        
         surface_set_target(bgVideoSurf);
             draw_clear_alpha(c_black, 0);
             var _status = video_draw();
         	if(_status[0] == -1) {
         		announcement_error("视频播放出现错误。");
-        		video_close();
+        		safe_video_free();
         		bgVideoLoaded = false;
         	}
         	else {
@@ -53,6 +53,7 @@ function safe_video_free() {
         bgVideoLoaded = false;
         bgVideoReloading = false;
         bgVideoDisplay = false;
+        bgVideoDestroying = true;
         surface_free_f(bgVideoSurf);
         video_close();
     }

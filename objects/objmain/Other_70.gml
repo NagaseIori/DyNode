@@ -15,8 +15,17 @@ if(_type == "video_start") {
 	bgVideoReloading = false;
 }
 else if(_type == "video_end") {
-	bgVideoReloading = true;
-	bgVideoDisplay = false;
-	video_load(objManager.videoPath);
-	show_debug_message("VIDEO PLAYBACK FINISHED.");
+	if(bgVideoDestroying) {
+		bgVideoDestroying = false;
+		return;
+	}
+	
+	// Idk why i have to add this line but this does work
+	if(objManager.videoPath != "") {
+		video_load(objManager.videoPath);
+		bgVideoReloading = true;
+		bgVideoDisplay = false;
+		show_debug_message_safe("Video reloading.");
+	}
+		
 }

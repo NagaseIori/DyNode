@@ -172,6 +172,7 @@ depth = 0;
         bgVideoLength = 0;
         bgVideoPath = "";
         bgVideoReloading = false;
+        bgVideoDestroying = false;
         bgVideoSurf = undefined;
         bgVideoAlpha = 0;
         

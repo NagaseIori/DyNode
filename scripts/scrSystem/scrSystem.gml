@@ -3,6 +3,7 @@
 
 function map_close() {
 	with(objMain) {
+		safe_video_free();
 		kawase_destroy(kawaseArr);
 		surface_free_f(bottomInfoSurf);
 		
@@ -30,8 +31,6 @@ function map_close() {
 			FMODGMS_Snd_Unload(music);
 			FMODGMS_Chan_RemoveChannel(channel);
 		}
-		
-		safe_video_free();
 	}
 	
 	instance_destroy(objMain);
@@ -623,30 +622,31 @@ function project_load(_file = "") {
     	chartPath = _contents.chartPath;
     	if(variable_struct_exists(_contents, "videoPath"))
     		videoPath = _contents.videoPath;
+    	else
+    		videoPath = "";
+    	
+    	if(variable_struct_exists(_contents, "charts")) {
+	    	objMain.animTargetTime = 0;
+	    	map_load(_contents.charts);
+	    }
+	    else
+	    	map_load(chartPath);
+	    
+	    music_load(musicPath);
+	    if(backgroundPath != "")
+	    	background_load(backgroundPath);
+	    if(videoPath != "")
+	    	background_load(videoPath);
+	    	
+	    timing_point_reset();
+	    objEditor.timingPoints = _contents.timingPoints;
+	    timing_point_sort();
+	    
+	    projectPath = _file;
+	    
+	    if(variable_struct_exists(_contents, "settings"))
+	    	project_set_settings(_contents.settings);
     }
-    
-    
-    if(variable_struct_exists(_contents, "charts")) {
-    	objMain.animTargetTime = 0;
-    	map_load(_contents.charts);
-    }
-    else
-    	map_load(chartPath);
-    
-    music_load(musicPath);
-    if(backgroundPath != "")
-    	background_load(backgroundPath);
-    if(videoPath != "")
-    	background_load(videoPath);
-    
-    timing_point_reset();
-    objEditor.timingPoints = _contents.timingPoints;
-    timing_point_sort();
-    
-    projectPath = _file;
-    
-    if(variable_struct_exists(_contents, "settings"))
-    	project_set_settings(_contents.settings);
     
     ///// Old version workaround
     
@@ -680,6 +680,7 @@ function project_save_as(_file = "") {
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
+		videoPath: objManager.videoPath,
 		timingPoints: objEditor.timingPoints,
 		charts: [],
 		settings: project_get_settings()
