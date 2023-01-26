@@ -9,7 +9,7 @@
     if(keycheck_down(vk_f3))
         music_load();
     if(keycheck_down(vk_f4))
-        image_load();
+        background_load();
     if(keycheck_down(vk_f5))
     	map_export_xml();
     if(keycheck_down(vk_f6))
@@ -153,10 +153,18 @@
             sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
             time_source_start(timesourceResumeDelay);
             // nowTime = sfmod_channel_get_position(channel, sampleRate);
+            
+            if(bgVideoLoaded) {
+            	time_source_start(timesourceSyncVideo);
+            }
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
+            
+            if(bgVideoLoaded) {
+            	video_pause();
+            }
         }
     }
 

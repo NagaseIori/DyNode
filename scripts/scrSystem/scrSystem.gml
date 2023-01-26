@@ -2,7 +2,6 @@
 #region MAP FUNCTIONS
 
 function map_close() {
-	
 	with(objMain) {
 		kawase_destroy(kawaseArr);
 		surface_free_f(bottomInfoSurf);
@@ -31,6 +30,8 @@ function map_close() {
 			FMODGMS_Snd_Unload(music);
 			FMODGMS_Chan_RemoveChannel(channel);
 		}
+		
+		video_close();
 	}
 	
 	instance_destroy(objMain);
@@ -342,14 +343,43 @@ function music_load(_file = "") {
     announcement_play("anno_music_load_complete", 1000);
 }
 
-function image_load(_file = "") {
+function background_load(_file = "") {
 	if(_file == "")
-	    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
-	        program_directory, "Load Background File 加载背景图片");
+	    _file = get_open_filename_ext("Background Files (*.jpg;*.jpeg;*.png;*.mp4;*.avi;*.mkv)|*.jpg;*.jpeg;*.png;*.mp4;*.avi;*.mkv|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
+	        program_directory, "Load Background File 加载背景文件");
         
     if(_file == "") return;
     
-    if(!file_exists(_file)) {
+    switch(filename_ext(_file)) {
+    	case ".jpg":
+    	case ".jpeg":
+    	case ".png":
+    		image_load(_file);
+    		break;
+    	case ".mp4":
+    	case ".avi":
+    	case ".mkv":
+    		video_load(_file);
+    		break;
+    }
+}
+
+function video_load(_file) {
+	if(!file_exists(_file)) {
+        announcement_error("视频文件不存在。\n[scale, 0.8]路径："+_file);
+        return;
+    }
+    
+	objMain.bgVideoLoaded = false;
+	video_close();
+    
+	video_open(_file);
+	video_set_volume(0);
+	objManager.videoPath = _file;
+}
+
+function image_load(_file) {
+	if(!file_exists(_file)) {
         announcement_error(i18n_get("anno_graph_not_exists")+_file);
         return;
     }
@@ -593,6 +623,8 @@ function project_load(_file = "") {
     	musicPath = _contents.musicPath;
     	backgroundPath = _contents.backgroundPath;
     	chartPath = _contents.chartPath;
+    	if(variable_struct_exists(_contents, "videoPath"))
+    		videoPath = _contents.videoPath;
     }
     
     
@@ -604,7 +636,10 @@ function project_load(_file = "") {
     	map_load(chartPath);
     
     music_load(musicPath);
-    if(backgroundPath != "") image_load(backgroundPath);
+    if(backgroundPath != "")
+    	background_load(backgroundPath);
+    if(videoPath != "")
+    	background_load(videoPath);
     
     timing_point_reset();
     objEditor.timingPoints = _contents.timingPoints;

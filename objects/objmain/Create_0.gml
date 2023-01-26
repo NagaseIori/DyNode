@@ -26,6 +26,15 @@ depth = 0;
 		time_source_create(time_source_game, NOTE_DEACTIVATION_TIME/1000,
 		time_source_units_seconds, function() {note_deactivate_flush();}, [], -1, time_source_expire_after);
 	time_source_start(timesourceDeactivateFlush);
+	timesourceSyncVideo = 
+		time_source_create(time_source_game, 0.1,
+		time_source_units_seconds, function() {
+			if(bgVideoLoaded) {
+	        	video_seek_to(clamp(nowTime, 0, bgVideoLength));
+	        	video_resume();
+	        	show_debug_message("VIDEO SEEKING TO: "+ string(clamp(nowTime, 0, bgVideoLength)));
+	        }
+		}, [], 1);
 	
 #endregion
 
@@ -150,6 +159,14 @@ depth = 0;
         // Image
         bgImageFile = "";
         bgImageSpr = -1;
+        
+        // Video
+        bgVideoLoaded = false;
+        bgVideoLength = 0;
+        bgVideoPath = "";
+        bgVideoReloading = false;
+        
+        // Faint
         bgFaintAlpha = 1;
         animCurvFaintChan = animcurve_get_channel(curvBgGlow, "curve1");
         animCurvFaintEval = 0.5;
