@@ -370,8 +370,15 @@ function video_load(_file) {
     }
 	safe_video_free();
     
-	video_open(_file);
-	video_set_volume(0);
+    __tmp_handlevo = call_later(1, time_source_units_frames, function () {
+    	if(video_get_status() == video_status_closed) {
+    		video_open(objManager.videoPath);
+			video_set_volume(0);
+    	}
+    	else
+    		call_cancel(__tmp_handlevo);
+    }, true);
+	
 	objManager.videoPath = _file;
 }
 
