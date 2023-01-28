@@ -136,6 +136,7 @@ var _music_resync_request = false;
             FMODGMS_Chan_PauseChannel(channel);
             nowTime = musicLength;
             animTargetTime = musicLength;
+            safe_video_pause();
             
             nowPlaying = false;
         }
