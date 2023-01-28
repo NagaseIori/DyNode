@@ -114,7 +114,7 @@ if(room == rMain) {
 				chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
 			}
 			music_load(_str.mus);
-			if(_str.bg != "") image_load(_str.bg);
+			if(_str.bg != "") background_load(_str.bg);
 			if(_str.chart != "") map_load(_str.chart);
 			initVars = undefined;
 		}

@@ -48,6 +48,11 @@ var _music_resync_request = false;
                 * global.fpsAdjust;
         }
     }
+    
+    if(nowPlaying && keycheck(vk_enter)) {
+    	nowTime = 0;
+    	_music_resync_request = true;
+    }
 
 // Time Operation
 
@@ -131,6 +136,7 @@ var _music_resync_request = false;
             FMODGMS_Chan_PauseChannel(channel);
             nowTime = musicLength;
             animTargetTime = musicLength;
+            safe_video_pause();
             
             nowPlaying = false;
         }
@@ -168,6 +174,11 @@ var _music_resync_request = false;
     if(_music_resync_request) {
         sfmod_channel_set_position(nowTime, channel, sampleRate);
         nowTime = sfmod_channel_get_position(channel, sampleRate);
+        
+        if(bgVideoLoaded) {
+        	time_source_start(timesourceSyncVideo);
+        }
+        	
     }
 
 #endregion
