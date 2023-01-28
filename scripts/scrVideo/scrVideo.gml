@@ -64,11 +64,10 @@ function safe_video_free() {
         bgVideoDisplay = false;
         
         surface_free_f(bgVideoSurf);
-        
         if(video_get_status() != 0) {
             bgVideoDestroying = true;
-            video_close();
         }
+        video_close();
         
         show_debug_message("VIDEO FREE!!");
     }

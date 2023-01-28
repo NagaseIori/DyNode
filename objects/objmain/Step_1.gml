@@ -48,6 +48,11 @@ var _music_resync_request = false;
                 * global.fpsAdjust;
         }
     }
+    
+    if(nowPlaying && keycheck(vk_enter)) {
+    	nowTime = 0;
+    	_music_resync_request = true;
+    }
 
 // Time Operation
 
