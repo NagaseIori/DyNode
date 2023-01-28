@@ -10,7 +10,8 @@
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro NOTE_DEACTIVATION_TIME 200			// Every fixed time than deactivated notes in queue
 #macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
-#macro SYSFIX "\\\\?\\"
+#macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
+#macro VIDEO_UPDATE_FREQUENCY 60			// in hz
 
 // Global Configs
 

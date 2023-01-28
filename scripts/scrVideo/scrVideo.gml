@@ -2,6 +2,15 @@
 function safe_video_init() {
     with(objMain) {
         bgVideoSurf = surface_create(global.resolutionW, global.resolutionH);
+        
+        timesourceUpdateVideo =
+    		time_source_create(time_source_game, 1/VIDEO_UPDATE_FREQUENCY, 
+    		time_source_units_seconds,
+    		function() {
+    			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
+    				safe_video_update();
+    		}, [], -1);
+    	time_source_start(timesourceUpdateVideo);
     }
 }
 
@@ -53,11 +62,13 @@ function safe_video_free() {
         bgVideoLoaded = false;
         bgVideoReloading = false;
         bgVideoDisplay = false;
-        bgVideoDestroying = true;
+        
         surface_free_f(bgVideoSurf);
         
-        if(video_get_status() != 0)
+        if(video_get_status() != 0) {
+            bgVideoDestroying = true;
             video_close();
+        }
         
         show_debug_message("VIDEO FREE!!");
     }

@@ -377,12 +377,15 @@ function background_reset() {
 	}
 }
 
-function video_load(_file) {
+function video_load(_file, _safe = true) {
 	if(!file_exists(_file)) {
 	        announcement_error("video_playback_file_not_exists"+_file);
         return;
     }
-	safe_video_free();
+    if(_safe)
+		safe_video_free();
+	else
+		video_close();
     
     if(variable_global_exists("__tmp_handlevo") && global.__tmp_handlevo != undefined)
     	call_cancel(global.__tmp_handlevo);

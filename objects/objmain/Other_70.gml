@@ -22,7 +22,7 @@ else if(_type == "video_end") {
 	
 	// Idk why i have to add this line but this does work
 	if(objManager.videoPath != "") {
-		video_load(objManager.videoPath);
+		video_load(objManager.videoPath, false);
 		bgVideoReloading = true;
 		bgVideoDisplay = false;
 		show_debug_message_safe("Video reloading.");

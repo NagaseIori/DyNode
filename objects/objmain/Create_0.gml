@@ -33,13 +33,6 @@ depth = 0;
 	        	safe_video_seek_to(clamp(nowTime, 0, bgVideoLength));
 	        }
 		}, [], 1);
-	timesourceUpdateVideo =
-		time_source_create(time_source_game, 1/120, time_source_units_seconds,
-		function() {
-			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
-				safe_video_update();
-		}, [], -1);
-	time_source_start(timesourceUpdateVideo);
 	
 #endregion
 
