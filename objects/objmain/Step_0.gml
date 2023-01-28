@@ -10,6 +10,8 @@
         music_load();
     if(keycheck_down(vk_f4))
         background_load();
+    if(keycheck_down_ctrl(vk_f4))
+    	background_reset();
     if(keycheck_down(vk_f5))
     	map_export_xml();
     if(keycheck_down(vk_f6))

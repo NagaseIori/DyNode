@@ -363,6 +363,20 @@ function background_load(_file = "") {
     }
 }
 
+function background_reset() {
+	with(objManager) {
+		backgroundPath = "";
+		videoPath = "";
+		with(objMain) {
+			if(sprite_exists(bgImageSpr))
+				sprite_delete(bgImageSpr);
+			bgImageSpr = -1;
+		}
+		safe_video_free();
+		announcement_play("anno_background_reset");
+	}
+}
+
 function video_load(_file) {
 	if(!file_exists(_file)) {
         announcement_error("视频文件不存在。\n[scale, 0.8]路径："+_file);

@@ -114,6 +114,7 @@
     "notes_set_width": "设置宽度：$0\n共 $1 处",
     "notes_set_type": "设置类型：$0\n共 $1 处",
     "copy_notes": "复制音符共 $0 处",
-    "cut_notes": "剪切音符共 $0 处"
+    "cut_notes": "剪切音符共 $0 处",
+    "anno_background_reset": "背景重设完成。"
   }
 }
