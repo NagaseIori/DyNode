@@ -21,7 +21,7 @@ function safe_video_update() {
             draw_clear_alpha(c_black, 0);
             var _status = video_draw();
         	if(_status[0] == -1) {
-        		announcement_error("视频播放出现错误。");
+        		announcement_error("video_playback_error");
         		safe_video_free();
         		bgVideoLoaded = false;
         	}

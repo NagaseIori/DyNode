@@ -379,7 +379,7 @@ function background_reset() {
 
 function video_load(_file) {
 	if(!file_exists(_file)) {
-        announcement_error("视频文件不存在。\n[scale, 0.8]路径："+_file);
+	        announcement_error("video_playback_file_not_exists"+_file);
         return;
     }
 	safe_video_free();
@@ -396,7 +396,7 @@ function video_load(_file) {
     	}
     	else {
     		if(global.__tmp_handlevo_time >= 3000)
-    			announcement_error("打开视频文件超时。");
+    			announcement_error("video_playback_open_timeout");
     		call_cancel(global.__tmp_handlevo);
     		global.__tmp_handlevo = undefined;
     	}
