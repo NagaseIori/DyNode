@@ -9,7 +9,7 @@ if(_type == "video_start") {
 		safe_video_pause();
 		
 		if(!bgVideoReloading)
-			announcement_play("视频加载完毕。");
+			announcement_play("video_load_finished");
 	}
 	bgVideoDisplay = true;
 	bgVideoReloading = false;

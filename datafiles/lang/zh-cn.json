@@ -118,6 +118,7 @@
     "anno_background_reset": "背景重设完成。",
     "video_playback_error": "视频播放出现错误。",
     "video_playback_file_not_exists": "视频文件不存在。\n[scale, 0.8]路径: ",
-    "video_playback_open_timeout": "加载视频文件超时。该视频文件可能不受支持。"
+    "video_playback_open_timeout": "加载视频文件超时。该视频文件可能不受支持。",
+    "video_load_finished": "视频加载完毕。"
   }
 }
