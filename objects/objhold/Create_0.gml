@@ -43,7 +43,9 @@ _prop_init();
 		    
 		    sinst.beginTime = time;
     
-		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
+    		
+		    pHeight = objMain.playbackSpeed * 
+		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime))
 		        + dFromBottom + uFromTop;
 		    if(!global.simplify)
 		    	pHeight = max(pHeight, originalHeight);

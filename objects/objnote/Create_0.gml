@@ -52,6 +52,7 @@ image_yscale = global.scaleYAdjust;
     recordRequest = false;
     selectInbound = false;			// If time inbound multi selection
     selectUnlock = false;			// If the state in last step is select
+    selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
     
     animSpeed = 0.4;

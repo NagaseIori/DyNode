@@ -4,15 +4,23 @@ if(!drawVisible) return;
     
     var _nx, _ny;
     
-    if(side == 0) {
-        _nx = x;
-        _ny = min(y, global.resolutionH - objMain.targetLineBelow);
+    if(!selectTolerance) {
+    	if(side == 0) {
+	        _nx = x;
+	        _ny = min(y, global.resolutionH - objMain.targetLineBelow);
+	    }
+	    else {
+	        _nx = side == 2? min(x, global.resolutionW - objMain.targetLineBeside) :
+	                        max(x, objMain.targetLineBeside);
+	        _ny = y;
+	    }
     }
     else {
-        _nx = side == 2? min(x, global.resolutionW - objMain.targetLineBeside) :
-                        max(x, objMain.targetLineBeside);
-        _ny = y;
+    	_nx = x;
+    	_ny = y;
     }
+    
+    
 
 // Draw Bg
     
