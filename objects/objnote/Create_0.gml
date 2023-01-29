@@ -9,15 +9,14 @@ image_yscale = global.scaleYAdjust;
     width = 2.0;
     position = 2.5;
     side = 0;
-    // offset = 0;
     bar = 0;
     time = 0;
-    nid = -1; // Note id
-    sid = -1; // Sub id
-    sinst = -999; // Sub instance id
-    finst = -999; // Father instance id
-    noteType = 0; // 0 Note 1 Chain 2 Hold
-    arrayPos = 0; // Position in chartNotesArray
+    nid = -1;						// Note id
+    sid = -1;						// Sub id
+    sinst = -999;					// Sub instance id
+    finst = -999;					// Father instance id
+    noteType = 0;					// 0 Note 1 Chain 2 Hold
+    arrayPos = 0;					// Position in chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -25,12 +24,12 @@ image_yscale = global.scaleYAdjust;
     origPosition = position;
     origY = y;
     origX = x;
-    origLength = 0; // For hold
-    origSubTime = 0; // For hold's sub
-    origProp = -1; // For Undo & Redo
-    fixedLastTime = -1; // For hold's copy and paste
+    origLength = 0;					// For hold
+    origSubTime = 0;				// For hold's sub
+    origProp = -1;					// For Undo & Redo
+    fixedLastTime = -1; 			// For hold's copy and paste
     isDragging = false;
-    nodeRadius = 22; // in Pixels
+    nodeRadius = 22;				// in Pixels
     nodeColor = c_blue;
     
     // For Hold & Sub
@@ -135,12 +134,9 @@ image_yscale = global.scaleYAdjust;
                 
                 part_emitter_burst(partSysNote, partEmit, partTypeNoteDL, _num);
                 part_emitter_burst(partSysNote, partEmit, partTypeNoteDR, _num);
-                // part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-                // part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
             }
             else if(_type == 1) {
                 _parttype_hold_init(partTypeHold, 1, _ang);
-                // part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
                 part_emitter_burst(partSysNote, partEmit, partTypeHold, _num);
             }
         }

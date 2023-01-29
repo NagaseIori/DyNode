@@ -3,7 +3,7 @@
 if(editorMode == 4) {
     // If the note being selected selectable
     var _selectable = instance_exists(editorSelectSingleTarget) && !keycheck_down(vk_up) && !editorSelectInbound;
-    // Detect mouse's drag to enable selecting area
+    // Detect if the mouse is dragging to enable selecting area
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
             editorSelectArea = true;
@@ -25,7 +25,7 @@ if(editorMode == 4) {
     }
     
     if(editorSelectResetRequest) {
-        // For wheel width adjust undo
+        // For mousewheel width adjust undo
         if(editorWidthAdjustTime < editorWidthAdjustTimeThreshold) {
             editorWidthAdjustTime = editorWidthAdjustTimeThreshold + 1;
             with(objNote) if(state == stateSelected) {
