@@ -4,7 +4,6 @@
 event_inherited();
 
 noteType = 2;
-edgeScaleY = 1;
 holdAlpha = 0.8;
 bgLightness = 0.4;
 
@@ -52,8 +51,6 @@ _prop_init();
     
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
-    
-		    edgeScaleY = min(pHeight, side==0?global.resolutionH:global.resolutionW) / originalHeight;
         }
     }
 
