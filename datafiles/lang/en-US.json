@@ -114,6 +114,11 @@
     "notes_set_width": "Set width：$0\nof $1",
     "notes_set_type": "Set type：$0\nof $1",
     "copy_notes": "Copy notes of $0",
-    "cut_notes": "Cut notes of $0"
+    "cut_notes": "Cut notes of $0",
+    "anno_background_reset": "Background reset complete.",
+    "video_playback_error": "There was an error playing the video.",
+    "video_playback_file_not_exists": "Video file does not exist.\n[scale, 0.8] path: ",
+    "video_playback_open_timeout": "Loading video file timeout. The video file may not be supported.",
+    "video_load_finished": "Video loading completed."
   }
 }
