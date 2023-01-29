@@ -275,8 +275,12 @@ image_yscale = global.scaleYAdjust;
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
-            if((mouse_isclick_l() && _mouse_inbound_check())
-                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area() && !editor_select_is_dragging())) {
+        	var _mouse_click_to_select = mouse_isclick_l() && _mouse_inbound_check();
+        	var _mouse_drag_to_select = mouse_ishold_l() && _mouse_inbound_check(1) 
+        		&& !editor_select_is_area() && !editor_select_is_dragging()
+        		&& !keyboard_check(vk_control);
+        	
+            if(_mouse_click_to_select || _mouse_drag_to_select) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }

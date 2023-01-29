@@ -1,7 +1,10 @@
 {
+  "resourceType": "GMWindowsOptions",
+  "resourceVersion": "1.1",
+  "name": "Windows",
   "option_windows_display_name": "DyNode",
   "option_windows_executable_name": "DyNode.exe",
-  "option_windows_version": "0.2.0.0",
+  "option_windows_version": "0.1.9.0",
   "option_windows_company_info": "",
   "option_windows_product_info": "DyNode",
   "option_windows_copyright_info": "NagaseIori © 2022",
@@ -28,9 +31,4 @@
   "option_windows_enable_steam": false,
   "option_windows_disable_sandbox": true,
   "option_windows_steam_use_alternative_launcher": false,
-  "option_windows_use_x64": true,
-  "resourceVersion": "1.1",
-  "name": "Windows",
-  "tags": [],
-  "resourceType": "GMWindowsOptions",
 }
