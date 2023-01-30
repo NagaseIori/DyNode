@@ -7,7 +7,7 @@
   "option_windows_version": "0.1.9.0",
   "option_windows_company_info": "",
   "option_windows_product_info": "DyNode",
-  "option_windows_copyright_info": "NagaseIori © 2022",
+  "option_windows_copyright_info": "NagaseIori © 2023",
   "option_windows_description_info": "DyNode - Yet another Dynamix chart tool",
   "option_windows_display_cursor": true,
   "option_windows_icon": "icons/icon.ico",

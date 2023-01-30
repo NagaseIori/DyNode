@@ -18,7 +18,7 @@
 global.configPath = program_directory + "config.json";
 
 
-global.version = "v0.1.8"
+global.version = "v0.1.9"
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
