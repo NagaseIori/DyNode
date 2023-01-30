@@ -234,6 +234,7 @@
     {"id":{"name":"objUIStringInput","path":"objects/objUIStringInput/objUIStringInput.yy",},"order":7,},
     {"id":{"name":"CleanEllipse","path":"scripts/CleanEllipse/CleanEllipse.yy",},"order":4,},
     {"id":{"name":"__global_object_depths","path":"scripts/__global_object_depths/__global_object_depths.yy",},"order":3,},
+    {"id":{"name":"scrVideo","path":"scripts/scrVideo/scrVideo.yy",},"order":12,},
     {"id":{"name":"scribble_anim_rainbow","path":"scripts/scribble_anim_rainbow/scribble_anim_rainbow.yy",},"order":4,},
     {"id":{"name":"scribble_font_has_character","path":"scripts/scribble_font_has_character/scribble_font_has_character.yy",},"order":11,},
     {"id":{"name":"sprMIXshadow","path":"sprites/sprMIXshadow/sprMIXshadow.yy",},"order":1,},

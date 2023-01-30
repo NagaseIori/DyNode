@@ -9,7 +9,9 @@
     if(keycheck_down(vk_f3))
         music_load();
     if(keycheck_down(vk_f4))
-        image_load();
+        background_load();
+    if(keycheck_down_ctrl(vk_f4))
+    	background_reset();
     if(keycheck_down(vk_f5))
     	map_export_xml();
     if(keycheck_down(vk_f6))
@@ -157,6 +159,10 @@
         else {
             FMODGMS_Chan_PauseChannel(channel);
             nowPlaying = false;
+            
+            if(bgVideoLoaded) {
+            	safe_video_pause();
+            }
         }
     }
 
@@ -166,6 +172,11 @@
 
 	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
+    
+    if(editor_get_editmode()==5 && safe_video_check_loaded())
+    	bgVideoAlpha = lerp_a(bgVideoAlpha, 1, animSpeed);
+    else
+    	bgVideoAlpha = lerp_a(bgVideoAlpha, 0, animSpeed);
     
 #endregion
 

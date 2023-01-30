@@ -2,8 +2,8 @@
 #region MAP FUNCTIONS
 
 function map_close() {
-	
 	with(objMain) {
+		safe_video_free();
 		kawase_destroy(kawaseArr);
 		surface_free_f(bottomInfoSurf);
 		
@@ -342,14 +342,74 @@ function music_load(_file = "") {
     announcement_play("anno_music_load_complete", 1000);
 }
 
-function image_load(_file = "") {
+function background_load(_file = "") {
 	if(_file == "")
-	    _file = get_open_filename_ext("Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
-	        program_directory, "Load Background File 加载背景图片");
+	    _file = get_open_filename_ext("Background Files (*.jpg;*.jpeg;*.png;*.mp4;*.avi;*.mkv)|*.jpg;*.jpeg;*.png;*.mp4;*.avi;*.mkv|JPG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png", "",
+	        program_directory, "Load Background File 加载背景文件");
         
     if(_file == "") return;
     
-    if(!file_exists(_file)) {
+    switch(filename_ext(_file)) {
+    	case ".jpg":
+    	case ".jpeg":
+    	case ".png":
+    		image_load(_file);
+    		break;
+    	case ".mp4":
+    	case ".avi":
+    	case ".mkv":
+    		video_load(_file);
+    		break;
+    }
+}
+
+function background_reset() {
+	with(objManager) {
+		backgroundPath = "";
+		videoPath = "";
+		with(objMain) {
+			if(sprite_exists(bgImageSpr))
+				sprite_delete(bgImageSpr);
+			bgImageSpr = -1;
+		}
+		safe_video_free();
+		announcement_play("anno_background_reset");
+	}
+}
+
+function video_load(_file, _safe = true) {
+	if(!file_exists(_file)) {
+	        announcement_error("video_playback_file_not_exists"+_file);
+        return;
+    }
+    if(_safe)
+		safe_video_free();
+	else
+		video_close();
+    
+    if(variable_global_exists("__tmp_handlevo") && global.__tmp_handlevo != undefined)
+    	call_cancel(global.__tmp_handlevo);
+    global.__tmp_handlevo_time = 0;
+    global.__tmp_handlevo = call_later(1, time_source_units_frames, function () {
+    	if(delta_time <= 1000000)
+    		global.__tmp_handlevo_time += delta_time / 1000;
+    	if(video_get_status() == video_status_closed && global.__tmp_handlevo_time < 3000) {
+    		video_open(objManager.videoPath);
+			video_set_volume(0);
+    	}
+    	else {
+    		if(global.__tmp_handlevo_time >= 3000)
+    			announcement_error("video_playback_open_timeout");
+    		call_cancel(global.__tmp_handlevo);
+    		global.__tmp_handlevo = undefined;
+    	}
+    }, true);
+	
+	objManager.videoPath = _file;
+}
+
+function image_load(_file) {
+	if(!file_exists(_file)) {
         announcement_error(i18n_get("anno_graph_not_exists")+_file);
         return;
     }
@@ -593,27 +653,33 @@ function project_load(_file = "") {
     	musicPath = _contents.musicPath;
     	backgroundPath = _contents.backgroundPath;
     	chartPath = _contents.chartPath;
+    	if(variable_struct_exists(_contents, "videoPath"))
+    		videoPath = _contents.videoPath;
+    	else
+    		videoPath = "";
+    	
+    	if(variable_struct_exists(_contents, "charts")) {
+	    	objMain.animTargetTime = 0;
+	    	map_load(_contents.charts);
+	    }
+	    else
+	    	map_load(chartPath);
+	    
+	    music_load(musicPath);
+	    if(backgroundPath != "")
+	    	background_load(backgroundPath);
+	    if(videoPath != "")
+	    	background_load(videoPath);
+	    	
+	    timing_point_reset();
+	    objEditor.timingPoints = _contents.timingPoints;
+	    timing_point_sort();
+	    
+	    projectPath = _file;
+	    
+	    if(variable_struct_exists(_contents, "settings"))
+	    	project_set_settings(_contents.settings);
     }
-    
-    
-    if(variable_struct_exists(_contents, "charts")) {
-    	objMain.animTargetTime = 0;
-    	map_load(_contents.charts);
-    }
-    else
-    	map_load(chartPath);
-    
-    music_load(musicPath);
-    if(backgroundPath != "") image_load(backgroundPath);
-    
-    timing_point_reset();
-    objEditor.timingPoints = _contents.timingPoints;
-    timing_point_sort();
-    
-    projectPath = _file;
-    
-    if(variable_struct_exists(_contents, "settings"))
-    	project_set_settings(_contents.settings);
     
     ///// Old version workaround
     
@@ -647,6 +713,7 @@ function project_save_as(_file = "") {
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
+		videoPath: objManager.videoPath,
 		timingPoints: objEditor.timingPoints,
 		charts: [],
 		settings: project_get_settings()

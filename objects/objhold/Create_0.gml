@@ -4,9 +4,8 @@
 event_inherited();
 
 noteType = 2;
-edgeScaleY = 1;
 holdAlpha = 0.8;
-bgLightness = 0.4;
+bgLightness = 0.6;
 
 image_yscale = 0.6 * global.scaleYAdjust;
 
@@ -43,15 +42,15 @@ _prop_init();
 		    
 		    sinst.beginTime = time;
     
-		    pHeight = objMain.playbackSpeed * (sinst.time - max(time, objMain.nowTime))
+    		
+		    pHeight = objMain.playbackSpeed * 
+		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime))
 		        + dFromBottom + uFromTop;
 		    if(!global.simplify)
 		    	pHeight = max(pHeight, originalHeight);
     
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
-    
-		    edgeScaleY = min(pHeight, side==0?global.resolutionH:global.resolutionW) / originalHeight;
         }
     }
 

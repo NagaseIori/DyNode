@@ -9,15 +9,14 @@ image_yscale = global.scaleYAdjust;
     width = 2.0;
     position = 2.5;
     side = 0;
-    // offset = 0;
     bar = 0;
     time = 0;
-    nid = -1; // Note id
-    sid = -1; // Sub id
-    sinst = -999; // Sub instance id
-    finst = -999; // Father instance id
-    noteType = 0; // 0 Note 1 Chain 2 Hold
-    arrayPos = 0; // Position in chartNotesArray
+    nid = -1;						// Note id
+    sid = -1;						// Sub id
+    sinst = -999;					// Sub instance id
+    finst = -999;					// Father instance id
+    noteType = 0;					// 0 Note 1 Chain 2 Hold
+    arrayPos = 0;					// Position in chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -25,12 +24,12 @@ image_yscale = global.scaleYAdjust;
     origPosition = position;
     origY = y;
     origX = x;
-    origLength = 0; // For hold
-    origSubTime = 0; // For hold's sub
-    origProp = -1; // For Undo & Redo
-    fixedLastTime = -1; // For hold's copy and paste
+    origLength = 0;					// For hold
+    origSubTime = 0;				// For hold's sub
+    origProp = -1;					// For Undo & Redo
+    fixedLastTime = -1; 			// For hold's copy and paste
     isDragging = false;
-    nodeRadius = 22; // in Pixels
+    nodeRadius = 22;				// in Pixels
     nodeColor = c_blue;
     
     // For Hold & Sub
@@ -52,6 +51,8 @@ image_yscale = global.scaleYAdjust;
     animTargetInfoA = 0;
     recordRequest = false;
     selectInbound = false;			// If time inbound multi selection
+    selectUnlock = false;			// If the state in last step is select
+    selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
     
     animSpeed = 0.4;
@@ -134,12 +135,9 @@ image_yscale = global.scaleYAdjust;
                 
                 part_emitter_burst(partSysNote, partEmit, partTypeNoteDL, _num);
                 part_emitter_burst(partSysNote, partEmit, partTypeNoteDR, _num);
-                // part_particles_create(partSysNote, _x, _y, partTypeNoteDL, _num/2);
-                // part_particles_create(partSysNote, _x, _y, partTypeNoteDR, _num/2);
             }
             else if(_type == 1) {
                 _parttype_hold_init(partTypeHold, 1, _ang);
-                // part_particles_create(partSysNote, _x, _y, partTypeHold, _num);
                 part_emitter_burst(partSysNote, partEmit, partTypeHold, _num);
             }
         }
@@ -228,6 +226,8 @@ image_yscale = global.scaleYAdjust;
     
     // State Normal
     stateNormal = function() {
+    	if(stateString == "SEL")
+    		selectUnlock = true;
         stateString = "NM";
         animTargetA = 1.0;
         animTargetLstA = lastAlphaL;
@@ -256,7 +256,9 @@ image_yscale = global.scaleYAdjust;
         // If inbound then the state wont change
         if(!selectInbound) {
         	if(time <= _limTime) {
-	            _create_shadow();
+        		// If the state in last step is SELECT then skip create_shadow
+        		if(!selectUnlock)
+	            	_create_shadow();
 	            state = stateLast;
 	            state();
 	        }
@@ -270,8 +272,12 @@ image_yscale = global.scaleYAdjust;
         // Check Selecting
         if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
-            if((mouse_isclick_l() && _mouse_inbound_check())
-                || (mouse_ishold_l() && _mouse_inbound_check(1) && !editor_select_is_area() && !editor_select_is_dragging())) {
+        	var _mouse_click_to_select = mouse_isclick_l() && _mouse_inbound_check();
+        	var _mouse_drag_to_select = mouse_ishold_l() && _mouse_inbound_check(1) 
+        		&& !editor_select_is_area() && !editor_select_is_dragging()
+        		&& !keyboard_check(vk_control);
+        	
+            if(_mouse_click_to_select || _mouse_drag_to_select) {
                 objEditor.editorSelectSingleTarget =
                     editor_select_compare(objEditor.editorSelectSingleTarget, id);
             }
