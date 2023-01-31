@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
-  "isCompatibility": false,
-  "parent": {
-    "name": "Batches",
-    "path": "folders/Extensions/Clean Shapes/Batches.yy",
-  },
+  "resourceType": "GMScript",
   "resourceVersion": "1.0",
   "name": "CleanBatchEndReturnVertexBuffer",
-  "tags": [],
-  "resourceType": "GMScript",
+  "isCompatibility": false,
+  "isDnD": false,
+  "parent": {
+    "name": "Batches",
+    "path": "folders/Clean Shapes/Batches.yy",
+  },
 }

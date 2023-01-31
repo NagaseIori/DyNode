@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
-  "isCompatibility": false,
-  "parent": {
-    "name": "Shapes",
-    "path": "folders/Extensions/Clean Shapes/Shapes.yy",
-  },
+  "resourceType": "GMScript",
   "resourceVersion": "1.0",
   "name": "CleanSpline",
-  "tags": [],
-  "resourceType": "GMScript",
+  "isCompatibility": false,
+  "isDnD": false,
+  "parent": {
+    "name": "Shapes",
+    "path": "folders/Clean Shapes/Shapes.yy",
+  },
 }
