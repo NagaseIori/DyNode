@@ -18,7 +18,7 @@
 
 <br>
 <br>
-<h2 align="center">Contributors</h1>
+<h2 align="center">Contributors</h2>
 
 感谢以下帮助并支持本项目的人们。
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -31,15 +31,6 @@
     </tr>
   </tbody>
 </table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
