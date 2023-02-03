@@ -7,9 +7,8 @@
 <p align="center">
 <a href="https://github.com/NagaseIori/DyNode/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NagaseIori/DyNode?style=flat"></a> 
 <a href="https://crowdin.com/project/dynode"><img src="https://badges.crowdin.net/dynode/localized.svg"></a>
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<a href="#contributors-"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat"></a>
+  
 <br>
   <strong>
   <a href="https://dyn.iorinn.moe/guide">Documentation</a> |
@@ -17,8 +16,9 @@
   </strong>
 </p>
 
-
-## Contributors
+<br>
+<br>
+<h2 align="center">Contributors</h1>
 
 感谢以下帮助并支持本项目的人们。
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
