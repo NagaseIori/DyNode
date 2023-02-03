@@ -22,6 +22,39 @@ function array_fill(arr, val, index, num) {
 		arr[i] = val;
 }
 
+#region HOLD DRAW
+
+function generate_hold_sprite(_height) {
+	var _ret = [];
+	
+	
+	var _w = sprite_get_width(sprHold);
+	var _h = sprite_get_height(sprHold);
+	
+	gpu_set_blendmode_ext(bm_one, bm_zero);
+	// Vertical Sprite
+	var _surf = surface_create(_w, _height);
+	surface_set_target(_surf);
+		for(var i=0; i<_height; i+=_h)
+			draw_sprite(sprHold, 0, 0, i);
+	surface_reset_target();
+	_ret[0] = sprite_create_from_surface(_surf, 0, 0, _w, _height, false, false, 0, 0);
+	surface_free_f(_surf);
+	
+	// Horizontal Sprite
+	_surf = surface_create(_height, _w);
+	surface_set_target(_surf);
+		draw_sprite_ext(_ret[0], 0, 0, _w, 1, 1, 90, c_white, 1);
+	surface_reset_target();
+	_ret[1] = sprite_create_from_surface(_surf, 0, 0, _height, _w, false, false, 0, 0);
+	surface_free_f(_surf);
+	gpu_set_blendmode(bm_normal);
+	
+	return _ret;
+}
+
+#endregion
+
 #region DRAW
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);

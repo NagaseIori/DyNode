@@ -55,6 +55,7 @@ global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 // Generate Temp Sprite
 
 global.sprLazer = generate_lazer_sprite(2000);
+global.sprHoldBG = generate_hold_sprite(global.resolutionW + 4*sprite_get_height(sprHold));
 
 // Set GUI & Window Resolution
 
