@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "NagaseIori",
+      "name": "NordLandeW",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31349569?v=4",
+      "profile": "https://acxblog.site",
+      "contributions": [
+        "projectManagement",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "DyNode",
+  "projectOwner": "NagaseIori"
+}
