@@ -7,7 +7,6 @@
 <p align="center">
 <a href="https://github.com/NagaseIori/DyNode/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NagaseIori/DyNode?style=flat"></a> 
 <a href="https://crowdin.com/project/dynode"><img src="https://badges.crowdin.net/dynode/localized.svg"></a>
-<a href="#contributors-"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat"></a>
   
 <br>
   <strong>
