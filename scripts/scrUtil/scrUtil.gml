@@ -35,8 +35,7 @@ function generate_hold_sprite(_height) {
 	// Vertical Sprite
 	var _surf = surface_create(_w, _height);
 	surface_set_target(_surf);
-		for(var i=0; i<_height; i+=_h)
-			draw_sprite(sprHold, 0, 0, i);
+		draw_sprite_stretched(sprHold, 0, 0, 0, _w, _height);
 	surface_reset_target();
 	_ret[0] = sprite_create_from_surface(_surf, 0, 0, _w, _height, false, false, 0, 0);
 	surface_free_f(_surf);
@@ -59,8 +58,6 @@ function generate_hold_sprite(_height) {
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);
 	var _yscl = h / sprite_get_height(sprite);
-	// better_scaling_draw_sprite(
-	// 	sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha, 1);
 	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
 

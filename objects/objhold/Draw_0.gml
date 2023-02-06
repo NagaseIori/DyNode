@@ -111,10 +111,10 @@ if(side == 0) {
 			.Rounding(2)
 			.Draw();
 	else
-	    better_scaling_draw_sprite(sprHoldEdge, image_number,
+	    draw_sprite_ext(sprHoldEdge, image_number,
 	    	_nx - pWidth/2,
 	    	_ny + dFromBottom,
-	    	image_xscale, _scly, image_angle, image_blend, image_alpha, 1);
+	    	image_xscale, _scly, image_angle, image_blend, image_alpha);
 }
 else {
 	
@@ -134,8 +134,8 @@ else {
 				.Draw();
 	}
 	else
-	    better_scaling_draw_sprite(sprHoldEdge, image_number,
+	    draw_sprite_ext(sprHoldEdge, image_number,
 	        _nx + dFromBottom * (side == 1? -1: 1),
 	        _ny + pWidth/2 * (side == 1? -1: 1), 
-	        image_xscale, _scly, image_angle, image_blend, image_alpha, 1);
+	        image_xscale, _scly, image_angle, image_blend, image_alpha);
 }
