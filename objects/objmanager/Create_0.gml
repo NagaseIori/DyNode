@@ -55,6 +55,7 @@ global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 // Generate Temp Sprite
 
 global.sprLazer = generate_lazer_sprite(2000);
+global.sprHoldBG = generate_hold_sprite(global.resolutionW + 4*sprite_get_height(sprHold));
 
 // Set GUI & Window Resolution
 
@@ -91,6 +92,7 @@ instance_create(x, y, objInput);
 // Fonts Initialization
 
 global._notoFont = font_add("fonts/NotoSansCJKkr-Black.otf", 30, false, false, 32, 65535);
+font_enable_sdf(global._notoFont, true);
 scribble_anim_cycle(0.2, 255, 255);
 scribble_font_bake_shadow("fOrbitron48", "fOrbitron48s", 0, 10, c_black, 0.4, 0, true);
 scribble_font_bake_shadow("fDynamix16", "fDynamix16s", 0, 2, c_black, 0.3, 0, true);

@@ -1,11 +1,16 @@
-#macro __CLEAN_VERSION  "1.0.12"
-#macro __CLEAN_DATE     "2021-05-03"
+#macro __CLEAN_VERSION  "1.1.0"
+#macro __CLEAN_DATE     "2023-01-28"
 #macro __CLEAN_FLAG_A   65536  // 2^16
 #macro __CLEAN_FLAG_B   131072 // 2^17
 #macro __CLEAN_FLAG_AB  196608 // 2^16 + 2^17
 
-__CleanTrace("Welcome to Clean Shapes by @jujuadams, with help from Alice Pedersen (@bakumoe) and @XorDev! This is version ", __CLEAN_VERSION, ", ", __CLEAN_DATE);
+__CleanTrace("Welcome to Clean Shapes by @jujuadams, Alice Pedersen (@bakumoe), and @XorDev! This is version ", __CLEAN_VERSION, ", ", __CLEAN_DATE);
 __CleanTrace("Made using a ton of shader code borrowed from Inigo Quilez");
+
+if (os_browser != browser_not_a_browser)
+{
+    __CleanError("Clean Shapes is incompatible with the HTML5 export target");
+}
 
 global.__cleanBatch     = undefined;
 global.__cleanAntialias = CLEAN_DEFAULT_ANTIALIAS;
@@ -14,8 +19,6 @@ global.__cleanMatrixIdentity = false;
 global.__cleanMatrix         = matrix_build_identity();
 global.__cleanMatrixOriginX  = 0;
 global.__cleanMatrixOriginY  = 0;
-
-global.__clean_u_vOutputSize = shader_get_uniform(__shdCleanAntialias, "u_vOutputSize");
 
 vertex_format_begin();
 vertex_format_add_position_3d();

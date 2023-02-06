@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
-  "isCompatibility": false,
-  "parent": {
-    "name": "(System)",
-    "path": "folders/Extensions/Clean Shapes/(System).yy",
-  },
+  "resourceType": "GMScript",
   "resourceVersion": "1.0",
   "name": "__CleanSystem",
-  "tags": [],
-  "resourceType": "GMScript",
+  "isCompatibility": false,
+  "isDnD": false,
+  "parent": {
+    "name": "(System)",
+    "path": "folders/Clean Shapes/(System).yy",
+  },
 }

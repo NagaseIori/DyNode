@@ -3,13 +3,24 @@ function safe_video_init() {
     with(objMain) {
         bgVideoSurf = surface_create(global.resolutionW, global.resolutionH);
         
-        timesourceUpdateVideo =
-    		time_source_create(time_source_game, 1/VIDEO_UPDATE_FREQUENCY, 
-    		time_source_units_seconds,
-    		function() {
-    			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
-    				safe_video_update();
-    		}, [], -1);
+        if(room_speed > VIDEO_UPDATE_FREQUENCY) {
+            timesourceUpdateVideo =
+        		time_source_create(time_source_game, 1/VIDEO_UPDATE_FREQUENCY, 
+        		time_source_units_seconds,
+        		function() {
+        			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
+        				safe_video_update();
+        		}, [], -1);
+        }
+        else {
+            timesourceUpdateVideo =
+        		time_source_create(time_source_game, 1, 
+        		time_source_units_frames,
+        		function() {
+        			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
+        				safe_video_update();
+        		}, [], -1);
+        }
     	time_source_start(timesourceUpdateVideo);
     }
 }

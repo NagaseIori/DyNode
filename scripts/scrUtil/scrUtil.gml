@@ -22,12 +22,42 @@ function array_fill(arr, val, index, num) {
 		arr[i] = val;
 }
 
+#region HOLD DRAW
+
+function generate_hold_sprite(_height) {
+	var _ret = [];
+	
+	
+	var _w = sprite_get_width(sprHold);
+	var _h = sprite_get_height(sprHold);
+	
+	gpu_set_blendmode_ext(bm_one, bm_zero);
+	// Vertical Sprite
+	var _surf = surface_create(_w, _height);
+	surface_set_target(_surf);
+		draw_sprite_stretched(sprHold, 0, 0, 0, _w, _height);
+	surface_reset_target();
+	_ret[0] = sprite_create_from_surface(_surf, 0, 0, _w, _height, false, false, 0, 0);
+	surface_free_f(_surf);
+	
+	// Horizontal Sprite
+	_surf = surface_create(_height, _w);
+	surface_set_target(_surf);
+		draw_sprite_ext(_ret[0], 0, 0, _w, 1, 1, 90, c_white, 1);
+	surface_reset_target();
+	_ret[1] = sprite_create_from_surface(_surf, 0, 0, _height, _w, false, false, 0, 0);
+	surface_free_f(_surf);
+	gpu_set_blendmode(bm_normal);
+	
+	return _ret;
+}
+
+#endregion
+
 #region DRAW
 function draw_sprite_stretched_exxt(sprite, subimg, x, y, w, h, rot, col, alpha) {
 	var _xscl = w / sprite_get_width(sprite);
 	var _yscl = h / sprite_get_height(sprite);
-	// better_scaling_draw_sprite(
-	// 	sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha, 1);
 	draw_sprite_ext(sprite, subimg, x, y, _xscl, _yscl, rot, col, alpha);
 }
 
@@ -264,7 +294,6 @@ function random_id(_length) {
 }
 
 // Compress sprite using better scaling
-
 function compress_sprite(_spr, _scale, _center = false){
 	var _w = sprite_get_width(_spr);
 	var _h = sprite_get_height(_spr);
@@ -339,68 +368,6 @@ function get_blur_shapesurf(func) {
 	surface_free_f(_temp);
 	
 	return _surf;
-}
-
-// Array Fast Unstable Sort
-function array_sort_f(array, compare) {
-    var length = array_length(array);
-    if(length == 0) return;
-    
-    var i, j;
-    var lb, ub;
-    var lb_stack = [], ub_stack = [];
-    
-    var stack_pos = 1;
-    var pivot_pos;
-    var pivot;
-    var temp;
-    
-    lb_stack[1] = 0;
-    ub_stack[1] = length - 1;
-    
-    do {
-        lb = lb_stack[stack_pos];
-        ub = ub_stack[stack_pos];
-        stack_pos--;
-        
-        do {
-            pivot_pos = (lb + ub) >> 1;
-            i = lb;
-            j = ub;
-            pivot = array[pivot_pos];
-            
-            do {
-                while (compare(array[i], pivot)) i++;
-                while (compare(pivot, array[j])) j--;
-                
-                if (i <= j) {
-                    temp = array[i];
-                    array[@ i] = array[j];
-                    array[@ j] = temp;
-                    i++;
-                    j--;
-                }
-            } until (i > j);
-            
-            if (i < pivot_pos) {
-                if (i < ub) {
-                    stack_pos++;
-                    lb_stack[stack_pos] = i;
-                    ub_stack[stack_pos] = ub;
-                }
-                
-                ub = j;
-            } else {
-                if (j > lb) {
-                    stack_pos++;
-                    lb_stack[stack_pos] = lb;
-                    ub_stack[stack_pos] = j;
-                }
-                
-                lb = i;
-            }
-        } until (lb >= ub);
-    } until (stack_pos == 0);
 }
 
 function surface_checkate(_surf, _w, _h) {

@@ -17,7 +17,7 @@ if(input != "") {
     else {
         draw_set_font(global._notoFont);
         draw_set_halign(fa_left); draw_set_valign(fa_top);
-        draw_text(x, y+scriHeight, input);
+        draw_text_transformed(x, y+scriHeight, input, 0.75, 0.75, 0);
     }
 }
 else {

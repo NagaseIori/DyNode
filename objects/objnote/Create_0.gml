@@ -146,6 +146,8 @@ image_yscale = global.scaleYAdjust;
     _create_shadow = function (_force = false) {
         if(!objMain.nowPlaying && !_force)
             return;
+        if(objMain.topBarMousePressed)
+        	return;
         
         // Play Sound
         if(objMain.hitSoundOn)

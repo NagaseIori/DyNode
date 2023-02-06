@@ -89,8 +89,8 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 else animTargetNodeA = 0;
 
 if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
-    scribble(stateString + " " + string(depth) + " " + string(arrayPos))
-    	.starting_format("fDynamix16", c_white)
-    	.align(fa_center, fa_top)
-    	.draw(x, y)
+	draw_set_font(fDynamix16)
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_top);
+    draw_text(x, y+5, stateString + " " + string(depth) + " " + string(arrayPos))
 }

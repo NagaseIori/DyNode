@@ -23,9 +23,7 @@ if(!drawVisible) return;
     
 
 // Draw Bg
-    
-    var _spr = side == 0? sprHold: sprHoldR;
-    var _sprg = side == 0? sprHoldGrey: sprHoldGreyR;
+
     var _h = sprite_get_height(sprHold), _th = pHeight - dFromBottom - uFromTop,
     _w = sprite_get_width(sprHold), _rw = pWidth - lFromLeft - rFromRight;
     var _sclx = _rw / _w;
@@ -47,7 +45,7 @@ if(!drawVisible) return;
     
     if(side == 0 && _th > global.resolutionH + 2*_h)
     	_th -= floor((_th - global.resolutionH - 2*_h) / _h) * _h;
-    else if(side >= 1 && _th > global.resolutionW + _h)
+    else if(side >= 1 && _th > global.resolutionW + 2*_h)
     	_th -= floor((_th - global.resolutionW - 2*_h) / _h) * _h;
     
     _scly = min(_scly, (side==0?global.resolutionH:global.resolutionW)+3*_h) / originalHeight;
@@ -69,31 +67,32 @@ if(!drawVisible) return;
     
     if(!global.simplify) {
     	if(side == 0) {
-	        for(var _i = _th; _i >= 0; _i -= _h) {
-	            draw_sprite_part_ext(_spr, 0, 0, 0, 
-	                _w, min(_h, _i), _nx - _rw/2, _ny - _i,
-	                _sclx, 1, c_white, holdAlpha * image_alpha);
-	            gpu_set_blendmode(bm_add);
-		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
-		                _w, min(_h, _i), _nx - _rw/2, _ny - _i,
-		                _sclx, 1, c_green, lastAlpha * image_alpha * bgLightness);
-	            gpu_set_blendmode(bm_normal);
-	        }
+	        draw_sprite_part_ext(
+	        	global.sprHoldBG[0], 0, 0, 0, _w, _th, _nx - _rw/2, _ny - _th,
+	        	_sclx, 1, c_white, holdAlpha * image_alpha);
+	        gpu_set_blendmode(bm_add);
+		        draw_sprite_ext(
+		        	sprHoldGrey, 0, _nx - _rw/2, _ny - _th, 
+		        	_sclx, _th / _h, 
+		        	0, c_green, lastAlpha * image_alpha * bgLightness);
+	        gpu_set_blendmode(bm_normal);
 	    }
 	    else {
-	        // var _spr = side == 1? sprHoldL:sprHoldR;
-	        for(var _i = _th; _i >= 0; _i -= _h) {
-	            draw_sprite_part_ext(_spr, 0, 0, 0, 
-	                min(_h, _i), _w,
-	                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
-	                side == 2 ? 1 : -1, _sclx, c_white, holdAlpha * image_alpha);
-	            gpu_set_blendmode(bm_add);
-		            draw_sprite_part_ext(_sprg, 0, 0, 0, 
-		                min(_h, _i), _w,
-		                _nx + _i * (side == 1 ? 1 : -1), _ny - _rw / 2,
-		                side == 2 ? 1 : -1, _sclx, c_green, lastAlpha * image_alpha * bgLightness);
-	            gpu_set_blendmode(bm_normal);
-	        }
+	        draw_sprite_part_ext(
+	        	global.sprHoldBG[1], 0, 
+	        	0, 0, 
+                _th, _w,
+                _nx + _th * (side == 1 ? 1 : -1), _ny - _rw / 2,
+                side == 2 ? 1 : -1, _sclx, 
+                c_white, holdAlpha * image_alpha);
+            gpu_set_blendmode(bm_add);
+		        draw_sprite_ext(
+		        	sprHoldGrey, 0,
+		        	_nx + _th * (side == 1 ? 1 : -1), _ny - _rw / 2, 
+		        	_sclx, (side == 1 ? 1 : -1) * _th / _h,
+		        	270, c_green, lastAlpha * image_alpha * bgLightness);
+	        gpu_set_blendmode(bm_normal);
+	        
 	    }
     }
    
@@ -112,10 +111,10 @@ if(side == 0) {
 			.Rounding(2)
 			.Draw();
 	else
-	    better_scaling_draw_sprite(sprHoldEdge, image_number,
+	    draw_sprite_ext(sprHoldEdge, image_number,
 	    	_nx - pWidth/2,
 	    	_ny + dFromBottom,
-	    	image_xscale, _scly, image_angle, image_blend, image_alpha, 1);
+	    	image_xscale, _scly, image_angle, image_blend, image_alpha);
 }
 else {
 	
@@ -135,8 +134,8 @@ else {
 				.Draw();
 	}
 	else
-	    better_scaling_draw_sprite(sprHoldEdge, image_number,
+	    draw_sprite_ext(sprHoldEdge, image_number,
 	        _nx + dFromBottom * (side == 1? -1: 1),
 	        _ny + pWidth/2 * (side == 1? -1: 1), 
-	        image_xscale, _scly, image_angle, image_blend, image_alpha, 1);
+	        image_xscale, _scly, image_angle, image_blend, image_alpha);
 }
