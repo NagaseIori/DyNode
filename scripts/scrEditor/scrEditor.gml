@@ -352,9 +352,9 @@ function operation_redo() {
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
-        return _a.time < _b.time;
+        return _a.time - _b.time;
     }
-    merge_sort(objEditor.timingPoints, _f);
+    array_sort(objEditor.timingPoints, _f);
 }
 
 // Add a timing point to "timingPoints" array
