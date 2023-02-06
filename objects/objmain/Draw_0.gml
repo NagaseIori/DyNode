@@ -32,10 +32,10 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 			}
 		    
 		    // Draw Difficulty
-		    better_scaling_draw_sprite(global.difficultySprite[chartDifficulty], 0, 
+		    draw_sprite_ext(global.difficultySprite[chartDifficulty], 0, 
 		        _nx, 77 * global.scaleYAdjust,
 		        0.67 * global.scaleXAdjust, 0.67 * global.scaleYAdjust, 0, c_white,
-		        1, 0);
+		        1);
 	    
     surface_reset_target();
     
