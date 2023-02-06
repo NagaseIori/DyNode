@@ -354,7 +354,7 @@ function timing_point_sort() {
     var _f = function(_a, _b) {
         return _a.time < _b.time;
     }
-    array_sort_f(objEditor.timingPoints, _f);
+    merge_sort(objEditor.timingPoints, _f);
 }
 
 // Add a timing point to "timingPoints" array

@@ -432,6 +432,39 @@ function array_sort_f(array, compare) {
     } until (stack_pos == 0);
 }
 
+// Array stable merge sort algorithm
+function merge_sort(arr, cmp, l = -1, r = 0) {
+	if(!is_array(arr))
+		show_error("argument arr must be an array.", true);
+	if(l>=r)
+		return;
+	
+	var _tmparr = [];
+	if(l == -1) {
+		l = 0;
+		r = array_length(arr)-1;
+	}
+	var _mid = (l+r) >> 1;
+	merge_sort(arr, cmp, l, _mid);
+	merge_sort(arr, cmp, _mid+1, r);
+	
+	var _posl = l, _posr = _mid+1;
+	while(_posl <= _mid || _posr <= r) {
+		if(_posl > _mid)
+			array_push(_tmparr, arr[_posr++]);
+		else if(_posr > r)
+			array_push(_tmparr, arr[_posl++]);
+		else if(cmp(arr[_posl], arr[_posr]))
+			array_push(_tmparr, arr[_posl++]);
+		else
+			array_push(_tmparr, arr[_posr++]);
+	}
+	
+	array_copy(arr, l, _tmparr, 0, r-l+1);
+	
+	return;
+}
+
 function surface_checkate(_surf, _w, _h) {
 	if(!surface_exists(_surf))
 		return surface_create(_w, _h);

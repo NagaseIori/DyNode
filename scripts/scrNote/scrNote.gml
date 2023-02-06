@@ -34,7 +34,7 @@ function note_sort_all() {
     var _f = function(_a, _b) {
         return _a.time == _b.time ? _a.inst < _b.inst : _a.time < _b.time;
     }
-    array_sort_f(objMain.chartNotesArray, _f);
+    merge_sort(objMain.chartNotesArray, _f);
 }
 
 function note_sort_request() {
