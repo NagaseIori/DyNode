@@ -20,7 +20,6 @@ if(!drawVisible) return;
     	_ny = y;
     }
     
-    
 
 // Draw Bg
 

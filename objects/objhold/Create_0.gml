@@ -43,12 +43,12 @@ _prop_init();
 		    sinst.beginTime = time;
     
     		
-		    pHeight = objMain.playbackSpeed * 
-		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime))
+		    pHeight = max(0, objMain.playbackSpeed * 
+		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime)))
 		        + dFromBottom + uFromTop;
-		    if(!global.simplify)
+		    if(!global.simplify) {
 		    	pHeight = max(pHeight, originalHeight);
-    
+		    }
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
         }
