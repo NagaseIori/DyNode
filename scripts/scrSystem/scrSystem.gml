@@ -711,7 +711,7 @@ function project_save_as(_file = "") {
 	if(_file == "") return 0;
 	
 	var _contents = {
-		version : global.version,
+		version : VERSION,
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
 		chartPath: objManager.chartPath,
@@ -959,7 +959,7 @@ function save_config() {
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
 		resolutionH: global.resolutionH,
-		version: global.version,
+		version: VERSION,
 		autosave: global.autosave,
 		autoupdate: global.autoupdate,
 		FMOD_MP3_DELAY: global.FMOD_MP3_DELAY,

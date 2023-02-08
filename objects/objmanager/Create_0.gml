@@ -2,6 +2,7 @@
 
 // Macros
 
+#macro VERSION "v0.2.0-dev"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -16,8 +17,6 @@
 // Global Configs
 
 global.configPath = program_directory + "config.json";
-
-global.version = "v0.2.0-dev"
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -113,11 +112,11 @@ randomize();
 
 // Check For Update
 
-if(global.autoupdate && !string_last_pos("dev", global.version))
+if(global.autoupdate && !string_last_pos("dev", VERSION))
 	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
 
-if(string_last_pos("dev", global.version) && !debug_mode)
+if(string_last_pos("dev", VERSION) && !debug_mode)
 	call_later(3, time_source_units_frames, function() {
 		announcement_warning("你正在使用开发中的 DyNode 版本。自动更新已关闭。");
 	});
