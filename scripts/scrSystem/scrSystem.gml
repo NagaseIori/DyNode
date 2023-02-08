@@ -165,7 +165,7 @@ function map_import_xml(_file) {
 	        // Initialize Timing Points
 	    	timing_point_reset();
 	        timing_point_add(
-	            0, bpm_to_mspb(chartBeatPerMin), 4);
+	            bar_to_time(-chartBarOffset), bpm_to_mspb(chartBeatPerMin), 4);
     	}
     }
     
@@ -200,11 +200,13 @@ function map_import_xml(_file) {
     // Import timing points info from dynamaker-modified
     if(_import_tp && _import_info) {
     	timing_point_reset();
-    	var _rtime = 0;
+    	var _rtime = bar_to_time(-objMain.chartBarOffset);
     	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
     		var _ntime = _tp_lists[i].time;
     		if(i>0)
     			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+    		else
+    			_ntime = _rtime;
     		_rtime = _ntime;
     		
     		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
