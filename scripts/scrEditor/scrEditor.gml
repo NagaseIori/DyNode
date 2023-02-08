@@ -450,6 +450,17 @@ function timing_point_reset() {
 // For Compatibility
 function timing_point_sync_with_chart_prop() {
 	with(objMain) {
+		var _q = show_question_i18n("bar_calibration_question");
+		
+		if(_q) {
+			chartTimeOffset = -objEditor.timingPoints[0].time;
+			chartBarOffset = time_to_bar(chartTimeOffset);
+			chartBarUsed = true;
+			
+			if(array_length(objEditor.timingPoints) > 1)
+				announcement_warning("bar_calibration_warning");
+		}
+		
 		chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
 		chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
 	}
