@@ -456,7 +456,7 @@ function timing_point_sync_with_chart_prop(_force_sync = true) {
 		
 		if(_force_sync || _q) {
 			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
-			chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+			chartBarPerMin = chartBeatPerMin / 4;
 		}
 		
 		if(_q) {
