@@ -454,6 +454,11 @@ function timing_point_sync_with_chart_prop(_force_sync = true) {
 	with(objMain) {
 		var _q = show_question_i18n("bar_calibration_question");
 		
+		if(_force_sync || _q) {
+			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
+			chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+		}
+		
 		if(_q) {
 			chartTimeOffset = -objEditor.timingPoints[0].time;
 			chartBarOffset = time_to_bar(chartTimeOffset);
@@ -461,14 +466,13 @@ function timing_point_sync_with_chart_prop(_force_sync = true) {
 			
 			if(array_length(objEditor.timingPoints) > 1)
 				announcement_warning("bar_calibration_warning");
-		}
-		
-		if(_force_sync || _q) {
-			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
-			chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
 			announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
 			
 			return true;
+		}
+		else if(_force_sync) {
+			chartTimeOffset = 0;
+			chartBarOffset = 0;
 		}
 		
 		return false;
