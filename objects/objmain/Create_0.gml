@@ -8,8 +8,8 @@ depth = 0;
 #region Optimization
 
 	deactivationQueue = ds_map_create();
-	savingProjectId = -1; // The project being saved async
-	savingExportId = -1; // The map being export async
+	savingProjectId = {id: -1}; // The project being saved async
+	savingExportId = {id: -1}; // The map being export async
 	
 #endregion
 
@@ -111,6 +111,7 @@ depth = 0;
 
     themeColor = theme_get().color;
 
+	timeBoundLimit = 3000; // Time bound before the musics starts
     nowBar = 0;
     nowTime = 0;
     nowPlaying = false;
