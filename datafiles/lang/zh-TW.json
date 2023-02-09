@@ -119,6 +119,11 @@
     "video_playback_error": "视频播放出现错误。",
     "video_playback_file_not_exists": "视频文件不存在。\n[scale, 0.8]路径: ",
     "video_playback_open_timeout": "加载视频文件超时。该视频文件可能不受支持。",
-    "video_load_finished": "视频加载完毕。"
+    "video_load_finished": "视频加载完毕。",
+    "bar_calibration_question": "检测到谱面没有配置 Bar 。按照推荐的默认方式对谱面配置 Bar 吗？",
+    "bar_calibration_warning": "检测到谱面包含多个 Timing Point 。\nDyNode 将以第一个 Timing Point 为准对 Bar 进行配置。\nDyNode 目前不支持变 BPM 的 Bar 配置。",
+    "bar_calibration_complete": "已按照默认方式配置 Bar: \nBar Per Minute: $0\nBar Offset: $1",
+    "bar_reset_question": "你已经对谱面设置了 Bar。要删除 Bar 相关的配置吗？",
+    "bar_reset_complete": "Bar 设置已清除。"
   }
 }
