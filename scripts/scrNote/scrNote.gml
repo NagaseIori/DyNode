@@ -197,6 +197,7 @@ function notes_reallocate_id() {
 			else
 				_inst.sid = "-1";
 		}
+		note_activation_reset();
 	}
 }
 
@@ -254,4 +255,13 @@ function note_select_reset(isself = false) {
 			state = stateNormal;
 			state();
 		}
+}
+
+function note_activation_reset() {
+	instance_deactivate_object(objNote);
+	with(objMain) {
+		ds_map_clear(deactivationQueue);
+		for(var i=0; i<chartNotesCount; i++)
+			note_check_and_activate(i);
+	}
 }

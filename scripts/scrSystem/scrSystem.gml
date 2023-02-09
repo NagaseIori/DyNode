@@ -45,6 +45,8 @@ function map_load(_file = "") {
 
 	if(is_struct(_file)) {
 		map_load_struct(_file);
+		
+		note_activation_reset();
 		return;
 	}
 	var _direct = _file != "";
@@ -74,6 +76,8 @@ function map_load(_file = "") {
     }
     
     announcement_play("anno_import_chart_complete");
+    
+    note_activation_reset();
 }
 
 function map_import_xml(_file) {
@@ -190,7 +194,7 @@ function map_import_xml(_file) {
         		else
         			time = bar_to_time(bar, _barpm);    	 // Bar to Chart Time in ms
         		
-	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)
+	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)	            
 	            if(noteType == 2)
 	            	_prop_hold_update();			// Hold prop init
         	}
@@ -511,13 +515,16 @@ function map_export_xml() {
     	}
     }
     
-	var f = file_text_open_write(_file);
-	file_text_write_string(f, SnapToXML(snap_alter_to_xml(_str)));
-	file_text_close(f);
+	// var f = file_text_open_write(_file);
+	// file_text_write_string(f, SnapToXML(snap_alter_to_xml(_str)));
+	// file_text_close(f);
+	
+	objMain.savingExportId = 
+		fast_file_save_async(_file, SnapToXML(snap_alter_to_xml(_str)));
 	
 	objManager.chartPath = _file;
 	
-	announcement_play("anno_export_complete");
+	note_activation_reset();
 }
 
 function map_get_struct() {
@@ -550,6 +557,8 @@ function map_get_struct() {
 		barused: objMain.chartBarUsed,
 		notes: _arr
 	}
+	
+	note_activation_reset();
 	
 	return _str;
 }
@@ -734,13 +743,13 @@ function project_save_as(_file = "") {
 	
 	_contents.charts = map_get_struct();
 	
-	var _f = file_text_open_write(_file);
-	file_text_write_string(_f, json_stringify(_contents));
-	file_text_close(_f);
+	// var _f = file_text_open_write(_file);
+	// file_text_write_string(_f, json_stringify(_contents));
+	// file_text_close(_f);
+	
+	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
 	
 	objManager.projectPath = _file;
-	
-	announcement_play("anno_project_save_complete");
 	
 	return 1;
 }

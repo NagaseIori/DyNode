@@ -244,6 +244,22 @@ function format_time_string(_time) {
 
 #endregion
 
+#region FAST FILE IO
+
+function fast_file_save_async(file, str) {
+	var _len = string_byte_length(str) + 1;
+	var _buf = buffer_create(_len, buffer_fixed, 1);
+	buffer_seek(_buf, buffer_seek_start, 0);
+	buffer_write(_buf, buffer_string, str);
+	var _id = buffer_save_async(_buf, file, 0, _len);
+	return {
+		id: _id,
+		buffer: _buf
+	};
+}
+
+#endregion
+
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }

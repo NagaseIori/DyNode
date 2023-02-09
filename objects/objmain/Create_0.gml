@@ -8,6 +8,8 @@ depth = 0;
 #region Optimization
 
 	deactivationQueue = ds_map_create();
+	savingProjectId = -1; // The project being saved async
+	savingExportId = -1; // The map being export async
 	
 #endregion
 
