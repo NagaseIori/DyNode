@@ -247,10 +247,10 @@ function format_time_string(_time) {
 #region FAST FILE IO
 
 function fast_file_save_async(file, str) {
-	var _len = string_byte_length(str) + 1;
+	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
 	buffer_seek(_buf, buffer_seek_start, 0);
-	buffer_write(_buf, buffer_string, str);
+	buffer_write(_buf, buffer_text, str);
 	var _id = buffer_save_async(_buf, file, 0, _len);
 	return {
 		id: _id,
