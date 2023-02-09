@@ -448,7 +448,9 @@ function timing_point_reset() {
 }
 
 // For Compatibility
-function timing_point_sync_with_chart_prop() {
+function timing_point_sync_with_chart_prop(_force_sync = true) {
+	if(array_length(objEditor.timingPoints) == 0)
+		return false;
 	with(objMain) {
 		var _q = show_question_i18n("bar_calibration_question");
 		
@@ -461,8 +463,15 @@ function timing_point_sync_with_chart_prop() {
 				announcement_warning("bar_calibration_warning");
 		}
 		
-		chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
-		chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+		if(_force_sync || _q) {
+			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
+			chartBarPerMin = chartBeatPerMin / objEditor.timingPoints[0].meter;
+			announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
+			
+			return true;
+		}
+		
+		return false;
 	}
 }
 

@@ -586,7 +586,18 @@ function map_get_alt_title() {
 }
 
 function map_set_global_bar() {
+	if(objMain.chartBarUsed) {
+		var _resetq = show_question_i18n("bar_reset_question");
+		if(_resetq) {
+			objMain.chartBarUsed = false;
+			objMain.showBar = false;
+			announcement_play("bar_reset_complete");
+		}
+		return;
+	}
 	
+	if(timing_point_sync_with_chart_prop(false))
+		return;
 	var _barpm = get_string_i18n(i18n_get("box_set_global_bar_1")+ " :", "");
 	_barpm = string_real(_barpm);
 	if(_barpm == "") return;
