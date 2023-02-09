@@ -143,7 +143,7 @@ var _music_resync_request = false;
         
         musicProgress = clamp(nowTime, 0, musicLength) / musicLength;
         
-        animTargetTime = clamp(animTargetTime, 0, musicLength);
+        animTargetTime = clamp(animTargetTime, -timeBoundLimit, musicLength);
     }
     
     else {
@@ -161,7 +161,7 @@ var _music_resync_request = false;
 
     if(nowPlaying) {
         if(music != undefined)
-            nowTime = clamp(nowTime, 0, musicLength);
+            nowTime = clamp(nowTime, -timeBoundLimit, musicLength);
         animTargetTime = nowTime;
     }
     else {

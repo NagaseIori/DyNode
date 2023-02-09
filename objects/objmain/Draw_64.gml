@@ -12,7 +12,7 @@ if(topBarTimeA > 0) {
 	draw_set_font(fMono16);
 	draw_set_color_alpha(merge_color(c_white, themeColor, topBarTimeGradA * 0.5), topBarTimeA);
 	draw_set_halign(fa_center); draw_set_valign(fa_top);
-	draw_text(_nx, _ny, format_time_string(nowTime) + " / "+format_time_string(_ntime))
+	draw_text(_nx, _ny, (nowTime<0?"-":"") + format_time_string(abs(nowTime)) + " / "+format_time_string(_ntime))
 	draw_set_alpha(1);
 }
 
