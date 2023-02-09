@@ -1,15 +1,15 @@
 
 
 function i18n_load(lname) {
-    var f = file_text_open_read("lang\\"+lname+".json");
+    var b = buffer_load("lang\\"+lname+".json");
     
-    if(f < 0) {
+    if(b < 0) {
         show_error("Localization file reading error. Please check the file integrity.", true);
         return;
     }
     
-    var str = json_parse(file_text_read_all(f));
-    file_text_close(f);
+    var str = json_parse(buffer_read(b, buffer_text));
+    buffer_delete(b);
     
     array_push(global.i18nCont, str);
     global.i18nCount ++;
