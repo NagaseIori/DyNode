@@ -76,7 +76,7 @@ function map_load(_file = "") {
     }
     
     announcement_play("anno_import_chart_complete");
-    
+    note_sort_all();
     note_activation_reset();
 }
 
