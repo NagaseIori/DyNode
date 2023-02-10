@@ -448,11 +448,11 @@ function timing_point_reset() {
 }
 
 // For Compatibility
-function timing_point_sync_with_chart_prop(_force_sync = true) {
+function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = false) {
 	if(array_length(objEditor.timingPoints) == 0)
 		return false;
 	with(objMain) {
-		var _q = show_question_i18n("bar_calibration_question");
+		var _q = _force_reset? true:show_question_i18n("bar_calibration_question");
 		
 		if(_force_sync || _q) {
 			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);

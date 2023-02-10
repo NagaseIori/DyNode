@@ -1,6 +1,11 @@
 {
   "FolderOrderSettings": [
     {"name":"Animation Curves","order":12,"path":"folders/Animation Curves.yy",},
+    {"name":"Clean Shapes","order":19,"path":"folders/Clean Shapes.yy",},
+    {"name":"(System)","order":1,"path":"folders/Clean Shapes/(System).yy",},
+    {"name":"Batches","order":2,"path":"folders/Clean Shapes/Batches.yy",},
+    {"name":"Shapes","order":3,"path":"folders/Clean Shapes/Shapes.yy",},
+    {"name":"Transform","order":4,"path":"folders/Clean Shapes/Transform.yy",},
     {"name":"Extensions","order":14,"path":"folders/Extensions.yy",},
     {"name":"Clean Shapes","order":7,"path":"folders/Extensions/Clean Shapes.yy",},
     {"name":"(System)","order":1,"path":"folders/Extensions/Clean Shapes/(System).yy",},
@@ -66,11 +71,6 @@
     {"name":"Notes","order":21,"path":"folders/Sprites/Notes.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"Clean Shapes","order":19,"path":"folders/Clean Shapes.yy",},
-    {"name":"(System)","order":1,"path":"folders/Clean Shapes/(System).yy",},
-    {"name":"Batches","order":2,"path":"folders/Clean Shapes/Batches.yy",},
-    {"name":"Shapes","order":3,"path":"folders/Clean Shapes/Shapes.yy",},
-    {"name":"Transform","order":4,"path":"folders/Clean Shapes/Transform.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"scribble_font_bake_outline","order":4,"path":"scripts/scribble_font_bake_outline/scribble_font_bake_outline.yy",},

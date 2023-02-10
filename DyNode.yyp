@@ -12,6 +12,11 @@
   "defaultScriptType": 1,
   "Folders": [
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Animation Curves","folderPath":"folders/Animation Curves.yy","order":12,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Clean Shapes","folderPath":"folders/Clean Shapes.yy","order":0,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"(System)","folderPath":"folders/Clean Shapes/(System).yy","order":0,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Batches","folderPath":"folders/Clean Shapes/Batches.yy","order":0,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Shapes","folderPath":"folders/Clean Shapes/Shapes.yy","order":0,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Transform","folderPath":"folders/Clean Shapes/Transform.yy","order":0,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Extensions","folderPath":"folders/Extensions.yy","order":14,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Clean Shapes","folderPath":"folders/Extensions/Clean Shapes.yy","order":7,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"(System)","folderPath":"folders/Extensions/Clean Shapes/(System).yy","order":1,},
@@ -78,11 +83,6 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Notes","folderPath":"folders/Sprites/Notes.yy","order":21,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Tile Sets","folderPath":"folders/Tile Sets.yy","order":2,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Timelines","folderPath":"folders/Timelines.yy","order":8,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Clean Shapes","folderPath":"folders/Clean Shapes.yy","order":0,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"(System)","folderPath":"folders/Clean Shapes/(System).yy","order":0,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Batches","folderPath":"folders/Clean Shapes/Batches.yy","order":0,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Shapes","folderPath":"folders/Clean Shapes/Shapes.yy","order":0,},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Transform","folderPath":"folders/Clean Shapes/Transform.yy","order":0,},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"zh-cn.json","CopyToMask":-1,"filePath":"datafiles/lang",},

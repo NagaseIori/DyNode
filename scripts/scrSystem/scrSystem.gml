@@ -464,11 +464,16 @@ function map_export_xml() {
     
     // For Compatibility
     notes_reallocate_id();
-    if(!objMain.chartBarUsed)
-    	timing_point_sync_with_chart_prop();
     instance_activate_object(objNote); // Temporarily activate all notes
     
-    var _fix_dec = show_question_i18n("export_fix_decimal_question");
+    var _export_to_dym = show_question_i18n("export_to_dym_question");
+    if(!objMain.chartBarUsed && !_export_to_dym)
+    	timing_point_sync_with_chart_prop();
+    if(_export_to_dym) {
+    	// Force reset all bar settings
+    	timing_point_sync_with_chart_prop(true, true);
+    }
+    var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
     var _gen_narray = function (_side, _fix_dec) {
     	var _ret = []
 		var l = array_length(objMain.chartNotesArray);
@@ -512,6 +517,31 @@ function map_export_xml() {
 	    			CMapNoteAsset : _gen_narray(2, _fix_dec)
 	    		}
 	    	}
+    	}
+    }
+    
+    if(_export_to_dym) {
+    	var _rbar = 0;
+    	var _arr = [];
+    	
+    	with(objEditor) {
+    		var l = array_length(timingPoints);
+    		for(var i=0; i<l; i++) {
+    			if(i>0)
+    				_rbar += time_to_bar(timingPoints[i].time - timingPoints[i-1].time,
+    					mspb_to_bpm(timingPoints[i-1].beatLength)/4);
+    			
+    			array_push(_arr, {
+    				m_time : { text : string_format(_rbar, 1, 9) },
+    				m_value : { text : string_format(mspb_to_bpm(timingPoints[i].beatLength)/4, 1, 9) }
+    			});
+    		}
+    	}
+    	
+    	_str.CMap.m_argument = {
+    		m_bpmchange : {
+    			CBpmchange : _arr
+    		}
     	}
     }
     
