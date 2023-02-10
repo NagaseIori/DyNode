@@ -544,10 +544,6 @@ function map_export_xml() {
     		}
     	}
     }
-    
-	// var f = file_text_open_write(_file);
-	// file_text_write_string(f, SnapToXML(snap_alter_to_xml(_str)));
-	// file_text_close(f);
 	
 	objMain.savingExportId = 
 		fast_file_save_async(_file, SnapToXML(snap_alter_to_xml(_str)));
@@ -772,10 +768,6 @@ function project_save_as(_file = "") {
 	};
 	
 	_contents.charts = map_get_struct();
-	
-	// var _f = file_text_open_write(_file);
-	// file_text_write_string(_f, json_stringify(_contents));
-	// file_text_close(_f);
 	
 	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
 	
