@@ -98,6 +98,30 @@ function bpm_to_mspb(bpm) {
 function mspb_to_bpm(mspb) {
 	return 60 * 1000 / mspb;
 }
+
+// Especially for dym
+function time_to_bar_for_dym(time) {
+	with(objEditor) {
+		var _rbar = 0;
+		var l = array_length(timingPoints);
+		for(var i=0; i<l; i++) {
+			if(i>0)
+				_rbar += time_to_bar(timingPoints[i].time - timingPoints[i-1].time,
+					mspb_to_bpm(timingPoints[i-1].beatLength)/4);
+			if(time < timingPoints[0].time || 
+				i == l-1 ||
+				in_between(time, timingPoints[i].time, timingPoints[i+1].time)) 
+				{
+					return _rbar +
+						time_to_bar(time - timingPoints[i].time,
+							mspb_to_bpm(timingPoints[i].beatLength)/4);
+				}
+		}
+	}
+	
+	show_error("CONVERTION FATAL ERROR", true);
+}
+
 #endregion
 
 #region POSITION TRANSFORM

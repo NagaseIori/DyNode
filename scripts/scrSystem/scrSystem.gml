@@ -62,9 +62,16 @@ function map_load(_file = "") {
     }
     
     var _confirm = _direct? true:show_question_i18n("box_q_import_confirm");
-    if(!_confirm) return;
+    if(!_confirm)
+    	return;
+    
     var _clear = _direct? true:show_question_i18n("box_q_import_clear");
-    if(_clear) note_delete_all();
+    if(_clear)
+    	note_delete_all();
+    
+    var _timing_reset = _direct? true:show_question_i18n("box_q_import_timing_reset");
+    if(_timing_reset)
+    	timing_point_reset();
     
     switch filename_ext(_file) {
     	case ".xml":
@@ -88,7 +95,7 @@ function map_import_xml(_file) {
     buffer_delete(_buf);
 
 	var _import_info = show_question_i18n("box_q_import_info");
-    var _import_tp = false;
+    var _import_tp = show_question_i18n("box_q_import_bpm");
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
     var _barpm, _offset;
@@ -128,34 +135,33 @@ function map_import_xml(_file) {
 	_import_fun(_main.m_notesLeft.m_notes.CMapNoteAsset, 1);
 	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
 	
+	var _imp_dym = false;
 	if(variable_struct_exists(_main, "m_argument")) {
-		_import_tp = show_question_i18n(i18n_get("box_q_import_dymm_bpm"));
 		if(variable_struct_exists(_main.m_argument, "m_bpmchange") && variable_struct_exists(_main.m_argument.m_bpmchange, "CBpmchange")) {
-			var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
-			if(!is_array(_bpms)) _bpms = [_bpms];
-			for(var i=0, l=array_length(_bpms); i<l; i++) {
-				_note_time = real(_bpms[i].m_time.text);
-				_nbpm = real(_bpms[i].m_value.text);
-			
-				array_push(_tp_lists, {
-		    		time: _note_time,
-		    		barpm: _nbpm
-		    	});
+			_imp_dym = true;
+			try {
+				var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
+				if(!is_array(_bpms)) _bpms = [_bpms];
+				for(var i=0, l=array_length(_bpms); i<l; i++) {
+					_note_time = real(_bpms[i].m_time.text);
+					_nbpm = real(_bpms[i].m_value.text);
+				
+					array_push(_tp_lists, {
+			    		time: _note_time,
+			    		barpm: _nbpm
+			    	});
+				}
+				
+				array_sort(_tp_lists, function (a, b) { return a.time - b.time; });
+			}
+			catch (e) {
+				announcement_error("error_dym_bpm_load_failed");
 			}
 		}
-		else
-			announcement_warning("error_dym_bpm_load_failed");
 	}
 	
     if(_import_info) {
     	with(objMain) {
-    		
-    		chartBarPerMin = _barpm;
-    		chartBeatPerMin = _barpm * 4;
-    		chartBarOffset = _offset;
-    		chartTimeOffset = bar_to_time(_offset);
-    		chartBarUsed = true;
-        
 	        // Reset to the beginning
 	        nowTime = 0;
 	        animTargetTime = nowTime;
@@ -165,11 +171,17 @@ function map_import_xml(_file) {
 	        
 	        // Get the chart's difficulty
 	        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
-	        
-	        // Initialize Timing Points
-	    	timing_point_reset();
-	        timing_point_add(
-	            bar_to_time(-chartBarOffset), bpm_to_mspb(chartBeatPerMin), 4);
+    	}
+    }
+    
+    // Initialize global bar info
+    if(_import_tp) {
+    	with(objMain) {
+    		chartBarPerMin = _barpm;
+    		chartBeatPerMin = _barpm * 4;
+    		chartBarOffset = _offset;
+    		chartTimeOffset = bar_to_time(_offset);
+    		chartBarUsed = true;
     	}
     }
     
@@ -201,22 +213,26 @@ function map_import_xml(_file) {
         }
     }
     
-    // Import timing points info from dynamaker-modified
-    if(_import_tp && _import_info) {
-    	timing_point_reset();
-    	var _rtime = bar_to_time(-objMain.chartBarOffset);
-    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
-    		var _ntime = _tp_lists[i].time;
-    		if(i>0)
-    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
-    		else
-    			_ntime = _rtime;
-    		_rtime = _ntime;
-    		
-    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
-    	}
-    	
-    	timing_point_sort();
+    // Import timing points info
+    if(_import_tp) {
+    	if(_imp_dym) {
+	    	var _rtime = bar_to_time(-objMain.chartBarOffset);
+	    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
+	    		var _ntime = _tp_lists[i].time;
+	    		if(i>0)
+	    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+	    		else
+	    			_ntime = _rtime;
+	    		_rtime = _ntime;
+	    		
+	    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
+	    	}
+	    }
+	    else {
+	    	timing_point_add(
+	            bar_to_time(-_offset), bpm_to_mspb(_barpm*4), 4);
+	    }
+	    timing_point_sort();
     }
 }
 
@@ -230,7 +246,6 @@ function map_import_osu(_file = "") {
     var _import_hitobj = show_question_i18n(i18n_get("box_q_osu_import_objects"));
     var _delay_time = 0;
     
-    timing_point_reset();
     var _buf = buffer_load(_file);
     var _grid = SnapBufferReadCSV(_buf, 0);
     buffer_delete(_buf);
@@ -474,15 +489,20 @@ function map_export_xml() {
     	timing_point_sync_with_chart_prop(true, true);
     }
     var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
-    var _gen_narray = function (_side, _fix_dec) {
-    	var _ret = []
+    
+    var _gen_narray = function (_side, _dec, _dym) {
+    	var _ret = [];
+    	var _bfun = _dym? time_to_bar_for_dym:time_to_bar;
 		var l = array_length(objMain.chartNotesArray);
     	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
             if(side == _side) {
+            	var _time = _dec?round(time):time;
+            	if(!_dym)
+            		_time = mtime_to_time(_time);
                 array_push(_ret, {
                 	m_id : { text : nid },
                 	m_type : { text : note_type_num_to_string(noteType) },
-                	m_time : { text : string_format(time_to_bar(mtime_to_time(_fix_dec?round(time):time)), 1, 9) },
+                	m_time : { text : string_format(_bfun(_time), 1, 9) },
                 	m_position : { text : string_format(position - width / 2, 1, 4) },
                 	m_width : { text : width },
                 	m_subId: { text : sid }
@@ -504,17 +524,17 @@ function map_export_xml() {
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0, _fix_dec)
+	    			CMapNoteAsset : _gen_narray(0, _fix_dec, _export_to_dym)
 	    		}
 	    	},
 	    	m_notesLeft : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1, _fix_dec)
+	    			CMapNoteAsset : _gen_narray(1, _fix_dec, _export_to_dym)
 	    		}
 	    	},
 	    	m_notesRight : {
 	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2, _fix_dec)
+	    			CMapNoteAsset : _gen_narray(2, _fix_dec, _export_to_dym)
 	    		}
 	    	}
     	}
