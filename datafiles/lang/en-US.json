@@ -78,6 +78,7 @@
     "fileformat_chart": "Supported Beatmap Files",
     "timing_point_create_with_note_question": "It has been detected that you have selected a Note, which time: $0 ms. Do you want to use this time as offset?",
     "export_fix_decimal_question": "Convert the exported time to integer milliseconds when exported?\nIf you only use this export beatmap for testing or publishing, we recommend \"Yes\".",
+    "export_to_dym_question": "是否导出用于 Dynamaker-modified 的相关信息？使用该选项导出的谱面仅能用于编辑器编辑。\n若选择“是”，所有已经设置的 Bar 信息将由 DyNode 以默认方式覆写。",
     "export_timing_error": "You haven't configured Timing, so you can't export beatmap yet.",
     "anno_simplify": "Simplified Display",
     "default_width_mode_name_1": "Width consistent",
