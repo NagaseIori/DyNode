@@ -152,7 +152,7 @@ function map_import_xml(_file) {
 			    	});
 				}
 				
-				array_sort(_tp_lists, function (a, b) { return a.time - b.time; });
+				array_sort(_tp_lists, function (a, b) { return sign(a.time-b.time); });
 			}
 			catch (e) {
 				announcement_error("error_dym_bpm_load_failed");
@@ -185,6 +185,28 @@ function map_import_xml(_file) {
     	}
     }
     
+    // Import timing points info
+    if(_import_tp) {
+    	if(_imp_dym) {
+	    	var _rtime = bar_to_time(-_offset, _barpm);
+	    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
+	    		var _ntime = _tp_lists[i].time;
+	    		if(i>0)
+	    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+	    		else
+	    			_ntime = _rtime;
+	    		_rtime = _ntime;
+	    		
+	    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
+	    	}
+	    }
+	    else {
+	    	timing_point_add(
+	            bar_to_time(-_offset, _barpm), bpm_to_mspb(_barpm*4), 4);
+	    }
+	    timing_point_sort();
+    }
+    
     // Fix every note's & tp's time
     _offset = bar_to_time(_offset, _barpm);
     if(instance_exists(objNote)) {
@@ -211,28 +233,6 @@ function map_import_xml(_file) {
 	            	_prop_hold_update();			// Hold prop init
         	}
         }
-    }
-    
-    // Import timing points info
-    if(_import_tp) {
-    	if(_imp_dym) {
-	    	var _rtime = bar_to_time(-objMain.chartBarOffset);
-	    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
-	    		var _ntime = _tp_lists[i].time;
-	    		if(i>0)
-	    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
-	    		else
-	    			_ntime = _rtime;
-	    		_rtime = _ntime;
-	    		
-	    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
-	    	}
-	    }
-	    else {
-	    	timing_point_add(
-	            bar_to_time(-_offset), bpm_to_mspb(_barpm*4), 4);
-	    }
-	    timing_point_sort();
     }
 }
 

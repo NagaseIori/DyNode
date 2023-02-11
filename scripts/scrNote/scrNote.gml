@@ -32,7 +32,7 @@ function _outscreen_check(_x, _y, _side) {
 function note_sort_all() {
 	notes_array_update();
     var _f = function(_a, _b) {
-        return _a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time;
+        return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
     array_sort(objMain.chartNotesArray, _f);
 }

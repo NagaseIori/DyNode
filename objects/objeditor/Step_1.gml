@@ -308,7 +308,7 @@ editorSelectMultiple = editorSelectCount > 1;
             }
         }
         array_sort(copyStack, function (_a, _b) { 
-            return _a.time == _b.time? _a.position - _b.position : _a.time - _b.time; });
+            return sign(_a.time == _b.time? _a.position - _b.position : _a.time - _b.time); });
         
         if(keycheck_down_ctrl(ord("X")))
             announcement_play(i18n_get("cut_notes", string(_cnt)));
