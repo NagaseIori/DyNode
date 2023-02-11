@@ -13,6 +13,7 @@
 #macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
 #macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
 #macro VIDEO_UPDATE_FREQUENCY 120			// in hz
+#macro EXPORT_XML_EPS 6
 math_set_epsilon(0.0000000001);
 
 // Global Configs

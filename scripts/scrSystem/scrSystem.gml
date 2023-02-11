@@ -502,7 +502,7 @@ function map_export_xml() {
                 array_push(_ret, {
                 	m_id : { text : nid },
                 	m_type : { text : note_type_num_to_string(noteType) },
-                	m_time : { text : string_format(_bfun(_time), 1, 9) },
+                	m_time : { text : string_format(_bfun(_time), 1, EXPORT_XML_EPS) },
                 	m_position : { text : string_format(position - width / 2, 1, 4) },
                 	m_width : { text : width },
                 	m_subId: { text : sid }
@@ -517,8 +517,8 @@ function map_export_xml() {
     var _str = {
     	CMap : {
     		m_path : { text : objMain.chartTitle },
-	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, 9) },
-	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, 9) },
+	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, EXPORT_XML_EPS) },
+	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, EXPORT_XML_EPS) },
 	    	m_leftRegion : { text : objMain.chartSideType[0] },
 	    	m_rightRegion : { text : objMain.chartSideType[1] },
 	    	m_mapID : { text : _mapid },
@@ -552,8 +552,8 @@ function map_export_xml() {
     					mspb_to_bpm(timingPoints[i-1].beatLength)/4);
     			
     			array_push(_arr, {
-    				m_time : { text : string_format(_rbar, 1, 9) },
-    				m_value : { text : string_format(mspb_to_bpm(timingPoints[i].beatLength)/4, 1, 9) }
+    				m_time : { text : string_format(_rbar, 1, EXPORT_XML_EPS) },
+    				m_value : { text : string_format(mspb_to_bpm(timingPoints[i].beatLength)/4, 1, EXPORT_XML_EPS) }
     			});
     		}
     	}
