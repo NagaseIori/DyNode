@@ -1,11 +1,13 @@
 
+fontColor = c_white;
 scriElement = scribble(cjk_prefix()+i18n_get(content))
-    .starting_format("fDynamix16", c_white)
+    .starting_format("fDynamix16", fontColor)
     .transform(scale, scale)
     .align(fa_left, fa_top);
 scriHeight = scriElement.get_height();
 
 gradAlpha = 0;
+gradMin = 0.05;
 animTargetGradAlpha = 0;
 animSpeed = 0.2;
 shadowDistance = 3;

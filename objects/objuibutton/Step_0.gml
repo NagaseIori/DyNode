@@ -5,7 +5,7 @@ var _inbound = mouse_inbound(_bbox.left, _bbox.top, _bbox.right, _bbox.bottom)
 animTargetGradAlpha = _inbound;
 gradAlpha = lerp_a(gradAlpha, animTargetGradAlpha, animSpeed);
 
-if(gradAlpha < 0.01) gradAlpha = 0;
+if(gradAlpha < gradMin) gradAlpha = 0;
 
 if(mouse_isclick_l() && _inbound) {
     eventFunc();

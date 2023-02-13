@@ -85,6 +85,11 @@ gpu_set_tex_filter(true);
     FMODGMS_Sys_Initialize(32);
     // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     
+// DyCore Initialization
+
+if(DyCore_init() != "success") {
+	show_error("DyCore Initialized Failed.", false);
+}
 
 // Input Initialization
 
