@@ -836,6 +836,8 @@ function project_new() {
 		projectPath = "";
 	}
 	
+	map_close();
+	
 	room_goto(rProjectInit);
 }
 
