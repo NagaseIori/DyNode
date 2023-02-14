@@ -38,6 +38,8 @@
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+<br>
+<br>
 <h2 align="center">License</h2>
 
 Most of the art assets used by DyNode are from the game Dynamix, produced by C4Cat Entertainment Limited.
