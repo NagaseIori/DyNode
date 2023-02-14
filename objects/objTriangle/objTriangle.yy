@@ -27,7 +27,9 @@
   "physicsShape": 1,
   "physicsShapePoints": [],
   "physicsStartAwake": true,
-  "properties": [],
+  "properties": [
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"colors","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"[c_aqua, 0x442A20, c_aqua]","varType":4,},
+  ],
   "solid": false,
   "spriteId": null,
   "spriteMaskId": null,

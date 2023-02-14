@@ -14,19 +14,23 @@ function trianglify_draw(tri_struct, colors, threshold = 0) {
 		// Triangulation
 		var _arr = json_parse(DyCore_delaunator(json_stringify(_temp)));
 		draw_set_color(c_white);
+		draw_primitive_begin(pr_trianglelist);
 		for(var i=0; i<array_length(_arr); i++) {
 			_arr[i].c = __trisys_centroid(_arr[i]);
+			// Sparkle Effect
+			// _arr[i].c = __trisys_spakle(_arr[i].c, w, h);
+			
 			var _color = __2corner_color_merge(colors, _arr[i].c[0], _arr[i].c[1], w, h);
+			_color = __trisys_mouselight(_color, _arr[i].c[0], _arr[i].c[1], colors[2]);
 			draw_set_color(_color);
 			var _alp = _arr[i].c[1]/h;
 			_alp = max(_alp - threshold, 0);
 			_alp = lerp(0, 1, _alp/(1-threshold));
-			// draw_set_alpha(_alp);
-			// if(_alp != 0)
-			draw_triangle(_arr[i].p1[0], _arr[i].p1[1],
-							_arr[i].p2[0], _arr[i].p2[1],
-							_arr[i].p3[0], _arr[i].p3[1], false);
+			draw_vertex_color(_arr[i].p1[0], _arr[i].p1[1], _color, 1);
+			draw_vertex_color(_arr[i].p2[0], _arr[i].p2[1], _color, 1);
+			draw_vertex_color(_arr[i].p3[0], _arr[i].p3[1], _color, 1);
 		}
+		draw_primitive_end();
 		gpu_set_blendmode(bm_normal);
 	surface_reset_target();
 	draw_set_alpha(1);
@@ -76,6 +80,17 @@ function trianglify_step(tri_struct) {
 		_arr[i].x += _arr[i].vx;
 		_arr[i].y += _arr[i].vy;
 	}
+}
+
+function __trisys_spakle(pos, w, h, jitterFactor = 0.15) {
+	return [
+		pos[0]+(random(1)-0.5)*jitterFactor*w,
+		pos[1]+(random(1)-0.5)*jitterFactor*h,
+		];
+}
+
+function __trisys_mouselight(col, x, y, lcol = c_white, radius = 300, alp = 0.4) {
+	return merge_color(col, lcol, lerp(0, alp, max(1-point_distance(x, y, mouse_x, mouse_y)/radius, 0)));
 }
 
 function __trisys_centroid(str) {
