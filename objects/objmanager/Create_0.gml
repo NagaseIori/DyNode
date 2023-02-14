@@ -66,6 +66,7 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
+display_reset(4, true);
 // gc_target_frame_time(50);
 
 // FMODGMS Initialization
