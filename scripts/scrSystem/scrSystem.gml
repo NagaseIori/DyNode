@@ -88,8 +88,6 @@ function map_load(_file = "") {
 }
 
 function map_import_xml(_file) {
-	notes_reallocate_id();
-    
     var _buf = buffer_load(_file);
     var _str = snap_alter_from_xml(SnapBufferReadXML(_buf, 0, buffer_get_size(_buf)));
     buffer_delete(_buf);
@@ -123,9 +121,13 @@ function map_import_xml(_file) {
 			_note_position = _arr[i].m_position.text;
 			_note_width = _arr[i].m_width.text;
 			_note_subid = _arr[i].m_subId.text;
+			
+			if(_note_subid != "-1")
+				_note_subid += "_imported";
+			_note_id += "_imported";
 	
-			var _err = build_note(_note_id+"_imported", _note_type, _note_time,
-	            _note_position, _note_width, _note_subid+"_imported",
+			var _err = build_note(_note_id, _note_type, _note_time,
+	            _note_position, _note_width, _note_subid,
 	            _side, true);
 	        if(_err < 0) return;
 		}
@@ -234,6 +236,9 @@ function map_import_xml(_file) {
         	}
         }
     }
+    
+    note_sort_all();
+    notes_reallocate_id();
 }
 
 function map_import_osu(_file = "") {
