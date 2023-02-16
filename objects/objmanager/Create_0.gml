@@ -29,6 +29,11 @@ global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
+global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
+global.graphics = {
+	AA : 4,
+	VSync : true
+};
 
 // Themes Init
 
@@ -66,7 +71,7 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
-display_reset(4, true);
+display_reset(global.graphics.AA, global.graphics.VSync);
 // gc_target_frame_time(50);
 
 // FMODGMS Initialization
@@ -120,14 +125,9 @@ randomize();
 
 // Check For Update
 
-if(global.autoupdate && !string_last_pos("dev", VERSION))
+if(global.autoupdate && !debug_mode)
 	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
-
-if(string_last_pos("dev", VERSION) && !debug_mode)
-	call_later(3, time_source_units_frames, function() {
-		announcement_warning("你正在使用开发中的 DyNode 版本。自动更新已关闭。");
-	});
 
 // Init finished
 
