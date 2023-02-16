@@ -1,2 +1,2 @@
 
-triStruct = trianglify_generate(global.resolutionW, global.resolutionH, [0.01, 0.05], 200);
+triStruct = trianglify_generate(global.resolutionW, global.resolutionH, [0.05, 0.12], 200);

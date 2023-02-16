@@ -836,6 +836,8 @@ function project_new() {
 		projectPath = "";
 	}
 	
+	map_close();
+	
 	room_goto(rProjectInit);
 }
 
@@ -982,31 +984,29 @@ function load_config() {
 		show_error_i18n("error_config_file_corrupted", false);
 		file_delete(global.configPath);
 		load_config();
-		return;
+		return -1;
 	}
 	
-	if(variable_struct_exists(_con, "theme"))
-		global.themeAt = _con.theme;
-	if(variable_struct_exists(_con, "FPS"))
-		global.fps = _con.FPS;
-	if(variable_struct_exists(_con, "resolutionH"))
-		global.resolutionH = _con.resolutionH;
-	if(variable_struct_exists(_con, "resolutionW"))
-		global.resolutionW = _con.resolutionW;
-	if(variable_struct_exists(_con, "autosave"))
-		global.autosave = _con.autosave;
-	if(variable_struct_exists(_con, "autoupdate"))
-		global.autoupdate = _con.autoupdate;
-	if(variable_struct_exists(_con, "FMOD_MP3_DELAY"))
-		global.FMOD_MP3_DELAY = _con.FMOD_MP3_DELAY;
-	if(variable_struct_exists(_con, "ANNOUNCEMENT_MAX_LIMIT"))
-		global.ANNOUNCEMENT_MAX_LIMIT = _con.ANNOUNCEMENT_MAX_LIMIT;
-	if(variable_struct_exists(_con, "fullscreen"))
-		global.fullscreen = _con.fullscreen;
+	var _check_set = function (struct, struct_name, global_name = "") {
+		if(global_name == "") global_name = struct_name;
+		if(variable_struct_exists(struct, struct_name))
+			variable_global_set(global_name, variable_struct_get(struct, struct_name));
+	}
+	
+	_check_set(_con, "theme", "themeAt");
+	_check_set(_con, "FPS", "fps");
+	_check_set(_con, "resolutionH");
+	_check_set(_con, "resolutionW");
+	_check_set(_con, "autosave");
+	_check_set(_con, "autoupdate");
+	_check_set(_con, "FMOD_MP3_DELAY");
+	_check_set(_con, "ANNOUNCEMENT_MAX_LIMIT");
+	_check_set(_con, "fullscreen");
 	if(variable_struct_exists(_con, "language"))
 		i18n_set_lang(_con.language);
-	if(variable_struct_exists(_con, "simplify"))
-		global.simplify = _con.simplify;
+	_check_set(_con, "simplify");
+	_check_set(_con, "updatechannel");
+	_check_set(_con, "graphics");
 		
 	vars_init();
 	
@@ -1016,7 +1016,7 @@ function load_config() {
 function save_config() {
 	
 	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, SnapToLooseJSON({
+	file_text_write_string(_f, SnapToJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -1028,7 +1028,9 @@ function save_config() {
 		ANNOUNCEMENT_MAX_LIMIT: global.ANNOUNCEMENT_MAX_LIMIT,
 		fullscreen: global.fullscreen,
 		language: i18n_get_lang(),
-		simplify: global.simplify
+		simplify: global.simplify,
+		updatechannel: global.updatechannel,
+		graphics: global.graphics
 	}, true));
 	
 	file_text_close(_f);

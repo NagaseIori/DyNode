@@ -85,7 +85,7 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - arrayPos*2;
+        depth = origDepth - arrayPos*16;
         if(noteType == 3 && instance_exists(finst))
         	depth = finst.depth;
         

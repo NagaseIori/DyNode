@@ -2,14 +2,14 @@
 
 // Macros
 
-#macro VERSION "v0.1.10-dev.6"
+#macro VERSION "v0.1.10"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
 #macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
-#macro NOTE_DEACTIVATION_TIME 200			// Every fixed time than deactivated notes in queue
+#macro NOTE_DEACTIVATION_TIME 20			// Every fixed time than deactivated notes in queue
 #macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
 #macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
 #macro VIDEO_UPDATE_FREQUENCY 120			// in hz
@@ -29,6 +29,11 @@ global.fullscreen = false;
 global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
+global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
+global.graphics = {
+	AA : 4,
+	VSync : true
+};
 
 // Themes Init
 
@@ -66,7 +71,7 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Smoother
 
 gpu_set_tex_filter(true);
-display_reset(4, true);
+display_reset(global.graphics.AA, global.graphics.VSync);
 // gc_target_frame_time(50);
 
 // FMODGMS Initialization
@@ -120,14 +125,9 @@ randomize();
 
 // Check For Update
 
-if(global.autoupdate && !string_last_pos("dev", VERSION))
+if(global.autoupdate && !debug_mode)
 	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
 _update_url = "";
-
-if(string_last_pos("dev", VERSION) && !debug_mode)
-	call_later(3, time_source_units_frames, function() {
-		announcement_warning("你正在使用开发中的 DyNode 版本。自动更新已关闭。");
-	});
 
 // Init finished
 
