@@ -300,7 +300,7 @@ function array_top(array) {
 }
 
 function lerp_lim(from, to, amount, limit) {
-    var _delta = lerp(from, to, amount)-from;
+    var _delta = lerp_safe(from, to, amount)-from;
     
     _delta = min(abs(_delta), limit) * sign(_delta);
     
@@ -313,7 +313,12 @@ function lerp_lim_a(from, to, amount, limit) {
 }
 
 function lerp_a(from, to, amount) {
-    return lerp(from, to, amount * global.fpsAdjust);
+    return lerp_safe(from, to, amount * global.fpsAdjust);
+}
+
+function lerp_safe(from, to, amount) {
+	if(abs(to-from)<LERP_EPS) return to;
+	return lerp(from, to, amount);
 }
 
 function create_scoreboard(_x, _y, _dep, _dig, _align, _lim) {

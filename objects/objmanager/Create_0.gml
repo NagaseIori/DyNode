@@ -14,6 +14,7 @@
 #macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
 #macro VIDEO_UPDATE_FREQUENCY 120			// in hz
 #macro EXPORT_XML_EPS 6
+#macro LERP_EPS 0.001
 math_set_epsilon(0.0000000001);				// 1E-10
 
 // Global Configs
