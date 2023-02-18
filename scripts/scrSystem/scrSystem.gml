@@ -51,7 +51,7 @@ function map_load(_file = "") {
 	}
 	var _direct = _file != "";
 	if(_file == "")
-	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.osu)|*.xml;*.osu", "example.xml", 
+	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.dyn;*.osu)|*.xml;*.dyn;*.osu", "", 
 	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
@@ -80,11 +80,16 @@ function map_load(_file = "") {
     	case ".osu":
     		map_import_osu(_file);
     		break;
+    	case ".dyn":
+    		map_import_dyn(_file);
+    		break;
     }
     
-    announcement_play("anno_import_chart_complete");
     note_sort_all();
+    notes_reallocate_id();
     note_activation_reset();
+    
+    announcement_play("anno_import_chart_complete");
 }
 
 function map_import_xml(_file) {
@@ -236,9 +241,6 @@ function map_import_xml(_file) {
         	}
         }
     }
-    
-    note_sort_all();
-    notes_reallocate_id();
 }
 
 function map_import_osu(_file = "") {
@@ -317,6 +319,23 @@ function map_import_osu(_file = "") {
     announcement_play("anno_import_info_complete", 1000);
 }
 
+function map_import_dyn(_file) {
+	var _import_info = show_question_i18n("box_q_import_info");
+    var _import_tp = show_question_i18n("box_q_import_bpm");
+    
+    var _str = json_parse(fast_file_read_all(_file));
+    
+    if(!is_struct(_str))
+    	show_error("Load failed.", true);
+    
+    if(_import_tp) {
+    	objEditor.timingPoints = array_concat(objEditor.timingPoints, _str.timingPoints);
+    	timing_point_sort();
+    }
+    
+    map_load_struct(_str.charts, _import_info, _import_tp);
+}
+
 function map_set_title() {
 	var _title = get_string_i18n(i18n_get("box_set_chart_title") + ": ", objMain.chartTitle);
 	
@@ -333,7 +352,7 @@ function music_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        show_error("Music file " + _file + " doesnt exist.", false);
+        announcement_error("Music file " + _file + " doesnt exist.", false);
         return;
     }
     
@@ -345,7 +364,6 @@ function music_load(_file = "") {
         music = FMODGMS_Snd_LoadSound_Ext2(_file, 0x00004200);
         // music = FMODGMS_Snd_LoadSound(_file);
         if(music < 0) {
-        	show_error("Load Music Failed. \n FMOD Error Message: " + FMODGMS_Util_GetErrorMessage(), false);
         	announcement_error(i18n_get("anno_music_load_err")+FMODGMS_Util_GetErrorMessage());
         	music = undefined;
         	return;
@@ -614,18 +632,23 @@ function map_get_struct() {
 	return _str;
 }
 
-function map_load_struct(_str) {
+function map_load_struct(_str, _import_info = true, _import_tp = true) {
 	note_delete_all();
 	
 	with(objMain) {
-		chartTitle = _str.title;
-		chartBeatPerMin = _str.bpm;
-		chartBarPerMin = _str.barpm;
-		chartDifficulty = _str.difficulty;
-		chartSideType = _str.sidetype;
+		if(_import_info) {
+			chartTitle = _str.title;
+			chartDifficulty = _str.difficulty;
+			chartSideType = _str.sidetype;
+		}
 		
-		if(variable_struct_exists(_str, "barused"))
-			chartBarUsed = _str.barused;
+		if(_import_tp) {
+			chartBeatPerMin = _str.bpm;
+			chartBarPerMin = _str.barpm;
+			
+			if(variable_struct_exists(_str, "barused"))
+				chartBarUsed = _str.barused;
+		}
 	}
 	
 	var _arr = _str.notes;
