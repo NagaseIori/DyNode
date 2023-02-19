@@ -163,6 +163,7 @@ function note_delete_all() {
 		ds_map_clear(chartNotesMap[2]);
 		
 		instance_activate_all();
+		with(objNote) arrayPos = -1;
 		instance_destroy(objNote);
 	}
 }
