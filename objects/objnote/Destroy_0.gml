@@ -3,4 +3,4 @@
 if(instance_exists(sinst))
     instance_destroy(sinst);
 
-note_delete(nid, recordRequest);
+note_delete(id, recordRequest);

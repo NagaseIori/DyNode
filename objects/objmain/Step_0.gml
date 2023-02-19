@@ -92,32 +92,6 @@
     }
 
 #endregion
-
-#region Chart Properties Update
-
-	// Adjust Difficulty
-	var _diff_delta = keycheck_down_ctrl(ord("P")) - keycheck_down_ctrl(ord("O"));
-	chartDifficulty += _diff_delta;
-	chartDifficulty = clamp(chartDifficulty, 0, global.difficultyCount - 1);
-
-    chartNotesCount = array_length(chartNotesArray)
-
-	chartNotesArrayAt = clamp(chartNotesArrayAt, 0, chartNotesCount);
-	
-    while(chartNotesArrayAt < chartNotesCount &&
-        chartNotesArray[chartNotesArrayAt].time <= nowTime) {
-            chartNotesArrayAt ++;
-            if(chartNotesArrayAt < chartNotesCount)
-                note_check_and_activate(chartNotesArrayAt);
-        }
-
-    while(chartNotesArrayAt > 0 &&
-        chartNotesArray[chartNotesArrayAt-1].time > nowTime){
-            chartNotesArrayAt --;
-            note_check_and_activate(chartNotesArrayAt);
-        }
-
-#endregion
   
 #region Scoreboard Update
 

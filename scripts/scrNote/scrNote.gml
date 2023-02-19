@@ -35,6 +35,13 @@ function note_sort_all() {
         return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
     array_sort(objMain.chartNotesArray, _f);
+    
+    // Flush deleted notes
+    with(objMain) {
+    	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
+    		array_pop(chartNotesArray);
+    	}
+    }
 }
 
 function note_sort_request() {
@@ -122,25 +129,23 @@ function build_note_withprop(prop, record = false, selecting = false) {
 	}
 }
 
-function note_delete(_id, _record = false) {
+function note_delete(_inst, _record = false) {
+	if(_inst.arrayPos == -1)
+		return;
     with(objMain) {
-        var l=array_length(chartNotesArray);
-        var found = false;
-        for(var i=0; i<l; i++)
-            if(chartNotesArray[i].inst.nid == _id) {
-            	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
-            	if(_record)
-            		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i], -1);
-            	
-            	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _id);
-                var _insta = chartNotesArray[i].inst;
-                array_delete(chartNotesArray, i, 1);
-                found = true;
-                break;
-            }
-		chartNotesCount = array_length(chartNotesArray);
+        var i = _inst.arrayPos;
+        if(chartNotesArray[i].inst == _inst) {
+        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
+        	if(_record)
+        		operation_step_add(OPERATION_TYPE.REMOVE, SnapDeepCopy(chartNotesArray[i]), -1);
+        	
+        	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
+            chartNotesArray[i].time = INF;
+        }
+        else
+        	show_error("NOTE DELETE ERROR.", true);
     }
-    if(found) note_sort_request();
+    note_sort_request();
 }
 
 function note_delete_all() {

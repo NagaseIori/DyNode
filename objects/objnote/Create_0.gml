@@ -16,7 +16,7 @@ image_yscale = global.scaleYAdjust;
     sinst = -999;					// Sub instance id
     finst = -999;					// Father instance id
     noteType = 0;					// 0 Note 1 Chain 2 Hold
-    arrayPos = 0;					// Position in chartNotesArray
+    arrayPos = -1;					// Position in chartNotesArray
     
     // For Editor
     origWidth = width;
