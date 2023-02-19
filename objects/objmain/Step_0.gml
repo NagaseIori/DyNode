@@ -88,7 +88,8 @@
     }
     
     if(mouse_check_button_pressed(mb_middle)) {
-    	showStats = !showStats;
+    	showStats ++;
+    	showStats %= 3;
     }
 
 #endregion

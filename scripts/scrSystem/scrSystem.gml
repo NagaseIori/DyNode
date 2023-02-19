@@ -1105,6 +1105,43 @@ function switch_autosave() {
 
 #endregion
 
+#region Stat
+
+function stat_reset() {
+	objMain.statCount = [
+		[0, 0, 0, 0],
+		[0, 0, 0, 0],
+		[0, 0, 0, 0],
+		[0, 0, 0, 0]
+		];
+}
+
+function stat_count(side, type) {
+	if(type > 2)
+		return;
+	
+	with(objMain) {
+		statCount[side][type] ++;
+		statCount[side][3] ++;
+		statCount[3][type] ++;
+		statCount[3][3] ++;
+	}
+}
+
+function stat_string(stype, ntype) {
+	with(objMain)
+		if(stype == 1) {
+			return string(statCount[3][ntype]);
+		}
+		else if(stype == 2) {
+			return string_concat(statCount[1][ntype],"/",
+								 statCount[0][ntype],"/",
+								 statCount[2][ntype]);
+		}
+}
+
+#endregion
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;

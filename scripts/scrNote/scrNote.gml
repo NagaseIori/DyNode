@@ -170,10 +170,10 @@ function note_delete_all() {
 
 function notes_array_update() {
 	with(objMain) {
-		statCount = [0, 0, 0];
+		stat_reset();
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
-		for(; i<l; i++) {
+		for(; i<l && chartNotesArray[i].time != INF; i++) {
 			if(instance_exists(chartNotesArray[i].inst)) {
 				chartNotesArray[i].time = chartNotesArray[i].inst.time;
 				chartNotesArray[i].side = chartNotesArray[i].inst.side;
@@ -183,8 +183,8 @@ function notes_array_update() {
 				chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
 				chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
 			}
-			if(chartNotesArray[i].noteType < 3)
-				statCount[chartNotesArray[i].noteType] ++;
+			
+			stat_count(chartNotesArray[i].side, chartNotesArray[i].noteType);
 		}
 	}
 	note_sort_request();

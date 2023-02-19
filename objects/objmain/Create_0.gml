@@ -138,7 +138,8 @@ depth = 0;
     showBar = false;
     fadeOtherNotes = false;
     
-    statCount = [0, 0, 0];
+    statCount = undefined;
+    stat_reset();
     
     // For 3 sides targetline's glow
     lazerAlpha = [1.0, 1.0, 1.0];
