@@ -36,8 +36,14 @@ function note_sort_all() {
     }
     array_sort(objMain.chartNotesArray, _f);
     
-    // Flush deleted notes
+    // Update arrayPos & Flush deleted notes
     with(objMain) {
+    	chartNotesCount = array_length(chartNotesArray);
+    	
+    	for(var i=0; i<chartNotesCount; i++)
+    		if(instance_exists(chartNotesArray[i].inst))
+    			chartNotesArray[i].inst.arrayPos = i;
+    	
     	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
     		array_pop(chartNotesArray);
     	}
