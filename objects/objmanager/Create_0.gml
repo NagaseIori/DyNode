@@ -16,7 +16,7 @@
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
-math_set_epsilon(0.0000000001);				// 1E-10
+math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs
 
