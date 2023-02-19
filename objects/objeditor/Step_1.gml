@@ -65,7 +65,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down_ctrl(ord("Z"))) {
         operation_undo();
     }
-    if(keycheck_down_ctrl(ord("Y"))) {
+    else if(keycheck_down_ctrl(ord("Y"))) {
         operation_redo();
     }
     
