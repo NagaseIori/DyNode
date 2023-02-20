@@ -249,8 +249,6 @@ editorSelectMultiple = editorSelectCount > 1;
             	if(editorMode != 0)
             		editorNoteAttaching[i].width = editor_get_default_width();
             }
-                
-            
         }
     }
     

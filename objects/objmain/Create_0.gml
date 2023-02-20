@@ -150,6 +150,8 @@ depth = 0;
     titleAlpha = titleAlphaL;
     animTargetTitleAlpha = titleAlphaL;
     
+    standardAlpha = 0; // For editmode switch usage
+    
     // Bottom
         bottomDim = 0.5;
         bottomBgBlurIterations = 3;

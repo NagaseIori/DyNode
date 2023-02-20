@@ -23,7 +23,8 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
     for(var i=0; i<2; i++) {
         if(chartSideType[i] == "MIXER") {
-                draw_sprite(sprMixer, 0,
-                    i*_nw + (i? -1:1) * targetLineBeside, mixerX[i]);
+                draw_sprite_ext(sprMixer, 0,
+                    i*_nw + (i? -1:1) * targetLineBeside, mixerX[i],
+                    1, 1, 0, c_white, lerp(0.25, 1, standardAlpha));
             }
     }

@@ -145,13 +145,11 @@
 
 #region Bg Animation
 
+	standardAlpha = lerp_a(standardAlpha, editor_get_editmode()==5?1:0, animSpeed);
 	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
     
-    if(editor_get_editmode()==5 && safe_video_check_loaded())
-    	bgVideoAlpha = lerp_a(bgVideoAlpha, 1, animSpeed);
-    else
-    	bgVideoAlpha = lerp_a(bgVideoAlpha, 0, animSpeed);
+	bgVideoAlpha = lerp(0, safe_video_check_loaded(), standardAlpha);
     
 #endregion
 
