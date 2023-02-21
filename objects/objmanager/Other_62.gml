@@ -17,10 +17,10 @@ if (async_load[? "id"] == _update_get) {
 				}
 			}
 		} catch (e) {
-			announcement_error("autoupdate_err")
+			announcement_warning("autoupdate_err")
 		}
 	}
 	else if (async_load[? "status"] < 0) {
-		announcement_error("autoupdate_err")
+		announcement_warning("autoupdate_err")
 	}
 }
