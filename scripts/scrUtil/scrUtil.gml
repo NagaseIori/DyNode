@@ -119,7 +119,7 @@ function time_to_bar_for_dym(time) {
 		}
 	}
 	
-	show_error("CONVERTION FATAL ERROR", true);
+	show_error("CONVERSION FATAL ERROR", true);
 }
 
 #endregion

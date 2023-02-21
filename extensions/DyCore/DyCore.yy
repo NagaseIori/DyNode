@@ -12,18 +12,20 @@
   "androidsourcedir": "",
   "author": "",
   "classname": "",
-  "copyToTargets": 64,
+  "copyToTargets": 192,
   "date": "2023-02-13T21:09:47.0507377+08:00",
   "description": "",
   "exportToGame": true,
   "extensionVersion": "0.0.1",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":64,"filename":"DyCore.dll","final":"","functions":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":192,"filename":"DyCore.dll","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"DyCore_init","argCount":0,"args":[],"documentation":"","externalName":"DyCore_init","help":"DyCore_init()","hidden":false,"kind":1,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"DyCore_delaunator","argCount":0,"args":[
             1,
           ],"documentation":"","externalName":"DyCore_delaunator","help":"DyCore_delaunator(json_array)","hidden":false,"kind":1,"returnType":1,},
-      ],"init":"","kind":1,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+      ],"init":"","kind":1,"order":[],"origname":"","ProxyFiles":[
+        {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libDyCore.so","TargetMask":7,},
+      ],"uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject": "",
   "hasConvertedCodeInjection": true,
