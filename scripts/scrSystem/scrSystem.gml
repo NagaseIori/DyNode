@@ -973,14 +973,14 @@ function announcement_play(_str, time = 3000, _uniqueID = "null") {
 	show_debug_message_safe("NEW MD5 ANNO: " + _uniqueID);
 }
 
-function announcement_warning(str, time = 5000) {
+function announcement_warning(str, time = 5000, uid = "null") {
 	str = i18n_get(str);
-	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time);
+	announcement_play("[c_warning][[" + i18n_get("anno_prefix_warn") + "] [/c]" + str, time, uid);
 }
 
-function announcement_error(str, time = 8000) {
+function announcement_error(str, time = 8000, uid = "null") {
 	str = i18n_get(str);
-	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time);
+	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time, uid);
 }
 
 function announcement_adjust(str, val) {

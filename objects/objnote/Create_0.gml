@@ -476,7 +476,7 @@ image_yscale = global.scaleYAdjust;
                     	}
                     	
                     	if(_outscreen_check(x, y, side))
-                			announcement_warning("warning_note_outbound");
+                			announcement_warning("warning_note_outbound", 5000, "wob");
                     }
                     
                     note_sort_request();
