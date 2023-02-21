@@ -2,48 +2,54 @@
 
 #region Window frame related
 
-window_frame_update();
+if(os_type == os_windows) {
+	window_frame_update();
 
-_set_window_frame_rect = function () {
-	var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
-	var w = global.resolutionW * _ratio, h = global.resolutionH * _ratio
-    window_frame_set_rect(
-		(display_get_width() - w) * 0.5,
-		(display_get_height() - h) * 0.5,
-		w,
-		h
-		);
-}
-
-
-if(keycheck_down(vk_f7)) {
-	if(keycheck_down(vk_f7))
-		global.fullscreen = !global.fullscreen;
-	window_frame_set_fakefullscreen(global.fullscreen);
-}
-
-if (window_frame_get_visible() && window_has_focus()) {
-	var w, h;
-	w = window_frame_get_width();
-	h = window_frame_get_height();
-	if(window_get_width() != w || window_get_height() != h || window_get_x() != 320) {
-		window_frame_set_region(0, 0, w, h);
+	_set_window_frame_rect = function () {
+		var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * 0.7;
+		var w = global.resolutionW * _ratio, h = global.resolutionH * _ratio
+	    window_frame_set_rect(
+			(display_get_width() - w) * 0.5,
+			(display_get_height() - h) * 0.5,
+			w,
+			h
+			);
 	}
-    if(!_windowframe_inited) {
-    	_windowframe_inited = true;
-    	window_command_hook(window_command_close);
-    	call_later(2, 1, function() {
-    		if(global.fullscreen)
-    			window_frame_set_fakefullscreen(global.fullscreen);
-    		else {
-				_set_window_frame_rect();
-    		}
-    	});
-    }
+	if(keycheck_down(vk_f7)) {
+		if(keycheck_down(vk_f7))
+			global.fullscreen = !global.fullscreen;
+		window_frame_set_fakefullscreen(global.fullscreen);
+	}
+	if (window_frame_get_visible() && window_has_focus()) {
+		var w, h;
+		w = window_frame_get_width();
+		h = window_frame_get_height();
+		if(window_get_width() != w || window_get_height() != h || window_get_x() != 320) {
+			window_frame_set_region(0, 0, w, h);
+		}
+	    if(!_windowframe_inited) {
+	    	_windowframe_inited = true;
+	    	window_command_hook(window_command_close);
+	    	call_later(2, 1, function() {
+	    		if(global.fullscreen)
+	    			window_frame_set_fakefullscreen(global.fullscreen);
+	    		else {
+					_set_window_frame_rect();
+	    		}
+	    	});
+	    }
+	}
+	
+	if(window_command_check(window_command_close)) {
+		game_end_confirm();
+	}
 }
-
-if(window_command_check(window_command_close)) {
-	game_end_confirm();
+else {
+	if(keycheck_down(vk_f7)) {
+		if(keycheck_down(vk_f7))
+			global.fullscreen = !global.fullscreen;
+		window_set_fullscreen(global.fullscreen);
+	}
 }
 
 #endregion
