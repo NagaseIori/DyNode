@@ -323,7 +323,7 @@ function map_import_dyn(_file) {
 	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = show_question_i18n("box_q_import_bpm");
     
-    var _str = json_parse(fast_file_read_all(_file));
+    var _str = json_parse(SnapStringFromFile(_file));
     
     if(!is_struct(_str))
     	show_error("Load failed.", true);

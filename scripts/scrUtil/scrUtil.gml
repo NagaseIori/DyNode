@@ -281,14 +281,6 @@ function fast_file_save_async(file, str) {
 		buffer: _buf
 	};
 }
-
-function fast_file_read_all(file) {
-	var _buf = buffer_load(file);
-	var _str = buffer_read(_buf, buffer_text);
-	buffer_delete(_buf);
-	return _str;
-}
-
 #endregion
 
 function in_between(x, l, r) {
