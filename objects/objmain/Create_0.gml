@@ -66,6 +66,10 @@ depth = 0;
     topBarTimeLastTime = 0;
     topBarTimeGradA = 0;
     animTargetTopBarTimeGradA = 0;
+    
+    blackBarFromTop = resor_to_y(125/1080);
+    blackBarHeight = 150;
+    pauseBarIndent = 40;
 
 #endregion
 

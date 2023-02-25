@@ -74,6 +74,46 @@ function draw_scribble_box(_ele, x, y, alpha) {
 		.Rounding(10)
 		.Draw();
 }
+
+function draw_rectangle_gradient(position, color, alpha) {
+	draw_primitive_begin(pr_trianglelist);
+	
+		draw_vertex_color(position[0], position[1], color[0], alpha[0]);
+		draw_vertex_color(position[2], position[3], color[3], alpha[3]);
+		draw_vertex_color(position[0], position[3], color[2], alpha[2]);
+		
+		draw_vertex_color(position[0], position[1], color[0], alpha[0]);
+		draw_vertex_color(position[2], position[1], color[1], alpha[1]);
+		draw_vertex_color(position[2], position[3], color[3], alpha[3]);
+	
+	draw_primitive_end();
+}
+
+// W Pixels Width
+function generate_pause_shadow(height, indent = 30) {
+	var width = global.resolutionW;
+	var surf = surface_create(width, height+2*indent);
+	surface_set_target(surf);
+		gpu_set_blendmode_ext(bm_one, bm_zero);
+			draw_rectangle_gradient([0, indent, width, indent+height/2],
+				[0, 0, 0, 0], [0, 0, 1, 1]);
+			draw_rectangle_gradient([0, indent+height/2, width, indent+height],
+				[0, 0, 0, 0], [1, 1, 0, 0]);
+		gpu_set_blendmode(bm_normal);
+	surface_reset_target();
+	
+	var _ping = kawase_create(width, height+2*indent, 5);
+	var _psurf = kawase_get_surface(_ping);
+	surface_copy(_psurf, 0, 0, surf);
+	kawase_blur(_ping);
+	surface_copy(surf, 0, 0, _psurf);
+	kawase_destroy(_ping);
+	
+	var _spr = sprite_create_from_surface(surf, 0, 0, width, height+2*indent, false, false, 0, 0);
+	surface_free(surf);
+	
+	return _spr;
+}
 #endregion
 
 #region TIME & BAR & BPM
@@ -280,6 +320,16 @@ function fast_file_save_async(file, str) {
 		id: _id,
 		buffer: _buf
 	};
+}
+
+function fast_file_save(file, str) {
+	var _len = string_byte_length(str);
+	var _buf = buffer_create(_len, buffer_fixed, 1);
+	buffer_seek(_buf, buffer_seek_start, 0);
+	buffer_write(_buf, buffer_text, str);
+	buffer_save(_buf, file);
+	buffer_delete(_buf);
+	return;
 }
 #endregion
 

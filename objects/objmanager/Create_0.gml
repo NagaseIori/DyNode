@@ -21,6 +21,8 @@ math_set_epsilon(0.00000001);				// 1E-8
 // Global Configs
 
 global.configPath = program_directory + "config.json";
+if(os_type == os_linux)
+	global.configPath = "config.json";
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -64,6 +66,7 @@ global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
 
 global.sprLazer = generate_lazer_sprite(2000);
 global.sprHoldBG = generate_hold_sprite(global.resolutionW + 4*sprite_get_height(sprHold));
+// global.sprPauseShadow = generate_pause_shadow(200);
 
 // Set GUI & Window Resolution
 

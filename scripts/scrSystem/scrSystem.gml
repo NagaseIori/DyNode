@@ -1003,6 +1003,9 @@ function load_config() {
 	if(!file_exists(global.configPath))
 		save_config();
 	
+	if(!file_exists(global.configPath))
+		show_error("Config file creating failed.", true)
+	
 	var _buf = buffer_load(global.configPath);
 	var _con = SnapBufferReadLooseJSON(_buf, 0);
 	buffer_delete(_buf);
@@ -1043,8 +1046,7 @@ function load_config() {
 
 function save_config() {
 	
-	var _f = file_text_open_write(global.configPath);
-	file_text_write_string(_f, SnapToJSON({
+	fast_file_save(global.configPath, SnapToJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -1060,8 +1062,6 @@ function save_config() {
 		updatechannel: global.updatechannel,
 		graphics: global.graphics
 	}, true));
-	
-	file_text_close(_f);
 	
 }
 
