@@ -69,7 +69,7 @@
                 animCurvFaintEval = lerp(0.5, 1.0, animCurvFaintEval);
             }
         
-        while((_nowtime - nowTime) * playbackSpeed <= _nh && beatlineAlphaMul > 0.01) {
+        while(((_nowtime - nowTime) * playbackSpeed <= _nh || _nowat == 0) && beatlineAlphaMul > 0.01) {
             for(var i = _nowbeats; i * _nowtp.beatLength + _nowtime < _nexttime && (i * _nowtp.beatLength + _nowtime - nowTime) * playbackSpeed <= _nh; i++) {
                 for(var j = 28; j >= 1; j--) if(beatlineEnabled[j]) {
                     for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowtp.beatLength + _nowtime < _nexttime; k += ((j&1)? 1:2)/j) {
