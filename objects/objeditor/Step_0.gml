@@ -48,9 +48,14 @@
         // Beat Lines Analyze & Draw
         
         var _nowat = 0, _pointscount = array_length(timingPoints);
+        var _totalBeats = 0;
         
-        while(_nowat + 1 != _pointscount && timingPoints[_nowat+1].time <= nowTime)
-            _nowat ++;
+        while(_nowat + 1 != _pointscount && timingPoints[_nowat+1].time <= nowTime) {
+        	_totalBeats += ceil((timingPoints[_nowat+1].time - timingPoints[_nowat].time)
+        		/(timingPoints[_nowat].beatLength*timingPoints[_nowat].meter))
+        	_nowat ++;
+        }
+            
         
         var _nowTp = timingPoints[_nowat];
         var _nowBeats = floor((nowTime - _nowTp.time) / _nowTp.beatLength);
@@ -125,15 +130,28 @@
                             
                             if(i == 0 && k == 0) {
                                 scribble("BPM "+string_format(mspb_to_bpm(_nowTp.beatLength), 1, 2)+" "+string(_nowTp.meter)+"/4")
-                                    .starting_format("fDynamix20", c_white)
+                                    .starting_format("mDynamix", c_white)
+                                    .msdf_border(c_dkgrey, 2)
                                     .align(fa_center, fa_top)
+                                    .scale(0.9, 0.9)
                                     .blend(c_white, beatlineAlpha[0])
-                                    .draw(_nw/2, _ny);
+                                    .draw(_nw/2, _ny+3);
+                            }
+                            
+                            if(_nowhard) {
+                            	scribble(string_format(_totalBeats + round(i/_nowTp.meter) + 1, 1, 0))
+                            		.align(fa_left, fa_center)
+                            		.starting_format("mDynamix", c_white)
+                            		.msdf_border(c_dkgrey, 2)
+                            		.scale(0.9, 0.9)
+                            		.blend(c_white, beatlineAlpha[0])
+                            		.draw(_nw/2 + _nowl/2 + 20, _ny);
                             }
                         }
                     }
                 }
             }
+            _totalBeats += ceil((_nextTpTime - _nowTpTime) / (_nowTp.beatLength * _nowTp.meter));
             _nowat ++;
             if(_nowat == _pointscount) break;
             _nowTpTime = _nextTpTime;
