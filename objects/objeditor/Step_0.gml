@@ -75,7 +75,7 @@
             }
         
         while(((_nowTpTime - nowTime) * playbackSpeed <= _nh || _nowat == 0) && beatlineAlphaMul > 0.01) {
-            for(var i = _nowBeats; i * _nowTp.beatLength + _nowTpTime < _nextTpTime && (i * _nowTp.beatLength + _nowTpTime - nowTime) * playbackSpeed <= _nh; i++) {
+            for(var i = _nowBeats; i * _nowTp.beatLength + _nowTpTime + 1 < _nextTpTime && (i * _nowTp.beatLength + _nowTpTime - nowTime) * playbackSpeed <= _nh; i++) {
                 for(var j = 28; j >= 1; j--) if(beatlineEnabled[j]) {
                     for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowTp.beatLength + _nowTpTime < _nextTpTime; k += ((j&1)? 1:2)/j) {
                         _ny =  note_time_to_y(_nowTpTime + (i + k) * _nowTp.beatLength, 0);
@@ -145,7 +145,30 @@
                             		.msdf_border(c_dkgrey, 2)
                             		.scale(0.9, 0.9)
                             		.blend(c_white, beatlineAlpha[0])
-                            		.draw(_nw/2 + _nowl/2 + 20, _ny);
+                            		.draw(beatlineSideInfoX + 20, _ny);
+                            }
+                            else if(j==1) {
+                            	scribble(string_format(_totalBeats + floor(i/_nowTp.meter) + 1, 1, 0))
+                            		.align(fa_left, fa_bottom)
+                            		.starting_format("mDynamix", c_ltgrey)
+                            		.msdf_border(c_dkgrey, 1)
+                            		.scale(0.75, 0.75)
+                            		.blend(c_white, beatlineAlpha[0])
+                            		.draw(beatlineSideInfoX + 10, _ny - 3);
+                            		
+                            	CleanLine(beatlineSideInfoX, _ny, beatlineSideInfoX+beatlineSideInfoDivWidth, _ny)
+                            		.Blend(c_ltgrey, beatlineAlpha[0])
+                            		.Thickness(7)
+                            		.Cap("round", "round")
+                            		.Draw();
+                            	
+                            	scribble(string_format(i - floor(i/_nowTp.meter)*_nowTp.meter, 1, 0)+"/4")
+                            		.align(fa_left, fa_top)
+                            		.starting_format("mDynamix", c_ltgrey)
+                            		.msdf_border(c_dkgrey, 1)
+                            		.scale(0.75, 0.75)
+                            		.blend(c_white, beatlineAlpha[0])
+                            		.draw(beatlineSideInfoX + 10, _ny + 3);
                             }
                         }
                     }

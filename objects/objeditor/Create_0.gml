@@ -127,6 +127,8 @@ beatlineHardHeight = (global.resolutionH - objMain.targetLineBeside) * 0.95;
 beatlineHeight = (global.resolutionH - objMain.targetLineBeside) * 0.90;
 beatlineAlpha = [0, 0, 0];
 beatlineAlphaMul = 0;
+beatlineSideInfoX = resor_to_x(0.5)+beatlineHardLength/2;
+beatlineSideInfoDivWidth = 100;
 
 animSpeed = 0.4;
 animBeatlineTargetAlpha = [0, 0, 0];
