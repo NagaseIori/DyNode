@@ -118,29 +118,42 @@ function editor_select_reset() {
 }
 
 function editor_snap_to_grid_y(_y, _side) {
-    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _y;
+	var _ret = {
+	    	y: _y,
+	    	bar: undefined
+    	};
+    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
-    var _ret = _y;
+    
     var _time = y_to_note_time(_y, _side);
     var _nowat = 0;
+    
     with(objEditor) {
         var targetLineBelow = objMain.targetLineBelow;
         var targetLineBeside = objMain.targetLineBeside;
         var playbackSpeed = objMain.playbackSpeed;
         var _l = array_length(timingPoints);
-        while(_nowat + 1 < _l && timingPoints[_nowat+1].time <= _time)
-            _nowat++;
+        var _totalBar = 1;
+        while(_nowat + 1 != _l && timingPoints[_nowat+1].time <= _time) {
+        	_totalBar += ceil((timingPoints[_nowat+1].time - timingPoints[_nowat].time)
+        		/(timingPoints[_nowat].beatLength*timingPoints[_nowat].meter));
+        	_nowat ++;
+        }
         var _nowtp = timingPoints[_nowat];
         var _nowbeats = floor((_time - _nowtp.time) / _nowtp.beatLength);
         var _nexttime = (_nowat + 1 == _l ? objMain.musicLength:timingPoints[_nowat+1].time)
-        var _nowdiv = 1 / beatlineDivs[beatlineNowGroup][beatlineNowMode] * _nowtp.beatLength;
+        var _nowdivb = beatlineDivs[beatlineNowGroup][beatlineNowMode]; // divs per beat
+        var _nowdiv = 1 / _nowdivb * _nowtp.beatLength;
+        var _nowdivbm = _nowdivb * _nowtp.meter; // divs per bar
         
         var _ntime = (_time - _nowbeats * _nowtp.beatLength - _nowtp.time) / _nowdiv;
-        var _rt = round(_ntime) * _nowdiv;
-        var _rbt = round(_ntime)==ceil(_ntime) ? floor(_ntime) * _nowdiv : ceil(_ntime) * _nowdiv;
+        var _rd = round(_ntime);
+        var _rt = _rd * _nowdiv;
+        var _rbd = round(_ntime)==ceil(_ntime) ? floor(_ntime) : ceil(_ntime);
+        var _rbt = _rbd * _nowdiv;
         _rt += _nowbeats * _nowtp.beatLength + _nowtp.time;
-        _rbt += _nowbeats * _nowtp.beatLength + _nowtp.time;;
+        _rbt += _nowbeats * _nowtp.beatLength + _nowtp.time;
         var _ry = note_time_to_y(_rt, min(_side, 1));
         var _rby = note_time_to_y(_rbt, min(_side, 1));
         
@@ -148,15 +161,41 @@ function editor_snap_to_grid_y(_y, _side) {
         
         if(_side == 0) {
             if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
-                _ret = _ry;
+                _ret = {
+                	y: _ry,
+                	bar: floor((_rt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
+                	divb: _nowdivbm,
+                	divc: _nowdivb * 4
+                };
             else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
-                _ret = _rby;
+                _ret = {
+                	y: _rby,
+                	bar: floor((_rbt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
+                	divb: _nowdivbm,
+                	divc: _nowdivb * 4
+                };
         }
         else {
             if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
-                _ret = _side == 1?_ry:_nw - _ry;
+                _ret =
+                {
+                	y: _side == 1?_ry:_nw - _ry,
+                	bar: floor((_rt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
+                	divb: _nowdivbm,
+                	divc: _nowdivb * 4
+                };
             else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
-                _ret = _side == 1?_rby:_nw - _rby;
+                _ret =
+                {
+                	y: _side == 1?_rby:_nw - _rby,
+                	bar: floor((_rbt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
+                	divb: _nowdivbm,
+                	divc: _nowdivb * 4
+                };
         }
     }
     

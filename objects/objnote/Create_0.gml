@@ -54,6 +54,7 @@ image_yscale = global.scaleYAdjust;
     selectUnlock = false;			// If the state in last step is select
     selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
+    lastAttachBar = -1;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
@@ -338,13 +339,15 @@ image_yscale = global.scaleYAdjust;
             if(editor_get_note_attaching_center() == id) {
             	if(side == 0) {
 	                x = editor_snap_to_grid_x(mouse_x, side);
-	                y = editor_snap_to_grid_y(mouse_y, side);
+	                lastAttachBar = editor_snap_to_grid_y(mouse_y, side);
+	                y = lastAttachBar.y;
 	                position = x_to_note_pos(x, side);
 	                time = y_to_note_time(y, side);
 	            }
 	            else {
-	                y = editor_snap_to_grid_x(mouse_y, side)
-	                x = editor_snap_to_grid_y(mouse_x, side);
+	                y = editor_snap_to_grid_x(mouse_y, side);
+	                lastAttachBar = editor_snap_to_grid_y(mouse_x, side);
+	                x = lastAttachBar.y;
 	                position = x_to_note_pos(y, side);
 	                time = y_to_note_time(x, side);
 	            }
@@ -418,7 +421,9 @@ image_yscale = global.scaleYAdjust;
         
         stateAttachSub = function () {
             stateString = "ATCHS";
-            sinst.time = y_to_note_time(editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side), side);
+            sinst.lastAttachBar = editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side);
+            sinst.time = y_to_note_time(sinst.lastAttachBar.y, side);
+            
             if(mouse_check_button_pressed(mb_left)) {
                 state = stateDropSub;
                 origWidth = width;
@@ -484,13 +489,15 @@ image_yscale = global.scaleYAdjust;
             }
             if(isDragging) {
                 if(side == 0) {
-                    y = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                	lastAttachBar = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                    y = lastAttachBar.y;
                     x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
                     position = x_to_note_pos(x, side);
                     time = y_to_note_time(y, side);
                 }
                 else {
-                    x = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
+                	lastAttachBar = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
+                    x = lastAttachBar.y;
                     y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
