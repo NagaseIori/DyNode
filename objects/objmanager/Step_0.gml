@@ -134,12 +134,12 @@ if(room == rMain) {
 }    
     
 if(keycheck_down_ctrl(vk_f12)) {
-	var _file = program_directory + "Screenshots\\" + random_id(9) + ".png"
+	var _file = SYSFIX + program_directory + "Screenshots\\" + random_id(9) + ".png"
 	screen_save(_file);
 	announcement_play(i18n_get("screenshot_save") + _file)
 }
 
-if(keycheck_down(vk_f12)) {
+else if(keycheck_down(vk_f12)) {
 	url_open("https://dyn.iorinn.moe/shortcuts.html");
 }
 
