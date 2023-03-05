@@ -23,6 +23,8 @@ math_set_epsilon(0.00000001);				// 1E-8
 global.configPath = program_directory + "config.json";
 if(os_type == os_linux)
 	global.configPath = "config.json";
+if(os_type == os_windows)
+	global.configPath = SYSFIX + global.configPath;
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -30,7 +32,7 @@ global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
 global.fullscreen = false;
-global.FMOD_MP3_DELAY = 60;
+global.FMOD_MP3_DELAY = 0;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
