@@ -148,7 +148,7 @@ function editor_snap_to_grid_y(_y, _side) {
         var _nowdivbm = _nowdivb * _nowtp.meter; // divs per bar
         
         var _ntime = (_time - _nowbeats * _nowtp.beatLength - _nowtp.time) / _nowdiv;
-        var _rd = round(_ntime);
+        var _rd = round(_ntime); // now divs in one beat
         var _rt = _rd * _nowdiv;
         var _rbd = round(_ntime)==ceil(_ntime) ? floor(_ntime) : ceil(_ntime);
         var _rbt = _rbd * _nowdiv;
@@ -163,7 +163,7 @@ function editor_snap_to_grid_y(_y, _side) {
             if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
                 _ret = {
                 	y: _ry,
-                	bar: floor((_rt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	bar: floor((_rd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
                 	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
                 	divb: _nowdivbm,
                 	divc: _nowdivb * 4
@@ -171,7 +171,7 @@ function editor_snap_to_grid_y(_y, _side) {
             else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
                 _ret = {
                 	y: _rby,
-                	bar: floor((_rbt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	bar: floor((_rbd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
                 	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
                 	divb: _nowdivbm,
                 	divc: _nowdivb * 4
@@ -182,7 +182,7 @@ function editor_snap_to_grid_y(_y, _side) {
                 _ret =
                 {
                 	y: _side == 1?_ry:_nw - _ry,
-                	bar: floor((_rt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	bar: floor((_rd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
                 	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
                 	divb: _nowdivbm,
                 	divc: _nowdivb * 4
@@ -191,7 +191,7 @@ function editor_snap_to_grid_y(_y, _side) {
                 _ret =
                 {
                 	y: _side == 1?_rby:_nw - _rby,
-                	bar: floor((_rbt - _nowtp.time)/(_nowtp.beatLength*_nowtp.meter)) + _totalBar,
+                	bar: floor((_rbd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
                 	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
                 	divb: _nowdivbm,
                 	divc: _nowdivb * 4
