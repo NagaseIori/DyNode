@@ -1,11 +1,13 @@
-/// @return Nested struct/array data that represents the contents of the JSON string
+/// @return Nested struct/array data that represents the contents of the QML string
 /// 
-/// @param buffer  Buffer to read data from
-/// @param offset  Offset in the buffer to read data from
+/// @param buffer                Buffer to read data from
+/// @param instanceofDict
+/// @param [relaxedMode=false]
+/// @param [offset]              Offset in the buffer to read data from
 /// 
-/// @jujuadams 2022-12-11
+/// @jujuadams 2023-01-08
 
-function SnapBufferReadLooseJSON(_buffer, _inOffset = undefined)
+function SnapBufferReadQML(_buffer, _instanceofDict, _relaxed = false, _inOffset = undefined)
 {
     if (_inOffset != undefined)
     {
@@ -22,23 +24,20 @@ function SnapBufferReadLooseJSON(_buffer, _inOffset = undefined)
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadLooseJSONComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
-        else if (_byte == ord("["))
+        else if ((_byte == ord("[")) || (_byte == ord("]")) || (_byte == ord("\"")) || (_byte == ord("{")) || (_byte == ord("}")))
         {
-            _result = __SnapBufferReadLooseJSONArray(_buffer, _bufferSize);
-        }
-        else if (_byte == ord("{"))
-        {
-            _result = __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize);
+            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting struct class name\n ", true);
         }
         else if (_byte > 0x20)
         {
-            show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting either { or [\n ", true);
+            _result = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
+            break;
         }
     }
     
@@ -50,7 +49,7 @@ function SnapBufferReadLooseJSON(_buffer, _inOffset = undefined)
     return _result;
 }
 
-function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
+function __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     var _result = [];
     
@@ -60,23 +59,23 @@ function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadLooseJSONComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if (_byte == ord("]"))
         {
             return _result;
         }
-        else if ((_byte == ord(":")) || (_byte == ord(",")))
+        else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
             show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a value\n ", true);
         }
         else if (_byte > 0x20)
         {
-            var _value = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
+            var _value = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
             array_push(_result, _value);
             
             //Find a comma, newline, or closing bracket
@@ -87,7 +86,7 @@ function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
                 {
                     return _result;
                 }
-                else if ((_byte == ord(",")) || (_byte == ord("\n")) || (_byte == ord("\r")))
+                else if ((_byte == ord(";")) || (_byte == ord("\n")) || (_byte == ord("\r")))
                 {
                     break;
                 }
@@ -102,9 +101,9 @@ function __SnapBufferReadLooseJSONArray(_buffer, _bufferSize)
     show_error("SNAP:\nFound unterminated array\n ", true);
 }
 
-function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
+function __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, _result)
 {
-    var _result = {};
+    var _childrenArrayVariableName = "children";
     
     while(buffer_tell(_buffer) < _bufferSize)
     {
@@ -112,103 +111,83 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
         
         if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("/")))
         {
-            __SnapBufferReadLooseJSONComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
         {
-            __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
+            __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
         }
         else if (_byte == ord("}"))
         {
             return _result;
         }
-        else if ((_byte == ord(":")) || (_byte == ord(",")))
+        else if ((_byte == ord(":")) || (_byte == ord(";")))
         {
             show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a key\n ", true);
         }
         else if (_byte > 0x20)
         {
-            var _key = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
-            
-            if (!is_string(_key))
+            var _key = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
+            if (is_struct(_key))
             {
-                if (is_array(_key))
+                //If the "key" is actually a struct then we should add whatever we find to the parent's <children> array
+                if (variable_struct_exists(_result, _childrenArrayVariableName))
                 {
-                    var _keyArray = _key;
-                    var _keyArrayLength = array_length(_keyArray);
-                    
-                    if (_keyArrayLength <= 0)
+                    if (!is_array(_result[$ _childrenArrayVariableName]))
                     {
-                        show_error("SNAP:\nStruct key arrays must have at least one element\n ", true);
-                    }
-                    else if (_keyArrayLength <= 1)
-                    {
-                        if (!is_string(_keyArray[0])) show_error("SNAP:\nStruct keys must be strings (key was " + string(_keyArray[0]) + ", typeof=" + typeof(_keyArray[0]) + ")\n ", true);
+                        show_error("SNAP:\n." + string(_childrenArrayVariableName) + " variable for struct exists already but is not an array\n ", true);
                     }
                 }
                 else
                 {
-                    show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
+                    _result[$ _childrenArrayVariableName] = [];
                 }
-            }
-            
-            //Find a colon
-            while(buffer_tell(_buffer) < _bufferSize)
-            {
-                var _byte = buffer_read(_buffer, buffer_u8);
                 
-                if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
-                {
-                    __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
-                }
-                else if (_byte == ord(":"))
-                {
-                    break;
-                }
-                else if (_byte > 0x20)
-                {
-                    show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
-                }
+                array_push(_result[$ _childrenArrayVariableName], _key);
             }
-            
-            //Find the start of a value
-            var _byte = 0x00;
-            while(buffer_tell(_buffer) < _bufferSize)
+            else
             {
-                var _byte = buffer_read(_buffer, buffer_u8);
+                if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
                 
-                if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
+                //Find a colon
+                while(buffer_tell(_buffer) < _bufferSize)
                 {
-                    __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
+                    var _byte = buffer_read(_buffer, buffer_u8);
+                    
+                    if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
+                    {
+                        __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
+                    }
+                    else if (_byte == ord(":"))
+                    {
+                        break;
+                    }
+                    else if (_byte > 0x20)
+                    {
+                        show_error("SNAP:\nFound unexpected character " + chr(_byte) + " (decimal=" + string(_byte) + ")\nWas expecting a colon\n ", true);
+                    }
                 }
-                else if (_byte > 0x20)
+                
+                //Find the start of a value
+                var _byte = 0x00;
+                while(buffer_tell(_buffer) < _bufferSize)
                 {
-                    break;
+                    var _byte = buffer_read(_buffer, buffer_u8);
+                    
+                    if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
+                    {
+                        __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
+                    }
+                    else if (_byte > 0x20)
+                    {
+                        break;
+                    }
                 }
-            }
-            if (_byte <= 0x20) show_error("SNAP:\nCould not find start of value for key \"" + _key + "\"\n ", true);
-            
-            //Read a value and store it in the struct
-            var _value = __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _byte);
-            
-            if (is_string(_key))
-            {
+                if (_byte <= 0x20) show_error("SNAP:\nCould not find start of value for key \"" + _key + "\"\n ", true);
+                
+                //Read a value and store it in the struct
+                var _value = __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _byte);
                 _result[$ _key] = _value;
-            }
-            else //Is an array
-            {
-                //Use the original return value to set the first key
-                _result[$ _keyArray[0]] = _value;
-                
-                //Use duplicate return values for subsequent keys
-                var _i = 1;
-                repeat(_keyArrayLength-1)
-                {
-                    var _key = _keyArray[_i];
-                    if (!is_string(_key)) show_error("SNAP:\nStruct keys must be strings (key was " + string(_key) + ", typeof=" + typeof(_key) + ")\n ", true);
-                    _result[$ _keyArray[_i]] = __SnapBufferReadLooseJSONDeepCopyInner(_value, self, self);
-                    ++_i;
-                }
             }
             
             //Find a comma, newline, or closing bracket
@@ -218,13 +197,13 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
                 
                 if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
                 {
-                    __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
+                    __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
                 }
                 else if (_byte == ord("}"))
                 {
                     return _result;
                 }
-                else if ((_byte == ord(",")) || (_byte == ord("\n")) || (_byte == ord("\r")))
+                else if ((_byte == ord(";")) || (_byte == ord("\n")) || (_byte == ord("\r")))
                 {
                     break;
                 }
@@ -239,27 +218,227 @@ function __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize)
     show_error("SNAP:\nFound unterminated struct\n ", true);
 }
 
-function __SnapBufferReadLooseJSONValue(_buffer, _bufferSize, _firstByte)
+function __SnapBufferReadQMLValue(_buffer, _instanceofDict, _relaxed, _bufferSize, _firstByte)
 {
     if (_firstByte == ord("["))
     {
-        return __SnapBufferReadLooseJSONArray(_buffer, _bufferSize);
+        return __SnapBufferReadQMLArray(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
     else if (_firstByte == ord("{"))
     {
-        return __SnapBufferReadLooseJSONStruct(_buffer, _bufferSize);
+        show_error("SNAP:\nStructs must have a class name\n ", true);
     }
     else if (_firstByte == ord("\""))
     {
-        return __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize);
+        return __SnapBufferReadQMLDelimitedString(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
     else
     {
-        return __SnapBufferReadLooseJSONString(_buffer, _bufferSize);
+        return __SnapBufferReadQMLString(_buffer, _instanceofDict, _relaxed, _bufferSize);
     }
 }
 
-function __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize)
+function __SnapBufferReadQMLString(_buffer, _instanceofDict, _relaxed, _bufferSize)
+{
+    static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
+    buffer_seek(_cacheBuffer, buffer_seek_start, 0);
+    
+    var _result = undefined;
+    
+    var _start = buffer_tell(_buffer)-1;
+    var _end   = _start+1;
+    
+    var _stringUsesCache = false;
+    
+    while(buffer_tell(_buffer) < _bufferSize)
+    {
+        var _byte = buffer_read(_buffer, buffer_u8);
+        
+        if ((_byte == ord(":"))
+         || (_byte == ord(";"))
+         || (_byte == ord("{"))
+         || (_byte == ord("}"))
+         || (_byte == ord("]"))
+         || (_byte == ord("\n"))
+         || (_byte == ord("\r"))
+         || ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*"))))
+        {
+            if (_stringUsesCache)
+            {
+                var _size = _end - _start;
+                if (_size > 0)
+                {
+                    buffer_copy(_buffer, _start, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
+                    buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
+                }
+                
+                buffer_write(_cacheBuffer, buffer_u8, 0x00);
+                buffer_seek(_cacheBuffer, buffer_seek_start, 0);
+                var _result = buffer_read(_cacheBuffer, buffer_string);
+            }
+            else
+            {
+                var _oldByte = buffer_peek(_buffer, _end, buffer_u8);
+                buffer_poke(_buffer, _end, buffer_u8, 0x00);
+                var _result = buffer_peek(_buffer, _start, buffer_string);
+                buffer_poke(_buffer, _end, buffer_u8, _oldByte);
+                
+                if (_result == "true")
+                {
+                    _result = true;
+                }
+                else if (_result == "false")
+                {
+                    _result = false;
+                }
+                else if (_result == "null")
+                {
+                    _result = undefined;
+                }
+                else
+                {
+                    try
+                    {
+                        _result = real(_result);
+                    }
+                    catch(_error)
+                    {
+                        //Not a number apparently
+                    }
+                }
+            }
+            
+            buffer_seek(_buffer, buffer_seek_relative, -1);
+            
+            if (_byte == ord("{"))
+            {
+                buffer_seek(_buffer, buffer_seek_relative, 1);
+                
+                if (!is_string(_result))
+                {
+                    show_error("SNAP:\nStruct class names must be strings (typeof=" + typeof(_result) + ")\n ", true);
+                }
+                
+                var _constructor = _instanceofDict[$ _result];
+                if (_relaxed && (_constructor == undefined)) _constructor = asset_get_index(_result);
+                
+                if (is_numeric(_constructor))
+                {
+                    if (!script_exists(_constructor))
+                    {
+                        show_error("SNAP:\nStruct class name \"" + string(_result) + "\" has script index " + string(_constructor) + " but this script doesn't exist\n ", true);
+                    }
+                    
+                    _result = __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, new _constructor());
+                }
+                else if (is_method(_constructor))
+                {
+                    _result = __SnapBufferReadQMLStruct(_buffer, _instanceofDict, _relaxed, _bufferSize, new _constructor());
+                }
+                else if (is_undefined(_constructor))
+                {
+                    show_error("SNAP:\nFound undefined struct class name \"" + string(_result) + "\"\n ", true);
+                }
+                else
+                {
+                    show_error("SNAP:\nFound invalid struct class name \"" + string(_result) + "\"\n ", true);
+                }
+            }
+            else if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
+            {
+                __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize);
+            }
+            
+            return _result;
+        }
+        else if (_byte == ord("\\"))
+        {
+            _stringUsesCache = true;
+            
+            var _size = buffer_tell(_buffer) - _start-1;
+            if (_size > 0)
+            {
+                buffer_copy(_buffer, _start, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
+                buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
+            }
+            
+            var _byte = buffer_read(_buffer, buffer_u8);
+            switch(_byte)
+            {
+                case ord("n"): buffer_write(_cacheBuffer, buffer_u8, ord("\n")); break;
+                case ord("r"): buffer_write(_cacheBuffer, buffer_u8, ord("\r")); break;
+                case ord("t"): buffer_write(_cacheBuffer, buffer_u8, ord("\t")); break;
+                
+                case ord("u"):
+                    var _oldByte = buffer_peek(_buffer, buffer_tell(_buffer)+4, buffer_u8);
+                    buffer_poke(_buffer, buffer_tell(_buffer)+4, buffer_u8, 0x00);
+                    var _hex = buffer_read(_buffer, buffer_string);
+                    buffer_seek(_buffer, buffer_seek_relative, -1);
+                    buffer_poke(_buffer, buffer_tell(_buffer), buffer_u8, _oldByte);
+                    
+                    var _value = int64(ptr(_hex));
+                    if (_value <= 0x7F) //0xxxxxxx
+                    {
+                        buffer_write(_cacheBuffer, buffer_u8, _value);
+                    }
+                    else if (_value <= 0x07FF) //110xxxxx 10xxxxxx
+                    {
+                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ((_value >> 6) & 0x1F));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ( _value       & 0x3F));
+                    }
+                    else if (_value <= 0xFFFF) //1110xxxx 10xxxxxx 10xxxxxx
+                    {
+                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ( _value        & 0x0F));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  4) & 0x3F));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >> 10) & 0x3F));
+                    }
+                    else if (_value <= 0x10000) //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+                    {
+                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ( _value        & 0x07));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  3) & 0x3F));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  9) & 0x3F));
+                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >> 15) & 0x3F));
+                    }
+                break;
+                
+                default:
+                    if ((_byte & $E0) == $C0) //110xxxxx 10xxxxxx
+                    {
+                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 1, _cacheBuffer, buffer_tell(_cacheBuffer));
+                        buffer_seek(_buffer, buffer_seek_relative, 1);
+                        buffer_seek(_cacheBuffer, buffer_seek_relative, 1);
+                    }
+                    else if ((_byte & $F0) == $E0) //1110xxxx 10xxxxxx 10xxxxxx
+                    {
+                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 2, _cacheBuffer, buffer_tell(_cacheBuffer));
+                        buffer_seek(_buffer, buffer_seek_relative, 2);
+                        buffer_seek(_cacheBuffer, buffer_seek_relative, 2);
+                    }
+                    else if ((_byte & $F8) == $F0) //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+                    {
+                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 3, _cacheBuffer, buffer_tell(_cacheBuffer));
+                        buffer_seek(_buffer, buffer_seek_relative, 3);
+                        buffer_seek(_cacheBuffer, buffer_seek_relative, 3);
+                    }
+                    else
+                    {
+                        buffer_write(_cacheBuffer, buffer_u8, _byte);
+                    }
+                break;
+            }
+            
+            _start = buffer_tell(_buffer);
+        }
+        else if (_byte > 0x20)
+        {
+            _end = buffer_tell(_buffer);
+        }
+    }
+    
+    show_error("SNAP:\nFound unterminated value\n ", true);
+}
+
+function __SnapBufferReadQMLDelimitedString(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
     buffer_seek(_cacheBuffer, buffer_seek_start, 0);
@@ -380,172 +559,7 @@ function __SnapBufferReadLooseJSONDelimitedString(_buffer, _bufferSize)
     show_error("SNAP:\nFound unterminated string\n ", true);
 }
 
-function __SnapBufferReadLooseJSONString(_buffer, _bufferSize)
-{
-    static _cacheBuffer = buffer_create(1024, buffer_grow, 1);
-    buffer_seek(_cacheBuffer, buffer_seek_start, 0);
-    
-    var _result = undefined;
-    
-    var _start = buffer_tell(_buffer)-1;
-    var _end   = _start+1;
-    
-    var _stringUsesCache = false;
-    
-    while(buffer_tell(_buffer) < _bufferSize)
-    {
-        var _byte = buffer_read(_buffer, buffer_u8);
-        
-        if ((_byte == ord(":"))
-         || (_byte == ord(","))
-         || (_byte == ord("}"))
-         || (_byte == ord("]"))
-         || (_byte == ord("\n"))
-         || (_byte == ord("\r"))
-         || ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*"))))
-        {
-            if (_stringUsesCache)
-            {
-                var _size = _end - _start;
-                if (_size > 0)
-                {
-                    buffer_copy(_buffer, _start, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
-                    buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
-                }
-                
-                buffer_write(_cacheBuffer, buffer_u8, 0x00);
-                buffer_seek(_cacheBuffer, buffer_seek_start, 0);
-                var _result = buffer_read(_cacheBuffer, buffer_string);
-            }
-            else
-            {
-                var _oldByte = buffer_peek(_buffer, _end, buffer_u8);
-                buffer_poke(_buffer, _end, buffer_u8, 0x00);
-                var _result = buffer_peek(_buffer, _start, buffer_string);
-                buffer_poke(_buffer, _end, buffer_u8, _oldByte);
-                
-                if (_result == "true")
-                {
-                    _result = true;
-                }
-                else if (_result == "false")
-                {
-                    _result = false;
-                }
-                else if (_result == "null")
-                {
-                    _result = undefined;
-                }
-                else
-                {
-                    try
-                    {
-                        _result = real(_result);
-                    }
-                    catch(_error)
-                    {
-                        //Not a number apparently
-                    }
-                }
-            }
-            
-            buffer_seek(_buffer, buffer_seek_relative, -1);
-            
-            if ((_byte == ord("/")) && (buffer_peek(_buffer, buffer_tell(_buffer), buffer_u8) == ord("*")))
-            {
-                __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize);
-            }
-            
-            return _result;
-        }
-        else if (_byte == ord("\\"))
-        {
-            _stringUsesCache = true;
-            
-            var _size = buffer_tell(_buffer) - _start-1;
-            if (_size > 0)
-            {
-                buffer_copy(_buffer, _start, _size, _cacheBuffer, buffer_tell(_cacheBuffer));
-                buffer_seek(_cacheBuffer, buffer_seek_relative, _size);
-            }
-            
-            var _byte = buffer_read(_buffer, buffer_u8);
-            switch(_byte)
-            {
-                case ord("n"): buffer_write(_cacheBuffer, buffer_u8, ord("\n")); break;
-                case ord("r"): buffer_write(_cacheBuffer, buffer_u8, ord("\r")); break;
-                case ord("t"): buffer_write(_cacheBuffer, buffer_u8, ord("\t")); break;
-                
-                case ord("u"):
-                    var _oldByte = buffer_peek(_buffer, buffer_tell(_buffer)+4, buffer_u8);
-                    buffer_poke(_buffer, buffer_tell(_buffer)+4, buffer_u8, 0x00);
-                    var _hex = buffer_read(_buffer, buffer_string);
-                    buffer_seek(_buffer, buffer_seek_relative, -1);
-                    buffer_poke(_buffer, buffer_tell(_buffer), buffer_u8, _oldByte);
-                    
-                    var _value = int64(ptr(_hex));
-                    if (_value <= 0x7F) //0xxxxxxx
-                    {
-                        buffer_write(_cacheBuffer, buffer_u8, _value);
-                    }
-                    else if (_value <= 0x07FF) //110xxxxx 10xxxxxx
-                    {
-                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ((_value >> 6) & 0x1F));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ( _value       & 0x3F));
-                    }
-                    else if (_value <= 0xFFFF) //1110xxxx 10xxxxxx 10xxxxxx
-                    {
-                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ( _value        & 0x0F));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  4) & 0x3F));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >> 10) & 0x3F));
-                    }
-                    else if (_value <= 0x10000) //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-                    {
-                        buffer_write(_cacheBuffer, buffer_u8, 0xC0 | ( _value        & 0x07));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  3) & 0x3F));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >>  9) & 0x3F));
-                        buffer_write(_cacheBuffer, buffer_u8, 0x80 | ((_value >> 15) & 0x3F));
-                    }
-                break;
-                
-                default:
-                    if ((_byte & $E0) == $C0) //110xxxxx 10xxxxxx
-                    {
-                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 1, _cacheBuffer, buffer_tell(_cacheBuffer));
-                        buffer_seek(_buffer, buffer_seek_relative, 1);
-                        buffer_seek(_cacheBuffer, buffer_seek_relative, 1);
-                    }
-                    else if ((_byte & $F0) == $E0) //1110xxxx 10xxxxxx 10xxxxxx
-                    {
-                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 2, _cacheBuffer, buffer_tell(_cacheBuffer));
-                        buffer_seek(_buffer, buffer_seek_relative, 2);
-                        buffer_seek(_cacheBuffer, buffer_seek_relative, 2);
-                    }
-                    else if ((_byte & $F8) == $F0) //11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-                    {
-                        buffer_copy(_buffer, buffer_tell(_buffer)+1, 3, _cacheBuffer, buffer_tell(_cacheBuffer));
-                        buffer_seek(_buffer, buffer_seek_relative, 3);
-                        buffer_seek(_cacheBuffer, buffer_seek_relative, 3);
-                    }
-                    else
-                    {
-                        buffer_write(_cacheBuffer, buffer_u8, _byte);
-                    }
-                break;
-            }
-            
-            _start = buffer_tell(_buffer);
-        }
-        else if (_byte > 0x20)
-        {
-            _end = buffer_tell(_buffer);
-        }
-    }
-    
-    show_error("SNAP:\nFound unterminated value\n ", true);
-}
-
-function __SnapBufferReadLooseJSONComment(_buffer, _bufferSize)
+function __SnapBufferReadQMLComment(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     while(buffer_tell(_buffer) < _bufferSize)
     {
@@ -558,7 +572,7 @@ function __SnapBufferReadLooseJSONComment(_buffer, _bufferSize)
     }
 }
 
-function __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize)
+function __SnapBufferReadQMLMultilineComment(_buffer, _instanceofDict, _relaxed, _bufferSize)
 {
     while(buffer_tell(_buffer) < _bufferSize)
     {
@@ -569,49 +583,4 @@ function __SnapBufferReadLooseJSONMultilineComment(_buffer, _bufferSize)
             if (_byte == ord("/")) break;
         }
     }
-}
-
-function __SnapBufferReadLooseJSONDeepCopyInner(_value, _oldStruct, _newStruct)
-{
-    var _copy = _value;
-    
-    if (is_method(_value))
-    {
-        var _self = method_get_self(_value);
-        if (_self == _oldStruct)
-        {
-            //If this method is bound to the source struct, create a new method bound to the new struct
-            _value = method(_newStruct, method_get_index(_value));
-        }
-        else if (_self != undefined)
-        {
-            //If the scope of the method isn't <undefined> (global) then spit out a warning
-            show_debug_message("SnapDeepCopy(): Warning! Deep copy found a method reference that could not be appropriately handled");
-        }
-    }
-    else if (is_struct(_value))
-    {
-        var _namesArray = variable_struct_get_names(_value);
-        var _copy = {};
-        var _i = 0;
-        repeat(array_length(_namesArray))
-        {
-            var _name = _namesArray[_i];
-            _copy[$ _name] = __SnapBufferReadLooseJSONDeepCopyInner(_value[$ _name], _value, _copy);
-            ++_i;
-        }
-    }
-    else if (is_array(_value))
-    {
-        var _count = array_length(_value);
-        var _copy = array_create(_count);
-        var _i = 0;
-        repeat(_count)
-        {
-            _copy[@ _i] = __SnapBufferReadLooseJSONDeepCopyInner(_value[_i], _oldStruct, _newStruct);
-            ++_i;
-        }
-    }
-    
-    return _copy;
 }
