@@ -21,6 +21,8 @@
   "gradleinject": "",
   "hasConvertedCodeInjection": true,
   "helpfile": "",
+  "HTML5CodeInjection": "",
+  "html5Props": false,
   "IncludedResources": [
     "Sprites\\spr_example",
     "Scripts\\Better Scaling\\better_scaling_draw_sprite",

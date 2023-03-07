@@ -235,6 +235,8 @@
   "gradleinject": "",
   "hasConvertedCodeInjection": true,
   "helpfile": "",
+  "HTML5CodeInjection": "",
+  "html5Props": false,
   "IncludedResources": [
     "Sprites\\DialogModule\\spr_example",
     "Objects\\DialogModule\\obj_example",

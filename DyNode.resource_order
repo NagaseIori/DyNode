@@ -56,6 +56,7 @@
     {"name":"Loose JSON","order":12,"path":"folders/SNAP/Loose JSON.yy",},
     {"name":"MessagePack","order":7,"path":"folders/SNAP/MessagePack.yy",},
     {"name":"NSV","order":8,"path":"folders/SNAP/NSV.yy",},
+    {"name":"QML","order":13,"path":"folders/SNAP/QML.yy",},
     {"name":"Utility","order":9,"path":"folders/SNAP/Utility.yy",},
     {"name":"XML","order":10,"path":"folders/SNAP/XML.yy",},
     {"name":"YAML","order":11,"path":"folders/SNAP/YAML.yy",},
@@ -73,7 +74,6 @@
     {"name":"Notes","order":21,"path":"folders/Sprites/Notes.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"QML","order":13,"path":"folders/SNAP/QML.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"sprChainL","order":11,"path":"sprites/sprChainL/sprChainL.yy",},

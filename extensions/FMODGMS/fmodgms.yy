@@ -420,6 +420,8 @@
   "gradleinject": "",
   "hasConvertedCodeInjection": true,
   "helpfile": "",
+  "HTML5CodeInjection": "",
+  "html5Props": false,
   "IncludedResources": [
     "Scripts\\FMODGMS\\FMODGMS_Util_BeatsToSamples",
     "Scripts\\FMODGMS\\FMODGMS_Util_SecondsToSamples",
