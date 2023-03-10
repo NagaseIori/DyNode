@@ -200,7 +200,8 @@ image_yscale = global.scaleYAdjust;
         	lastTime : lastTime,
         	noteType : noteType,
         	inst : id,
-        	beginTime : beginTime
+        	beginTime : beginTime,
+        	lastAttachBar: lastAttachBar
         };
     }
     
@@ -215,6 +216,9 @@ image_yscale = global.scaleYAdjust;
     	lastTime = props.lastTime;
     	noteType = props.noteType;
     	beginTime = props.beginTime;
+    	
+    	if(variable_struct_exists(props, "lastAttachBar"))
+    		lastAttachBar = props.lastAttachBar;
     	
     	if(noteType == 2 && sinst > 0) {
     		note_activate(sinst);
