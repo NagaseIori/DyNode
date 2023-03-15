@@ -487,7 +487,7 @@ function timing_point_reset() {
 }
 
 // For Compatibility
-function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = false) {
+function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = true) {
 	if(array_length(objEditor.timingPoints) == 0)
 		return false;
 	with(objMain) {
