@@ -1000,7 +1000,7 @@ function announcement_set(str, val) {
 #region SYSTEM FUNCTIONS
 
 function load_config() {
-	if(!file_exists(global.configPath))
+	if(!file_exists(global.configPath) || debug_mode)
 		save_config();
 	
 	if(!file_exists(global.configPath))
