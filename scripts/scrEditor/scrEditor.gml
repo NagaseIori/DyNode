@@ -228,7 +228,7 @@ function editor_select_compare(ida, idb) {
 }
 
 function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1) {
-    var _obj = [objNote, objChain, objHold];
+    var _obj = [objNote, objChain, objHold, objMark];
     _obj = _obj[_type];
     
     var _inst = instance_create_depth(mouse_x, mouse_y, 

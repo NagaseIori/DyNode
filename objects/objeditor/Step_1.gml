@@ -190,7 +190,7 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Editor Mode Switch
-    for(var i=1; i<=5; i++)
+    for(var i=1; i<=6; i++)
         if(keycheck_down(ord(string(i)))) {
             if(editorMode != i)
                 _attach_reset_request = true;
@@ -285,7 +285,12 @@ editorSelectMultiple = editorSelectCount > 1;
                 editorNoteAttachingCenter = 0;
             }
             break;
-            
+        case 6:
+        	if(editorNoteAttaching == -1) {
+                editorNoteAttaching = [note_build_attach(3, editorSide, editor_get_default_width())];
+                editorNoteAttachingCenter = 0;
+            }
+            break;
         case 4:
         default:
             break;

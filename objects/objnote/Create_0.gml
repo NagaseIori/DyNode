@@ -15,7 +15,7 @@ image_yscale = global.scaleYAdjust;
     sid = -1;						// Sub id
     sinst = -999;					// Sub instance id
     finst = -999;					// Father instance id
-    noteType = 0;					// 0 Note 1 Chain 2 Hold
+    noteType = 0;					// 0 Note 1 Chain 2 Hold 3 Mark
     arrayPos = -1;					// Position in chartNotesArray
     
     // For Editor

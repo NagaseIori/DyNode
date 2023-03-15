@@ -161,7 +161,7 @@ if(surface_exists(beatlineSurf))
 
 // Draw Highlight Lines
 
-if(editorHighlightLine) {
+if(editorHighlightLine && editor_get_editmode() != 6) {
     draw_set_color_alpha(0x75e7dc, 1);
     var _ny = note_time_to_y(editorHighlightTime, 0),
         _nx = note_time_to_y(editorHighlightTime, 1);
