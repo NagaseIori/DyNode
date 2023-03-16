@@ -173,7 +173,7 @@ function notes_array_update() {
 		stat_reset();
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
-		for(; i<l && chartNotesArray[i].time != INF; i++) {
+		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
 			if(instance_exists(chartNotesArray[i].inst)) {
 				chartNotesArray[i].time = chartNotesArray[i].inst.time;
 				chartNotesArray[i].side = chartNotesArray[i].inst.side;

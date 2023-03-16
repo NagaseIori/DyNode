@@ -1124,7 +1124,7 @@ function stat_count(side, type) {
 		statCount[side][type] ++;
 		statCount[side][3] ++;
 		statCount[3][type] ++;
-		statCount[3][3] ++;
+		statCount[3][3] += 1 + (type == 2);
 	}
 }
 
