@@ -1122,7 +1122,7 @@ function stat_count(side, type) {
 	
 	with(objMain) {
 		statCount[side][type] ++;
-		statCount[side][3] ++;
+		statCount[side][3] += 1 + (type == 2);
 		statCount[3][type] ++;
 		statCount[3][3] += 1 + (type == 2);
 	}
