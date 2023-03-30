@@ -49,6 +49,15 @@ function map_load(_file = "") {
 		note_activation_reset();
 		return;
 	}
+	else if(_file != "" && filename_ext(_file) == ".dyc") {
+		var _buf = buffer_load(_file);
+		map_load_struct(SnapBufferReadBinary(_buf, 0));
+		buffer_delete(_buf);
+		
+		note_activation_reset();
+		return;
+	}
+	
 	var _direct = _file != "";
 	if(_file == "")
 	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.dyn;*.osu)|*.xml;*.dyn;*.osu", "", 
@@ -622,7 +631,10 @@ function map_get_struct() {
 		difficulty: objMain.chartDifficulty,
 		sidetype: objMain.chartSideType,
 		barused: objMain.chartBarUsed,
-		notes: _arr
+		notes: _arr,
+		get_fname: function () {
+			return title+"."+difficulty_num_to_char(difficulty)+".dyc";
+		}
 	}
 	
 	note_activation_reset();
@@ -753,7 +765,8 @@ function project_load(_file = "") {
     	
     	if(variable_struct_exists(_contents, "charts")) {
 	    	objMain.animTargetTime = 0;
-	    	map_load(_contents.charts);
+
+			map_load(_contents.charts);
 	    }
 	    
 	    music_load(musicPath);
@@ -806,12 +819,21 @@ function project_save_as(_file = "") {
 		videoPath: objManager.videoPath,
 		timingPoints: objEditor.timingPoints,
 		charts: [],
-		settings: project_get_settings()
+		settings: project_get_settings(),
+		format_version: "v2"
 	};
 	
-	_contents.charts = map_get_struct();
+	var _dyc_chart = map_get_struct();
+	_contents.charts = filename_path(_file)+_dyc_chart.get_fname();
+	var _buf = buffer_create(1024*1024, buffer_grow, 1);
+	buffer_seek(_buf, buffer_seek_start, 0);
+	SnapBufferWriteBinary(_buf, _dyc_chart);
+	var _size = buffer_tell(_buf);
+	show_debug_message("Custom Binary Size: "+string(_size));
+	buffer_seek(_buf, buffer_seek_start, 0);
 	
-	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
+	objMain.savingProjectId = fast_file_save_async_buffer(_contents.charts, _buf, _size);
+	fast_file_save(_file, json_stringify(_contents));
 	
 	objManager.projectPath = _file;
 	

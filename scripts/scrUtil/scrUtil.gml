@@ -322,6 +322,14 @@ function fast_file_save_async(file, str) {
 	};
 }
 
+function fast_file_save_async_buffer(file, buf, size) {
+	var _id = buffer_save_async(buf, file, 0, size);
+	return {
+		id: _id,
+		buffer: buf
+	};
+}
+
 function fast_file_save(file, str) {
 	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
