@@ -591,8 +591,6 @@ function map_export_xml() {
 	objMain.savingExportId = 
 		fast_file_save_async(_file, SnapToXML(snap_alter_to_xml(_str)));
 	
-	objManager.chartPath = _file;
-	
 	note_activation_reset();
 }
 
@@ -748,7 +746,6 @@ function project_load(_file = "") {
     with(objManager) {
     	musicPath = _contents.musicPath;
     	backgroundPath = _contents.backgroundPath;
-    	chartPath = _contents.chartPath;
     	if(variable_struct_exists(_contents, "videoPath"))
     		videoPath = _contents.videoPath;
     	else
@@ -758,8 +755,6 @@ function project_load(_file = "") {
 	    	objMain.animTargetTime = 0;
 	    	map_load(_contents.charts);
 	    }
-	    else
-	    	map_load(chartPath);
 	    
 	    music_load(musicPath);
 	    if(backgroundPath != "")
@@ -808,7 +803,6 @@ function project_save_as(_file = "") {
 		version : VERSION,
 		musicPath: objManager.musicPath,
 		backgroundPath: objManager.backgroundPath,
-		chartPath: objManager.chartPath,
 		videoPath: objManager.videoPath,
 		timingPoints: objEditor.timingPoints,
 		charts: [],
@@ -860,7 +854,6 @@ function project_new() {
 	with(objManager) {
 		musicPath = "";
 		backgroundPath = "";
-		chartPath = "";
 		projectPath = "";
 	}
 	

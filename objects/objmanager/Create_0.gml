@@ -149,7 +149,6 @@ else
 	projectPath = "";
 	backgroundPath = "";
 	musicPath = "";
-	chartPath = "";
 	videoPath = "";
 	
 #endregion
