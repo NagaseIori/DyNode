@@ -87,6 +87,12 @@
     	announcement_adjust("anno_simplify", global.simplify);
     }
     
+    if(keycheck_down_ctrl(vk_f6)) {
+    	switch_autosave(false);
+    	chart_randomize();
+    	announcement_play("谱面已随机化，请谨慎保存谱面。");
+    }
+    
     if(mouse_check_button_pressed(mb_middle)) {
     	showStats ++;
     	showStats %= 3;
