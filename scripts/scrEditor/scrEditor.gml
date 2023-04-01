@@ -158,44 +158,32 @@ function editor_snap_to_grid_y(_y, _side) {
         var _rby = note_time_to_y(_rbt, min(_side, 1));
         
         var _eps = 1;	// Prevent some precision problems
+        var _f_genret = method({
+        	_nowbeats: _nowbeats,
+        	_nowdivb: _nowdivb,
+        	_nowdivbm: _nowdivbm,
+        	_totalBar: _totalBar
+        }, function (_ny, _d) {
+        	return {
+        		y: _ny,
+            	bar: floor((_d + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
+            	diva: ((_d + _nowbeats * _nowdivb) % _nowdivbm + _nowdivbm) % _nowdivbm,
+            	divb: _nowdivbm,
+            	divc: _nowdivb * 4
+        	};
+        });
         
         if(_side == 0) {
             if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
-                _ret = {
-                	y: _ry,
-                	bar: floor((_rd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
-                	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
-                	divb: _nowdivbm,
-                	divc: _nowdivb * 4
-                };
+                _ret = _f_genret(_ry, _rd);
             else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
-                _ret = {
-                	y: _rby,
-                	bar: floor((_rbd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
-                	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
-                	divb: _nowdivbm,
-                	divc: _nowdivb * 4
-                };
+                _ret = _f_genret(_rby, _rbd);
         }
         else {
             if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
-                _ret =
-                {
-                	y: _side == 1?_ry:_nw - _ry,
-                	bar: floor((_rd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
-                	diva: (_rd + _nowbeats * _nowdivb) % _nowdivbm,
-                	divb: _nowdivbm,
-                	divc: _nowdivb * 4
-                };
+                _ret = _f_genret(_side == 1?_ry:_nw - _ry, _rd);
             else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
-                _ret =
-                {
-                	y: _side == 1?_rby:_nw - _rby,
-                	bar: floor((_rbd + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
-                	diva: (_rbd + _nowbeats * _nowdivb) % _nowdivbm,
-                	divb: _nowdivbm,
-                	divc: _nowdivb * 4
-                };
+                _ret = _f_genret(_side == 1?_rby:_nw - _rby, _rbd);
         }
     }
     
@@ -517,3 +505,20 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 }
 
 #endregion
+
+/// surprise
+function chart_randomize() {
+	instance_activate_all();
+	with(objNote) {
+		if(noteType != 3) {
+			origProp = get_prop();
+			position = random(5);
+			side = irandom_range(0, 2);
+			width = random_range(0.5, 5);
+			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+		}
+		
+	}
+	notes_array_update();
+	note_activation_reset();
+}

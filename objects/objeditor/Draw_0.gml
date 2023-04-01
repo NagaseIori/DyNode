@@ -36,8 +36,7 @@
             // Background Glow
             with(objMain) {
                 animCurvFaintEval = animcurve_channel_evaluate(
-                    animCurvFaintChan, frac((nowTime - _nowTp.time) / _nowTp.beatLength / _nowTp.meter));
-                
+                    animCurvFaintChan, frac(frac((nowTime - _nowTp.time) / _nowTp.beatLength / _nowTp.meter)+1));
                 animCurvFaintEval = lerp(0.5, 1.0, animCurvFaintEval);
             }
         

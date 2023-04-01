@@ -1,5 +1,7 @@
 /// @description Variables-Init
 
+#macro INPUT_GROUP_DEFAULT_NAME "default"
+
 depth = -100000;
 
 // In-functions
@@ -39,3 +41,7 @@ mouseHoldClear = true;
 // For Input Reset
 windowNFocusTime = 0;
 windowNFocusTimeThreshold = 500;
+
+// For Input Group
+inputGroup = "default";     // group used for input checking
+checkGroup = "default";     // now 

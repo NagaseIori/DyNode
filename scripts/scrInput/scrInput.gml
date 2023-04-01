@@ -101,3 +101,19 @@ function wheelcheck_up_ctrl() {
 function wheelcheck_down_ctrl() {
     return mouse_wheel_down() && ctrl_ishold();
 }
+
+function input_group_set(group = INPUT_GROUP_DEFAULT_NAME) {
+    objInput.inputGroup = group;
+}
+function input_group_reset() {
+    objInput.inputGroup = INPUT_GROUP_DEFAULT_NAME;
+}
+function input_check_group_set(group = INPUT_GROUP_DEFAULT_NAME) {
+    objInput.checkGroup = group;
+}
+function input_check_group_reset() {
+    objInput.checkGroup = INPUT_GROUP_DEFAULT_NAME;
+}
+function input_group_validate(input_group = objInput.inputGroup) {
+    return input_group == objInput.checkGroup;
+}
