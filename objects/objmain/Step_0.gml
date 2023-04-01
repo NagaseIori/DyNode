@@ -90,7 +90,8 @@
     if(keycheck_down_ctrl(vk_f6)) {
     	switch_autosave(false);
     	chart_randomize();
-    	announcement_play("谱面已随机化，请谨慎保存谱面。");
+    	scribble_anim_wheel(random_range(15,20), random_range(9, 20), random_range(0.5, 5)*global.fpsAdjust);
+    	announcement_play("[rainbow][wobble][wheel][scale,2]R A N D O M[/rainbow][/wobble][/wheel][/s]\n请谨慎保存谱面。");
     }
     
     if(mouse_check_button_pressed(mb_middle)) {
