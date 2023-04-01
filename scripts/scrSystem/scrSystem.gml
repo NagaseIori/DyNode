@@ -679,7 +679,7 @@ function map_set_global_bar() {
 		return;
 	}
 	
-	if(timing_point_sync_with_chart_prop(false))
+	if(timing_point_sync_with_chart_prop(false, false))
 		return;
 	var _barpm = get_string_i18n(i18n_get("box_set_global_bar_1")+ " :", "");
 	_barpm = string_real(_barpm);
@@ -1089,9 +1089,9 @@ function switch_debug_info() {
 	}
 }
 
-function switch_autosave() {
+function switch_autosave(state = !global.autosave) {
 	with(objManager) {
-		if(!global.autosave) {
+		if(state) {
 			announcement_play("autosave_enable", 2000);
 			time_source_start(tsAutosave);
 		}
@@ -1099,7 +1099,7 @@ function switch_autosave() {
 			announcement_play("autosave_disable", 2000);
 			time_source_stop(tsAutosave);
 		}
-		global.autosave = !global.autosave;
+		global.autosave = state;
 	}
 }
 
