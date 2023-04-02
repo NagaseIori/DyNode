@@ -258,6 +258,7 @@ image_yscale = global.scaleYAdjust;
     	fstruct.side = side;
     	fstruct.time = time;
     	fstruct.sinst = sinst;
+    	fstruct.length = lastTime;
     }
     
     // _outbound_check was moved to scrNote

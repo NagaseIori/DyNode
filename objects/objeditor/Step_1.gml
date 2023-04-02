@@ -83,6 +83,11 @@ editorSelectMultiple = editorSelectCount > 1;
     // Notes operation
     
     if(editor_select_count() > 0) {
+    	// Sync Props
+	    with(objNote)
+	    	if(state == stateSelected)
+	    		sync_prop_get();
+    	
     	// Wheel width adjust
 	    var _delta_width = wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
 	    if(_delta_width != 0) {
@@ -200,6 +205,12 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	}
 			announcement_play(i18n_get("notes_set_type", "CHAIN", string(editor_select_count())));
 	    }
+	    
+	    // Sync Props
+    
+	    with(objNote)
+	    	if(state == stateSelected)
+	    		sync_prop_set();
     }
         
     editorGridWidthEnabled = !ctrl_ishold();
@@ -336,10 +347,6 @@ editorSelectMultiple = editorSelectCount > 1;
             announcement_play(i18n_get("copy_notes", string(_cnt)));
     }
     
-    // Sync Props
     
-    with(objNote)
-    	if(state == stateSelected)
-    		sync_prop_set();
 
 #endregion

@@ -108,11 +108,11 @@ function note_sort_all() {
     	chartNotesCount = array_length(chartNotesArray);
     	
     	for(var i=0; i<chartNotesCount; i++)
-    		if(instance_exists(chartNotesArray[i].inst))
-    			chartNotesArray[i].inst.arrayPos = i;
+			chartNotesArray[i].arrayPos = i;
     	
     	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
     		array_pop(chartNotesArray);
+    		// show_debug_message("Remove one note from array.");
     	}
     }
 }
@@ -129,7 +129,7 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
 		var _sprop = SnapDeepCopy(prop);
 		_sprop.time = _note.time+_note.length;
 		_sprop.noteType = 3;
-		var _snote = build_note(_sprop, _fromxml, _record, _selecting)
+		var _snote = build_note(_sprop, _fromxml)
 		_note.sinst = _snote.inst;
 		array_push(objMain.chartNotesArray, _snote);
 	}
@@ -163,9 +163,8 @@ function note_delete(_inst, _record = false) {
     with(objMain) {
         var i = _inst.arrayPos;
         if(chartNotesArray[i].inst == _inst) {
-        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
         	if(_record)
-        		operation_step_add(OPERATION_TYPE.REMOVE, SnapDeepCopy(chartNotesArray[i]), -1);
+        		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i].get_prop(), -1);
         	
         	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
             chartNotesArray[i].time = INF;

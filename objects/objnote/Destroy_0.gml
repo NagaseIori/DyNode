@@ -4,3 +4,6 @@ if(instance_exists(sinst))
     instance_destroy(sinst);
 
 note_delete(id, recordRequest);
+
+// Detach from fstruct
+fstruct = undefined;
