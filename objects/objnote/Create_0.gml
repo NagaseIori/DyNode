@@ -201,6 +201,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     get_prop = function (_fromxml = false) {
+    	sync_prop_get(); // Keep latest
     	return {
         	time : _fromxml?bar:time,
         	side : side,
@@ -235,6 +236,7 @@ image_yscale = global.scaleYAdjust;
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
+    	sync_prop_set();
     }
     
     sync_prop_get = function () {
@@ -554,6 +556,7 @@ image_yscale = global.scaleYAdjust;
                             sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
                             _prop_hold_update();
                         }
+                        sync_prop_set();
                     }
                 }
             }
@@ -588,7 +591,6 @@ image_yscale = global.scaleYAdjust;
 		    	note_sort_request();
 		    if(_timechg != 0 || _poschg != 0)
 		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-		    	
         }
 
     state = stateOut;

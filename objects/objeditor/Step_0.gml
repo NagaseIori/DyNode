@@ -36,28 +36,3 @@
     }
 
 #endregion
-
-#region Note Edit
-
-    // Wheel width adjust
-    var _delta_width = wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
-    if(_delta_width != 0) {
-        with(objNote) if(state == stateSelected) {
-            if(objEditor.editorWidthAdjustTime > objEditor.editorWidthAdjustTimeThreshold)
-                origProp = get_prop();
-            width += _delta_width * 0.05;
-        }
-        editorWidthAdjustTime = 0;
-    }
-    
-    if(editorWidthAdjustTime < editorWidthAdjustTimeThreshold) {
-        editorWidthAdjustTime += delta_time / 1000;
-        if(editorWidthAdjustTime >= editorWidthAdjustTimeThreshold) {
-            with(objNote) if(state == stateSelected) {
-                operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-            }
-        }
-    }
-    editorWidthAdjustTime = min(editorWidthAdjustTime, 10000);
-
-#endregion

@@ -273,7 +273,6 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.MOVE:
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
-			_from.inst.sync_prop_set();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
