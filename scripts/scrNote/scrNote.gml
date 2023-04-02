@@ -1,3 +1,47 @@
+
+function sNote(prop) constructor {
+	if(!is_struct(prop))
+		show_error("prop in sNote must be a struct.", true);
+	
+	width = 2.0;
+    position = 2.5;
+    side = 0;
+    time = 0;
+    length = 0;
+    ntype = 0;
+    arrayPos = -1;
+    
+    inst = undefined;
+	
+	static set_prop = function (prop) {
+		width = prop.width;
+		position = prop.position;
+		side = prop.side;
+		ntype = prop.noteType;
+		time = prop.time;
+		length = prop.lastTime;
+	}
+	
+	static get_prop = function () {
+		return {
+			width: width,
+			position: position,
+			side: side,
+			noteType: ntype,
+			time: time,
+			length: length
+		};
+	}
+	
+	static create_self = function () {
+		if(instance_exists(inst))
+			show_error("Create self failed. There has been a instance related to the note.", true);
+		var obj_type = [objNote, objChain, objHold, objHoldSub][ntype];
+		inst = instance_create_depth(0, 0, 0, obj_type, {fstruct: self});
+		
+	}
+}
+
 function _outbound_check(_x, _y, _side) {
     if(_side == 0 && _y < -100)
         return true;

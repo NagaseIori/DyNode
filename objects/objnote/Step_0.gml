@@ -1,3 +1,5 @@
+sync_prop_get();
+
 _prop_init();
 
 if(state == stateOut && image_alpha<EPS) {
@@ -10,6 +12,8 @@ selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, not
 selectTolerance = selectInbound || state == stateSelected;
 
 state();
+
+sync_prop_set();
 
 selectUnlock = false;
 
@@ -55,6 +59,8 @@ if(objEditor.editorHighlightLine && instance_exists(id)) {
         }
 	}
 }
+
+
 
 // Add selection blend
 

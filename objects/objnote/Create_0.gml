@@ -6,17 +6,21 @@ image_yscale = global.scaleYAdjust;
 // In-Variables
 
     sprite = sprNote2;
-    width = 2.0;
-    position = 2.5;
-    side = 0;
+    
+    if(!variable_instance_exists(id, "fstruct"))
+    	show_error("Instance create failed: need fconstructor.", true);
+    
+    width = fstruct.width;
+    position = fstruct.position;
+    side = fstruct.side;
     bar = 0;
-    time = 0;
+    time = fstruct.time;
     nid = -1;						// Note id
     sid = -1;						// Sub id
     sinst = -999;					// Sub instance id
     finst = -999;					// Father instance id
-    noteType = 0;					// 0 Note 1 Chain 2 Hold
-    arrayPos = -1;					// Position in chartNotesArray
+    noteType = fstruct.ntype;		// 0 Note 1 Chain 2 Hold
+    arrayPos = fstruct.arrayPos;					// Position in chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -225,6 +229,22 @@ image_yscale = global.scaleYAdjust;
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
+    }
+    
+    sync_prop_get = function () {
+    	width = fstruct.width;
+	    position = fstruct.position;
+	    side = fstruct.side;
+	    time = fstruct.time;
+	    noteType = fstruct.ntype;
+	    arrayPos = fstruct.arrayPos;
+    }
+   
+    sync_prop_set = function () {
+    	fstruct.width = width;
+    	fstruct.position = position;
+    	fstruct.side = side;
+    	fstruct.time = time;
     }
     
     // _outbound_check was moved to scrNote
