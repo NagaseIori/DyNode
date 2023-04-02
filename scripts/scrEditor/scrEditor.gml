@@ -273,6 +273,7 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.MOVE:
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
+			_from.inst.sync_prop_set();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
@@ -299,6 +300,10 @@ function operation_refresh_inst(_origi, _nowi) {
 					_ops[ii].fromProp.inst = _nowi;
 				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
 					_ops[ii].toProp.inst = _nowi;
+				if(_ops[ii].fromProp.sinst == _origi)
+					_ops[ii].fromProp.sinst = _nowi;
+				if(_ops[ii].toProp != -1 && _ops[ii].toProp.sinst == _origi)
+					_ops[ii].toProp.sinst = _nowi;
 			}
 		}
 	}
@@ -319,8 +324,9 @@ function operation_undo() {
 				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
 				break;
 			case OPERATION_TYPE.REMOVE:
-				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
-				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				var _note = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _note.inst);
+				operation_refresh_inst(_ops[i].fromProp.sinst, _note.sinst);
 				break;
 			case OPERATION_TYPE.TPADD:
 				operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
@@ -354,8 +360,9 @@ function operation_redo() {
 				operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
 				break;
 			case OPERATION_TYPE.ADD:
-				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
-				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				var _note = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+				operation_refresh_inst(_ops[i].fromProp.inst, _note.inst);
+				operation_refresh_inst(_ops[i].fromProp.sinst, _note.sinst);
 				break;
 			case OPERATION_TYPE.REMOVE:
 			case OPERATION_TYPE.TPADD:

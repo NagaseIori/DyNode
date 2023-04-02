@@ -600,11 +600,11 @@ function map_get_struct() {
 	var _arr = [];
 	
 	with(objMain) {
-		var i=0, l=chartNotesCount, _inst;
+		var i=0, l=chartNotesCount;
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
 			if(_str.noteType != 3)
-				array_push(_arr, chartNotesArray[i].get_prop());
+				array_push(_arr, chartNotesArray[i].get_prop(false));
 		}
 	}
 	
@@ -1094,7 +1094,7 @@ function switch_autosave(state = !global.autosave) {
 
 #endregion
 
-#region Stat
+#region STAT FUNCTIONS
 
 function stat_reset() {
 	objMain.statCount = [

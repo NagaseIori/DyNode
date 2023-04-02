@@ -12,6 +12,7 @@ function sNote(prop) constructor {
     arrayPos = -1;
     
     inst = undefined;
+    sinst = undefined;
     selfPointer = self;
 	
 	static set_prop = function (prop) {
@@ -25,15 +26,20 @@ function sNote(prop) constructor {
 	
 	set_prop(prop);
 	
-	static get_prop = function () {
-		return {
+	static get_prop = function (with_inst = true) {
+		var _ret = {
 			width: width,
 			position: position,
 			side: side,
 			noteType: ntype,
 			time: time,
-			length: length
+			lastTime: length
 		};
+		if(with_inst) {
+			variable_struct_set(_ret, "inst", inst);
+			variable_struct_set(_ret, "sinst", sinst);
+		}
+		return _ret;
 	}
 	
 	static create_self = function () {
@@ -48,6 +54,15 @@ function sNote(prop) constructor {
 	static get_begin_time = function () {
 		if(ntype == 3) return time - length;
 		return time;
+	}
+	
+	static activate = function () {
+		note_activate(inst);
+		inst.sync_prop_get();
+	}
+	
+	static deactivate = function () {
+		note_deactivate_request(inst);
 	}
 }
 
@@ -115,7 +130,7 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
 		_sprop.time = _note.time+_note.length;
 		_sprop.noteType = 3;
 		var _snote = build_note(_sprop, _fromxml, _record, _selecting)
-		_inst.sinst = _snote.inst;
+		_note.sinst = _snote.inst;
 		array_push(objMain.chartNotesArray, _snote);
 	}
     
@@ -200,15 +215,12 @@ function notes_reallocate_id() {
 
 function note_check_and_activate(_posistion_in_array) {
 	var _struct = objMain.chartNotesArray[_posistion_in_array];
-	if(instance_exists(_struct.inst)) {
-		_struct.inst.arrayPos = _posistion_in_array;
-		return 0;
-	}
+	_struct.arrayPos = _posistion_in_array;
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.ntype == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.length > nowTime) {
 		note_activate(_str.inst);
-		_str.inst.arrayPos = _posistion_in_array;
+		_str.arrayPos = _posistion_in_array;
 		return 1;
 	}
 	else if(_flag && _outbound_check_t(_str.time, !(_str.side))) {

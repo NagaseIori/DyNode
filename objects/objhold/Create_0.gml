@@ -50,6 +50,7 @@ _prop_init();
 		    lastTime = max(lastTime, 1);
 		    
 		    sinst.lastTime = lastTime;
+		    sinst.sync_prop_set();
         }
     }
 

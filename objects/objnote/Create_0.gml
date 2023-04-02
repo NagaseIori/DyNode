@@ -209,6 +209,7 @@ image_yscale = global.scaleYAdjust;
         	lastTime : lastTime,
         	noteType : noteType,
         	inst : id,
+        	sinst : sinst, 
         	beginTime : beginTime,
         	lastAttachBar: lastAttachBar
         };
@@ -244,6 +245,7 @@ image_yscale = global.scaleYAdjust;
 	    time = fstruct.time;
 	    noteType = fstruct.ntype;
 	    arrayPos = fstruct.arrayPos;
+	    sinst = fstruct.sinst;
     }
     sync_prop_get();
    
@@ -253,6 +255,7 @@ image_yscale = global.scaleYAdjust;
     	fstruct.position = position;
     	fstruct.side = side;
     	fstruct.time = time;
+    	fstruct.sinst = sinst;
     }
     
     // _outbound_check was moved to scrNote
@@ -468,7 +471,9 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 var _subid = random_id(9);
                 var _teid = random_id(9);
-                build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
+                //build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
+				lastTime = sinst.time - time;
+				build_note(get_prop(), false, true);
                 instance_destroy(sinst);
                 instance_destroy();
                 sinst = -999;
