@@ -18,10 +18,7 @@ _prop_init();
 // In-Function
 
     _prop_hold_update = function () {
-        if(sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid))) {
-            if(sinst <= 0)
-		        sinst = objMain.chartNotesMap[side][? sid]
-		    
+        if(sinst > 0) {
 		    if(state != stateOut)
 		    	note_activate(sinst);
     
@@ -37,11 +34,11 @@ _prop_init();
 		    sinst.finst = id;
 		    sinst.time = max(sinst.time, time+0.0001);
 		    
+		    
 		    if(fixedLastTime != -1)
 		    	sinst.time = time + fixedLastTime;
 		    
 		    sinst.beginTime = time;
-    
     		
 		    pHeight = max(0, objMain.playbackSpeed * 
 		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime)))
@@ -51,6 +48,8 @@ _prop_init();
 		    }
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
+		    
+		    sinst.lastTime = lastTime;
         }
     }
 

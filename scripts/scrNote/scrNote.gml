@@ -12,6 +12,7 @@ function sNote(prop) constructor {
     arrayPos = -1;
     
     inst = undefined;
+    selfPointer = self;
 	
 	static set_prop = function (prop) {
 		width = prop.width;
@@ -36,9 +37,15 @@ function sNote(prop) constructor {
 	static create_self = function () {
 		if(instance_exists(inst))
 			show_error("Create self failed. There has been a instance related to the note.", true);
-		var obj_type = [objNote, objChain, objHold, objHoldSub][ntype];
-		inst = instance_create_depth(0, 0, 0, obj_type, {fstruct: self});
-		
+		static obj_types = [objNote, objChain, objHold, objHoldSub];
+		var obj_type = obj_types[ntype];
+		inst = instance_create_depth(0, 0, 0, obj_type, {fstruct: selfPointer});
+		return inst;
+	}
+	
+	static get_begin_time = function () {
+		if(ntype == 3) return time - length;
+		return time;
 	}
 }
 
@@ -74,7 +81,7 @@ function _outscreen_check(_x, _y, _side) {
 }
 
 function note_sort_all() {
-	notes_array_update();
+	// notes_array_update();
     var _f = function(_a, _b) {
         return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
@@ -98,42 +105,20 @@ function note_sort_request() {
 	objEditor.editorNoteSortRequest = true;
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false, _selecting = false) {
-    var _obj = undefined;
-    switch(_type) {
-        case "NORMAL":
-        case 0:
-            _obj = objNote;
-            break;
-        case "CHAIN":
-        case 1:
-            _obj = objChain;
-            break;
-        case "HOLD":
-        case 2:
-            _obj = objHold;
-            break;
-        case "SUB":
-        case 3:
-            _obj = objHoldSub;
-            break;
-        default:
-            return;
-    }
-    var _inst = instance_create_depth(0, 0, 0, _obj);
-    _inst.width = real(_width);
-    _inst.side = real(_side);
-    // _inst.offset = real(_time);
-    if(_fromxml)
-        _inst.bar = real(_time);
-    else
-        _inst.time = _time;
-    _inst.position = real(_position);
-    _inst.nid = _id;
-    _inst.sid = _subid;
+function build_note(prop, _fromxml = false, _record = false, _selecting = false) {
+    var _note = new sNote(prop);
+	var _inst = _note.create_self();
+	
+	if(_note.ntype == 2) {
+		var _sprop = SnapDeepCopy(prop);
+		_sprop.time = prop.time+prop.length;
+		var _snote = build_note(_sprop, _fromxml, _record, _selecting)
+		_inst.sinst = _snote.inst;
+		array_push(objMain.chartNotesArray, _snote);
+	}
     
     if(_fromxml)
-        _inst.position += _inst.width/2;
+        _note.position += _note.width/2;
     
     with(_inst) {
     	_prop_init();
@@ -141,42 +126,18 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     	if(_selecting) state = stateSelected;
     }
     with(objMain) {
-        array_push(chartNotesArray, _inst.get_prop(_fromxml));
-        if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
-            show_error_async("Duplicate Note ID " + _id + " in side " 
-                + string(_side), false);
-            return true;
-        }
-        chartNotesMap[_inst.side][? _id] = _inst;
-        
+        array_push(chartNotesArray, _note);
         note_sort_request();
     }
     
     if(_record)
-    	operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(_fromxml), -1);
+    	operation_step_add(OPERATION_TYPE.ADD, _note.get_prop(), -1);
     
-    return _inst;
+    return _note;
 }
-
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false, _selecting = false) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, false, _selecting);
-	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side, false, false, _selecting);
-	_sinst.beginTime = _time;
-	if(_record)
-		operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(), -1);
-	return _inst;
-}
-
 
 function build_note_withprop(prop, record = false, selecting = false) {
-	if(prop.noteType < 2) {
-		return build_note(random_id(9), prop.noteType, prop.time, prop.position, 
-			prop.width, "-1", prop.side, false, record, selecting);
-	}
-	else {
-		return build_hold(random_id(9), prop.time, prop.position, prop.width,
-			random_id(9), prop.time + prop.lastTime, prop.side, record, selecting);
-	}
+	return build_note(prop, false, record, selecting);
 }
 
 function note_delete(_inst, _record = false) {
@@ -265,7 +226,7 @@ function note_check_and_activate(_posistion_in_array) {
 	}
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
-	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
+	if((!_flag || (_str.ntype == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.length > nowTime) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;

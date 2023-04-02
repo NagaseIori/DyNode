@@ -8,19 +8,19 @@ image_yscale = global.scaleYAdjust;
     sprite = sprNote2;
     
     if(!variable_instance_exists(id, "fstruct"))
-    	show_error("Instance create failed: need fconstructor.", true);
+	    fstruct = undefined;
     
-    width = fstruct.width;
-    position = fstruct.position;
-    side = fstruct.side;
+    width = 1;
+    position = 1;
+    side = 0;
     bar = 0;
-    time = fstruct.time;
+    time = 0;
     nid = -1;						// Note id
     sid = -1;						// Sub id
     sinst = -999;					// Sub instance id
     finst = -999;					// Father instance id
-    noteType = fstruct.ntype;		// 0 Note 1 Chain 2 Hold
-    arrayPos = fstruct.arrayPos;					// Position in chartNotesArray
+    noteType = 0;					// 0 Note 1 Chain 2 Hold
+    arrayPos = -1;					// Position in chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -95,6 +95,11 @@ image_yscale = global.scaleYAdjust;
         	depth = finst.depth;
         
         noteprop_set_xy(position, time, side);
+        
+        if(noteType == 3)
+        	beginTime = time - lastTime;
+        else
+        	beginTime = time;
     }
     _prop_init();
 
@@ -232,6 +237,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     sync_prop_get = function () {
+    	if(is_undefined(fstruct)) return;
     	width = fstruct.width;
 	    position = fstruct.position;
 	    side = fstruct.side;
@@ -239,8 +245,10 @@ image_yscale = global.scaleYAdjust;
 	    noteType = fstruct.ntype;
 	    arrayPos = fstruct.arrayPos;
     }
+    sync_prop_get();
    
     sync_prop_set = function () {
+    	if(is_undefined(fstruct)) return;
     	fstruct.width = width;
     	fstruct.position = position;
     	fstruct.side = side;
@@ -421,7 +429,7 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
                     return;
                 }
-                build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
+                build_note(get_prop(), false, true);
                 
                 if(_outscreen_check(x, y, side))
                 	announcement_warning("warning_note_outbound");
