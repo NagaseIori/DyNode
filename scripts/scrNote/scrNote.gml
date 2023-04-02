@@ -23,6 +23,8 @@ function sNote(prop) constructor {
 		length = prop.lastTime;
 	}
 	
+	set_prop(prop);
+	
 	static get_prop = function () {
 		return {
 			width: width,
@@ -81,7 +83,6 @@ function _outscreen_check(_x, _y, _side) {
 }
 
 function note_sort_all() {
-	// notes_array_update();
     var _f = function(_a, _b) {
         return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
@@ -111,7 +112,8 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
 	
 	if(_note.ntype == 2) {
 		var _sprop = SnapDeepCopy(prop);
-		_sprop.time = prop.time+prop.length;
+		_sprop.time = _note.time+_note.length;
+		_sprop.noteType = 3;
 		var _snote = build_note(_sprop, _fromxml, _record, _selecting)
 		_inst.sinst = _snote.inst;
 		array_push(objMain.chartNotesArray, _snote);
@@ -173,28 +175,6 @@ function note_delete_all() {
 	}
 }
 
-function notes_array_update() {
-	with(objMain) {
-		stat_reset();
-		chartNotesCount = array_length(chartNotesArray);
-		var i=0, l=chartNotesCount;
-		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
-			if(instance_exists(chartNotesArray[i].inst)) {
-				chartNotesArray[i].time = chartNotesArray[i].inst.time;
-				chartNotesArray[i].side = chartNotesArray[i].inst.side;
-				chartNotesArray[i].width = chartNotesArray[i].inst.width;
-				chartNotesArray[i].lastTime = chartNotesArray[i].inst.lastTime;
-				chartNotesArray[i].position = chartNotesArray[i].inst.position;
-				chartNotesArray[i].noteType = chartNotesArray[i].inst.noteType;
-				chartNotesArray[i].beginTime = chartNotesArray[i].inst.beginTime;
-			}
-			
-			stat_count(chartNotesArray[i].side, chartNotesArray[i].noteType);
-		}
-	}
-	note_sort_request();
-}
-
 function notes_reallocate_id() {
 	with(objMain) {
 		instance_activate_object(objNote);
@@ -227,7 +207,6 @@ function note_check_and_activate(_posistion_in_array) {
 	var _str = _struct, _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.ntype == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.length > nowTime) {
-		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;
 		return 1;
@@ -249,7 +228,6 @@ function note_activate(inst) {
 }
 
 function note_deactivate_flush() {
-	// return;
 	with(objMain) {
 		var q=deactivationQueue;
 		var k=ds_map_find_first(q), s=ds_map_size(q);

@@ -508,7 +508,6 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 
 /// surprise
 function chart_randomize() {
-	instance_activate_all();
 	with(objNote) {
 		if(noteType != 3) {
 			origProp = get_prop();
@@ -517,8 +516,6 @@ function chart_randomize() {
 			width = random_range(0.5, 5);
 			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		}
-		
 	}
-	notes_array_update();
 	note_activation_reset();
 }

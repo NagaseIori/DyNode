@@ -600,20 +600,11 @@ function map_get_struct() {
 	var _arr = [];
 	
 	with(objMain) {
-		instance_activate_all();
-		notes_array_update();
 		var i=0, l=chartNotesCount, _inst;
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
 			if(_str.noteType != 3)
-				array_push(_arr, {
-					width : _str.width,
-					side : _str.side,
-					noteType : _str.noteType,
-					position : _str.position,
-					time : _str.time,
-					lastTime : _str.lastTime,
-				});
+				array_push(_arr, chartNotesArray[i].get_prop());
 		}
 	}
 	
@@ -714,13 +705,11 @@ function map_add_offset(_offset = "", record = false) {
 			timingPoints[i].time += _offset;
 	}
 	
-	note_activate(objNote);
 	with(objMain) {
 		for(var i=0, l=array_length(chartNotesArray); i<l; i++) {
-			chartNotesArray[i].inst.time += _offset;
+			chartNotesArray[i].time += _offset;
 		}
 	}
-	notes_array_update();
 	
 	announcement_play("anno_add_offset_complete");
 	
