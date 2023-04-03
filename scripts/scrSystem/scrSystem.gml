@@ -603,7 +603,7 @@ function map_get_struct() {
 		var i=0, l=chartNotesCount;
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
-			if(_str.ntype != 3)
+			if(_str.noteType != 3)
 				array_push(_arr, _str.get_prop(false));
 		}
 	}

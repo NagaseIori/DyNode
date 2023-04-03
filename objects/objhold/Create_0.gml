@@ -25,14 +25,29 @@ _prop_init();
 		    // Being destroyed
 		    if(!instance_exists(sinst))
 		        return;
-    
+		    
 		    // Sync the properties
+		    
+		    if(sinst.dummy) {
+		    	sinst.time = max(sinst.time, time+0.0001);
+		    	if(fixedLastTime != -1)
+		    		sinst.time = time + fixedLastTime;
+		    	pHeight = max(0, objMain.playbackSpeed * 
+			    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime)))
+			        + dFromBottom + uFromTop;
+			    if(!global.simplify)
+			    	pHeight = max(pHeight, originalHeight);
+			    
+			    lastTime = sinst.time - time;
+			    lastTime = max(lastTime, 1);
+				return;
+		    }
+		    
 		    var snote = sinst.fstruct;
 		    snote.position = position;
 		    snote.width = width;
 		    snote.side = side;
 		    snote.time = max(snote.time, time+0.0001);
-		    
 		    
 		    if(fixedLastTime != -1)
 		    	snote.time = time + fixedLastTime;

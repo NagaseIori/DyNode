@@ -5,10 +5,10 @@ image_yscale = global.scaleYAdjust;
 
 // In-Variables
 
+	if(!variable_instance_exists(id, "fstruct")) {
+    	fstruct = undefined;
+    }
     sprite = sprNote2;
-    
-    if(!variable_instance_exists(id, "fstruct"))
-	    fstruct = undefined;
     
     width = 1;
     position = 1;
@@ -18,7 +18,9 @@ image_yscale = global.scaleYAdjust;
     nid = -1;						// Note id
     sid = -1;						// Sub id
     sinst = -999;					// Sub instance id
+    snote = undefined;
     finst = -999;					// Father instance id
+    fnote = undefined;
     noteType = 0;					// 0 Note 1 Chain 2 Hold
     arrayPos = -1;					// Position in chartNotesArray
     
@@ -240,11 +242,13 @@ image_yscale = global.scaleYAdjust;
 	    position = fstruct.position;
 	    side = fstruct.side;
 	    time = fstruct.time;
-	    noteType = fstruct.ntype;
+	    noteType = fstruct.noteType;
 	    arrayPos = fstruct.arrayPos;
 	    sinst = fstruct.sinst;
 	    finst = fstruct.finst;
 	    beginTime = fstruct.get_begin_time();
+	    snote = fstruct.snote;
+	    fnote = fstruct.fnote;
     }
     sync_prop_get();
    
@@ -255,7 +259,7 @@ image_yscale = global.scaleYAdjust;
     	fstruct.side = side;
     	fstruct.time = time;
     	fstruct.sinst = sinst;
-    	fstruct.length = lastTime;
+    	fstruct.lastTime = lastTime;
     }
     
     // _outbound_check was moved to scrNote
@@ -421,7 +425,9 @@ image_yscale = global.scaleYAdjust;
                 	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
-                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
+						lastTime = fixedLastTime;
+                		//build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
+						build_note(get_prop(), false, true);
                 		instance_destroy();
                 		return;
                 	}

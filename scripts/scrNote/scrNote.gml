@@ -7,8 +7,8 @@ function sNote(prop) constructor {
     position = 2.5;
     side = 0;
     time = 0;
-    length = 0;
-    ntype = 0;
+    lastTime = 0;
+    noteType = 0;
     arrayPos = -1;
     
     inst = undefined;
@@ -22,9 +22,9 @@ function sNote(prop) constructor {
 		width = prop.width;
 		position = prop.position;
 		side = prop.side;
-		ntype = prop.noteType;
+		noteType = prop.noteType;
 		time = prop.time;
-		length = prop.lastTime;
+		lastTime = prop.lastTime;
 	}
 	
 	set_prop(prop);
@@ -34,9 +34,9 @@ function sNote(prop) constructor {
 			width: width,
 			position: position,
 			side: side,
-			noteType: ntype,
+			noteType: noteType,
 			time: time,
-			lastTime: length
+			lastTime: lastTime
 		};
 		if(with_inst) {
 			variable_struct_set(_ret, "inst", inst);
@@ -49,13 +49,13 @@ function sNote(prop) constructor {
 		if(instance_exists(inst))
 			show_error("Create self failed. There has been a instance related to the note.", true);
 		static obj_types = [objNote, objChain, objHold, objHoldSub];
-		var obj_type = obj_types[ntype];
+		var obj_type = obj_types[noteType];
 		inst = instance_create_depth(0, 0, 0, obj_type, {fstruct: selfPointer});
 		return inst;
 	}
 	
 	static get_begin_time = function () {
-		if(ntype == 3) return time - length;
+		if(noteType == 3) return time - lastTime;
 		return 0x3f3f3f3f;
 	}
 	
@@ -66,6 +66,18 @@ function sNote(prop) constructor {
 	
 	static deactivate = function () {
 		note_deactivate_request(inst);
+	}
+	
+	static destroy = function (_record = true) {
+		if(arrayPos == -1) {
+			return;
+		}
+		var i = arrayPos;
+    	if(_record)
+    		operation_step_add(OPERATION_TYPE.REMOVE, get_prop(), -1);
+		if(array_length(objMain.chartNotesArray))
+    		ds_map_delete(objMain.chartNotesMap[objMain.chartNotesArray[i].side], inst.nid);
+        time = INF;
 	}
 }
 
@@ -128,9 +140,9 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
     var _note = new sNote(prop);
 	var _inst = _note.create_self();
 	
-	if(_note.ntype == 2) {
+	if(_note.noteType == 2) {
 		var _sprop = SnapDeepCopy(prop);
-		_sprop.time = _note.time+_note.length;
+		_sprop.time = _note.time+_note.lastTime;
 		_sprop.noteType = 3;
 		var _snote = build_note(_sprop, _fromxml)
 		_note.sinst = _snote.inst;
@@ -163,22 +175,9 @@ function build_note_withprop(prop, record = false, selecting = false) {
 	return build_note(prop, false, record, selecting);
 }
 
-function note_delete(_inst, _record = false) {
-	if(_inst.arrayPos == -1)
-		return;
-    with(objMain) {
-        var i = _inst.arrayPos;
-        if(chartNotesArray[i].inst == _inst) {
-        	if(_record)
-        		operation_step_add(OPERATION_TYPE.REMOVE, chartNotesArray[i].get_prop(), -1);
-        	
-        	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
-            chartNotesArray[i].time = INF;
-        }
-        else
-        	show_error("NOTE DELETE ERROR.", true);
-    }
-    note_sort_request();
+function note_delete(_note, _record = false) {
+	if(is_undefined(_note)) return;
+	_note.destroy(_record);
 }
 
 function note_delete_all() {
@@ -223,7 +222,7 @@ function note_check_and_activate(_posistion_in_array) {
 	_str.arrayPos = _posistion_in_array;
 	var _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
-	if((!_flag || (_str.ntype == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.length > nowTime) {
+	if((!_flag || (_str.noteType == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.lastTime > nowTime) {
 		_str.activate();
 		_str.arrayPos = _posistion_in_array;
 		return 1;
