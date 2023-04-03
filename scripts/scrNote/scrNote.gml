@@ -443,27 +443,27 @@ function sNote(prop) constructor {
 			if(!isDragging) {
 				isDragging = true;
 				objEditor.editorSelectDragOccupied = 1;
-				with(objNote) {
+				_WITHNOTE_START
 					if(state == stateSelected) {
 						origProp = get_prop();
 						origX = x;
 						origY = y;
 					}
-				}
+				_WITHNOTE_END
 			}
 		}
 		if(mouse_check_button_released(mb_left)) {
 			if(isDragging) {
 				isDragging = false;
 				
-				with(objNote) {
+				_WITHNOTE_START
 					if(state == stateSelected) {
 						operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 					}
 					
 					if(_outscreen_check(x, y, side))
 						announcement_warning("warning_note_outbound", 5000, "wob");
-				}
+				_WITHNOTE_END
 				
 				note_sort_request();
 			}
@@ -487,7 +487,7 @@ function sNote(prop) constructor {
 			var _delta_x = x - origX;
 			var _delta_y = y - origY;
 			
-			with(objNote) {
+			_WITHNOTE_E_START
 				if(state == stateSelected) {
 					x = origX + _delta_x;
 					y = origY + _delta_y;
@@ -499,7 +499,7 @@ function sNote(prop) constructor {
 						_prop_hold_update();
 					}
 				}
-			}
+			_WITHNOTE_E_END
 		}
 		
 		if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3) {

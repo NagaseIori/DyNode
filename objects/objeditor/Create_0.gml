@@ -1,8 +1,5 @@
 /// @description 
 
-#macro _WITHNOTE_START note_foreach(function(_e, _i) { \
-	with(_e) {
-#macro _WITHNOTE_END }});
 // visible = false;
 
 depth = -500000000;
