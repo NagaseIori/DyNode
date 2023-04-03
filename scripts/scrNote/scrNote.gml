@@ -832,7 +832,7 @@ function _outscreen_check(_x, _y, _side) {
 
 function note_sort_all() {
     var _f = function(_a, _b) {
-        return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
+        return sign(_a.time == _b.time ? _a.arrayPos - _b.arrayPos : _a.time - _b.time);
     }
     array_sort(objMain.chartNotesArray, _f);
     
@@ -855,6 +855,7 @@ function note_sort_request() {
 }
 
 function build_note(prop, _fromxml = false, _record = false, _selecting = false) {
+	if(prop.noteType > 1) return;
     var _note = new sNote(prop);
 	
 	if(_note.noteType == 2) {

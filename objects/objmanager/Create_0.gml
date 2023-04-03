@@ -20,9 +20,16 @@ math_set_epsilon(0.00000001);				// 1E-8
 
 // Macro Functions
 
-#macro _WITHNOTE_START note_foreach(function(_e, _i) { \
-	with(_e) {
-#macro _WITHNOTE_END }});
+// #macro _WITHNOTE_START note_foreach(function(_e, _i) { \
+// 	with(_e) {
+// #macro _WITHNOTE_END }});
+
+
+#macro _WITHNOTE_START with(objMain) { \
+	for(var i=0; i<chartNotesCount; i++) \
+		with(chartNotesArray[i]) {
+
+#macro _WITHNOTE_END	}}
 
 #macro _WITHNOTE_E_START with(objMain) { \
 	for(var i=0; i<chartNotesCount; i++) \
