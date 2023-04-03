@@ -11,11 +11,19 @@ function sNote(prop) constructor {
     lastTime = 0;
     noteType = 0;
     arrayPos = -1;
+
+	/// Old Builtin Props
+	nid = "";
+	sid = "";
     
-	/// Builtin Image Variables
+	/// Builtin Variables
 	image_xscale = 1;
 	image_angle = 0;
 	image_yscale = global.scaleYAdjust;
+	image_alpha = 1;
+	x=0;
+	y=0;
+	__selfPointer = self;
 
 	/// Display Variables
 	drawVisible = false;
@@ -86,9 +94,6 @@ function sNote(prop) constructor {
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - arrayPos*16;
-        if(noteType == 3 && instance_exists(finst))
-        	depth = finst.depth;
         
         noteprop_set_xy(position, time, side);
 	}
@@ -143,6 +148,43 @@ function sNote(prop) constructor {
                 part_emitter_burst(partSysNote, partEmit, partTypeHold, _num);
             }
         }
+    }
+
+	static _create_shadow = function (_force = false) {
+        if(!objMain.nowPlaying && !_force)
+            return;
+        if(objMain.topBarMousePressed)
+        	return;
+        
+        // Play Sound
+        if(objMain.hitSoundOn)
+            audio_play_sound(sndHit, 0, 0);
+        
+        // Create Shadow
+        if(side > 0 && objMain.chartSideType[side-1] == "MIXER") {
+            objMain.mixerShadow[side-1]._hit();
+        }
+        else {
+        	var _x, _y;
+	        if(side == 0) {
+	            _x = x;
+	            _y = global.resolutionH - objMain.targetLineBelow;
+	        }
+	        else {
+	            _x = side == 1 ? objMain.targetLineBeside : 
+	                             global.resolutionW - objMain.targetLineBeside;
+	            _y = y;
+	        }
+	        var _shadow = objShadow;
+	        
+	        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
+	        _inst.nowWidth = pWidth;
+	        _inst.visible = true;
+	        _inst.image_angle = image_angle;
+	        _inst._prop_init();
+        }
+        
+        _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
 
 	static _mouse_inbound_check = function (_mode = 0) {
@@ -246,7 +288,7 @@ function sNote(prop) constructor {
         animTargetA = 0.0;
         animTargetLstA = lastAlphaL;
         
-        if(time + lastTime> objMain.nowTime && !_outbound_check(x, y, side)) {
+        if(time + lastTime > objMain.nowTime && !_outbound_check(x, y, side)) {
 	        drawVisible = true;
 	        state = stateNormal;
 	        state();
@@ -442,7 +484,6 @@ function sNote(prop) constructor {
 						sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
 						_prop_hold_update();
 					}
-					sync_prop_set();
 				}
 			}
 		}
@@ -494,7 +535,7 @@ function sNote(prop) constructor {
 	
 	set_prop(prop);
 	
-	static get_prop = function (with_inst = true) {
+	static get_prop = function (not_export = true) {
 		var _ret = {
 			width: width,
 			position: position,
@@ -503,20 +544,16 @@ function sNote(prop) constructor {
 			time: time,
 			lastTime: lastTime
 		};
-		if(with_inst) {
-			variable_struct_set(_ret, "inst", inst);
-			variable_struct_set(_ret, "sinst", sinst);
+		if(not_export) {
+			_ret.note = weak_ref_create(__selfPointer);
+			_ret.snote = weak_ref_create(snote);
+			_ret.fnote = weak_ref_create(fnote);
 		}
 		return _ret;
 	}
 	
 	static create_self = function () {
-		if(instance_exists(inst))
-			show_error("Create self failed. There has been a instance related to the note.", true);
-		static obj_types = [objNote, objChain, objHold, objHoldSub];
-		var obj_type = obj_types[noteType];
-		inst = instance_create_depth(0, 0, 0, obj_type, {fstruct: selfPointer});
-		return inst;
+		show_error("Deprecated method", true);
 	}
 	
 	static get_begin_time = function () {
@@ -525,12 +562,11 @@ function sNote(prop) constructor {
 	}
 	
 	static activate = function () {
-		note_activate(inst);
-		inst.sync_prop_get();
+
 	}
 	
 	static deactivate = function () {
-		note_deactivate_request(inst);
+		
 	}
 	
 	static destroy = function (_record = true) {
@@ -543,6 +579,18 @@ function sNote(prop) constructor {
 		if(array_length(objMain.chartNotesArray))
     		ds_map_delete(objMain.chartNotesMap[objMain.chartNotesArray[i].side], inst.nid);
         time = INF;
+	}
+
+	static activatable = function () {
+		var _flag;
+		_flag = _outbound_check_t(time, side);
+		if((!_flag || (noteType == 3 && get_begin_time() < nowTime)) && time + lastTime > nowTime) {
+			return 1;
+		}
+		else if(_flag && _outbound_check_t(time, !(side))) {
+			return -1;
+		}
+		return 0;
 	}
 
 /// Event Methods
@@ -663,12 +711,11 @@ function sNote(prop) constructor {
 			draw_set_font(fDynamix16)
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_top);
-			draw_text(x, y+5, stateString + " " + string(depth) + " " + string(arrayPos))
+			draw_text(x, y+5, stateString + " " + string(arrayPos))
 		}
 	}
 
 	static _event_step = function() {
-		sync_prop_get();
 
 		_prop_init();
 
@@ -682,8 +729,6 @@ function sNote(prop) constructor {
 		selectTolerance = selectInbound || state == stateSelected;
 
 		state();
-
-		sync_prop_set();
 
 		selectUnlock = false;
 
@@ -877,6 +922,9 @@ function notes_reallocate_id() {
 }
 
 function note_check_and_activate(_posistion_in_array) {
+	/// Suspended for now
+	return;
+
 	var _str = objMain.chartNotesArray[_posistion_in_array];
 	_str.arrayPos = _posistion_in_array;
 	var _flag;
@@ -893,16 +941,25 @@ function note_check_and_activate(_posistion_in_array) {
 }
 
 function note_deactivate_request(inst) {
+	/// Suspended for now
+	return;
+
 	objMain.deactivationQueue[? inst] = true;
 }
 
 function note_activate(inst) {
+	/// Suspended for now
+	return;
+
 	instance_activate_object(inst);
 	if(ds_map_exists(objMain.deactivationQueue, inst))
 		ds_map_delete(objMain.deactivationQueue, inst);
 }
 
 function note_deactivate_flush() {
+	/// Suspended for now
+	return;
+
 	with(objMain) {
 		var q=deactivationQueue;
 		var k=ds_map_find_first(q), s=ds_map_size(q);
@@ -928,6 +985,8 @@ function note_select_reset(isself = false) {
 }
 
 function note_activation_reset() {
+	/// Suspended for now
+	return;
 	instance_deactivate_object(objNote);
 	with(objMain) {
 		ds_map_clear(deactivationQueue);
