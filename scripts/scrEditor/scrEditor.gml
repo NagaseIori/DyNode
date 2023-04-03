@@ -514,14 +514,15 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 
 /// surprise
 function chart_randomize() {
-	with(objNote) {
-		if(noteType != 3) {
-			origProp = get_prop();
-			position = random(5);
-			side = irandom_range(0, 2);
-			width = random_range(0.5, 5);
-			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+	array_foreach(objMain.chartNotesArray, function(_ele, _ind) {
+		with(_ele) {
+			if(noteType != 3) {
+				var origProp = get_prop();
+				position = random(5);
+				side = irandom_range(0, 2);
+				width = random_range(0.5, 5);
+				operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+			}
 		}
-	}
-	note_activation_reset();
+	});
 }
