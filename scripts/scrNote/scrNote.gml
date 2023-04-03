@@ -24,7 +24,6 @@ function sNote(prop) constructor {
 	image_number = 0;
 	x=0;
 	y=0;
-	__selfPointer = self;
 
 	
 	/// Display Variables
@@ -95,10 +94,10 @@ function sNote(prop) constructor {
 
 	static _get_bbox = function () {
 		return [
-			x-bbox[0]/2,
-			y-bbox[1]/2,
-			x+bbox[0]/2,
-			y+bbox[1]/2
+			x-bbox[0]*image_xscale/2,
+			y-bbox[1]*image_yscale/2,
+			x+bbox[0]*image_xscale/2,
+			y+bbox[1]*image_yscale/2
 		]
 	}
 
@@ -228,7 +227,7 @@ function sNote(prop) constructor {
         
         // Update Mixer's Position
 	    if(side > 0) {
-	        var _nside = side-1, _noff = time, _nx = y, _nid = self;
+	        var _nside = side-1, _noff = time, _nx = y, _nid = selfPointer;
 	        
 	        with(objMain) {
 	            if((_noff-nowTime)*playbackSpeed/global.resolutionW < MIXER_REACTION_RANGE &&
@@ -267,12 +266,12 @@ function sNote(prop) constructor {
         	
             if(_mouse_click_to_select || _mouse_drag_to_select) {
                 objEditor.editorSelectSingleTarget =
-                    editor_select_compare(objEditor.editorSelectSingleTarget, self);
+                    editor_select_compare(objEditor.editorSelectSingleTarget, selfPointer);
             }
             
             if(_mouse_inbound_check()) {
                 objEditor.editorSelectSingleTargetInbound = 
-                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, self);
+                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, selfPointer);
             }
         }
     }
@@ -317,7 +316,7 @@ function sNote(prop) constructor {
 		stateString = "ATCH";
 		animTargetA = _outbound_check(x, y, side) ? 0:0.5;
 		
-		if(editor_get_note_attaching_center() == self) {
+		if(editor_get_note_attaching_center() == selfPointer) {
 			if(side == 0) {
 				x = editor_snap_to_grid_x(mouse_x, side);
 				lastAttachBar = editor_snap_to_grid_y(mouse_y, side);
@@ -347,7 +346,7 @@ function sNote(prop) constructor {
 		}
 		
 		if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)
-			&& self == editor_get_note_attaching_center()) {
+			&& selfPointer == editor_get_note_attaching_center()) {
 			with(objNote) if(state == stateAttach) {
 				state = stateDrop;
 				origWidth = width;
@@ -560,7 +559,7 @@ function sNote(prop) constructor {
 			lastTime: lastTime
 		};
 		if(not_export) {
-			_ret.note = weak_ref_create(__selfPointer);
+			_ret.note = weak_ref_create(selfPointer);
 			_ret.snote = is_undefined(snote)?snote:weak_ref_create(snote);
 			_ret.fnote = is_undefined(fnote)?fnote:weak_ref_create(fnote);
 		}
@@ -639,7 +638,7 @@ function sNote(prop) constructor {
 				}
 			}
 			else {
-				if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == self) {
+				if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == selfPointer) {
 					animTargetNodeA = 1.0;
 					animTargetInfoA = ctrl_ishold()? 1:0;
 				}
@@ -723,10 +722,15 @@ function sNote(prop) constructor {
 		else animTargetNodeA = 0;
 
 		if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
+			draw_set_color(c_white);
 			draw_set_font(fDynamix16)
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_top);
 			draw_text(x, y+5, stateString + " " + string(arrayPos))
+			
+			var _bbox = _get_bbox();
+			draw_set_color(c_red);
+			draw_rectangle(_bbox[0], _bbox[1], _bbox[2], _bbox[3], true);
 		}
 	}
 
@@ -774,7 +778,7 @@ function sNote(prop) constructor {
 		// Update Highlight Line's Position
 		if(objEditor.editorHighlightLine) {
 			if(state == stateSelected && isDragging || state == stateAttachSub || state == stateDropSub
-				|| ((state == stateAttach || state == stateDrop) && self == editor_get_note_attaching_center())) {
+				|| ((state == stateAttach || state == stateDrop) && selfPointer == editor_get_note_attaching_center())) {
 				objEditor.editorHighlightTime = time;
 				objEditor.editorHighlightPosition = position;
 				objEditor.editorHighlightSide = side;
@@ -1009,4 +1013,20 @@ function note_foreach(meth) {
 			meth(_e, _i);
 	})
 	array_foreach(objMain.chartNotesArray, meth);
+}
+
+function note_foreach_direct(func) {
+	func = method({
+		func: func
+	}, function (_e, _i) {
+		var _func = func;
+		if(_e.activatable())
+			with(_e)
+				_func();
+	})
+	array_foreach(objMain.chartNotesArray, func);
+}
+
+function note_exists(note) {
+	return is_struct(note) && note.activatable();
 }

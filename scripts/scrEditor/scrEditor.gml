@@ -206,13 +206,9 @@ function editor_snap_width(_width) {
 
 // Comparison function to deal with multiple single selection targets
 function editor_select_compare(ida, idb) {
-	if(!instance_exists(ida)) return idb;
-	else if(!instance_exists(idb)) return ida;
-	else if(ida.depth < idb.depth) return ida;
-	else if(ida.depth > idb.depth) return idb;
-	else if(ida.time < idb.time) return ida;
-	else if(ida.time > idb.time) return idb;
-	else return min(ida, idb);
+	if(!is_struct(ida)) return idb;
+	if(!is_struct(idb)) return ida;
+	return ida.arrayPos<idb.arrayPos?ida:idb;
 }
 
 function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1) {

@@ -9,8 +9,8 @@ editorSelectInbound = false;
 editorHighlightLine = false;
 
 editorSelectCount = 0;
-with(objNote) {
-    var _hl = false;
+_WITHNOTE_START
+	var _hl = false;
     if(state == stateSelected) {
         objEditor.editorSelectCount ++;
         objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
@@ -18,7 +18,7 @@ with(objNote) {
         objEditor.editorSelectDragOccupied |= isDragging;
         if(isDragging) _hl = true;
     }
-    else if((state == stateAttach || state == stateDrop) && id == editor_get_note_attaching_center()) {
+    else if((state == stateAttach || state == stateDrop) && selfPointer == editor_get_note_attaching_center()) {
         _hl = true;
     }
     else if(state == stateAttachSub || state == stateDropSub) {
@@ -35,7 +35,7 @@ with(objNote) {
             objEditor.editorHighlightTime = sinst.time;
         }
     }
-}
+_WITHNOTE_END
 
 editorSelectMultiple = editorSelectCount > 1;
 
@@ -83,10 +83,6 @@ editorSelectMultiple = editorSelectCount > 1;
     // Notes operation
     
     if(editor_select_count() > 0) {
-    	// Sync Props
-	    with(objNote)
-	    	if(state == stateSelected)
-	    		sync_prop_get();
     	
     	// Wheel width adjust
 	    var _delta_width = wheelcheck_up_ctrl() - wheelcheck_down_ctrl();
@@ -112,29 +108,29 @@ editorSelectMultiple = editorSelectCount > 1;
 	    editorWidthAdjustTime = min(editorWidthAdjustTime, 10000);
     	
     	if(keycheck_down(ord("M"))) {
-	    	with(objNote) {
+	    	_WITHNOTE_START
 	    		if(state == stateSelected) {
 	    			origProp = get_prop();
 	    			position = 5 - position;
 	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
-	    	}
+	    	_WITHNOTE_END
 	    	announcement_play(i18n_get("notes_mirror", string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("M"))) {
-	    	with(objNote) {
+	    	_WITHNOTE_START
 	    		if(state == stateSelected) {
 	    			var prop = get_prop();
 	    			prop.position = 5 - prop.position;
 	    			note_select_reset(true);
 	    			build_note_withprop(prop, true, true);
 	    		}
-	    	}
+	    	_WITHNOTE_END
 	    	announcement_play(i18n_get("notes_mirror_copy", string(editor_select_count())));
 	    }
 	    if(keycheck_down(ord("R"))) {
 	    	var _found = 0;
-	    	with(objNote) {
+	    	_WITHNOTE_START
 	    		if(state == stateSelected)
 		    		if(side > 0) {
 		    			origProp = get_prop();
@@ -142,7 +138,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 			    		_found ++;
 			    	}
-	    	}
+	    	_WITHNOTE_END
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate", string(_found)));
 	    		editorSide = 1 + (!(editorSide - 1));
@@ -153,7 +149,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    }
 	    if(keycheck_down_ctrl(ord("R"))) {
 	    	var _found = 0;
-	    	with(objNote) {
+	    	_WITHNOTE_START
 	    		if(state == stateSelected)
 		    		if(side > 0) {
 		    			var prop = get_prop();
@@ -162,7 +158,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		build_note_withprop(prop, true, true);
 			    		_found ++;
 			    	}
-	    	}
+	    	_WITHNOTE_END
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate_copy", string(_found)));
 	    		editorSide = 1 + (!(editorSide - 1));
@@ -205,12 +201,6 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	}
 			announcement_play(i18n_get("notes_set_type", "CHAIN", string(editor_select_count())));
 	    }
-	    
-	    // Sync Props
-    
-	    with(objNote)
-	    	if(state == stateSelected)
-	    		sync_prop_set();
     }
         
     editorGridWidthEnabled = !ctrl_ishold();
@@ -328,7 +318,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if((keycheck_down_ctrl(ord("C")) || keycheck_down_ctrl(ord("X"))) && editorSelectCount > 0) {
         var _cnt = 0;
         copyStack = [];
-        with(objNote) {
+        _WITHNOTE_START
             if(state == stateSelected && noteType <= 2) {
                 array_push(objEditor.copyStack, get_prop());
                 _cnt ++;
@@ -337,7 +327,7 @@ editorSelectMultiple = editorSelectCount > 1;
                     instance_destroy();
                 }
             }
-        }
+        _WITHNOTE_END
         array_sort(copyStack, function (_a, _b) { 
             return sign(_a.time == _b.time? _a.position - _b.position : _a.time - _b.time); });
         
