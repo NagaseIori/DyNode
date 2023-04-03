@@ -27,30 +27,26 @@ _prop_init();
 		        return;
     
 		    // Sync the properties
-		    sinst.position = position;
-		    sinst.width = width;
-		    sinst.depth = depth;
-		    sinst.side = side;
-		    sinst.finst = id;
-		    sinst.time = max(sinst.time, time+0.0001);
+		    var snote = sinst.fstruct;
+		    snote.position = position;
+		    snote.width = width;
+		    snote.side = side;
+		    snote.time = max(snote.time, time+0.0001);
 		    
 		    
 		    if(fixedLastTime != -1)
-		    	sinst.time = time + fixedLastTime;
-		    
-		    sinst.beginTime = time;
+		    	snote.time = time + fixedLastTime;
     		
 		    pHeight = max(0, objMain.playbackSpeed * 
-		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime)))
+		    	(snote.time - max(time, selectTolerance?0:objMain.nowTime)))
 		        + dFromBottom + uFromTop;
 		    if(!global.simplify) {
 		    	pHeight = max(pHeight, originalHeight);
 		    }
-		    lastTime = sinst.time - time;
+		    lastTime = snote.time - time;
 		    lastTime = max(lastTime, 1);
 		    
-		    sinst.lastTime = lastTime;
-		    sinst.sync_prop_set();
+		    snote.lastTime = lastTime;
         }
     }
 

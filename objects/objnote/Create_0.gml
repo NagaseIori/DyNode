@@ -95,11 +95,6 @@ image_yscale = global.scaleYAdjust;
         	depth = finst.depth;
         
         noteprop_set_xy(position, time, side);
-        
-        if(noteType == 3)
-        	beginTime = time - lastTime;
-        else
-        	beginTime = time;
     }
     _prop_init();
 
@@ -248,6 +243,8 @@ image_yscale = global.scaleYAdjust;
 	    noteType = fstruct.ntype;
 	    arrayPos = fstruct.arrayPos;
 	    sinst = fstruct.sinst;
+	    finst = fstruct.finst;
+	    beginTime = fstruct.get_begin_time();
     }
     sync_prop_get();
    

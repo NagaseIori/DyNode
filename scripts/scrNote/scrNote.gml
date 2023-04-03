@@ -13,6 +13,9 @@ function sNote(prop) constructor {
     
     inst = undefined;
     sinst = undefined;
+    snote = undefined;
+    finst = undefined;
+    fnote = undefined;
     selfPointer = self;
 	
 	static set_prop = function (prop) {
@@ -53,7 +56,7 @@ function sNote(prop) constructor {
 	
 	static get_begin_time = function () {
 		if(ntype == 3) return time - length;
-		return time;
+		return 0x3f3f3f3f;
 	}
 	
 	static activate = function () {
@@ -131,6 +134,9 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
 		_sprop.noteType = 3;
 		var _snote = build_note(_sprop, _fromxml)
 		_note.sinst = _snote.inst;
+		_note.snote = _snote;
+		_snote.finst = _note.inst;
+		_snote.fnote = _note;
 		array_push(objMain.chartNotesArray, _snote);
 	}
     
@@ -213,12 +219,12 @@ function notes_reallocate_id() {
 }
 
 function note_check_and_activate(_posistion_in_array) {
-	var _struct = objMain.chartNotesArray[_posistion_in_array];
-	_struct.arrayPos = _posistion_in_array;
-	var _str = _struct, _flag;
+	var _str = objMain.chartNotesArray[_posistion_in_array];
+	_str.arrayPos = _posistion_in_array;
+	var _flag;
 	_flag = _outbound_check_t(_str.time, _str.side);
 	if((!_flag || (_str.ntype == 3 && _str.get_begin_time() < nowTime)) && _str.time + _str.length > nowTime) {
-		note_activate(_str.inst);
+		_str.activate();
 		_str.arrayPos = _posistion_in_array;
 		return 1;
 	}

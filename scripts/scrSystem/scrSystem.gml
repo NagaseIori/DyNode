@@ -604,7 +604,7 @@ function map_get_struct() {
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
 			if(_str.ntype != 3)
-				array_push(_arr, chartNotesArray[i].get_prop(false));
+				array_push(_arr, _str.get_prop(false));
 		}
 	}
 	
