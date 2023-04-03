@@ -200,6 +200,7 @@ image_yscale = global.scaleYAdjust;
         	lastTime : lastTime,
         	noteType : noteType,
         	inst : id,
+        	sinst: sinst,
         	beginTime : beginTime,
         	lastAttachBar: lastAttachBar
         };
