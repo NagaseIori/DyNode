@@ -221,3 +221,12 @@ var _music_resync_request = false;
 			break;
 
 #endregion
+
+/// Note Step Pipeline
+
+note_foreach(function (_e, _i) {
+	with(_e) {
+		arrayPos = _i;
+		_event_step();
+	}
+});

@@ -56,3 +56,7 @@ draw_set_halign(fa_center);
 draw_set_valign(fa_top);
 draw_set_color_alpha(c_white, 1);
 draw_text(global.resolutionW/2, 50, _debug_str);
+
+note_foreach(function (_e, _i) {
+	_e._event_draw_gui();
+})

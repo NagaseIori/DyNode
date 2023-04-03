@@ -21,10 +21,12 @@ function sNote(prop) constructor {
 	image_angle = 0;
 	image_yscale = global.scaleYAdjust;
 	image_alpha = 1;
+	image_number = 0;
 	x=0;
 	y=0;
 	__selfPointer = self;
 
+	
 	/// Display Variables
 	drawVisible = false;
 	sprite = sprNote2;
@@ -34,6 +36,9 @@ function sNote(prop) constructor {
     lastAlphaR = 1;
     lastAlpha = lastAlphaL;
 
+	/// Bounce Box
+	bbox = [sprite_get_width(sprite), sprite_get_height(sprite)]
+	
 	/// Related instances
     inst = undefined;
     sinst = undefined;
@@ -87,6 +92,15 @@ function sNote(prop) constructor {
     uFromTop = 0;
 
 /// Private Methods
+
+	static _get_bbox = function () {
+		return [
+			x-bbox[0]/2,
+			y-bbox[1]/2,
+			x+bbox[0]/2,
+			y+bbox[1]/2
+		]
+	}
 
 	static _prop_init = function () {
         originalWidth = sprite_get_width(sprite);
@@ -188,11 +202,12 @@ function sNote(prop) constructor {
     }
 
 	static _mouse_inbound_check = function (_mode = 0) {
+		var _bbox = _get_bbox();
         switch _mode {
             case 0:
-                return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
+                return mouse_inbound(_bbox[0], _bbox[1], _bbox[2], _bbox[3]);
             case 1:
-                return mouse_inbound_last_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
+                return mouse_inbound_last_l(_bbox[0], _bbox[1], _bbox[2], _bbox[3]);
         }
     }
 
@@ -213,7 +228,7 @@ function sNote(prop) constructor {
         
         // Update Mixer's Position
 	    if(side > 0) {
-	        var _nside = side-1, _noff = time, _nx = y, _nid = id;
+	        var _nside = side-1, _noff = time, _nx = y, _nid = self;
 	        
 	        with(objMain) {
 	            if((_noff-nowTime)*playbackSpeed/global.resolutionW < MIXER_REACTION_RANGE &&
@@ -252,12 +267,12 @@ function sNote(prop) constructor {
         	
             if(_mouse_click_to_select || _mouse_drag_to_select) {
                 objEditor.editorSelectSingleTarget =
-                    editor_select_compare(objEditor.editorSelectSingleTarget, id);
+                    editor_select_compare(objEditor.editorSelectSingleTarget, self);
             }
             
             if(_mouse_inbound_check()) {
                 objEditor.editorSelectSingleTargetInbound = 
-                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, id);
+                    editor_select_compare(objEditor.editorSelectSingleTargetInbound, self);
             }
         }
     }
@@ -294,7 +309,7 @@ function sNote(prop) constructor {
 	        state();
 	    }
 	    
-	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
+	    if(time > objMain.nowTime && get_begin_time() <= objMain.nowTime)
 	    	note_activate(finst);
     }
 
@@ -302,7 +317,7 @@ function sNote(prop) constructor {
 		stateString = "ATCH";
 		animTargetA = _outbound_check(x, y, side) ? 0:0.5;
 		
-		if(editor_get_note_attaching_center() == id) {
+		if(editor_get_note_attaching_center() == self) {
 			if(side == 0) {
 				x = editor_snap_to_grid_x(mouse_x, side);
 				lastAttachBar = editor_snap_to_grid_y(mouse_y, side);
@@ -332,7 +347,7 @@ function sNote(prop) constructor {
 		}
 		
 		if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)
-			&& id == editor_get_note_attaching_center()) {
+			&& self == editor_get_note_attaching_center()) {
 			with(objNote) if(state == stateAttach) {
 				state = stateDrop;
 				origWidth = width;
@@ -546,8 +561,8 @@ function sNote(prop) constructor {
 		};
 		if(not_export) {
 			_ret.note = weak_ref_create(__selfPointer);
-			_ret.snote = weak_ref_create(snote);
-			_ret.fnote = weak_ref_create(fnote);
+			_ret.snote = is_undefined(snote)?snote:weak_ref_create(snote);
+			_ret.fnote = is_undefined(fnote)?fnote:weak_ref_create(fnote);
 		}
 		return _ret;
 	}
@@ -584,7 +599,7 @@ function sNote(prop) constructor {
 	static activatable = function () {
 		var _flag;
 		_flag = _outbound_check_t(time, side);
-		if((!_flag || (noteType == 3 && get_begin_time() < nowTime)) && time + lastTime > nowTime) {
+		if((!_flag || (noteType == 3 && get_begin_time() < objMain.nowTime)) && time + lastTime > objMain.nowTime) {
 			return 1;
 		}
 		else if(_flag && _outbound_check_t(time, !(side))) {
@@ -624,7 +639,7 @@ function sNote(prop) constructor {
 				}
 			}
 			else {
-				if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == id) {
+				if((!objEditor.editorSelectOccupied || ctrl_ishold()) && objEditor.editorSelectSingleTargetInbound == self) {
 					animTargetNodeA = 1.0;
 					animTargetInfoA = ctrl_ishold()? 1:0;
 				}
@@ -756,16 +771,10 @@ function sNote(prop) constructor {
 			infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
 		}
 
-		// If no longer visible then deactivate self
-		if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
-			note_deactivate_request(id);
-			return;
-		}
-
 		// Update Highlight Line's Position
-		if(objEditor.editorHighlightLine && instance_exists(id)) {
+		if(objEditor.editorHighlightLine) {
 			if(state == stateSelected && isDragging || state == stateAttachSub || state == stateDropSub
-				|| ((state == stateAttach || state == stateDrop) && id == editor_get_note_attaching_center())) {
+				|| ((state == stateAttach || state == stateDrop) && self == editor_get_note_attaching_center())) {
 				objEditor.editorHighlightTime = time;
 				objEditor.editorHighlightPosition = position;
 				objEditor.editorHighlightSide = side;
@@ -843,23 +852,20 @@ function note_sort_request() {
 
 function build_note(prop, _fromxml = false, _record = false, _selecting = false) {
     var _note = new sNote(prop);
-	var _inst = _note.create_self();
 	
 	if(_note.noteType == 2) {
 		var _sprop = SnapDeepCopy(prop);
 		_sprop.time = _note.time+_note.lastTime;
 		_sprop.noteType = 3;
 		var _snote = build_note(_sprop, _fromxml)
-		_note.sinst = _snote.inst;
 		_note.snote = _snote;
-		_snote.finst = _note.inst;
 		_snote.fnote = _note;
 	}
     
     if(_fromxml)
         _note.position += _note.width/2;
     
-    with(_inst) {
+    with(_note) {
     	_prop_init();
     	if(noteType == 2) _prop_hold_update();
     	if(_selecting) state = stateSelected;
@@ -993,4 +999,14 @@ function note_activation_reset() {
 		for(var i=0; i<chartNotesCount; i++)
 			note_check_and_activate(i);
 	}
+}
+
+function note_foreach(meth) {
+	meth = method({
+		meth: meth
+	}, function (_e, _i) {
+		if(_e.activatable())
+			meth(_e, _i);
+	})
+	array_foreach(objMain.chartNotesArray, meth);
 }

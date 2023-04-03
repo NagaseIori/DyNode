@@ -96,4 +96,9 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 	draw_set_color_alpha(merge_color(themeColor, c_white, lineMix[0]), 1.0);
     draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
                     _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
-    
+
+// Notes Draw Pipeline
+
+	note_foreach(function (_e, _i) {
+		_e._event_draw();
+	})
