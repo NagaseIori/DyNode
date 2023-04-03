@@ -149,7 +149,6 @@ function build_note(prop, _fromxml = false, _record = false, _selecting = false)
 		_note.snote = _snote;
 		_snote.finst = _note.inst;
 		_snote.fnote = _note;
-		array_push(objMain.chartNotesArray, _snote);
 	}
     
     if(_fromxml)
