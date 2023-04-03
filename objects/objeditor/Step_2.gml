@@ -5,7 +5,7 @@ if(editorMode == 4) {
     var _selectable = note_exists(editorSelectSingleTarget) && !keycheck_down(vk_up) && !editorSelectInbound;
     // Detect if the mouse is dragging to enable selecting area
     if(!note_exists(editorSelectSingleTarget) && !editorSelectArea 
-        && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
+        && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !note_exists(editorSelectSingleTargetInbound)) {
             editorSelectArea = true;
             var _pos = mouse_get_last_pos(0);
             editorSelectAreaPosition = xy_to_noteprop(_pos[0], _pos[1], editorSide);

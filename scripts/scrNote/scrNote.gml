@@ -987,11 +987,20 @@ function note_deactivate_flush() {
 }
 
 function note_select_reset(isself = false) {
-	with(isself?id:objNote)
+	if(isself) {
 		if(state == stateSelected) {
 			state = stateNormal;
 			state();
 		}
+	}
+	else {
+		_WITHNOTE_START
+			if(state == stateSelected) {
+				state = stateNormal;
+				state();
+			}
+		_WITHNOTE_END
+	}
 }
 
 function note_activation_reset() {
