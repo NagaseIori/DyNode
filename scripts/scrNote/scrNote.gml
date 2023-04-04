@@ -219,15 +219,18 @@ function note_check_and_activate(_posistion_in_array) {
 		_struct.inst.arrayPos = _posistion_in_array;
 		return 0;
 	}
-	var _str = _struct, _flag;
-	_flag = _outbound_check_t(_str.time, _str.side);
-	if((!_flag || (_str.noteType == 3 && _str.beginTime < nowTime)) && _str.time + _str.lastTime > nowTime) {
+	var _str = _struct;
+	var _note_inbound = !_outbound_check_t(_str.time, _str.side) && _str.time >= objMain.nowTime;
+	var _hold_intersect = (_str.noteType >= 2) *
+		(_str.noteType == 2? (_str.time <= objMain.nowTime && _str.time + _str.lastTime >= objMain.nowTime):
+			(_str.beginTime <= objMain.nowTime && _str.time >= objMain.nowTime));
+	if(_note_inbound || _hold_intersect) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;
 		return 1;
 	}
-	else if(_flag && _outbound_check_t(_str.time, !(_str.side))) {
+	else if(_note_inbound && _outbound_check_t(_str.time, !(_str.side))) {
 		return -1;
 	}
 	return 0;

@@ -331,8 +331,9 @@ image_yscale = global.scaleYAdjust;
 	        state();
 	    }
 	    
-	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
+	    if(noteType == 3 && time > objMain.nowTime && beginTime <= objMain.nowTime) {
 	    	note_activate(finst);
+	    }
     }
     
     // Editors
