@@ -17,6 +17,7 @@ image_yscale = global.scaleYAdjust;
     finst = -999;					// Father instance id
     noteType = 0;					// 0 Note 1 Chain 2 Hold
     arrayPos = -1;					// Position in chartNotesArray
+    arrayPointer = undefined;		// Pointer to chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -191,8 +192,8 @@ image_yscale = global.scaleYAdjust;
         
     }
     
-    get_prop = function (_fromxml = false) {
-    	return {
+    get_prop = function (_fromxml = false, _set_pointer = false) {
+    	var _prop = {
         	time : _fromxml?bar:time,
         	side : side,
         	width : width,
@@ -204,6 +205,10 @@ image_yscale = global.scaleYAdjust;
         	beginTime : beginTime,
         	lastAttachBar: lastAttachBar
         };
+    	if(_set_pointer) {
+    		arrayPointer = _prop;
+    	}
+    	return _prop;
     }
     
     set_prop = function (props) {
@@ -226,6 +231,20 @@ image_yscale = global.scaleYAdjust;
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
+    }
+    
+    update_prop = function() {
+    	if(!is_struct(arrayPointer)) return;
+    	arrayPointer.time = time;
+    	arrayPointer.side = side;
+    	arrayPointer.width = width;
+    	arrayPointer.position = position;
+    	arrayPointer.lastTime = lastTime;
+    	arrayPointer.noteType = noteType;
+    	arrayPointer.inst = id;
+    	arrayPointer.sinst = sinst;
+    	arrayPointer.beginTime = beginTime;
+    	arrayPointer.lastAttachBar = lastAttachBar;
     }
     
     // _outbound_check was moved to scrNote

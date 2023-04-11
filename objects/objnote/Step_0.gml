@@ -10,6 +10,7 @@ selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, not
 selectTolerance = selectInbound || state == stateSelected;
 
 state();
+update_prop();
 
 selectUnlock = false;
 
