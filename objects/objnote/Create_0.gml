@@ -75,7 +75,7 @@ image_yscale = global.scaleYAdjust;
 
 // In-Functions
 
-    _prop_init = function () {
+    function _prop_init() {
     	origDepth = -20000000;
     	if(noteType == 1) origDepth *= 2;
     	else if(noteType == 2) origDepth /= 2;
@@ -95,7 +95,7 @@ image_yscale = global.scaleYAdjust;
     }
     _prop_init();
 
-    _emit_particle = function(_num, _type, _force = false) {
+    function _emit_particle(_num, _type, _force = false) {
         
         if(!objMain.nowPlaying && !_force)
             return;
@@ -145,7 +145,7 @@ image_yscale = global.scaleYAdjust;
         }
     }
 
-    _create_shadow = function (_force = false) {
+    function _create_shadow(_force = false) {
         if(!objMain.nowPlaying && !_force)
             return;
         if(objMain.topBarMousePressed)
@@ -182,7 +182,7 @@ image_yscale = global.scaleYAdjust;
         _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
     
-    _mouse_inbound_check = function (_mode = 0) {
+    function _mouse_inbound_check(_mode = 0) {
         switch _mode {
             case 0:
                 return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
@@ -192,7 +192,7 @@ image_yscale = global.scaleYAdjust;
         
     }
     
-    get_prop = function (_fromxml = false, _set_pointer = false) {
+    function get_prop(_fromxml = false, _set_pointer = false) {
     	var _prop = {
         	time : _fromxml?bar:time,
         	side : side,
@@ -211,7 +211,7 @@ image_yscale = global.scaleYAdjust;
     	return _prop;
     }
     
-    set_prop = function (props) {
+    function set_prop(props) {
     	if(!is_struct(props))
     		show_error("property must be a struct.", true);
     	
@@ -233,7 +233,7 @@ image_yscale = global.scaleYAdjust;
     	}
     }
     
-    update_prop = function() {
+    function update_prop() {
     	if(!is_struct(arrayPointer)) return;
     	arrayPointer.time = time;
     	arrayPointer.side = side;
@@ -252,7 +252,7 @@ image_yscale = global.scaleYAdjust;
 // State Machines
     
     // State Normal
-    stateNormal = function() {
+    function stateNormal() {
     	if(stateString == "SEL")
     		selectUnlock = true;
         stateString = "NM";
@@ -317,7 +317,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     // State Last
-    stateLast = function () {
+    function stateLast() {
         stateString = "LST";
         animTargetLstA = lastAlphaR;
         
@@ -338,7 +338,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     // State Targeted
-    stateOut = function() {
+    function stateOut() {
         stateString = "OUT";
         
         animTargetA = 0.0;
@@ -357,7 +357,7 @@ image_yscale = global.scaleYAdjust;
     
     // Editors
         // State attached to cursor
-        stateAttach = function() {
+        function stateAttach() {
             stateString = "ATCH";
             animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
@@ -401,7 +401,7 @@ image_yscale = global.scaleYAdjust;
         }
         
         // State Dropping down
-        stateDrop = function() {
+        function stateDrop() {
             stateString = "DROP";
             animTargetA = 0.8;
             
@@ -444,7 +444,7 @@ image_yscale = global.scaleYAdjust;
             _prop_init();
         }
         
-        stateAttachSub = function () {
+        function stateAttachSub() {
             stateString = "ATCHS";
             sinst.lastAttachBar = editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side);
             sinst.time = y_to_note_time(sinst.lastAttachBar.y, side);
@@ -455,7 +455,7 @@ image_yscale = global.scaleYAdjust;
             }
         }
         
-        stateDropSub = function () {
+        function stateDropSub() {
             stateString = "DROPS";
             animTargetA = 1.0;
             if(mouse_check_button_released(mb_left)) {
@@ -469,7 +469,7 @@ image_yscale = global.scaleYAdjust;
         }
         
         // State Selected
-        stateSelected = function() {
+        function stateSelected() {
         	animTargetA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
