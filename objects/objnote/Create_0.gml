@@ -579,5 +579,5 @@ image_yscale = global.scaleYAdjust;
 		    	
         }
 
-    state = stateOut;
+    state = undefined;			// shouldn't be assigned with function index immediately
     stateString = "OUT";

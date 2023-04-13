@@ -1,5 +1,8 @@
 _prop_init();
 
+if(state == undefined)
+	state = stateOut;
+
 if(state == stateOut && image_alpha<EPS) {
 	drawVisible = false;
 }
