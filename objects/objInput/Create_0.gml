@@ -6,7 +6,7 @@ depth = -100000;
 
 // In-functions
 
-_ioclear = function() {
+function _ioclear() {
     last_mouse_x = 0;
     last_mouse_y = 0;
     

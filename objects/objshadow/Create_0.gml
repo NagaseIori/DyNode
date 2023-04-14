@@ -18,7 +18,7 @@ nowScaleX = 1;
 
 alphaMul = 1.0;
 
-_prop_init = function () {
+function _prop_init() {
     nowScaleX = (nowWidth + extraWidth) / originalWidth;
     image_xscale = nowScaleX;
 }
