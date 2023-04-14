@@ -39,13 +39,11 @@ var _music_resync_request = false;
     
     if(_timchange != 0 || _timscr != 0) {
         if(nowPlaying) {
-            nowTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
-                * global.fpsAdjust;
+            nowTime += (_timchange * adtimeSpeed * global.fpsAdjust + _timscr * scrolltimeSpeed);
             _music_resync_request = true;
         }
         else {
-            animTargetTime += (_timchange * adtimeSpeed + _timscr * scrolltimeSpeed)
-                * global.fpsAdjust;
+            animTargetTime += (_timchange * adtimeSpeed * global.fpsAdjust + _timscr * scrolltimeSpeed);
         }
     }
     
