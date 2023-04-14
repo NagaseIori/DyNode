@@ -78,6 +78,9 @@ function __CleanDraw()
         CleanBatchDrawVertexBuffer(_vbuff, true);
     }
     
+    var _selfPointer = self;
+    delete _selfPointer;
+    
     return undefined;
 }
 

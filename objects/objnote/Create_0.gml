@@ -17,6 +17,7 @@ image_yscale = global.scaleYAdjust;
     finst = -999;					// Father instance id
     noteType = 0;					// 0 Note 1 Chain 2 Hold
     arrayPos = -1;					// Position in chartNotesArray
+    arrayPointer = undefined;		// Pointer to chartNotesArray
     
     // For Editor
     origWidth = width;
@@ -74,7 +75,7 @@ image_yscale = global.scaleYAdjust;
 
 // In-Functions
 
-    _prop_init = function () {
+    function _prop_init() {
     	origDepth = -20000000;
     	if(noteType == 1) origDepth *= 2;
     	else if(noteType == 2) origDepth /= 2;
@@ -82,6 +83,10 @@ image_yscale = global.scaleYAdjust;
     	
     	if(attaching) origDepth = -100000000;
         originalWidth = sprite_get_width(sprite);
+        
+        // Properties Limitation
+        width = max(width, 0.01);
+        
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
@@ -94,7 +99,7 @@ image_yscale = global.scaleYAdjust;
     }
     _prop_init();
 
-    _emit_particle = function(_num, _type, _force = false) {
+    function _emit_particle(_num, _type, _force = false) {
         
         if(!objMain.nowPlaying && !_force)
             return;
@@ -144,7 +149,7 @@ image_yscale = global.scaleYAdjust;
         }
     }
 
-    _create_shadow = function (_force = false) {
+    function _create_shadow(_force = false) {
         if(!objMain.nowPlaying && !_force)
             return;
         if(objMain.topBarMousePressed)
@@ -181,7 +186,7 @@ image_yscale = global.scaleYAdjust;
         _emit_particle(ceil(partNumberLast * image_xscale), 0);
     }
     
-    _mouse_inbound_check = function (_mode = 0) {
+    function _mouse_inbound_check(_mode = 0) {
         switch _mode {
             case 0:
                 return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
@@ -191,8 +196,8 @@ image_yscale = global.scaleYAdjust;
         
     }
     
-    get_prop = function (_fromxml = false) {
-    	return {
+    function get_prop(_fromxml = false, _set_pointer = false) {
+    	var _prop = {
         	time : _fromxml?bar:time,
         	side : side,
         	width : width,
@@ -200,12 +205,17 @@ image_yscale = global.scaleYAdjust;
         	lastTime : lastTime,
         	noteType : noteType,
         	inst : id,
+        	sinst: sinst,
         	beginTime : beginTime,
         	lastAttachBar: lastAttachBar
         };
+    	if(_set_pointer) {
+    		arrayPointer = _prop;
+    	}
+    	return _prop;
     }
     
-    set_prop = function (props) {
+    function set_prop(props) {
     	if(!is_struct(props))
     		show_error("property must be a struct.", true);
     	
@@ -227,12 +237,26 @@ image_yscale = global.scaleYAdjust;
     	}
     }
     
+    function update_prop() {
+    	if(!is_struct(arrayPointer)) return;
+    	arrayPointer.time = time;
+    	arrayPointer.side = side;
+    	arrayPointer.width = width;
+    	arrayPointer.position = position;
+    	arrayPointer.lastTime = lastTime;
+    	arrayPointer.noteType = noteType;
+    	arrayPointer.inst = id;
+    	arrayPointer.sinst = sinst;
+    	arrayPointer.beginTime = beginTime;
+    	arrayPointer.lastAttachBar = lastAttachBar;
+    }
+    
     // _outbound_check was moved to scrNote
 
 // State Machines
     
     // State Normal
-    stateNormal = function() {
+    function stateNormal() {
     	if(stateString == "SEL")
     		selectUnlock = true;
         stateString = "NM";
@@ -297,7 +321,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     // State Last
-    stateLast = function () {
+    function stateLast() {
         stateString = "LST";
         animTargetLstA = lastAlphaR;
         
@@ -318,7 +342,7 @@ image_yscale = global.scaleYAdjust;
     }
     
     // State Targeted
-    stateOut = function() {
+    function stateOut() {
         stateString = "OUT";
         
         animTargetA = 0.0;
@@ -330,13 +354,14 @@ image_yscale = global.scaleYAdjust;
 	        state();
 	    }
 	    
-	    if(time > objMain.nowTime && beginTime <= objMain.nowTime)
+	    if(noteType == 3 && time > objMain.nowTime && beginTime <= objMain.nowTime) {
 	    	note_activate(finst);
+	    }
     }
     
     // Editors
         // State attached to cursor
-        stateAttach = function() {
+        function stateAttach() {
             stateString = "ATCH";
             animTargetA = _outbound_check(x, y, side) ? 0:0.5;
             
@@ -380,7 +405,7 @@ image_yscale = global.scaleYAdjust;
         }
         
         // State Dropping down
-        stateDrop = function() {
+        function stateDrop() {
             stateString = "DROP";
             animTargetA = 0.8;
             
@@ -423,7 +448,7 @@ image_yscale = global.scaleYAdjust;
             _prop_init();
         }
         
-        stateAttachSub = function () {
+        function stateAttachSub() {
             stateString = "ATCHS";
             sinst.lastAttachBar = editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side);
             sinst.time = y_to_note_time(sinst.lastAttachBar.y, side);
@@ -434,7 +459,7 @@ image_yscale = global.scaleYAdjust;
             }
         }
         
-        stateDropSub = function () {
+        function stateDropSub() {
             stateString = "DROPS";
             animTargetA = 1.0;
             if(mouse_check_button_released(mb_left)) {
@@ -448,7 +473,7 @@ image_yscale = global.scaleYAdjust;
         }
         
         // State Selected
-        stateSelected = function() {
+        function stateSelected() {
         	animTargetA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
@@ -558,5 +583,5 @@ image_yscale = global.scaleYAdjust;
 		    	
         }
 
-    state = stateOut;
+    state = undefined;			// shouldn't be assigned with function index immediately
     stateString = "OUT";

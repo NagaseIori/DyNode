@@ -299,6 +299,10 @@ function operation_refresh_inst(_origi, _nowi) {
 					_ops[ii].fromProp.inst = _nowi;
 				if(_ops[ii].toProp != -1 && _ops[ii].toProp.inst == _origi)
 					_ops[ii].toProp.inst = _nowi;
+				if(_ops[ii].fromProp.sinst == _origi)
+					_ops[ii].fromProp.sinst = _nowi;
+				if(_ops[ii].toProp != -1 && _ops[ii].toProp.sinst == _origi)
+					_ops[ii].toProp.sinst = _nowi;
 			}
 		}
 	}
@@ -321,6 +325,7 @@ function operation_undo() {
 			case OPERATION_TYPE.REMOVE:
 				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
 				break;
 			case OPERATION_TYPE.TPADD:
 				operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
@@ -356,6 +361,7 @@ function operation_redo() {
 			case OPERATION_TYPE.ADD:
 				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
 				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+				operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
 				break;
 			case OPERATION_TYPE.REMOVE:
 			case OPERATION_TYPE.TPADD:

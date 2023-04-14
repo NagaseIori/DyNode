@@ -1,5 +1,8 @@
 _prop_init();
 
+if(state == undefined)
+	state = stateOut;
+
 if(state == stateOut && image_alpha<EPS) {
 	drawVisible = false;
 }
@@ -10,6 +13,7 @@ selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, not
 selectTolerance = selectInbound || state == stateSelected;
 
 state();
+update_prop();
 
 selectUnlock = false;
 
