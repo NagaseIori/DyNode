@@ -10,8 +10,8 @@
   
 <br>
   <strong>
-  <a href="https://dyn.iorinn.moe/guide">Documentation</a> |
-  <a href="https://dyn.iorinn.moe">Homepage</a>
+  <a href="https://dyn.iorinn.moe/guide">Guide 指南</a> |
+  <a href="https://dyn.iorinn.moe">Homepage 主页</a>
   </strong>
 </p>
 
