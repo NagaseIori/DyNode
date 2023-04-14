@@ -83,6 +83,10 @@ image_yscale = global.scaleYAdjust;
     	
     	if(attaching) origDepth = -100000000;
         originalWidth = sprite_get_width(sprite);
+        
+        // Properties Limitation
+        width = max(width, 0.01);
+        
         pWidth = width * 300 / (side == 0 ? 1:2) - 30 + lFromLeft + rFromRight;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
