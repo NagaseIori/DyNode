@@ -353,6 +353,7 @@
     {"name":"scribble_color_set","order":1,"path":"scripts/scribble_color_set/scribble_color_set.yy",},
     {"name":"objHoldSub","order":3,"path":"objects/objHoldSub/objHoldSub.yy",},
     {"name":"objShadow","order":4,"path":"objects/objShadow/objShadow.yy",},
+    {"name":"scrGUI","order":14,"path":"scripts/scrGUI/scrGUI.yy",},
     {"name":"scribble_markdown_format","order":3,"path":"scripts/scribble_markdown_format/scribble_markdown_format.yy",},
     {"name":"__scribble_tick","order":18,"path":"scripts/__scribble_tick/__scribble_tick.yy",},
     {"name":"sprParticleB","order":10,"path":"sprites/sprParticleB/sprParticleB.yy",},

@@ -70,7 +70,7 @@ function draw_scribble_box(_ele, x, y, alpha) {
 	var _bbox = _ele.get_bbox(x, y);
 	
 	CleanRectangle(_bbox.left-5, _bbox.top-5, _bbox.right+5, _bbox.bottom+5)
-		.Blend(theme_get().color, alpha)
+		.Blend(merge_color(theme_get().color, c_black, 0.4), alpha)
 		.Rounding(10)
 		.Draw();
 }
@@ -368,6 +368,17 @@ function lerp_a(from, to, amount) {
 function lerp_safe(from, to, amount) {
 	if(abs(to-from)<LERP_EPS) return to;
 	return lerp(from, to, amount);
+}
+
+function lerp_pos(from, to, amount) {
+	return {
+		x: lerp_safe(from.x, to.x, amount),
+		y: lerp_safe(from.y, to.y, amount)
+	};
+}
+
+function lerp_a_pos(from, to, amount) {
+	return lerp_pos(from, to, amount * global.fpsAdjust);
 }
 
 function create_scoreboard(_x, _y, _dep, _dig, _align, _lim) {

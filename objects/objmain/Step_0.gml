@@ -1,10 +1,26 @@
 
 // _position_update();
 
-#region Functions Control
-
+#region GUI Management
 	if(mouse_ishold_r() && !instance_exists(objUISideSwitcher))
 		instance_create(mouse_get_last_pos(1)[0], mouse_get_last_pos(1)[1], objUISideSwitcher);
+	else if(mouse_isclick_r()) {
+		if(global.__GUIManager == undefined) {
+			global.__GUIManager = new GUIManager();
+			var _smh = new Button("smh", mouse_x, mouse_y, "BRUH");
+		}
+		else global.__GUIManager.destroy();
+	}
+	
+	if(global.__GUIManager != undefined) {
+		global.__GUIManager.step();
+	}
+		
+#endregion
+
+#region Functions Control
+
+	
     
     if(keycheck_down(vk_f3))
         music_load();

@@ -425,6 +425,7 @@
     {"id":{"name":"scribble_color_set","path":"scripts/scribble_color_set/scribble_color_set.yy",},},
     {"id":{"name":"objHoldSub","path":"objects/objHoldSub/objHoldSub.yy",},},
     {"id":{"name":"objShadow","path":"objects/objShadow/objShadow.yy",},},
+    {"id":{"name":"scrGUI","path":"scripts/scrGUI/scrGUI.yy",},},
     {"id":{"name":"scribble_markdown_format","path":"scripts/scribble_markdown_format/scribble_markdown_format.yy",},},
     {"id":{"name":"__scribble_tick","path":"scripts/__scribble_tick/__scribble_tick.yy",},},
     {"id":{"name":"sprParticleB","path":"sprites/sprParticleB/sprParticleB.yy",},},

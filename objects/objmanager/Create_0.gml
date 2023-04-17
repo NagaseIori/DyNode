@@ -16,6 +16,7 @@
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
+#macro NULL_FUN function() {}
 math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs
@@ -63,6 +64,7 @@ global.difficultyString = "CNHMGT";
 global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
+global.__GUIManager = undefined;
 
 // Generate Temp Sprite
 

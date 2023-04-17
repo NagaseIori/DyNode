@@ -45,7 +45,7 @@ function mouse_square_inbound_last_l(x, y, a) {
 }
 
 function mouse_clear_hold() {
-    objInput.mouseHoldClear = true;
+    objInput._holdclear();
 }
 
 function mouse_ishold_l() {
@@ -59,6 +59,9 @@ function mouse_ishold_r() {
 }
 function mouse_isclick_r() {
     return objInput.mouseClick[1] > 0;
+}
+function mouse_clear_click() {
+    objInput._pressclear();
 }
 
 function ctrl_ishold() {

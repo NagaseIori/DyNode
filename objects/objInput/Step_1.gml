@@ -24,7 +24,7 @@ for(var i=0; i<mouseButtonCount; i++) {
         
     
     if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
-        mouseClick[i] = !mouse_ishold_l();
+        mouseClick[i] = !(mouseHoldTime[i] > mouseHoldThreshold);
     }
     else if(mouseHoldClear) mouseClick[i] = -1;
     
@@ -38,4 +38,5 @@ for(var i=0; i<mouseButtonCount; i++) {
     }
 }
 
-mouseHoldClear = false;
+if(!mouse_check_button(mb_left) && !mouse_check_button(mb_right))
+    mouseHoldClear = false;
