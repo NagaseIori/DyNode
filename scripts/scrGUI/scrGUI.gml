@@ -49,16 +49,23 @@ function GUIElement() constructor {
     atscale = 1;
     
     // Focus part
+    static focus_action = function () { };
     static has_focus = function() {
         return focus;
     }
     static set_focus = function() {
         focus = true;
+        
         manager.element_in_focus = self;
+        
+        show_debug_message("Element "+name+" focused.");
     }
     static remove_focus = function() {
         focus = false;
+        
         manager.element_in_focus = undefined;
+        
+        show_debug_message("Element "+name+" unfocused.");
     }
     
     // Animation Effects
@@ -175,6 +182,9 @@ function GUIElement() constructor {
     }
 }
 
+// Button: Click to do an action
+// _content: Element description string to draw
+// _action: custom action, called when value is changed
 function Button(_id, _x, _y, _content, _action = undefined, _active_check = undefined) : GUIElement() constructor {
     if(!is_undefined(_active_check))
         get_active = _active_check;
@@ -195,6 +205,75 @@ function Button(_id, _x, _y, _content, _action = undefined, _active_check = unde
     }
 }
 
+// Bar: Drag or Click to set value
+// _range: should be an array including 2 elements = [range_l, range_r]
+// _action: custom action, called when value is changed
+function Bar(_id, _x, _y, _content, _range, _action = undefined, _active_check = undefined) : GUIElement() constructor {
+    if(!is_undefined(_active_check))
+        get_active = _active_check;
+    
+    if(!is_undefined(_action))
+        custom_action = _action;
+        
+    content = _content;
+    set_position(_x, _y);
+    name = _id;
+    
+    value = 0.5;
+    range = _range;
+    
+    // Animation States
+    aval = 0;
+    atval = 0;
+    
+    // Animation Props
+    ashrink = [0.01, -0.01];
+    amagnet = 0.01;
+    aspdval = 0.4;
+    
+    static get_progress = function() {
+        var _prog = clamp((mouse_x - x)/width, 0, 1);
+        return _prog;
+    }
+    
+    static click = function() {
+        set(get_progress());
+    }
+    
+    static listen = function() {
+        if(mouse_check_button_released(mb_left)) remove_focus();
+        
+        set(get_progress());
+    }
+    
+    static __step = step;
+    static step = function() {
+        __step();
+        atval = value;
+        aval = lerp_a(aval, atval, aspdval);
+    }
+    
+    static get = function() {
+        return lerp(range[0], range[1], value);
+    }
+    
+    static draw = function() {
+        var _x = acenter.x;
+        var _y = acenter.y;
+        CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
+            .Blend(c_black, 1)
+            .Border(0, c_black, 0)
+            .Rounding(rounding)
+            .Draw();
+        
+        CleanRectangleXYWH(_x - width*ascale*(0.5-aval/2), _y, width*ascale*aval, height*ascale)
+            .Blend(c_white, 1)
+            .Border(0, c_white, 0)
+            .Rounding(rounding)
+            .Draw();
+    }
+}
+
 function GUIManager() constructor {
     global.__GUIManager = self;
     
@@ -211,6 +290,9 @@ function GUIManager() constructor {
         for(var i=ds_list_size(elements)-1; i>=0; i--) {
             elements[| i].step();
         }
+        
+        if(element_in_focus != undefined)
+            element_in_focus.listen();
     }
     
     static draw = function() {

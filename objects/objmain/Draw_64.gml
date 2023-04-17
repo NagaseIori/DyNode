@@ -19,7 +19,6 @@ if(topBarTimeA > 0) {
 	draw_set_alpha(1);
 }
 
-
 // Chart stats
 
 if(showStats > 0)

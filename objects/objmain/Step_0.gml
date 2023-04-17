@@ -7,7 +7,8 @@
 	else if(mouse_isclick_r()) {
 		if(global.__GUIManager == undefined) {
 			global.__GUIManager = new GUIManager();
-			var _smh = new Button("smh", mouse_x, mouse_y, "BRUH");
+			var _smh = new Bar("smh", mouse_x, mouse_y, "BRUH", [0, 100]);
+			_smh.width = 300;
 		}
 		else global.__GUIManager.destroy();
 	}
@@ -19,8 +20,6 @@
 #endregion
 
 #region Functions Control
-
-	
     
     if(keycheck_down(vk_f3))
         music_load();
