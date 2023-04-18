@@ -467,7 +467,6 @@
     {"id":{"name":"__scribble_gen_3_devanagari","path":"scripts/__scribble_gen_3_devanagari/__scribble_gen_3_devanagari.yy",},},
     {"id":{"name":"__scribble_get_cache_state","path":"scripts/__scribble_get_cache_state/__scribble_get_cache_state.yy",},},
     {"id":{"name":"SnitchLogSet","path":"scripts/SnitchLogSet/SnitchLogSet.yy",},},
-    {"id":{"name":"objInput","path":"objects/objInput/objInput.yy",},},
     {"id":{"name":"sndHit","path":"sounds/sndHit/sndHit.yy",},},
     {"id":{"name":"scrInput","path":"scripts/scrInput/scrInput.yy",},},
     {"id":{"name":"SnapBufferReadQML","path":"scripts/SnapBufferReadQML/SnapBufferReadQML.yy",},},

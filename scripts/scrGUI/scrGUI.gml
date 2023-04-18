@@ -107,17 +107,32 @@ function GUIElement() constructor {
     static set_position = function(_x, _y) {
         x = _x;
         y = _y;
-        center = { x:x, y:y };
         acenter = center;
         atcenter = center;
+        update_position();
+    }
+    static set_wh = function(_w, _h) {
+        width = _w;
+        height = _h;
+        update_position();
+    }
+    static set_width = function(_w) {
+        set_wh(_w, height);
+    }
+    static set_height = function(_h) {
+        set_wh(width, _h);
+    }
+    
+    static update_position = function() {
+        center.x = x + width/2;
+        center.y = y + height/2;
     }
     
     // Events
     static step = function() {
         update_inbound();
         update_active();
-        center.x = x + width/2;
-        center.y = y + height/2;
+        update_position();
         atcenter = center;
         atscale = 1;
         

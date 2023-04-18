@@ -8,15 +8,10 @@
 		if(global.__GUIManager == undefined) {
 			global.__GUIManager = new GUIManager();
 			var _smh = new Bar("smh", mouse_x, mouse_y, "BRUH", [0, 100]);
-			_smh.width = 300;
+			_smh.set_width(300);
 		}
 		else global.__GUIManager.destroy();
 	}
-	
-	if(global.__GUIManager != undefined) {
-		global.__GUIManager.step();
-	}
-		
 #endregion
 
 #region Functions Control

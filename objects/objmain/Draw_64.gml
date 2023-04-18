@@ -1,8 +1,5 @@
 /// @description Draw some infos
 
-if(global.__GUIManager != undefined)
-	global.__GUIManager.draw();
-
 // Time Info
 
 if(topBarTimeA > 0) {

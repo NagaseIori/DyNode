@@ -390,7 +390,6 @@
     {"name":"__scribble_gen_3_devanagari","order":3,"path":"scripts/__scribble_gen_3_devanagari/__scribble_gen_3_devanagari.yy",},
     {"name":"__scribble_get_cache_state","order":4,"path":"scripts/__scribble_get_cache_state/__scribble_get_cache_state.yy",},
     {"name":"SnitchLogSet","order":1,"path":"scripts/SnitchLogSet/SnitchLogSet.yy",},
-    {"name":"objInput","order":1,"path":"objects/objInput/objInput.yy",},
     {"name":"scrInput","order":8,"path":"scripts/scrInput/scrInput.yy",},
     {"name":"scribble_external_sound_exists","order":1,"path":"scripts/scribble_external_sound_exists/scribble_external_sound_exists.yy",},
     {"name":"SnapToYAML","order":3,"path":"scripts/SnapToYAML/SnapToYAML.yy",},

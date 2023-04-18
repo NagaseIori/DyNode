@@ -108,7 +108,7 @@ if(DyCore_init() != "success") {
 
 // Input Initialization
 
-instance_create(x, y, objInput);
+global.__InputManager = new InputManager();
 
 // Fonts Initialization
 
