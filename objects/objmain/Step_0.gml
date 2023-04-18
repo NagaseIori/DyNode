@@ -7,10 +7,16 @@
 	else if(mouse_isclick_r()) {
 		if(global.__GUIManager == undefined) {
 			global.__GUIManager = new GUIManager();
-			// var _smh = new Bar("smh", mouse_x, mouse_y, "BRUH", 0.5, [0, 100]);
-			var _smh = new StateButton("smh", mouse_x, mouse_y, "BRUH", true);
-			var _smh2 = new StateButton("smh2", mouse_x, mouse_y+100, "BRUH", false, function (_val) { return _val; });
-			_smh.set_width(100);
+			var _smh = new Bar("smh", mouse_x+100, mouse_y, "BRUH", 0.5, [0, 100]);
+			_smh.set_wh(300, 40);
+			var _smh = new StateButton("smh", mouse_x+100, mouse_y+80, "BRUH", true);
+			_smh.deactivate();
+			var _smh2 = new StateButton("smh2", mouse_x+100, mouse_y+160, "BRUH", false, function (_val) { return _val; });
+			var _smh = new ButtonSideSwitcher("smh", mouse_x, mouse_y, 0);
+			var _smh2 = new ButtonSideSwitcher("smh2", mouse_x, mouse_y+80, 1);
+			var _smh3 = new ButtonSideSwitcher("smh3", mouse_x, mouse_y+160, 2);
+			
+			// _smh.set_width(100);
 		}
 		else global.__GUIManager.destroy();
 	}

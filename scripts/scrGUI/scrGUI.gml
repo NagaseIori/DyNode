@@ -12,8 +12,8 @@ function GUIElement() constructor {
     height = 64;
     padding = 16;
     rounding = 10;
-    color = c_black;
-    alpha = 0.6;
+    color = 0x111111;
+    alpha = 0.85;
     fontSize = 16;
     fontColor = c_white;
     // font = "sprMsdfNotoSans";
@@ -92,18 +92,19 @@ function GUIElement() constructor {
     // Value Fetcher
     static get = function() { return value; }
     static set = function(_val) { value = _val; }
+    get_value = function() { return value; }
     static update = function() {
-        value = get();
+        value = get_value();
     }
     
     // Active part
-    static set_active = function() {
+    static activate = function() {
         active = true;
     }
-    static remove_active = function() {
+    static deactivate = function() {
         active = false;
     }
-    static get_active = function() {
+    get_active = function() {
         return active;
     }
     static update_active = function() {
@@ -144,12 +145,16 @@ function GUIElement() constructor {
         atcenter = center;
         atscale = 1;
         
+        if(focus && mouse_check_button_released(mb_left))
+            remove_focus();
+        
         if(inbound || focus) {
             if(!pressing && mouse_check_button_pressed(mb_left)) {
                 pressing = 1;
             }
             else if(pressing && mouse_check_button_released(mb_left))
                 pressing = 0;
+            
             
             if(active)
                 _a_shrink(pressing);
@@ -179,7 +184,7 @@ function GUIElement() constructor {
     }
     static listen = function() { }
     
-    static custom_action = function() { }
+    custom_action = function() { }
 
     // Draw
     static draw = function() {
@@ -193,7 +198,7 @@ function GUIElement() constructor {
         
         var _content = content;
         if(has_cjk(content)) _content = cjk_prefix() + content;
-        scribble(content)
+        scribble(content, "GUI_"+content)
             .starting_format(font, fontColor)
             .align(fa_center, fa_middle)
             .scale(ascale, ascale)
@@ -235,7 +240,7 @@ function Button(_id, _x, _y, _content, _action = undefined, _active_check = unde
 
 // StateButton: Click to do state change and do an action
 // _action(state_value): return a new value with the current state
-// _state_update(): rewrite get method
+// _state_update(): rewriteget method
 function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_method = undefined, _active_check = undefined) : GUIElement() constructor {
     if(_action == undefined)
         _action = function (val) { return !val; }
@@ -245,7 +250,7 @@ function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_me
     value = _value;
     
     if(!is_undefined(_get_method))
-        get = _get_method;
+        get_value = _get_method;
     
     static click = function() {
         if(!active) return;
@@ -262,7 +267,7 @@ function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_me
         
         if(value) {
             var _col = theme_get().color;
-            var _dcol = merge_color(_col, c_black, 0.1);
+            var _dcol = merge_color(_col, c_black, 0.2);
             CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
                 .Blend4(_col, 1, _col, 1, _dcol, 1, _dcol, 1)
                 .Border(0, c_white, 0)
@@ -281,7 +286,7 @@ function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_me
         
         var _content = content;
         if(has_cjk(content)) _content = cjk_prefix() + content;
-        scribble(content)
+        scribble(content, "GUI_"+content)
             .starting_format(font, c_white)
             .blend(_fcol, 1)
             .align(fa_center, fa_middle)
@@ -304,8 +309,9 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
     atval = aval;
     
     // Animation Props
-    ashrink = [0.01, -0.01];
-    amagnet = 0.01;
+    // ashrink = [0.01, -0.01];
+    ashrink[1] = -0.03;
+    // amagnet = 0.01;
     aspdval = 0.4;
     
     static get_progress = function() {
@@ -314,11 +320,12 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
     }
     
     static click = function() {
+        if(!active) return;
         set(get_progress());
     }
     
     static listen = function() {
-        if(mouse_check_button_released(mb_left)) remove_focus();
+        if(!active) return;
         
         if(get_progress() != value) {
             set(get_progress());
@@ -333,7 +340,7 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
         aval = lerp_a(aval, atval, aspdval);
     }
     
-    static get = function() {
+    get = function() {
         return lerp(range[0], range[1], value);
     }
     
@@ -341,14 +348,14 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
         var _x = acenter.x;
         var _y = acenter.y;
         CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
-            .Blend(c_black, 1)
-            .Border(0, c_black, 0)
+            .Blend(color, alpha)
+            .Border(0, color, 0)
             .Rounding(rounding)
             .Draw();
         
         CleanRectangleXYWH(_x - width*ascale*(0.5-aval/2), _y, width*ascale*aval, height*ascale)
-            .Blend(c_white, 1)
-            .Border(0, c_white, 0)
+            .Blend(color_invert(color), 0.95)
+            .Border(0, color_invert(color), 0)
             .Rounding(rounding)
             .Draw();
     }

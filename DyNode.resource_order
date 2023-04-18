@@ -315,6 +315,7 @@
     {"name":"CleanTransformAddSkew","order":3,"path":"scripts/CleanTransformAddSkew/CleanTransformAddSkew.yy",},
     {"name":"objUILangList","order":10,"path":"objects/objUILangList/objUILangList.yy",},
     {"name":"sprGiga","order":4,"path":"sprites/sprGiga/sprGiga.yy",},
+    {"name":"scrGUIElements","order":15,"path":"scripts/scrGUIElements/scrGUIElements.yy",},
     {"name":"scribble_kerning_pair_set","order":19,"path":"scripts/scribble_kerning_pair_set/scribble_kerning_pair_set.yy",},
     {"name":"SnapBufferRead2DArray","order":1,"path":"scripts/SnapBufferRead2DArray/SnapBufferRead2DArray.yy",},
     {"name":"sh_better_scaling_5xbra","order":1,"path":"shaders/sh_better_scaling_5xbra/sh_better_scaling_5xbra.yy",},

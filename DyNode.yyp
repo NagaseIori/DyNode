@@ -379,6 +379,7 @@
     {"id":{"name":"scribble_super_clear","path":"scripts/scribble_super_clear/scribble_super_clear.yy",},},
     {"id":{"name":"objUILangList","path":"objects/objUILangList/objUILangList.yy",},},
     {"id":{"name":"sprGiga","path":"sprites/sprGiga/sprGiga.yy",},},
+    {"id":{"name":"scrGUIElements","path":"scripts/scrGUIElements/scrGUIElements.yy",},},
     {"id":{"name":"scribble_kerning_pair_set","path":"scripts/scribble_kerning_pair_set/scribble_kerning_pair_set.yy",},},
     {"id":{"name":"SnapBufferRead2DArray","path":"scripts/SnapBufferRead2DArray/SnapBufferRead2DArray.yy",},},
     {"id":{"name":"sh_better_scaling_5xbra","path":"shaders/sh_better_scaling_5xbra/sh_better_scaling_5xbra.yy",},},
