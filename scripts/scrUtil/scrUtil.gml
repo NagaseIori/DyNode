@@ -541,3 +541,10 @@ function version_cmp(vera, verb) {
 	if(la!=lb) return la<lb?-1:1;
 	return 0;
 }
+
+function color_invert(col) {
+	var _r = 255-color_get_red(col);
+	var _g = 255-color_get_green(col);
+	var _b = 255-color_get_blue(col);
+	return make_color_rgb(_r, _g, _b);
+}

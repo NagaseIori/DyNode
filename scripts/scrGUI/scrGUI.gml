@@ -11,9 +11,13 @@ function GUIElement() constructor {
     width = 100;
     height = 64;
     padding = 16;
-    rounding = 5;
-    color = c_white;
+    rounding = 10;
+    color = c_black;
+    alpha = 0.6;
     fontSize = 16;
+    fontColor = c_white;
+    // font = "sprMsdfNotoSans";
+    font = "fMono16";
     
     // States
     inbound = false;
@@ -23,8 +27,8 @@ function GUIElement() constructor {
     
     // Animation Prop
     aspd = 0.4;                 // Animation Speed
-    amagnet = 0.03;            // Mouse Magnet Effect
-    ashrink = [0.1, -0.05];     // Element Shrink Effect
+    amagnet = 0.01;            // Mouse Magnet Effect
+    ashrink = [0.03, -0.07];     // Element Shrink Effect
                                 // [0] = inbound; [1] = pressing
     
     x = 0;
@@ -88,6 +92,9 @@ function GUIElement() constructor {
     // Value Fetcher
     static get = function() { return value; }
     static set = function(_val) { value = _val; }
+    static update = function() {
+        value = get();
+    }
     
     // Active part
     static set_active = function() {
@@ -133,17 +140,19 @@ function GUIElement() constructor {
         update_inbound();
         update_active();
         update_position();
+        update();
         atcenter = center;
         atscale = 1;
         
-        if(inbound) {
+        if(inbound || focus) {
             if(!pressing && mouse_check_button_pressed(mb_left)) {
                 pressing = 1;
             }
             else if(pressing && mouse_check_button_released(mb_left))
                 pressing = 0;
             
-            _a_shrink(pressing);
+            if(active)
+                _a_shrink(pressing);
             _a_magnet();
             
             if(mouse_isclick_l()) {
@@ -177,15 +186,15 @@ function GUIElement() constructor {
         var _x = acenter.x;
         var _y = acenter.y;
         CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
-            .Blend(c_white, 1)
-            .Border(0, c_white, 0)
+            .Blend(color, alpha)
+            .Border(0, color, 0)
             .Rounding(rounding)
             .Draw();
         
         var _content = content;
         if(has_cjk(content)) _content = cjk_prefix() + content;
         scribble(content)
-            .starting_format("mDynamix", c_black)
+            .starting_format(font, fontColor)
             .align(fa_center, fa_middle)
             .scale(ascale, ascale)
             .draw(_x, _y);
@@ -195,21 +204,25 @@ function GUIElement() constructor {
             ds_list_find_index(manager.elements, self)
         );
     }
+    
+    static __init = function(_id, _x, _y, _content, _action = undefined, _active_check = undefined) {
+        if(!is_undefined(_active_check))
+            get_active = _active_check;
+        
+        if(!is_undefined(_action))
+            custom_action = _action;
+        
+        content = _content;
+        set_position(_x, _y);
+        name = _id;
+    }
 }
 
 // Button: Click to do an action
 // _content: Element description string to draw
 // _action: custom action, called when value is changed
 function Button(_id, _x, _y, _content, _action = undefined, _active_check = undefined) : GUIElement() constructor {
-    if(!is_undefined(_active_check))
-        get_active = _active_check;
-    
-    if(!is_undefined(_action))
-        custom_action = _action;
-    
-    content = _content;
-    set_position(_x, _y);
-    name = _id;
+    __init(_id, _x, _y, _content, _action, _active_check);
     
     static click = function() {
         if(!active) return;
@@ -220,26 +233,75 @@ function Button(_id, _x, _y, _content, _action = undefined, _active_check = unde
     }
 }
 
+// StateButton: Click to do state change and do an action
+// _action(state_value): return a new value with the current state
+// _state_update(): rewrite get method
+function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_method = undefined, _active_check = undefined) : GUIElement() constructor {
+    if(_action == undefined)
+        _action = function (val) { return !val; }
+    
+    __init(_id, _x, _y, _content, _action, _active_check);
+    
+    value = _value;
+    
+    if(!is_undefined(_get_method))
+        get = _get_method;
+    
+    static click = function() {
+        if(!active) return;
+        
+        value = custom_action(value);
+        
+        show_debug_message("StateButton "+name+" is clicked.");
+    }
+    
+    static draw = function() {
+        var _x = acenter.x;
+        var _y = acenter.y;
+        var _fcol = fontColor;
+        
+        if(value) {
+            var _col = theme_get().color;
+            var _dcol = merge_color(_col, c_black, 0.1);
+            CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
+                .Blend4(_col, 1, _col, 1, _dcol, 1, _dcol, 1)
+                .Border(0, c_white, 0)
+                .Rounding(rounding)
+                .Draw();
+            _fcol = color_invert(_fcol);
+        }
+        else {
+            CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
+                .Blend(color, alpha)
+                .Border(0, color, 0)
+                .Rounding(rounding)
+                .Draw();
+        }
+            
+        
+        var _content = content;
+        if(has_cjk(content)) _content = cjk_prefix() + content;
+        scribble(content)
+            .starting_format(font, c_white)
+            .blend(_fcol, 1)
+            .align(fa_center, fa_middle)
+            .scale(ascale, ascale)
+            .draw(_x, _y);
+    }
+}
+
 // Bar: Drag or Click to set value
 // _range: should be an array including 2 elements = [range_l, range_r]
 // _action: custom action, called when value is changed
-function Bar(_id, _x, _y, _content, _range, _action = undefined, _active_check = undefined) : GUIElement() constructor {
-    if(!is_undefined(_active_check))
-        get_active = _active_check;
+function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active_check = undefined) : GUIElement() constructor {
+    __init(_id, _x, _y, _content, _action, _active_check);
     
-    if(!is_undefined(_action))
-        custom_action = _action;
-        
-    content = _content;
-    set_position(_x, _y);
-    name = _id;
-    
-    value = 0.5;
+    value = _value;
     range = _range;
     
     // Animation States
-    aval = 0;
-    atval = 0;
+    aval = _value;
+    atval = aval;
     
     // Animation Props
     ashrink = [0.01, -0.01];
@@ -258,7 +320,10 @@ function Bar(_id, _x, _y, _content, _range, _action = undefined, _active_check =
     static listen = function() {
         if(mouse_check_button_released(mb_left)) remove_focus();
         
-        set(get_progress());
+        if(get_progress() != value) {
+            set(get_progress());
+            custom_action();
+        }
     }
     
     static __step = step;
