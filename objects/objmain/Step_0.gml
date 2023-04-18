@@ -7,7 +7,8 @@
 	else if(mouse_isclick_r()) {
 		if(global.__GUIManager == undefined) {
 			global.__GUIManager = new GUIManager();
-			var _smh = new Bar("smh", mouse_x+100, mouse_y, "BRUH", 0.5, [0, 100]);
+			// var _smh = new Bar("smh", mouse_x+100, mouse_y, "BRUH", 0.5, [0, 100]);
+			var _smh = new BarVolumeMain("smh", mouse_x+100, mouse_y);
 			_smh.set_wh(300, 40);
 			var _smh = new StateButton("smh", mouse_x+100, mouse_y+80, "BRUH", true);
 			_smh.deactivate();

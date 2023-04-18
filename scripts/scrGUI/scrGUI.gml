@@ -24,6 +24,8 @@ function GUIElement() constructor {
     focus = false;
     active = true;
     pressing = 0;       // probably for animation...
+    updateLatency = 0;
+    updateColddown = 0;
     
     // Animation Prop
     aspd = 0.4;                 // Animation Speed
@@ -141,7 +143,12 @@ function GUIElement() constructor {
         update_inbound();
         update_active();
         update_position();
-        update();
+        if(updateLatency <= 0) {
+            update();
+        }
+        else {
+            updateLatency -= delta_time/1000;
+        }
         atcenter = center;
         atscale = 1;
         
@@ -322,6 +329,7 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
     static click = function() {
         if(!active) return;
         set(get_progress());
+        custom_action();
     }
     
     static listen = function() {
@@ -330,6 +338,8 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
         if(get_progress() != value) {
             set(get_progress());
             custom_action();
+            
+            updateLatency = updateColddown;
         }
     }
     
@@ -358,6 +368,10 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
             .Border(0, color_invert(color), 0)
             .Rounding(rounding)
             .Draw();
+    }
+    
+    static update = function() {
+        value = clamp(get_value(), 0, 1);
     }
 }
 

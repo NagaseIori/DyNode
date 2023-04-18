@@ -15,3 +15,23 @@ function ButtonSideSwitcher(_id, _x, _y, _side) : StateButton(_id, _x, _y, "", 0
         return val;
     }
 }
+
+function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) constructor {
+	range = [0, 1];
+// 	updateColddown = 200;
+    get_active = function () {
+        return objMain.music!=undefined;
+    }
+    get_value = function () {
+        if(!active) return 0;
+        return FMODGMS_Chan_Get_Volume(objMain.channel);
+    }
+    custom_action = function() {
+        FMODGMS_Chan_Set_Volume(objMain.channel, value);
+    }
+    
+    update_active();
+    value = get_value();
+    aval = value;
+    atval = value;
+}
