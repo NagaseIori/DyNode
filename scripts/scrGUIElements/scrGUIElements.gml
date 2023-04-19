@@ -35,3 +35,31 @@ function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) cons
     aval = value;
     atval = value;
 }
+
+function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) constructor {
+	range = [0, 1];
+	active = true;
+	get_active = function() {
+		return instance_exists(objMain);
+	}
+    get_value = function () {
+    	if(!active) return;
+    	if(!objMain.hitSoundOn)
+    		return 0;
+        return audio_sound_get_gain(sndHit);
+    }
+    custom_action = function() {
+        if(value == 0) {
+        	objMain.hitSoundOn = false;
+        }
+        else {
+        	objMain.hitSoundOn = true;
+        	audio_sound_gain(sndHit, value, 0);
+        }
+    }
+    
+    update_active();
+    value = get_value();
+    aval = value;
+    atval = value;
+}
