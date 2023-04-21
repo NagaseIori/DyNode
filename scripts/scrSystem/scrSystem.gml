@@ -118,6 +118,8 @@ function map_import_xml(_file) {
 	// Import 3 sides Notes
 	
 	var _import_fun = function (_arr, _side) {
+		if(!variable_struct_exists(_arr, "CMapNoteAsset"))
+			return;
 		if(!is_array(_arr)) _arr = [_arr];
 		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
 			_note_id = _arr[i].m_id.text;
@@ -138,9 +140,14 @@ function map_import_xml(_file) {
 		}
 	}
 	
-	_import_fun(_main.m_notes.m_notes.CMapNoteAsset, 0);
-	_import_fun(_main.m_notesLeft.m_notes.CMapNoteAsset, 1);
-	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
+	try {
+		_import_fun(_main.m_notes.m_notes, 0);
+		_import_fun(_main.m_notesLeft.m_notes, 1);
+		_import_fun(_main.m_notesRight.m_notes, 2);
+	} catch (e) {
+		announcement_error("error_dym_note_load_failed");
+		return;
+	}
 	
 	var _imp_dym = false;
 	if(variable_struct_exists(_main, "m_argument")) {
