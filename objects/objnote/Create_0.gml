@@ -64,7 +64,7 @@ image_yscale = global.scaleYAdjust;
     image_alpha = 0;
     
     // Particles Number
-    partNumber = 12;
+    partNumber = 75;
     partNumberLast = 1;
     
     // Correction Values

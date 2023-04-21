@@ -884,10 +884,10 @@ function theme_init() {
 		title: "[c_aqua]Dynamix[/c]",
 		color: c_aqua,
 		partSpr: sprParticleW,		// Particle Sprite
-		partColA: 0x652dba, 		// Note's Particle Color
-		partColB: 0x652dba,
-		partColHA: 0x16925a,		// Hold's Particle Color
-		partColHB: 0x16925a,
+		partColA: 0xd129ff, 		// Note's Particle Color
+		partColB: 0xd129ff,
+		partColHA: 0x11f1fb,		// Hold's Particle Color
+		partColHB: 0x11f1fb,
 		partBlend: true
 	});
 	

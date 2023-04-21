@@ -17,7 +17,15 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 
 // Draw Note Particles
 
-    part_system_drawit(partSysNote);
+	if(particlesEnabled) {
+		partSurf = surface_checkate(partSurf, _nw, _nh);
+		
+		surface_set_target(partSurf);
+			draw_clear_alpha(c_black, 0);
+	    	part_system_drawit(partSysNote);
+	    surface_reset_target();
+	    draw_surface_ext(partSurf, 0, 0, 1, 1, 0, c_white, 1);
+	}
 
 // Draw Mixer & Shadow's Position
 

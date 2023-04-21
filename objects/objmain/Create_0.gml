@@ -202,7 +202,8 @@ depth = 0;
 
     // PartSys
     partSysNote = part_system_create();
-    partAlphaMul = 0.75;
+    partAlphaMul = 1;
+    partSurf = surface_create(global.resolutionW, global.resolutionH);
     part_system_automatic_draw(partSysNote, false);
 
     // PartType
@@ -212,19 +213,19 @@ depth = 0;
         	var _theme = theme_get();
             part_type_sprite(_pt, _theme.partSpr, false, true, false);
             if(_theme.partBlend)
-            	part_type_alpha3(_pt, partAlphaMul, 0.6 * partAlphaMul, 0);
+            	part_type_alpha3(_pt, partAlphaMul, 0.8 * partAlphaMul, 0);
             else
-            	part_type_alpha3(_pt, 1, 0.6, 0);
+            	part_type_alpha3(_pt, 1, 0.8, 0);
             
             part_type_speed(_pt, _scl * 10 * global.fpsAdjust
                             , _scl * 30 * global.fpsAdjust,
-                            _scl * -0.5 * global.fpsAdjust, 0);
-            part_type_color3(_pt, _theme.partColA, _theme.partColB, themeColor);
+                            _scl * -1 * global.fpsAdjust * global.fpsAdjust, 0);
+            part_type_color3(_pt, c_white, _theme.partColA, _theme.partColB);
             //part_type_color2(_pt, 0x652dba, themeColor);
-            part_type_size(_pt, 0.5, 0.8, -0.01 * global.fpsAdjust, 0);
+            part_type_size(_pt, 0.8, 0.9, -0.01 * global.fpsAdjust, 0);
             part_type_scale(_pt, _scl * 2, _scl * 2);
             part_type_orientation(_pt, 0, 360, 0.5 * global.fpsAdjust, 0, false);
-            part_type_life(_pt, room_speed*0.2, room_speed*0.4);
+            part_type_life(_pt, room_speed*0.4, room_speed*0.6);
             part_type_blend(_pt, _theme.partBlend);
             part_type_direction(_pt, _ang, _ang, 0, 0);
         }
