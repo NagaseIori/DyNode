@@ -120,6 +120,7 @@ function map_import_xml(_file) {
 	var _import_fun = function (_arr, _side) {
 		if(!variable_struct_exists(_arr, "CMapNoteAsset"))
 			return;
+		_arr = _arr.CMapNoteAsset;
 		if(!is_array(_arr)) _arr = [_arr];
 		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
 			_note_id = _arr[i].m_id.text;
