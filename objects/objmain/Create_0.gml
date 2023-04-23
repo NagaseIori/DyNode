@@ -123,7 +123,7 @@ depth = 0;
     nowCombo = 0;
     playbackSpeed = 1.6;
     adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
-    scrolltimeSpeed = 180.0; // Use mouse scroll to Adjust Time ms per frame
+    scrolltimeSpeed = 120.0; // Use mouse scroll to Adjust Time ms per frame
     
     particlesEnabled = true;
     
