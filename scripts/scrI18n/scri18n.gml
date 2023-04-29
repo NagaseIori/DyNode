@@ -52,10 +52,9 @@ function i18n_get(context) {
     var _lang = global.i18nLang;
     if(!variable_struct_exists(global.i18nCont[_lang].content, context))
         _lang = global.i18nDefault;
-    if(!variable_struct_exists(global.i18nCont[_lang].content, context))
-        return context;
+    if(variable_struct_exists(global.i18nCont[_lang].content, context))
+        context = variable_struct_get(global.i18nCont[_lang].content, context);
     
-    context = variable_struct_get(global.i18nCont[_lang].content, context)
     if(argument_count>1) {
         for(var i=1; i<argument_count; i++)
             context = string_replace_all(context, "$"+string(i-1), argument[i]);

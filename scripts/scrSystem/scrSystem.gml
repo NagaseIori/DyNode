@@ -85,6 +85,9 @@ function map_load(_file = "") {
     		break;
     }
     
+    // Notes information init & Remove extra sub notes.
+    notes_array_update();
+    note_extra_sub_removal();
     note_sort_all();
     notes_reallocate_id();
     note_activation_reset();
@@ -249,6 +252,8 @@ function map_import_xml(_file) {
         	}
         }
     }
+    
+    
 }
 
 function map_import_osu(_file = "") {
@@ -511,6 +516,7 @@ function map_export_xml() {
     // For Compatibility
     notes_reallocate_id();
     instance_activate_object(objNote); // Temporarily activate all notes
+    note_extra_sub_removal();
     
     var _export_to_dym = show_question_i18n("export_to_dym_question");
     if(!objMain.chartBarUsed && !_export_to_dym)

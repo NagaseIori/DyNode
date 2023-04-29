@@ -46,6 +46,7 @@ function note_sort_all() {
     	
     	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
     		array_pop(chartNotesArray);
+    		chartNotesCount --;
     	}
     }
 }
@@ -271,5 +272,20 @@ function note_activation_reset() {
 		ds_map_clear(deactivationQueue);
 		for(var i=0; i<chartNotesCount; i++)
 			note_check_and_activate(i);
+	}
+}
+
+// Prevent extra sub notes.
+function note_extra_sub_removal() {
+	var _dcnt = 0;
+	with(objNote) {
+		if(noteType == 3 && finst<0) {
+			instance_destroy();
+			_dcnt ++;
+		}
+	}
+	if(_dcnt > 0) {
+		announcement_warning(i18n_get("检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。", string(_dcnt)));
+		note_sort_all();
 	}
 }
