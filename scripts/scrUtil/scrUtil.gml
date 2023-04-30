@@ -311,6 +311,7 @@ function format_time_string(_time) {
 #region FAST FILE IO
 
 function fast_file_save_async(file, str) {
+	file = file_path_fix(file);
 	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
 	buffer_seek(_buf, buffer_seek_start, 0);
@@ -323,6 +324,7 @@ function fast_file_save_async(file, str) {
 }
 
 function fast_file_save(file, str) {
+	file = file_path_fix(file);
 	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
 	buffer_seek(_buf, buffer_seek_start, 0);
@@ -330,6 +332,12 @@ function fast_file_save(file, str) {
 	buffer_save(_buf, file);
 	buffer_delete(_buf);
 	return;
+}
+
+function file_path_fix(_file) {
+	if(os_type == os_windows && string_last_pos(SYSFIX, _file) == 0)
+		_file = SYSFIX + _file;
+	return _file;
 }
 #endregion
 
