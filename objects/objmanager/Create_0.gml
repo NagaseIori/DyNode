@@ -52,7 +52,7 @@ i18n_init();
 
 // Load Settings
 
-// if(debug_mode) save_config();
+if(debug_mode) save_config();
 
 _lastConfig_md5 = load_config();
 

@@ -102,7 +102,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
-            return true;
+            return -999;
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
