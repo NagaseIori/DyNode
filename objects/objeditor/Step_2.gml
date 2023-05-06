@@ -68,8 +68,18 @@ if(editorNoteSortRequest) {
     editorNoteSortRequest = false;
 }
 
+#region UNDO & REDO Management
+
 // Operation stack flush
 if(array_length(operationStackStep)) {
     operation_step_flush(operationStackStep);
     operationStackStep = [];
 }
+
+while(operationCount>MAXIMUM_UNDO_STEPS) {
+	array_shift(operationStack);
+	operationCount --;
+	operationPointer --;
+}
+
+#endregion

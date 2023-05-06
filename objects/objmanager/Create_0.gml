@@ -7,6 +7,7 @@
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
+#macro MAXIMUM_UNDO_STEPS 3000
 #macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro NOTE_DEACTIVATION_TIME 20			// Every fixed time than deactivated notes in queue
@@ -81,7 +82,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 
 gpu_set_tex_filter(true);
 display_reset(global.graphics.AA, global.graphics.VSync);
-// gc_target_frame_time(50);
 
 // FMODGMS Initialization
 
