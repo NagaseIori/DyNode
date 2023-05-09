@@ -332,9 +332,22 @@ function time_add(offset, animated = true) {
 	time_set(time_get() + offset, animated);
 }
 
-// Check if given [time] is inbound the screen.
+// Check if given [time] is inbound.
 function time_inbound(time) {
 	return time>nowTime && note_time_to_pix(time - nowTime) + targetLineBelow < global.resolutionH;
+}
+
+// Make the specific time range inbound.
+function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
+	var _il = time_inbound(timeL);
+	var _ir = time_inbound(timeR);
+	if(!_il && !_ir) {
+		if(in_between(nowTime, timeL, timeR)) return;
+		else if(nowTime > timeR)
+			time_set(timeR, animated, inbound);
+		else
+			time_set(timeL, animated, inbound);
+	}
 }
 
 #endregion

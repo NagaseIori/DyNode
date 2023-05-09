@@ -251,17 +251,17 @@ function editor_get_note_attaching_center() {
 
 function operation_synctime_set(time) {
 	with(objEditor) {
-		operationSyncTime = min(operationSyncTime, time);
+		operationSyncTime[0] = min(operationSyncTime[0], time);
+		operationSyncTime[1] = max(operationSyncTime[1], time);
 		show_debug_message_safe("OPERATION SYNC TIME SET:"+string(operationSyncTime));
 	}
 }
 function operation_synctime_sync() {
-	if(objEditor.operationSyncTime == INF) return;
+	if(objEditor.operationSyncTime[0] == INF) return;
 	var _time = objEditor.operationSyncTime;
 	
-	if(!objMain.time_inbound(_time))
-		objMain.time_set(_time, true, 100);
-	objEditor.operationSyncTime = INF;
+	objMain.time_range_made_inbound(_time[0], _time[1], 300);
+	objEditor.operationSyncTime = [INF, -INF];
 }
 
 function operation_step_add(_type, _from, _to) {
@@ -283,7 +283,7 @@ function operation_step_flush(_array) {
 function operation_do(_type, _from, _to = -1) {
 	if(_to != -1)
 		operation_synctime_set(_to.time);
-	else
+	else if(is_struct(_from))
 		operation_synctime_set(_from.time);
 	switch(_type) {
 		case OPERATION_TYPE.ADD:

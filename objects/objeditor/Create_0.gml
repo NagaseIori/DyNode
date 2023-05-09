@@ -144,4 +144,4 @@ operationStack = [];
 operationStackStep = [];
 operationPointer = -1;
 operationCount = 0;
-operationSyncTime = INF;		// The earliest operated instance's time on last step
+operationSyncTime = [INF, -INF];		// The earliest operated instance's time on last step
