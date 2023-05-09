@@ -68,6 +68,7 @@ editorSelectMultiple = editorSelectCount > 1;
     else if(keycheck_down_ctrl(ord("Y"))) {
         operation_redo();
     }
+    operation_synctime_sync();
     
     if(keycheck_down(ord("L"))) {
     	editorDefaultWidthMode ++;

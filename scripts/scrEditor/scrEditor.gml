@@ -249,6 +249,21 @@ function editor_get_note_attaching_center() {
 
 #region UNDO & REDO FUNCTION
 
+function operation_synctime_set(time) {
+	with(objEditor) {
+		operationSyncTime = min(operationSyncTime, time);
+		show_debug_message_safe("OPERATION SYNC TIME SET:"+string(operationSyncTime));
+	}
+}
+function operation_synctime_sync() {
+	if(objEditor.operationSyncTime == INF) return;
+	var _time = objEditor.operationSyncTime;
+	
+	if(!objMain.time_inbound(_time))
+		objMain.time_set(_time, true, 100);
+	objEditor.operationSyncTime = INF;
+}
+
 function operation_step_add(_type, _from, _to) {
 	with(objEditor) {
 		array_push(operationStackStep, new sOperation(_type, _from, _to));
@@ -266,6 +281,10 @@ function operation_step_flush(_array) {
 }
 
 function operation_do(_type, _from, _to = -1) {
+	if(_to != -1)
+		operation_synctime_set(_to.time);
+	else
+		operation_synctime_set(_from.time);
 	switch(_type) {
 		case OPERATION_TYPE.ADD:
 			return build_note_withprop(_from);

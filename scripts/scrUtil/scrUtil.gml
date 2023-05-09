@@ -165,6 +165,13 @@ function time_to_bar_for_dym(time) {
 #endregion
 
 #region POSITION TRANSFORM
+function note_time_to_pix(_time) {
+	return _time * objMain.playbackSpeed;
+}
+function pix_to_note_time(_pixel) {
+	return _pixel / objMain.playbackSpeed;
+}
+
 function note_pos_to_x(_pos, _side) {
     if(_side == 0) {
         return global.resolutionW/2 + (_pos-2.5)*300*global.scaleXAdjust;
@@ -555,4 +562,9 @@ function color_invert(col) {
 	var _g = 255-color_get_green(col);
 	var _b = 255-color_get_blue(col);
 	return make_color_rgb(_r, _g, _b);
+}
+
+function assert(expression) {
+	if(!expression)
+		show_error("Assertion failed.", true);
 }

@@ -47,7 +47,7 @@ depth = 0;
     targetLineBelowH = 6;
     targetLineBesideW = 4;
     
-    _position_update = function () {
+    function _position_update() {
         targetLineBelow = 137*global.resolutionH/1080;
         targetLineBeside = 112*global.resolutionW/1920;
     }
@@ -188,7 +188,7 @@ depth = 0;
         animTargetBgFaintAlpha = 0.5; 
         animSpeedFaint = 0.1;
         
-        _faint_hit = function() {
+        function _faint_hit() {
             bgFaintAlpha = 0.7;
         }
         
@@ -208,7 +208,7 @@ depth = 0;
     // PartType
     
         // Note
-        _parttype_noted_init = function(_pt, _scl = 1.0, _ang = 0.0) {
+        function _parttype_noted_init(_pt, _scl = 1.0, _ang = 0.0) {
         	var _theme = theme_get();
             part_type_sprite(_pt, _theme.partSpr, false, true, false);
             if(_theme.partBlend)
@@ -235,7 +235,7 @@ depth = 0;
         _parttype_noted_init(partTypeNoteDR, 1, 180);
         
         // Hold
-        _parttype_hold_init = function(_pt, _scl = 1.0, _ang = 0.0) {
+        function _parttype_hold_init(_pt, _scl = 1.0, _ang = 0.0) {
         	var _theme = theme_get();
             part_type_sprite(_pt, _theme.partSpr, false, true, false);
             if(_theme.partBlend)
@@ -260,7 +260,7 @@ depth = 0;
     // Part Emitter
     
         partEmit = part_emitter_create(partSysNote);
-        _partemit_init = function(_pe, _x1, _y1, _x2, _y2) {
+        function _partemit_init(_pe, _x1, _y1, _x2, _y2) {
             part_emitter_region(partSysNote, _pe, _x1, _y1, _x2, _y2, 
                 ps_shape_line, ps_distr_linear);
         }
@@ -301,3 +301,40 @@ depth = 0;
     channelPaused = false;	// Only used for time correction
     musicLength = 0;
     usingMP3 = false;		// For Latency Workaround
+    
+#region Methods
+
+// Set music's time to [time].
+// If [animated], there will be no transition animation when time is set.
+// If [inbound!=-1], the time being set will stay above targetline in [inbound] pixels
+function time_set(time, animated = true, inbound = -1) {
+	if(inbound > 0) {
+		// If above screen
+		if(time > nowTime) 
+			time -= pix_to_note_time(global.resolutionH - targetLineBelow - inbound);
+		else
+			time -= pix_to_note_time(inbound);
+	}
+		
+	animTargetTime = time;
+	if(!animated)
+		nowTime = time;
+}
+
+// Get music's time.
+// If [animated], the precise time displayed on screen (including transition animation) will be returned.
+function time_get(animated = false) {
+	return animated?animTargetTime:nowTime;
+}
+
+// Add music's time with [offset].
+function time_add(offset, animated = true) {
+	time_set(time_get() + offset, animated);
+}
+
+// Check if given [time] is inbound the screen.
+function time_inbound(time) {
+	return time>nowTime && note_time_to_pix(time - nowTime) + targetLineBelow < global.resolutionH;
+}
+
+#endregion
