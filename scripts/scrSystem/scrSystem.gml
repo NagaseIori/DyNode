@@ -553,6 +553,10 @@ function map_export_xml() {
     
     var _str = {
     	CMap : {
+    		attributes : {
+    			"xmlns:xsi" : "http://www.w3.org/2001/XMLSchema-instance",
+    			"xmlns:xsd" : "http://www.w3.org/2001/XMLSchema"
+    		},
     		m_path : { text : objMain.chartTitle },
 	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, EXPORT_XML_EPS) },
 	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, EXPORT_XML_EPS) },
