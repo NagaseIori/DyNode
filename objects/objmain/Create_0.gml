@@ -317,8 +317,10 @@ function time_set(time, animated = true, inbound = -1) {
 	}
 		
 	animTargetTime = time;
-	if(!animated)
+	if(!animated || nowPlaying)
 		nowTime = time;
+	if(nowPlaying)
+		time_music_sync();
 }
 
 // Get music's time.
@@ -348,6 +350,19 @@ function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
 		else
 			time_set(timeL, animated, inbound);
 	}
+}
+
+// Sync the time with music.
+function time_music_sync() {
+	// Set the fmod channel
+	sfmod_channel_set_position(nowTime, channel, sampleRate);
+	// Resync with fmod's position because of fmod's lower precision
+    nowTime = sfmod_channel_get_position(channel, sampleRate);
+    
+    // Sync with the video position
+    if(bgVideoLoaded) {
+    	time_source_start(timesourceSyncVideo);
+    }
 }
 
 #endregion
