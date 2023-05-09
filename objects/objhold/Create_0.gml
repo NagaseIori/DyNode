@@ -54,6 +54,9 @@ _prop_init();
 		    lastTime = max(lastTime, 1);
         }
     }
+    
+    _prop_hold_update();
+    update_prop();
 
 // Correction Value
 

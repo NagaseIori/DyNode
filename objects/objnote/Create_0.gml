@@ -466,7 +466,6 @@ image_yscale = global.scaleYAdjust;
                 var _subid = random_id(9);
                 var _teid = random_id(9);
                 build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
-                instance_destroy(sinst);
                 instance_destroy();
                 sinst = -999;
             }
