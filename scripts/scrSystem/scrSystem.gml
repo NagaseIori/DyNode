@@ -601,9 +601,17 @@ function map_export_xml() {
     		}
     	}
     }
+	_str = snap_alter_to_xml(_str);
+	
+	_str.prolog = {
+		attributes: {
+			version: "1.0",
+			encoding: "UTF-8"
+		}
+	};
 	
 	objMain.savingExportId = 
-		fast_file_save_async(_file, SnapToXML(snap_alter_to_xml(_str)));
+		fast_file_save_async(_file, SnapToXML(_str));
 	
 	objManager.chartPath = _file;
 	
