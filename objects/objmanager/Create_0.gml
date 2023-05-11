@@ -22,12 +22,6 @@ math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs
 
-global.configPath = program_directory + "config.json";
-if(os_type == os_linux)
-	global.configPath = "config.json";
-if(os_type == os_windows)
-	global.configPath = SYSFIX + global.configPath;
-
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
