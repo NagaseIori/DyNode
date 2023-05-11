@@ -175,7 +175,7 @@
 	animTargetBgFaintAlpha = editor_get_editmode() == 5? 0.5: 0;
     bgFaintAlpha = lerp_a(bgFaintAlpha, animTargetBgFaintAlpha, animSpeedFaint);
     
-	bgVideoAlpha = lerp(0, safe_video_check_loaded(), standardAlpha);
+	bgVideoAlpha = lerp_a(0, safe_video_check_loaded(), standardAlpha);
     
 #endregion
 
