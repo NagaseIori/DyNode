@@ -547,9 +547,15 @@ function map_export_xml() {
             }
         }
         if(array_length(_ret) == 0)
-        	_ret = { text : "" };
-        return _ret;
+        	return { text : "" };
+        return {
+        	CMapNoteAsset : _ret
+        };
     }
+    
+    var _narray = [_gen_narray(0, _fix_dec, _export_to_dym),
+    			   _gen_narray(1, _fix_dec, _export_to_dym),
+    			   _gen_narray(2, _fix_dec, _export_to_dym)];
     
     var _str = {
     	CMap : {
@@ -564,19 +570,13 @@ function map_export_xml() {
 	    	m_rightRegion : { text : objMain.chartSideType[1] },
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[0]
 	    	},
 	    	m_notesLeft : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[1]
 	    	},
 	    	m_notesRight : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[2]
 	    	}
     	}
     }
@@ -1025,21 +1025,30 @@ function announcement_set(str, val) {
 
 #region SYSTEM FUNCTIONS
 
+function get_config_path() {
+	if(os_type == os_linux) {
+		return "config.json";
+	}
+	else
+		return SYSFIX + program_directory + "config.json";
+}
+
 function load_config() {
-	if(!file_exists(global.configPath) || debug_mode)
+	var pth = get_config_path();
+	if(!file_exists(pth) || debug_mode)
 		save_config();
 	
-	if(!file_exists(global.configPath))
+	if(!file_exists(pth))
 		show_error("Config file creating failed.", true)
 	
-	var _buf = buffer_load(global.configPath);
+	var _buf = buffer_load(pth);
 	var _con = SnapBufferReadLooseJSON(_buf, 0);
 	buffer_delete(_buf);
 	
 	// If config file is corrupted
 	if(!is_struct(_con)) {
 		show_error_i18n("error_config_file_corrupted", false);
-		file_delete(global.configPath);
+		file_delete(pth);
 		load_config();
 		return -1;
 	}
@@ -1067,12 +1076,12 @@ function load_config() {
 		
 	vars_init();
 	
-	return md5_file(global.configPath);
+	return md5_file(pth);
 }
 
 function save_config() {
 	
-	fast_file_save(global.configPath, SnapToJSON({
+	fast_file_save(get_config_path(), SnapToJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -1092,10 +1101,10 @@ function save_config() {
 }
 
 function md5_config() {
-	if(!file_exists(global.configPath))
+	if(!file_exists(get_config_path()))
 		save_config();
 	
-	return md5_file(global.configPath);
+	return md5_file(get_config_path());
 }
 
 function vars_init() {
