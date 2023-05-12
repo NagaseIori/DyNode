@@ -547,9 +547,15 @@ function map_export_xml() {
             }
         }
         if(array_length(_ret) == 0)
-        	_ret = { text : "" };
-        return _ret;
+        	return { text : "" };
+        return {
+        	CMapNoteAsset : _ret
+        };
     }
+    
+    var _narray = [_gen_narray(0, _fix_dec, _export_to_dym),
+    			   _gen_narray(1, _fix_dec, _export_to_dym),
+    			   _gen_narray(2, _fix_dec, _export_to_dym)];
     
     var _str = {
     	CMap : {
@@ -564,19 +570,13 @@ function map_export_xml() {
 	    	m_rightRegion : { text : objMain.chartSideType[1] },
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[0]
 	    	},
 	    	m_notesLeft : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[1]
 	    	},
 	    	m_notesRight : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[2]
 	    	}
     	}
     }
