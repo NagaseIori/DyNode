@@ -80,6 +80,12 @@ editorSelectMultiple = editorSelectCount > 1;
     	_attach_sync_request = editor_set_default_width_qbox();
     }
     
+    if(keycheck_down(ord("J"))) {
+    	beatlineStyleCurrent ++;
+    	beatlineStyleCurrent %= BEATLINE_STYLES_COUNT;
+    	announcement_set("beatline_style", beatlineStylesName[beatlineStyleCurrent]);
+    }
+    
     
     // Notes operation
     

@@ -62,6 +62,23 @@ highlightLineColorSideA = scribble_rgb_to_bgr(0xffc1e3);
 highlightLineColorSideB = scribble_rgb_to_bgr(0xce93d8);
 
 // Beatlines
+enum BeatlineStyles {
+	BS_DEFAULT,
+	BS_MONOLONG,
+	BS_MONO,
+	BS_LONG,
+};
+
+#macro BEATLINE_STYLES_COUNT 4
+
+beatlineStylesName = [];
+beatlineStylesName[BeatlineStyles.BS_DEFAULT] = "beatline_style_default";
+beatlineStylesName[BeatlineStyles.BS_MONOLONG] = "beatline_style_monolong";
+beatlineStylesName[BeatlineStyles.BS_MONO] = "beatline_style_mono";
+beatlineStylesName[BeatlineStyles.BS_LONG] = "beatline_style_long";
+
+
+beatlineStyleCurrent = BeatlineStyles.BS_DEFAULT;
 beatlineSurf = -1;
 beatlineColors = [0, 0xffffff, 0x3643f4, 0xb0279c, 0xf39621,
     0x6abb66, 0x889600, 0x757575, 0x3bebff,
@@ -123,6 +140,7 @@ beatlineHardWidth = 6;
 beatlineWidth = 3;
 beatlineHardLength = global.resolutionW * 0.9;
 beatlineLength = global.resolutionW * 0.75;
+beatlineLengthLong = global.resolutionW - objMain.targetLineBeside * 2;
 beatlineHardHeight = (global.resolutionH - objMain.targetLineBeside) * 0.95;
 beatlineHeight = (global.resolutionH - objMain.targetLineBeside) * 0.90;
 beatlineAlpha = [0, 0, 0];
