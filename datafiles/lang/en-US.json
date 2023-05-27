@@ -130,6 +130,11 @@
     "bar_calibration_warning": "Various timing points have been detected.\nDyNode will configure the Bars on first Timing Point.\nDyNode does not currently support Bar configurations of BPM change.",
     "bar_calibration_complete": "Bar is configured by default: \nBar Per Minute: $0\nBar Offset: $1",
     "bar_reset_question": "You have set Bar on the beatmap already. Do you want to remove the Bar configuration?",
-    "bar_reset_complete": "Bar settings have been removed."
+    "bar_reset_complete": "Bar settings have been removed.",
+    "beatline_style_default": "默认",
+    "beatline_style_mono": "单色",
+    "beatline_style_long": "等长",
+    "beatline_style_monolong": "经典",
+    "beatline_style": "拍线样式"
   }
 }
