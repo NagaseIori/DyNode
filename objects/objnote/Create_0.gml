@@ -251,6 +251,13 @@ image_yscale = global.scaleYAdjust;
     	arrayPointer.lastAttachBar = lastAttachBar;
     }
     
+    // If a note is moving out of screen, throw a warning.
+	function note_outscreen_check() {
+		_prop_init();
+		if(_outscreen_check(x, y, side))
+			announcement_warning("warning_note_outbound", 5000, "wob");
+	}
+    
     // _outbound_check was moved to scrNote
 
 // State Machines
@@ -508,8 +515,7 @@ image_yscale = global.scaleYAdjust;
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
                     	}
                     	
-                    	if(_outscreen_check(x, y, side))
-                			announcement_warning("warning_note_outbound", 5000, "wob");
+                    	note_outscreen_check();
                     }
                     
                     note_sort_request();
