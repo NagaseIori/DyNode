@@ -65,7 +65,7 @@
                         /// If beatline style is long
                         if(beatlineStyleCurrent == BeatlineStyles.BS_LONG ||
                            beatlineStyleCurrent == BeatlineStyles.BS_MONOLONG) {
-                           		_nowl = beatlineLengthLong;
+                           		_nowl = _nowhard ? beatlineHardLength : beatlineLengthLong;
                            }
                         
                         draw_set_color(beatlineColors[j]);

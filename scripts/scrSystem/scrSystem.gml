@@ -1073,6 +1073,7 @@ function load_config() {
 	_check_set(_con, "simplify");
 	_check_set(_con, "updatechannel");
 	_check_set(_con, "graphics");
+	_check_set(_con, "beatlineStyle");
 		
 	vars_init();
 	
@@ -1095,7 +1096,8 @@ function save_config() {
 		language: i18n_get_lang(),
 		simplify: global.simplify,
 		updatechannel: global.updatechannel,
-		graphics: global.graphics
+		graphics: global.graphics,
+		beatlineStyle: global.beatlineStyle
 	}, true));
 	
 }

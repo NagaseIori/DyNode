@@ -83,6 +83,7 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down(ord("J"))) {
     	beatlineStyleCurrent ++;
     	beatlineStyleCurrent %= BEATLINE_STYLES_COUNT;
+    	global.beatlineStyle = beatlineStyleCurrent;
     	announcement_set("beatline_style", beatlineStylesName[beatlineStyleCurrent]);
     }
     

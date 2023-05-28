@@ -77,8 +77,8 @@ beatlineStylesName[BeatlineStyles.BS_MONOLONG] = "beatline_style_monolong";
 beatlineStylesName[BeatlineStyles.BS_MONO] = "beatline_style_mono";
 beatlineStylesName[BeatlineStyles.BS_LONG] = "beatline_style_long";
 
+beatlineStyleCurrent = global.beatlineStyle;
 
-beatlineStyleCurrent = BeatlineStyles.BS_DEFAULT;
 beatlineSurf = -1;
 beatlineColors = [0, 0xffffff, 0x3643f4, 0xb0279c, 0xf39621,
     0x6abb66, 0x889600, 0x757575, 0x3bebff,

@@ -32,6 +32,7 @@ global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
+global.beatlineStyle = BeatlineStyles.BS_DEFAULT;
 global.graphics = {
 	AA : 4,
 	VSync : true
