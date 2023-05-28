@@ -548,3 +548,62 @@ function chart_randomize() {
 	notes_array_update();
 	note_activation_reset();
 }
+
+/// For advanced property modifications.
+function advanced_expr() {
+	with(objEditor) {
+		var _global = editorSelectCount == 0;
+		var _scope_str = _global?"你正在对谱面的所有音符进行高级操作。":"你正在对选定的音符进行高级操作。";
+		var _expr = get_string(_scope_str+"请填写表达式：", "");
+		var _using_bar = string_last_pos(_expr, "bar");
+		var _success = 1;
+		var _eval = expreval_create();
+		expreval_load(_eval, _expr);
+		
+		if(_global)
+			instance_activate_all();
+		
+		with(objNote) {
+			if(_global || state==stateSelected) {
+				var _prop = get_prop();
+				var _nprop = get_prop();
+				
+				expreval_write_variable(_eval, "time", _prop.time);
+				expreval_write_variable(_eval, "pos", _prop.position);
+				expreval_write_variable(_eval, "wid", _prop.width);
+				expreval_write_variable(_eval, "len", _prop.lastTime);
+				expreval_write_variable(_eval, "htime", _prop.time);
+				expreval_write_variable(_eval, "etime", _prop.time + _prop.lastTime);
+				
+				_success &= expreval_run(_eval);
+				
+				if(!_success) {
+					announcement_error("表达式在计算时出现错误，请检查表达式语法。已中止高级操作。")
+					break;
+				}
+				
+				_nprop.time = expreval_read_variable(_eval, "time");
+				_nprop.position = expreval_read_variable(_eval, "pos");
+				_nprop.width = expreval_read_variable(_eval, "wid");
+				if(expreval_read_variable(_eval, "htime") != _prop.time) {
+					_nprop.lastTime = _prop.lastTime - (expreval_read_variable(_eval, "htime") - _prop.time);
+					_nprop.time = expreval_read_variable(_eval, "htime");
+				}
+				if(expreval_read_variable(_eval, "len") != _prop.lastTime)
+					_nprop.lastTime = expreval_read_variable(_eval, "len");
+				else
+					_nprop.lastTime = expreval_read_variable(_eval, "etime") - _nprop.time;
+				
+				
+				set_prop(_nprop, true);
+				
+				delete _prop;
+				delete _nprop;
+			}
+		}
+		
+		expreval_destroy(_eval);
+		
+		note_activation_reset();
+	}
+}

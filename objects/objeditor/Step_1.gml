@@ -87,6 +87,9 @@ editorSelectMultiple = editorSelectCount > 1;
     	announcement_set("beatline_style", beatlineStylesName[beatlineStyleCurrent]);
     }
     
+    if(keycheck_down(ord("0")))
+    	advanced_expr();
+    
     
     // Notes operation
     
