@@ -480,6 +480,7 @@
     {"id":{"name":"not_catspeak_features","path":"notes/not_catspeak_features/not_catspeak_features.yy",},},
     {"id":{"name":"sndSoft","path":"sounds/sndSoft/sndSoft.yy",},},
     {"id":{"name":"sprBottomSignBlue","path":"sprites/sprBottomSignBlue/sprBottomSignBlue.yy",},},
+    {"id":{"name":"scrModder","path":"scripts/scrModder/scrModder.yy",},},
     {"id":{"name":"curvShiftIn","path":"animcurves/curvShiftIn/curvShiftIn.yy",},},
     {"id":{"name":"__scribble_config_defaults","path":"scripts/__scribble_config_defaults/__scribble_config_defaults.yy",},},
     {"id":{"name":"SnapFromCSV","path":"scripts/SnapFromCSV/SnapFromCSV.yy",},},

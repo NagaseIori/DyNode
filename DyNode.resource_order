@@ -400,6 +400,7 @@
     {"name":"not_catspeak_features","order":3,"path":"notes/not_catspeak_features/not_catspeak_features.yy",},
     {"name":"sndSoft","order":1,"path":"sounds/sndSoft/sndSoft.yy",},
     {"name":"sprBottomSignBlue","order":29,"path":"sprites/sprBottomSignBlue/sprBottomSignBlue.yy",},
+    {"name":"scrModder","order":16,"path":"scripts/scrModder/scrModder.yy",},
     {"name":"curvShiftIn","order":2,"path":"animcurves/curvShiftIn/curvShiftIn.yy",},
     {"name":"__scribble_config_defaults","order":2,"path":"scripts/__scribble_config_defaults/__scribble_config_defaults.yy",},
     {"name":"SnapFromCSV","order":2,"path":"scripts/SnapFromCSV/SnapFromCSV.yy",},
