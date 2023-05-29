@@ -215,10 +215,13 @@ image_yscale = global.scaleYAdjust;
     	return _prop;
     }
     
-    function set_prop(props) {
+    function set_prop(props, record = false) {
     	if(!is_struct(props))
     		show_error("property must be a struct.", true);
     	
+    	if(record)
+    		origProp = get_prop();
+    		
     	time = props.time;
     	side = props.side;
     	width = props.width;
@@ -235,6 +238,11 @@ image_yscale = global.scaleYAdjust;
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
+    	
+    	if(record)
+    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+    	
+    	update_prop();
     }
     
     function update_prop() {

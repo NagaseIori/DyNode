@@ -219,6 +219,7 @@
     {"id":{"name":"__SnitchConfigServices","path":"scripts/__SnitchConfigServices/__SnitchConfigServices.yy",},},
     {"id":{"name":"SnitchURLEncode","path":"scripts/SnitchURLEncode/SnitchURLEncode.yy",},},
     {"id":{"name":"__scribble_effects_maps_initialize","path":"scripts/__scribble_effects_maps_initialize/__scribble_effects_maps_initialize.yy",},},
+    {"id":{"name":"scrExpr","path":"scripts/scrExpr/scrExpr.yy",},},
     {"id":{"name":"sprNumber2","path":"sprites/sprNumber2/sprNumber2.yy",},},
     {"id":{"name":"__scribble_font_add_msdf_from_project","path":"scripts/__scribble_font_add_msdf_from_project/__scribble_font_add_msdf_from_project.yy",},},
     {"id":{"name":"rTest","path":"rooms/rTest/rTest.yy",},},
