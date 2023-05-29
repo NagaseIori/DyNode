@@ -103,6 +103,7 @@ depth = 0;
     chartFile = "";
     
     chartNotesArray = [];
+    chartNotesArrayActivated = [];		// Activated notes in a step.
     chartNotesArrayAt = 0;
     chartNotesCount = 0;
     chartNotesMap = array_create(3);
