@@ -113,3 +113,4 @@ if(state == stateSelected)
     image_blend = selBlendColor;
 else
     image_blend = c_white;
+    

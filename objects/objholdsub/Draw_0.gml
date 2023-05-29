@@ -1,3 +1,3 @@
-/// @description Not draw self
+/// @description Not drawing self
 
 // ^w^
