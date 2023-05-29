@@ -225,7 +225,7 @@ function note_check_and_activate(_posistion_in_array) {
 	var _hold_intersect = _str.noteType >= 2 &&
 		(_str.noteType == 2? (_str.time <= objMain.nowTime && _str.time + _str.lastTime >= objMain.nowTime):
 			(_str.beginTime <= objMain.nowTime && _str.time >= objMain.nowTime));
-	if(_note_inbound || _hold_intersect) {
+	if(_note_inbound || _hold_intersect || _str.inst.state != _str.inst.stateOut) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;

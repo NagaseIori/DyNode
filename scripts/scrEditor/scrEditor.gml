@@ -609,6 +609,7 @@ function advanced_expr() {
 		editorLastExpr = _expr;
 		
 		note_sort_all();
-		note_activation_reset();
+		if(_global)
+			note_activation_reset();
 	}
 }
