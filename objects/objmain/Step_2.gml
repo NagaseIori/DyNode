@@ -20,3 +20,5 @@
 		if(noteType <= 2)
 			array_push(objMain.chartNotesArrayActivated, self);
     }
+    // Sort by array position
+    array_sort(chartNotesArrayActivated, function(_a, _b) { return _a.arrayPos - _b.arrayPos; });
