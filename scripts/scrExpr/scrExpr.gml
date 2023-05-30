@@ -4,10 +4,11 @@ enum ExprSymbolTypes {
 	FUNCTION
 }
 
-function ExprSymbol(_name="zero", _typ=ExprSymbolTypes.NUMBER, _val=0) constructor {
+function ExprSymbol(_name="zero", _typ=ExprSymbolTypes.NUMBER, _val=0, _temp=1) constructor {
 	name = _name;
 	symType = _typ;
 	value = undefined;
+	tempVar = _temp;
 	
 	static get_type = function () {
 		return symType;
@@ -15,7 +16,10 @@ function ExprSymbol(_name="zero", _typ=ExprSymbolTypes.NUMBER, _val=0) construct
 	static get_value = function () {
 		return value;
 	}
-	static set_value = function (_val) {
+	static set_value = function (_val, _init = false) {
+		if(tempVar && !_init)
+			throw $"You cannot assign a tempvar {value} with a value {_val}.";
+		
 		if(is_struct(_val))
 			_val = _val.get_value();
 		
@@ -36,7 +40,11 @@ function ExprSymbol(_name="zero", _typ=ExprSymbolTypes.NUMBER, _val=0) construct
 		value = _val;
 	}
 	
-	set_value(_val);
+	static toString = function () {
+		return string(value);
+	}
+	
+	set_value(_val, true);
 }
 
 function expr_init() {
@@ -45,30 +53,35 @@ function expr_init() {
 	global.__expr_symbols = {};
 }
 
+function expr_symbol_copy(sym) {
+	return new ExprSymbol("tempVar", sym.symType, sym.value, true);
+}
+
 function expr_set_var(name, val) {
-	variable_struct_set(global.__expr_symbols, name, new ExprSymbol(name, ExprSymbolTypes.NUMBER, val));
+	variable_struct_set(global.__expr_symbols, name, new ExprSymbol(name, ExprSymbolTypes.NUMBER, val, 0));
 }
 
 function expr_get_var(name) {
 	if(!variable_struct_exists(global.__expr_symbols, name))
-		throw $"Variable {name} was not defined before reading.";
+		throw $"Variable {name} was not defined.";
 	return variable_struct_get(global.__expr_symbols, name).value;
 }
 
 function expr_get_sym(name) {
 	if(!variable_struct_exists(global.__expr_symbols, name))
-		throw $"Variable {name} was not defined before reading.";
+		throw $"Variable {name} was not defined.";
 	return variable_struct_get(global.__expr_symbols, name);
 }
 
 function expr_cac(_opt, _a, _b=new ExprSymbol()) {
 	show_debug_message_safe($"EXPR CAC {_opt}, {_a}, {_b}")
-	var _va = _a.get_value(), _vb = _b.get_value();
+	var _va = (is_struct(_a)?_a.get_value():_a), _vb = (is_struct(_b)?_b.get_value():_b);
 	var _res = new ExprSymbol();
 	switch(_opt) {
 		case "=":
 			_a.set_value(_b);
-			_res = _a;
+			_res = expr_symbol_copy(_a);
+			_res.tempVar = true;
 			break;
 		case "+":
 			_res = _va + _vb;
@@ -133,8 +146,6 @@ function expr_cac(_opt, _a, _b=new ExprSymbol()) {
 	}
 	if(!is_struct(_res))
 		_res = new ExprSymbol("TempSymbol", ExprSymbolTypes.NUMBER, _res)
-	else
-		_res = SnapDeepCopy(_res);
 	return _res;
 }
 
@@ -163,7 +174,7 @@ function expr_eval(_expr) {
 	_prio[? "|"] = 10;
 	_prio[? "&&"] = 11;
 	_prio[? "||"] = 12;
-	_prio[? "="] = 13;
+	_prio[? "="] = -13;
 	
 	// Define some ds
 	var _stnum = ds_stack_create();
@@ -233,10 +244,20 @@ function expr_eval(_expr) {
 			}
 			if(!ds_map_exists(_prio, _opt))
 				throw "Expression error: "+ _expr +" - an unexists operation " + _opt + " .";
-				
+			
+			
 			
 			// Caculation
-			while(ds_stack_size(_stopt)>0 && _prio[? _opt] >= _prio[? ds_stack_top(_stopt)]) {
+			while(ds_stack_size(_stopt)>0) {
+				var _prio_now = _prio[? _opt];
+				var _prio_top = _prio[? ds_stack_top(_stopt)];
+				var _rtol = _prio_now == _prio_top && _prio_now < 0;
+				_prio_now = abs(_prio_now);
+				_prio_top = abs(_prio_top);
+				
+				if(_rtol || _prio_now < _prio_top)
+					break;
+				
 				var _nopt = ds_stack_top(_stopt); ds_stack_pop(_stopt);
 				var _na = ds_stack_top(_stnum); ds_stack_pop(_stnum);
 				var _ans = new ExprSymbol();
