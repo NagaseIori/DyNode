@@ -578,7 +578,7 @@ function advanced_expr() {
 				_success = _success && expr_exec(_expr);
 				
 				if(!_success) {
-					announcement_error("表达式在计算时出现错误，请检查表达式语法。已中止高级操作。")
+					announcement_error("advanced_expr_error");
 					break;
 				}
 				

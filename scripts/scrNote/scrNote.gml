@@ -292,7 +292,7 @@ function note_extra_sub_removal() {
 		}
 	}
 	if(_dcnt > 0) {
-		announcement_warning(i18n_get("检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。", string(_dcnt)));
+		announcement_warning(i18n_get("extra_sub_fix", string(_dcnt)));
 		note_sort_all();
 	}
 }
