@@ -135,6 +135,9 @@
     "beatline_style_mono": "单色",
     "beatline_style_long": "等长",
     "beatline_style_monolong": "经典",
-    "beatline_style": "拍线样式"
+    "beatline_style": "拍线样式",
+    "extra_sub_fix": "检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。",
+    "expr_catch_error": "表达式执行错误。\n错误信息：$0\n错误表达式：$1",
+    "advanced_expr_error": "表达式在计算时出现错误，请检查表达式语法。批量操作已中止。"
   }
 }
