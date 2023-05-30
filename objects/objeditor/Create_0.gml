@@ -11,6 +11,9 @@ editorLastSide = 0;
 editorNoteAttaching = -1;                   // instances that attached to cursor now
 editorNoteAttachingCenter = 0;           // attached instances' center
 
+// Expressions
+editorLastExpr = "";
+
 // Width for different modes
 editorDefaultWidth = [
 	1.0,

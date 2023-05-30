@@ -548,3 +548,68 @@ function chart_randomize() {
 	notes_array_update();
 	note_activation_reset();
 }
+
+/// For advanced property modifications.
+function advanced_expr() {
+	with(objEditor) {
+		var _global = editorSelectCount == 0;
+		var _scope_str = _global?"你正在对谱面的所有音符进行高级操作。":"你正在对选定的音符进行高级操作。";
+		var _expr = get_string(_scope_str+"请填写表达式：", editorLastExpr);
+		var _using_bar = string_last_pos(_expr, "bar");
+		var _success = 1;
+		
+		if(_global)
+			instance_activate_all();
+		
+		with(objNote) {
+			if(noteType != 3)
+			if(_global || state==stateSelected) {
+				var _prop = get_prop();
+				var _nprop = get_prop();
+				
+				expr_init(); // Reset symbol table
+				expr_set_var("time", _prop.time);
+				expr_set_var("pos", _prop.position);
+				expr_set_var("wid", _prop.width);
+				expr_set_var("len", _prop.lastTime);
+				expr_set_var("htime", _prop.time);
+				expr_set_var("etime", _prop.time + _prop.lastTime);
+				
+				_success = _success && expr_exec(_expr);
+				
+				if(!_success) {
+					announcement_error("advanced_expr_error");
+					break;
+				}
+				
+				_nprop.time = expr_get_var("time");
+				_nprop.position = expr_get_var("pos");
+				_nprop.width = expr_get_var("wid");
+				if(noteType == 2) {
+					if(expr_get_var("htime") != _prop.time) {
+						_nprop.lastTime = _prop.lastTime - (expr_get_var("htime") - _prop.time);
+						_nprop.time = expr_get_var("htime");
+					}
+					if(expr_get_var("len") != _prop.lastTime)
+						_nprop.lastTime = expr_get_var("len");
+					else
+						_nprop.lastTime = expr_get_var("etime") - _nprop.time;
+				}
+				
+				set_prop(_nprop, true);
+				
+				delete _prop;
+				delete _nprop;
+			}
+		}
+		
+		if(_success)
+			announcement_play("表达式执行成功。");
+			
+		editorLastExpr = _expr;
+		
+		note_sort_all();
+		if(_global)
+			note_activation_reset();
+	}
+}

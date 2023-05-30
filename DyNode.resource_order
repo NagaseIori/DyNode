@@ -182,6 +182,7 @@
     {"name":"Better_Scaling","order":4,"path":"extensions/Better_Scaling/Better_Scaling.yy",},
     {"name":"__SnitchConfigServices","order":8,"path":"scripts/__SnitchConfigServices/__SnitchConfigServices.yy",},
     {"name":"SnitchURLEncode","order":4,"path":"scripts/SnitchURLEncode/SnitchURLEncode.yy",},
+    {"name":"scrExpr","order":16,"path":"scripts/scrExpr/scrExpr.yy",},
     {"name":"sprNumber2","order":22,"path":"sprites/sprNumber2/sprNumber2.yy",},
     {"name":"__scribble_font_add_msdf_from_project","order":15,"path":"scripts/__scribble_font_add_msdf_from_project/__scribble_font_add_msdf_from_project.yy",},
     {"name":"rTest","order":2,"path":"rooms/rTest/rTest.yy",},

@@ -225,7 +225,7 @@ function note_check_and_activate(_posistion_in_array) {
 	var _hold_intersect = _str.noteType >= 2 &&
 		(_str.noteType == 2? (_str.time <= objMain.nowTime && _str.time + _str.lastTime >= objMain.nowTime):
 			(_str.beginTime <= objMain.nowTime && _str.time >= objMain.nowTime));
-	if(_note_inbound || _hold_intersect) {
+	if(_note_inbound || _hold_intersect || _str.inst.state != _str.inst.stateOut) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;
@@ -292,7 +292,7 @@ function note_extra_sub_removal() {
 		}
 	}
 	if(_dcnt > 0) {
-		announcement_warning(i18n_get("检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。", string(_dcnt)));
+		announcement_warning(i18n_get("extra_sub_fix", string(_dcnt)));
 		note_sort_all();
 	}
 }

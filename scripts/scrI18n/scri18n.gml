@@ -57,7 +57,7 @@ function i18n_get(context) {
     
     if(argument_count>1) {
         for(var i=1; i<argument_count; i++)
-            context = string_replace_all(context, "$"+string(i-1), argument[i]);
+            context = string_replace_all(context, "$"+string(i-1), string(argument[i]));
     }
     
     return context;
