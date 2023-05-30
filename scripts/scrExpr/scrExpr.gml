@@ -27,7 +27,7 @@ function ExprSymbol(_name="zero", _typ=ExprSymbolTypes.NUMBER, _val=0, _temp=1) 
 		
 		
 		if(symType == ExprSymbolTypes.NUMBER) {
-			if(is_string(_val) || is_int32(_val) || is_int64(_val))
+			if(is_string(_val) || is_int32(_val) || is_int64(_val) || is_bool(_val))
 				_val = real(_val);
 			if(!is_real(_val))
 				throw $"Symbol {name} is a number, which cannot be set to {_val}";
@@ -74,6 +74,8 @@ function expr_get_sym(name) {
 }
 
 function expr_cac(_opt, _a, _b=new ExprSymbol()) {
+	if(is_undefined(_a) || is_undefined(_b))
+		throw $"Expression error: operator {_opt} need arguments to operate.";
 	show_debug_message_safe($"EXPR CAC {_opt}, {_a}, {_b}")
 	var _va = (is_struct(_a)?_a.get_value():_a), _vb = (is_struct(_b)?_b.get_value():_b);
 	var _res = new ExprSymbol();
@@ -155,26 +157,27 @@ function expr_eval(_expr) {
 	show_debug_message("CAC EXPR "+_expr);
 	// Define the priority
 	var _prio = ds_map_create();
-	_prio[? "!"] = 2;
-	_prio[? "*"] = 3;
-	_prio[? "/"] = 3;
-	_prio[? "%"] = 3;
-	_prio[? "+"] = 4;
-	_prio[? "-"] = 4;
-	_prio[? "<<"] = 5;
-	_prio[? ">>"] = 5;
-	_prio[? ">" ] = 6;
-	_prio[? ">="] = 6;
-	_prio[? "<" ] = 6;
-	_prio[? "<=" ] = 6;
-	_prio[? "==" ] = 7;
-	_prio[? "!=" ] = 7;
-	_prio[? "&"] = 8;
-	_prio[? "^"] = 9;
-	_prio[? "|"] = 10;
-	_prio[? "&&"] = 11;
-	_prio[? "||"] = 12;
-	_prio[? "="] = -13;
+	///						precedence, associativity, 	unary
+	_prio[? "!"] 	= 		[2, 		1, 				1]		;
+	_prio[? "*"] 	= 		[3, 		0, 				0]		;
+	_prio[? "/"] 	= 		[3, 		0, 				0]		;
+	_prio[? "%"] 	= 		[3, 		0, 				0]		;
+	_prio[? "+"] 	= 		[4, 		0, 				0]		;
+	_prio[? "-"] 	= 		[4, 		0, 				0]		;
+	_prio[? "<<"] 	= 		[5, 		0, 				0]		;
+	_prio[? ">>"] 	= 		[5, 		0, 				0]		;
+	_prio[? ">" ] 	= 		[6, 		0, 				0]		;
+	_prio[? ">="] 	= 		[6, 		0, 				0]		;
+	_prio[? "<" ] 	= 		[6, 		0, 				0]		;
+	_prio[? "<=" ] 	=		[6, 		0, 				0]		;
+	_prio[? "==" ] 	=		[7, 		0, 				0]		;
+	_prio[? "!=" ] 	=		[7, 		0, 				0]		;
+	_prio[? "&"] 	= 		[8, 		0, 				0]		;
+	_prio[? "^"] 	= 		[9, 		0, 				0]		;
+	_prio[? "|"] 	= 		[10, 		0, 				0]		;
+	_prio[? "&&"] 	= 		[11, 		0, 				0]		;
+	_prio[? "||"] 	= 		[12, 		0, 				0]		;
+	_prio[? "="] 	= 		[13, 		1, 				0]		;
 	
 	// Define some ds
 	var _stnum = ds_stack_create();
@@ -208,7 +211,7 @@ function expr_eval(_expr) {
 				_ch = string_char_at(_expr, _j);
 			}
 			if(is_alpha(_ch) || _ch == "_")
-				throw "Expression error: "+ _expr +" - a variable's name can't start with a number.";
+				throw "Expression error: "+ _expr +" - invalid number.";
 			if(_subdot > 1)
 				throw "Expression error: "+ _expr +" - invalid real number."
 			var _varn = string_copy(_expr, _i, _j - _i);
@@ -235,15 +238,13 @@ function expr_eval(_expr) {
 		else {
 			var _opt = _ch;
 			_ch = string_char_at(_expr, _i + 1);
-			if(!(is_alpha(_ch) || _ch = "_" || is_number(_ch) || _ch == "(" || _ch == " ")) {
+			if(ds_map_exists(_prio, _opt+_ch)) {
 				_i ++ ;
 				_opt += _ch;
 				_ch = string_char_at(_expr, _i + 1);
-				if(!(is_alpha(_ch) || _ch = "_" || is_number(_ch) || _ch == "(" || _ch == " "))	
-					throw "Expression error: "+ _expr +" - an unexists operation.";
 			}
 			if(!ds_map_exists(_prio, _opt))
-				throw "Expression error: "+ _expr +" - an unexists operation " + _opt + " .";
+				throw $"Expression error: {_expr} - an unexists operation {_opt}.";
 			
 			
 			
@@ -251,17 +252,15 @@ function expr_eval(_expr) {
 			while(ds_stack_size(_stopt)>0) {
 				var _prio_now = _prio[? _opt];
 				var _prio_top = _prio[? ds_stack_top(_stopt)];
-				var _rtol = _prio_now == _prio_top && _prio_now < 0;
-				_prio_now = abs(_prio_now);
-				_prio_top = abs(_prio_top);
+				var _rtol = _prio_now[0] == _prio_top[0] && _prio_now[1];
 				
-				if(_rtol || _prio_now < _prio_top)
+				if(_rtol || _prio_now[0] < _prio_top[0])
 					break;
 				
 				var _nopt = ds_stack_top(_stopt); ds_stack_pop(_stopt);
 				var _na = ds_stack_top(_stnum); ds_stack_pop(_stnum);
 				var _ans = new ExprSymbol();
-				if(_nopt == "!") {
+				if(_prio_top[2]) {
 					_ans = expr_cac(_nopt, _na);
 				}
 				else {
