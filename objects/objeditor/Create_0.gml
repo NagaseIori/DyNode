@@ -1,7 +1,7 @@
 /// @description 
 // visible = false;
 
-depth = -500000000;
+depth = -10000;
 
 // Editors
 editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play 0 copy
