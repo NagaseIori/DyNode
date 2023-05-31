@@ -2,11 +2,12 @@
 
 // Macros
 
-#macro VERSION "v0.1.11.2"
+#macro VERSION "v0.1.12-dev.2"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
 #macro MAXIMUM_DELAY_OF_SOUND 20        	// in ms
+#macro MAXIMUM_UNDO_STEPS 3000
 #macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro NOTE_DEACTIVATION_TIME 20			// Every fixed time than deactivated notes in queue
@@ -16,15 +17,10 @@
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
+#macro NULL_FUN function() {}
 math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs
-
-global.configPath = program_directory + "config.json";
-if(os_type == os_linux)
-	global.configPath = "config.json";
-if(os_type == os_windows)
-	global.configPath = SYSFIX + global.configPath;
 
 global.resolutionW = 1920
 global.resolutionH = 1080
@@ -36,6 +32,7 @@ global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
+global.beatlineStyle = BeatlineStyles.BS_DEFAULT;
 global.graphics = {
 	AA : 4,
 	VSync : true
@@ -51,7 +48,7 @@ i18n_init();
 
 // Load Settings
 
-// if(debug_mode) save_config();
+if(debug_mode) save_config();
 
 _lastConfig_md5 = load_config();
 
@@ -63,6 +60,7 @@ global.difficultyString = "CNHMGT";
 global.difficultyCount = string_length(global.difficultyString);
 
 global.noteTypeName = ["NORMAL", "CHAIN", "HOLD", "SUB"];
+global.__GUIManager = undefined;
 
 // Generate Temp Sprite
 
@@ -79,7 +77,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 
 gpu_set_tex_filter(true);
 display_reset(global.graphics.AA, global.graphics.VSync);
-// gc_target_frame_time(50);
 
 // FMODGMS Initialization
 
@@ -106,7 +103,7 @@ if(DyCore_init() != "success") {
 
 // Input Initialization
 
-instance_create(x, y, objInput);
+global.__InputManager = new InputManager();
 
 // Fonts Initialization
 

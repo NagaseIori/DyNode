@@ -1,30 +1,133 @@
 
+function InputManager() constructor {
+    #macro INPUT_GROUP_DEFAULT_NAME "default"
+    
+    // In-functions
+    
+    static _ioclear = function () {
+        last_mouse_x = 0;
+        last_mouse_y = 0;
+        
+        mouseButtons = [mb_left, mb_right];
+        mouseButtonCount = array_length(mouseButtons);
+        lastMousePressedPos = [];
+        for(var i=0; i<mouseButtonCount; i++)
+            lastMousePressedPos[i] = [0, 0];
+        mouseHoldTime = array_create(mouseButtonCount, 0);
+        mouseClick = array_create(mouseButtonCount, -1);
+        
+        mouseHoldThreshold = 125;
+        mouseHoldDistanceThreshold = 20;
+        mouseHoldClear = true;
+    }
+    
+    static _pressclear = function () {
+        array_fill(mouseClick, -1, 0, 2);
+    }
+    
+    static _holdclear = function () {
+        _pressclear();
+        mouseHoldClear = true;
+        array_fill(mouseHoldTime, 0, 0, 2);
+    }
+    
+    last_mouse_x = 0;
+    last_mouse_y = 0;
+    
+    mouseButtons = [mb_left, mb_right];
+    mouseButtonCount = array_length(mouseButtons);
+    lastMousePressedPos = [];
+    for(var i=0; i<mouseButtonCount; i++)
+        lastMousePressedPos[i] = [0, 0];
+    mouseHoldTime = array_create(mouseButtonCount, 0);
+    mouseClick = array_create(mouseButtonCount, -1);
+            // -1 = no input; 0 = not sure if is click (pressing); 1 = is click
+    
+    mouseHoldThreshold = 125;
+            // Time Threshold to judge if a mouse press is a hold
+    mouseHoldDistanceThreshold = 20;
+            // Distance Threshold to judge if a mouse press is a drag (also hold)
+    mouseHoldClear = true;
+            // Whethere to clear the state of mouse hold
+    
+    // For Input Reset
+    windowNFocusTime = 0;
+    windowNFocusTimeThreshold = 500;
+    
+    // For Input Group
+    inputGroup = "default";     // used for changing a code block's input group
+    checkGroup = "default";     // the focusing group
+    
+    static step = function () {
+        windowNFocusTime = delta_time / 1000;
+
+        if(windowNFocusTime > windowNFocusTimeThreshold) {
+            io_clear_diag();
+            
+            _ioclear();
+            
+            show_debug_message_safe("IO Cleared.");
+        }
+        
+        last_mouse_x = mouse_x;
+        last_mouse_y = mouse_y;
+        
+        for(var i=0; i<mouseButtonCount; i++) {
+            var _nbut = mouseButtons[i];
+            if(mouseClick[i] == 1) mouseClick[i] = -1;
+            if(mouse_check_button_pressed(_nbut)) {
+                lastMousePressedPos[i][0] = mouse_x;
+                lastMousePressedPos[i][1] = mouse_y;
+                mouseClick[i] = 0;
+            }
+                
+            
+            if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
+                mouseClick[i] = !(mouseHoldTime[i] > mouseHoldThreshold);
+            }
+            else if(mouseHoldClear) mouseClick[i] = -1;
+            
+            if(mouse_check_button(_nbut) && !mouseHoldClear) {
+                mouseHoldTime[i] += delta_time / 1000;
+                if(point_distance(mouse_x, mouse_y, lastMousePressedPos[i][0], lastMousePressedPos[i][1]) > mouseHoldDistanceThreshold)
+                    mouseHoldTime[i] = 1000000;
+            }
+            else {
+                mouseHoldTime[i] = 0;
+            }
+        }
+        
+        if(!mouse_check_button(mb_left) && !mouse_check_button(mb_right))
+            mouseHoldClear = false;
+    }
+}
+
 
 // Get mouse's delta x from last frame
 function mouse_get_delta_x() {
-    return mouse_x - objInput.last_mouse_x;
+    return mouse_x - global.__InputManager.last_mouse_x;
 }
 function mouse_get_delta_y() {
-    return mouse_y - objInput.last_mouse_y;
+    return mouse_y - global.__InputManager.last_mouse_y;
 }
 
 // Get mouse's delta x from last pressed mb_left frame
 function mouse_get_delta_last_x_l() {
-    return mouse_x - objInput.lastMousePressedPos[0][0];
+    return mouse_x - global.__InputManager.lastMousePressedPos[0][0];
 }
 function mouse_get_delta_last_y_l() {
-    return mouse_y - objInput.lastMousePressedPos[0][1];
+    return mouse_y - global.__InputManager.lastMousePressedPos[0][1];
 }
 
 function mouse_get_delta_last_x_r() {
-    return mouse_x - objInput.lastMousePressedPos[1][0];
+    return mouse_x - global.__InputManager.lastMousePressedPos[1][0];
 }
 function mouse_get_delta_last_y_r() {
-    return mouse_y - objInput.lastMousePressedPos[1][1];
+    return mouse_y - global.__InputManager.lastMousePressedPos[1][1];
 }
 
 function mouse_get_last_pos(button) {
-    return objInput.lastMousePressedPos[button];
+    return global.__InputManager.lastMousePressedPos[button];
 }
 
 function mouse_inbound(x1, y1, x2, y2) {
@@ -34,31 +137,34 @@ function mouse_square_inbound(x, y, a) {
     return pos_inbound(mouse_x, mouse_y, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 function mouse_inbound_last_l(x1, y1, x2, y2) {
-    var _nx = objInput.lastMousePressedPos[0][0];
-    var _ny = objInput.lastMousePressedPos[0][1];
+    var _nx = global.__InputManager.lastMousePressedPos[0][0];
+    var _ny = global.__InputManager.lastMousePressedPos[0][1];
     return pos_inbound(_nx, _ny, x1, y1, x2, y2);
 }
 function mouse_square_inbound_last_l(x, y, a) {
-    var _nx = objInput.lastMousePressedPos[0][0];
-    var _ny = objInput.lastMousePressedPos[0][1];
+    var _nx = global.__InputManager.lastMousePressedPos[0][0];
+    var _ny = global.__InputManager.lastMousePressedPos[0][1];
     return pos_inbound(_nx, _ny, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 
 function mouse_clear_hold() {
-    objInput.mouseHoldClear = true;
+    global.__InputManager._holdclear();
 }
 
 function mouse_ishold_l() {
-    return objInput.mouseHoldTime[0] > objInput.mouseHoldThreshold;
+    return global.__InputManager.mouseHoldTime[0] > global.__InputManager.mouseHoldThreshold;
 }
 function mouse_isclick_l() {
-    return objInput.mouseClick[0] > 0;
+    return global.__InputManager.mouseClick[0] > 0;
 }
 function mouse_ishold_r() {
-    return objInput.mouseHoldTime[1] > objInput.mouseHoldThreshold;
+    return global.__InputManager.mouseHoldTime[1] > global.__InputManager.mouseHoldThreshold;
 }
 function mouse_isclick_r() {
-    return objInput.mouseClick[1] > 0;
+    return global.__InputManager.mouseClick[1] > 0;
+}
+function mouse_clear_click() {
+    global.__InputManager._pressclear();
 }
 
 function ctrl_ishold() {
@@ -103,17 +209,17 @@ function wheelcheck_down_ctrl() {
 }
 
 function input_group_set(group = INPUT_GROUP_DEFAULT_NAME) {
-    objInput.inputGroup = group;
+    global.__InputManager.inputGroup = group;
 }
 function input_group_reset() {
-    objInput.inputGroup = INPUT_GROUP_DEFAULT_NAME;
+    global.__InputManager.inputGroup = INPUT_GROUP_DEFAULT_NAME;
 }
 function input_check_group_set(group = INPUT_GROUP_DEFAULT_NAME) {
-    objInput.checkGroup = group;
+    global.__InputManager.checkGroup = group;
 }
 function input_check_group_reset() {
-    objInput.checkGroup = INPUT_GROUP_DEFAULT_NAME;
+    global.__InputManager.checkGroup = INPUT_GROUP_DEFAULT_NAME;
 }
-function input_group_validate(input_group = objInput.inputGroup) {
-    return input_group == objInput.checkGroup;
+function input_group_validate(input_group = global.__InputManager.inputGroup) {
+    return input_group == global.__InputManager.checkGroup;
 }

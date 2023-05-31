@@ -56,12 +56,24 @@
                         if(_ny < 0 && _nyl > _nw / 2)
                             break;
                         
+                        var _ncol = beatlineColors[j];
+                        /// If beatline style is mono
+                        if(beatlineStyleCurrent == BeatlineStyles.BS_MONO ||
+                           beatlineStyleCurrent == BeatlineStyles.BS_MONOLONG) {
+                           		_ncol = _nowhard ? c_white:c_ltgrey;
+                           }
+                        /// If beatline style is long
+                        if(beatlineStyleCurrent == BeatlineStyles.BS_LONG ||
+                           beatlineStyleCurrent == BeatlineStyles.BS_MONOLONG) {
+                           		_nowl = _nowhard ? beatlineHardLength : beatlineLengthLong;
+                           }
+                        
                         draw_set_color(beatlineColors[j]);
                         // LR
                         if(_nyl > targetLineBeside && _nyl <= _nw / 2) {
                             if(beatlineAlpha[1]>0.01) {
                                 CleanLine(_nyl, _nh - targetLineBelow - _nowh, _nyl, _nh - targetLineBelow)
-                                    .Blend(beatlineColors[j], beatlineAlpha[1])
+                                    .Blend(_ncol, beatlineAlpha[1])
                                     .Thickness(_noww)
                                     .Cap("round", "round")
                                     .Draw();
@@ -73,7 +85,7 @@
                                 
                             if(beatlineAlpha[2]>0.01) {
                                 CleanLine(_nyr, _nh - targetLineBelow - _nowh, _nyr, _nh - targetLineBelow)
-                                    .Blend(beatlineColors[j], beatlineAlpha[2])
+                                    .Blend(_ncol, beatlineAlpha[2])
                                     .Thickness(_noww)
                                     .Cap("round", "round")
                                     .Draw();
@@ -86,7 +98,7 @@
                         // Down
                         if(_ny <= _nh - targetLineBelow && _ny >= 0 && beatlineAlpha[0]>0.01) {
                             CleanLine(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny)
-                                    .Blend(beatlineColors[j], beatlineAlpha[0])
+                                    .Blend(_ncol, beatlineAlpha[0])
                                     .Thickness(_noww)
                                     .Cap("round", "round")
                                     .Draw();

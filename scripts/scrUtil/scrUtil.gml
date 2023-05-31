@@ -70,7 +70,7 @@ function draw_scribble_box(_ele, x, y, alpha) {
 	var _bbox = _ele.get_bbox(x, y);
 	
 	CleanRectangle(_bbox.left-5, _bbox.top-5, _bbox.right+5, _bbox.bottom+5)
-		.Blend(theme_get().color, alpha)
+		.Blend(merge_color(theme_get().color, c_black, 0.4), alpha)
 		.Rounding(10)
 		.Draw();
 }
@@ -165,6 +165,13 @@ function time_to_bar_for_dym(time) {
 #endregion
 
 #region POSITION TRANSFORM
+function note_time_to_pix(_time) {
+	return _time * objMain.playbackSpeed;
+}
+function pix_to_note_time(_pixel) {
+	return _pixel / objMain.playbackSpeed;
+}
+
 function note_pos_to_x(_pos, _side) {
     if(_side == 0) {
         return global.resolutionW/2 + (_pos-2.5)*300*global.scaleXAdjust;
@@ -311,6 +318,7 @@ function format_time_string(_time) {
 #region FAST FILE IO
 
 function fast_file_save_async(file, str) {
+	file = file_path_fix(file);
 	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
 	buffer_seek(_buf, buffer_seek_start, 0);
@@ -323,6 +331,7 @@ function fast_file_save_async(file, str) {
 }
 
 function fast_file_save(file, str) {
+	file = file_path_fix(file);
 	var _len = string_byte_length(str);
 	var _buf = buffer_create(_len, buffer_fixed, 1);
 	buffer_seek(_buf, buffer_seek_start, 0);
@@ -330,6 +339,12 @@ function fast_file_save(file, str) {
 	buffer_save(_buf, file);
 	buffer_delete(_buf);
 	return;
+}
+
+function file_path_fix(_file) {
+	if(os_type == os_windows && string_last_pos(SYSFIX, _file) == 0)
+		_file = SYSFIX + _file;
+	return _file;
 }
 #endregion
 
@@ -368,6 +383,17 @@ function lerp_a(from, to, amount) {
 function lerp_safe(from, to, amount) {
 	if(abs(to-from)<LERP_EPS) return to;
 	return lerp(from, to, amount);
+}
+
+function lerp_pos(from, to, amount) {
+	return {
+		x: lerp_safe(from.x, to.x, amount),
+		y: lerp_safe(from.y, to.y, amount)
+	};
+}
+
+function lerp_a_pos(from, to, amount) {
+	return lerp_pos(from, to, amount * global.fpsAdjust);
 }
 
 function create_scoreboard(_x, _y, _dep, _dig, _align, _lim) {
@@ -529,4 +555,16 @@ function version_cmp(vera, verb) {
 	}
 	if(la!=lb) return la<lb?-1:1;
 	return 0;
+}
+
+function color_invert(col) {
+	var _r = 255-color_get_red(col);
+	var _g = 255-color_get_green(col);
+	var _b = 255-color_get_blue(col);
+	return make_color_rgb(_r, _g, _b);
+}
+
+function assert(expression) {
+	if(!expression)
+		show_error("Assertion failed.", true);
 }

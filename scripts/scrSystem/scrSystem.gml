@@ -85,6 +85,9 @@ function map_load(_file = "") {
     		break;
     }
     
+    // Notes information init & Remove extra sub notes.
+    notes_array_update();
+    note_extra_sub_removal();
     note_sort_all();
     notes_reallocate_id();
     note_activation_reset();
@@ -118,6 +121,9 @@ function map_import_xml(_file) {
 	// Import 3 sides Notes
 	
 	var _import_fun = function (_arr, _side) {
+		if(!variable_struct_exists(_arr, "CMapNoteAsset"))
+			return;
+		_arr = _arr.CMapNoteAsset;
 		if(!is_array(_arr)) _arr = [_arr];
 		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
 			_note_id = _arr[i].m_id.text;
@@ -138,9 +144,14 @@ function map_import_xml(_file) {
 		}
 	}
 	
-	_import_fun(_main.m_notes.m_notes.CMapNoteAsset, 0);
-	_import_fun(_main.m_notesLeft.m_notes.CMapNoteAsset, 1);
-	_import_fun(_main.m_notesRight.m_notes.CMapNoteAsset, 2);
+	try {
+		_import_fun(_main.m_notes.m_notes, 0);
+		_import_fun(_main.m_notesLeft.m_notes, 1);
+		_import_fun(_main.m_notesRight.m_notes, 2);
+	} catch (e) {
+		announcement_error("error_dym_note_load_failed");
+		return;
+	}
 	
 	var _imp_dym = false;
 	if(variable_struct_exists(_main, "m_argument")) {
@@ -241,6 +252,8 @@ function map_import_xml(_file) {
         	}
         }
     }
+    
+    
 }
 
 function map_import_osu(_file = "") {
@@ -503,6 +516,7 @@ function map_export_xml() {
     // For Compatibility
     notes_reallocate_id();
     instance_activate_object(objNote); // Temporarily activate all notes
+    note_extra_sub_removal();
     
     var _export_to_dym = show_question_i18n("export_to_dym_question");
     if(!objMain.chartBarUsed && !_export_to_dym)
@@ -533,12 +547,22 @@ function map_export_xml() {
             }
         }
         if(array_length(_ret) == 0)
-        	_ret = { text : "" };
-        return _ret;
+        	return { text : "" };
+        return {
+        	CMapNoteAsset : _ret
+        };
     }
+    
+    var _narray = [_gen_narray(0, _fix_dec, _export_to_dym),
+    			   _gen_narray(1, _fix_dec, _export_to_dym),
+    			   _gen_narray(2, _fix_dec, _export_to_dym)];
     
     var _str = {
     	CMap : {
+    		attributes : {
+    			"xmlns:xsi" : "http://www.w3.org/2001/XMLSchema-instance",
+    			"xmlns:xsd" : "http://www.w3.org/2001/XMLSchema"
+    		},
     		m_path : { text : objMain.chartTitle },
 	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, EXPORT_XML_EPS) },
 	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, EXPORT_XML_EPS) },
@@ -546,19 +570,13 @@ function map_export_xml() {
 	    	m_rightRegion : { text : objMain.chartSideType[1] },
 	    	m_mapID : { text : _mapid },
 	    	m_notes : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(0, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[0]
 	    	},
 	    	m_notesLeft : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(1, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[1]
 	    	},
 	    	m_notesRight : {
-	    		m_notes : {
-	    			CMapNoteAsset : _gen_narray(2, _fix_dec, _export_to_dym)
-	    		}
+	    		m_notes : _narray[2]
 	    	}
     	}
     }
@@ -587,9 +605,17 @@ function map_export_xml() {
     		}
     	}
     }
+	_str = snap_alter_to_xml(_str);
+	
+	_str.prolog = {
+		attributes: {
+			version: "1.0",
+			encoding: "UTF-8"
+		}
+	};
 	
 	objMain.savingExportId = 
-		fast_file_save_async(_file, SnapToXML(snap_alter_to_xml(_str)));
+		fast_file_save_async(_file, SnapToXML(_str));
 	
 	objManager.chartPath = _file;
 	
@@ -981,6 +1007,7 @@ function announcement_warning(str, time = 5000, uid = "null") {
 function announcement_error(str, time = 8000, uid = "null") {
 	str = i18n_get(str);
 	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time, uid);
+	show_debug_message_safe(str);
 }
 
 function announcement_adjust(str, val) {
@@ -999,21 +1026,30 @@ function announcement_set(str, val) {
 
 #region SYSTEM FUNCTIONS
 
+function get_config_path() {
+	if(os_type == os_linux) {
+		return "config.json";
+	}
+	else
+		return SYSFIX + program_directory + "config.json";
+}
+
 function load_config() {
-	if(!file_exists(global.configPath) || debug_mode)
+	var pth = get_config_path();
+	if(!file_exists(pth) || debug_mode)
 		save_config();
 	
-	if(!file_exists(global.configPath))
+	if(!file_exists(pth))
 		show_error("Config file creating failed.", true)
 	
-	var _buf = buffer_load(global.configPath);
+	var _buf = buffer_load(pth);
 	var _con = SnapBufferReadLooseJSON(_buf, 0);
 	buffer_delete(_buf);
 	
 	// If config file is corrupted
 	if(!is_struct(_con)) {
 		show_error_i18n("error_config_file_corrupted", false);
-		file_delete(global.configPath);
+		file_delete(pth);
 		load_config();
 		return -1;
 	}
@@ -1038,15 +1074,16 @@ function load_config() {
 	_check_set(_con, "simplify");
 	_check_set(_con, "updatechannel");
 	_check_set(_con, "graphics");
+	_check_set(_con, "beatlineStyle");
 		
 	vars_init();
 	
-	return md5_file(global.configPath);
+	return md5_file(pth);
 }
 
 function save_config() {
 	
-	fast_file_save(global.configPath, SnapToJSON({
+	fast_file_save(get_config_path(), SnapToJSON({
 		theme: global.themeAt,
 		FPS: global.fps,
 		resolutionW: global.resolutionW,
@@ -1060,16 +1097,17 @@ function save_config() {
 		language: i18n_get_lang(),
 		simplify: global.simplify,
 		updatechannel: global.updatechannel,
-		graphics: global.graphics
+		graphics: global.graphics,
+		beatlineStyle: global.beatlineStyle
 	}, true));
 	
 }
 
 function md5_config() {
-	if(!file_exists(global.configPath))
+	if(!file_exists(get_config_path()))
 		save_config();
 	
-	return md5_file(global.configPath);
+	return md5_file(get_config_path());
 }
 
 function vars_init() {

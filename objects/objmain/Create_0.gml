@@ -47,7 +47,7 @@ depth = 0;
     targetLineBelowH = 6;
     targetLineBesideW = 4;
     
-    _position_update = function () {
+    function _position_update() {
         targetLineBelow = 137*global.resolutionH/1080;
         targetLineBeside = 112*global.resolutionW/1920;
     }
@@ -103,6 +103,7 @@ depth = 0;
     chartFile = "";
     
     chartNotesArray = [];
+    chartNotesArrayActivated = [];		// Activated notes in a step.
     chartNotesArrayAt = 0;
     chartNotesCount = 0;
     chartNotesMap = array_create(3);
@@ -123,7 +124,7 @@ depth = 0;
     nowCombo = 0;
     playbackSpeed = 1.6;
     adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
-    scrolltimeSpeed = 180.0; // Use mouse scroll to Adjust Time ms per frame
+    scrolltimeSpeed = 120.0; // Use mouse scroll to Adjust Time ms per frame
     
     particlesEnabled = true;
     
@@ -150,7 +151,7 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
-    titleAlphaL = 0.5;
+    titleAlphaL = 0.7;
     titleAlpha = titleAlphaL;
     animTargetTitleAlpha = titleAlphaL;
     
@@ -188,7 +189,7 @@ depth = 0;
         animTargetBgFaintAlpha = 0.5; 
         animSpeedFaint = 0.1;
         
-        _faint_hit = function() {
+        function _faint_hit() {
             bgFaintAlpha = 0.7;
         }
         
@@ -209,7 +210,7 @@ depth = 0;
     // PartType
     
         // Note
-        _parttype_noted_init = function(_pt, _scl = 1.0, _ang = 0.0) {
+        function _parttype_noted_init(_pt, _scl = 1.0, _ang = 0.0) {
         	var _theme = theme_get();
             part_type_sprite(_pt, _theme.partSpr, false, true, false);
             if(_theme.partBlend)
@@ -236,7 +237,7 @@ depth = 0;
         _parttype_noted_init(partTypeNoteDR, 1, 180);
         
         // Hold
-        _parttype_hold_init = function(_pt, _scl = 1.0, _ang = 0.0) {
+        function _parttype_hold_init(_pt, _scl = 1.0, _ang = 0.0) {
         	var _theme = theme_get();
             part_type_sprite(_pt, _theme.partSpr, false, true, false);
             if(_theme.partBlend)
@@ -261,7 +262,7 @@ depth = 0;
     // Part Emitter
     
         partEmit = part_emitter_create(partSysNote);
-        _partemit_init = function(_pe, _x1, _y1, _x2, _y2) {
+        function _partemit_init(_pe, _x1, _y1, _x2, _y2) {
             part_emitter_region(partSysNote, _pe, _x1, _y1, _x2, _y2, 
                 ps_shape_line, ps_distr_linear);
         }
@@ -302,3 +303,68 @@ depth = 0;
     channelPaused = false;	// Only used for time correction
     musicLength = 0;
     usingMP3 = false;		// For Latency Workaround
+    
+#region Methods
+
+// Set music's time to [time].
+// If [animated], there will be no transition animation when time is set.
+// If [inbound!=-1], the time being set will stay above targetline in [inbound] pixels
+function time_set(time, animated = true, inbound = -1) {
+	if(inbound > 0) {
+		// If above screen
+		if(time > nowTime) 
+			time -= pix_to_note_time(global.resolutionH - targetLineBelow - inbound);
+		else
+			time -= pix_to_note_time(inbound);
+	}
+		
+	animTargetTime = time;
+	if(!animated || nowPlaying)
+		nowTime = time;
+	if(nowPlaying)
+		time_music_sync();
+}
+
+// Get music's time.
+// If [animated], the precise time displayed on screen (including transition animation) will be returned.
+function time_get(animated = false) {
+	return animated?animTargetTime:nowTime;
+}
+
+// Add music's time with [offset].
+function time_add(offset, animated = true) {
+	time_set(time_get() + offset, animated);
+}
+
+// Check if given [time] is inbound.
+function time_inbound(time) {
+	return time>nowTime && note_time_to_pix(time - nowTime) + targetLineBelow < global.resolutionH;
+}
+
+// Make the specific time range inbound.
+function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
+	var _il = time_inbound(timeL);
+	var _ir = time_inbound(timeR);
+	if(!_il && !_ir) {
+		if(in_between(nowTime, timeL, timeR)) return;
+		else if(nowTime > timeR)
+			time_set(timeR, animated, inbound);
+		else
+			time_set(timeL, animated, inbound);
+	}
+}
+
+// Sync the time with music.
+function time_music_sync() {
+	// Set the fmod channel
+	sfmod_channel_set_position(nowTime, channel, sampleRate);
+	// Resync with fmod's position because of fmod's lower precision
+    nowTime = sfmod_channel_get_position(channel, sampleRate);
+    
+    // Sync with the video position
+    if(bgVideoLoaded) {
+    	time_source_start(timesourceSyncVideo);
+    }
+}
+
+#endregion

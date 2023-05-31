@@ -11,8 +11,7 @@ _generate_element = function () {
 		.transform(0.8, 0.8);
 }
 _generate_element();
-	
-	
+
 image_alpha = 0;
 animTargetAlpha = 1;
 

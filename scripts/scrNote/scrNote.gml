@@ -46,6 +46,7 @@ function note_sort_all() {
     	
     	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
     		array_pop(chartNotesArray);
+    		chartNotesCount --;
     	}
     }
 }
@@ -101,7 +102,7 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
-            return true;
+            return -999;
         }
         chartNotesMap[_inst.side][? _id] = _inst;
         
@@ -118,6 +119,7 @@ function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _rec
 	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, false, _selecting);
 	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side, false, false, _selecting);
 	_sinst.beginTime = _time;
+	// assert(_inst.sinst == _sinst);
 	if(_record)
 		operation_step_add(OPERATION_TYPE.ADD, _inst.get_prop(), -1);
 	return _inst;
@@ -135,9 +137,15 @@ function build_note_withprop(prop, record = false, selecting = false) {
 	}
 }
 
+// This function can only be accessed in destroy event.
 function note_delete(_inst, _record = false) {
-	if(_inst.arrayPos == -1)
+	if(!instance_exists(_inst)) {
+		show_debug_message("!!!Warning!!! You're trying to delete an unexisting/deactiaved note.")
 		return;
+	}
+	if(_inst.arrayPos == -1) {
+		return;
+	}
     with(objMain) {
         var i = _inst.arrayPos;
         if(chartNotesArray[i].inst == _inst) {
@@ -217,7 +225,7 @@ function note_check_and_activate(_posistion_in_array) {
 	var _hold_intersect = _str.noteType >= 2 &&
 		(_str.noteType == 2? (_str.time <= objMain.nowTime && _str.time + _str.lastTime >= objMain.nowTime):
 			(_str.beginTime <= objMain.nowTime && _str.time >= objMain.nowTime));
-	if(_note_inbound || _hold_intersect) {
+	if(_note_inbound || _hold_intersect || _str.inst.state != _str.inst.stateOut) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
 		_str.inst.arrayPos = _posistion_in_array;
@@ -271,5 +279,20 @@ function note_activation_reset() {
 		ds_map_clear(deactivationQueue);
 		for(var i=0; i<chartNotesCount; i++)
 			note_check_and_activate(i);
+	}
+}
+
+// Prevent extra sub notes.
+function note_extra_sub_removal() {
+	var _dcnt = 0;
+	with(objNote) {
+		if(noteType == 3 && finst<0) {
+			instance_destroy();
+			_dcnt ++;
+		}
+	}
+	if(_dcnt > 0) {
+		announcement_warning(i18n_get("extra_sub_fix", string(_dcnt)));
+		note_sort_all();
 	}
 }

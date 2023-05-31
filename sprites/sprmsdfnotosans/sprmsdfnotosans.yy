@@ -2,9 +2,9 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "sprMsdfNotoSans",
-  "bbox_bottom": 2655,
+  "bbox_bottom": 3643,
   "bbox_left": 0,
-  "bbox_right": 2655,
+  "bbox_right": 3643,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b0982f1d-2441-4f0e-a992-c741e1e9b76b",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4665b021-f7a9-4928-89f9-461e0014037e",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 2656,
+  "height": 3644,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"108fd0ad-6176-4fea-918b-80736012d3c9","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"0747edc2-eb28-42e9-b8ed-0a06339acaf6","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"b0982f1d-2441-4f0e-a992-c741e1e9b76b","path":"sprites/sprMsdfNotoSans/sprMsdfNotoSans.yy",},},},"Disabled":false,"id":"03170b5d-d829-4453-90a6-ef9e3a728454","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"4665b021-f7a9-4928-89f9-461e0014037e","path":"sprites/sprMsdfNotoSans/sprMsdfNotoSans.yy",},},},"Disabled":false,"id":"856f587d-4c5d-4174-b7e5-dd01f3b6f693","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -73,5 +73,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 2656,
+  "width": 3644,
 }

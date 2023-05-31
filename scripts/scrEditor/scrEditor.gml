@@ -249,6 +249,21 @@ function editor_get_note_attaching_center() {
 
 #region UNDO & REDO FUNCTION
 
+function operation_synctime_set(time) {
+	with(objEditor) {
+		operationSyncTime[0] = min(operationSyncTime[0], time);
+		operationSyncTime[1] = max(operationSyncTime[1], time);
+		show_debug_message_safe("OPERATION SYNC TIME SET:"+string(operationSyncTime));
+	}
+}
+function operation_synctime_sync() {
+	if(objEditor.operationSyncTime[0] == INF) return;
+	var _time = objEditor.operationSyncTime;
+	
+	objMain.time_range_made_inbound(_time[0], _time[1], 300);
+	objEditor.operationSyncTime = [INF, -INF];
+}
+
 function operation_step_add(_type, _from, _to) {
 	with(objEditor) {
 		array_push(operationStackStep, new sOperation(_type, _from, _to));
@@ -266,6 +281,10 @@ function operation_step_flush(_array) {
 }
 
 function operation_do(_type, _from, _to = -1) {
+	if(_to != -1)
+		operation_synctime_set(_to.time);
+	else if(is_struct(_from))
+		operation_synctime_set(_from.time);
 	switch(_type) {
 		case OPERATION_TYPE.ADD:
 			return build_note_withprop(_from);
@@ -273,6 +292,7 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.MOVE:
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
+			_from.inst.note_outscreen_check();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
@@ -527,4 +547,69 @@ function chart_randomize() {
 	}
 	notes_array_update();
 	note_activation_reset();
+}
+
+/// For advanced property modifications.
+function advanced_expr() {
+	with(objEditor) {
+		var _global = editorSelectCount == 0;
+		var _scope_str = _global?"你正在对谱面的所有音符进行高级操作。":"你正在对选定的音符进行高级操作。";
+		var _expr = get_string(_scope_str+"请填写表达式：", editorLastExpr);
+		var _using_bar = string_last_pos(_expr, "bar");
+		var _success = 1;
+		
+		if(_global)
+			instance_activate_all();
+		
+		with(objNote) {
+			if(noteType != 3)
+			if(_global || state==stateSelected) {
+				var _prop = get_prop();
+				var _nprop = get_prop();
+				
+				expr_init(); // Reset symbol table
+				expr_set_var("time", _prop.time);
+				expr_set_var("pos", _prop.position);
+				expr_set_var("wid", _prop.width);
+				expr_set_var("len", _prop.lastTime);
+				expr_set_var("htime", _prop.time);
+				expr_set_var("etime", _prop.time + _prop.lastTime);
+				
+				_success = _success && expr_exec(_expr);
+				
+				if(!_success) {
+					announcement_error("advanced_expr_error");
+					break;
+				}
+				
+				_nprop.time = expr_get_var("time");
+				_nprop.position = expr_get_var("pos");
+				_nprop.width = expr_get_var("wid");
+				if(noteType == 2) {
+					if(expr_get_var("htime") != _prop.time) {
+						_nprop.lastTime = _prop.lastTime - (expr_get_var("htime") - _prop.time);
+						_nprop.time = expr_get_var("htime");
+					}
+					if(expr_get_var("len") != _prop.lastTime)
+						_nprop.lastTime = expr_get_var("len");
+					else
+						_nprop.lastTime = expr_get_var("etime") - _nprop.time;
+				}
+				
+				set_prop(_nprop, true);
+				
+				delete _prop;
+				delete _nprop;
+			}
+		}
+		
+		if(_success)
+			announcement_play("表达式执行成功。");
+			
+		editorLastExpr = _expr;
+		
+		note_sort_all();
+		if(_global)
+			note_activation_reset();
+	}
 }
