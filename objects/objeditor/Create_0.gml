@@ -46,6 +46,7 @@ editorHighlightLineEnabled = true;
 editorHighlightTime = 0;
 editorHighlightPosition = 0;
 editorHighlightSide = 0;
+editorHighlightWidth = 0;
 
 editorWidthAdjustTime = 9999;
 editorWidthAdjustTimeThreshold = 300;

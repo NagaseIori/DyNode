@@ -31,6 +31,7 @@ with(objNote) {
         objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;
+        objEditor.editorHighlightWidth = width;
         if(state == stateAttachSub || state == stateDropSub) {
             objEditor.editorHighlightTime = sinst.time;
         }

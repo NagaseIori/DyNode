@@ -46,7 +46,7 @@ if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) 
 	note_deactivate_request(id);
 	return;
 }
-// Else then update the color rectangle
+// Else then update the colored squares
 else if(editor_get_editmode() <= 4){
 	var _col = c_blue;
     
@@ -65,11 +65,21 @@ else if(editor_get_editmode() <= 4){
             animTargetNodeA = 1.0;
             animTargetInfoA = ctrl_ishold()? 1:0;
         }
-        else if(objEditor.editorHighlightLine && objEditor.editorHighlightPosition == position &&
-            objEditor.editorHighlightSide == side) {
-            animTargetNodeA = 1.0;
-            animTargetInfoA = ctrl_ishold()? 1:0;
-            _col = 0xc2577e;
+        else if(objEditor.editorHighlightLine && objEditor.editorHighlightSide == side) {
+            
+            var _position = objEditor.editorHighlightPosition == position;
+            var _width = objEditor.editorHighlightWidth == width;
+            if(_position || _width) {
+            	animTargetNodeA = 1.0;
+            	animTargetInfoA = ctrl_ishold()? 1:0;
+            }
+            else animTargetNodeA = 0;
+            if(_position && _width)
+            	_col = 0xa1A1fe;
+            else if(_position)
+            	_col = 0xc2577e;
+            else if(_width)
+            	_col = 0xFF9E00;
         }
         else animTargetNodeA = 0;
     }
@@ -101,6 +111,7 @@ if(objEditor.editorHighlightLine && instance_exists(id)) {
 		objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;
+        objEditor.editorHighlightWidth = width;
         if(state == stateAttachSub || state == stateDropSub) {
             objEditor.editorHighlightTime = sinst.time;
         }
