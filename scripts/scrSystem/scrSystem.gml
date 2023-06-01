@@ -857,7 +857,8 @@ function project_get_settings() {
 		defaultWidth: objEditor.editorDefaultWidth,
 		defaultWidthMode: objEditor.editorDefaultWidthMode,
 		ntime: objMain.nowTime,
-		fade: objMain.fadeOtherNotes
+		fade: objMain.fadeOtherNotes,
+		bgdim: objMain.bgDim
 	};
 }
 
@@ -875,6 +876,9 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "fade")) {
 		objMain.fadeOtherNotes = str.fade;
+	}
+	if(variable_struct_exists(str, "bgdim")) {
+		objMain.bgDim = str.bgdim;
 	}
 }
 

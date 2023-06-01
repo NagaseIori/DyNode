@@ -63,3 +63,23 @@ function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) 
     aval = value;
     atval = value;
 }
+
+function BarBackgroundDim(_id, _x, _y) : Bar(_id, _x, _y, "Background Dim", 0, 0) constructor {
+	range = [0, 1];
+	active = true;
+	get_active = function() {
+		return instance_exists(objMain);
+	}
+	get_value = function () {
+    	if(!active) return;
+    	return objMain.bgDim;
+    }
+    custom_action = function() {
+    	objMain.bgDim = value;
+    }
+    
+    update_active();
+    value = get_value();
+    aval = value;
+    atval = value;
+}
