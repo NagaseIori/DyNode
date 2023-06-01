@@ -1007,6 +1007,7 @@ function announcement_warning(str, time = 5000, uid = "null") {
 function announcement_error(str, time = 8000, uid = "null") {
 	str = i18n_get(str);
 	announcement_play("[#f44336][[" + i18n_get("anno_prefix_err") + "] " + str, time, uid);
+	show_debug_message_safe(str);
 }
 
 function announcement_adjust(str, val) {
@@ -1073,6 +1074,7 @@ function load_config() {
 	_check_set(_con, "simplify");
 	_check_set(_con, "updatechannel");
 	_check_set(_con, "graphics");
+	_check_set(_con, "beatlineStyle");
 		
 	vars_init();
 	
@@ -1095,7 +1097,8 @@ function save_config() {
 		language: i18n_get_lang(),
 		simplify: global.simplify,
 		updatechannel: global.updatechannel,
-		graphics: global.graphics
+		graphics: global.graphics,
+		beatlineStyle: global.beatlineStyle
 	}, true));
 	
 }

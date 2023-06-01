@@ -31,6 +31,7 @@ with(objNote) {
         objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;
+        objEditor.editorHighlightWidth = width;
         if(state == stateAttachSub || state == stateDropSub) {
             objEditor.editorHighlightTime = sinst.time;
         }
@@ -79,6 +80,17 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down(ord("K"))) {
     	_attach_sync_request = editor_set_default_width_qbox();
     }
+    
+    if(keycheck_down(ord("J"))) {
+    	beatlineStyleCurrent ++;
+    	beatlineStyleCurrent %= BEATLINE_STYLES_COUNT;
+    	global.beatlineStyle = beatlineStyleCurrent;
+    	announcement_set("beatline_style", beatlineStylesName[beatlineStyleCurrent]);
+    }
+    
+    if(keycheck_down(ord("0")))
+    	advanced_expr();
+    
     
     
     // Notes operation

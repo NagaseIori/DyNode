@@ -97,3 +97,30 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
     draw_rectangle(0, _nh - targetLineBelow - targetLineBelowH/2, 
                     _nw, _nh - targetLineBelow + targetLineBelowH/2, false);
     
+// Draw Notes
+	
+	var _l = array_length(chartNotesArrayActivated);
+	// Draw Holds
+	for(var i=0; i<_l; i++)
+		with(chartNotesArrayActivated[i])
+			if(noteType == 2) {
+				draw_event(false);
+			}
+	for(var i=0; i<_l; i++)
+		with(chartNotesArrayActivated[i])
+			if(noteType == 2) {
+				draw_event(true);
+			}
+	// Draw Notes
+	for(var i=0; i<_l; i++)
+		with(chartNotesArrayActivated[i])
+			if(noteType == 0) {
+				draw_event();
+			}
+	// Draw Chains
+	for(var i=0; i<_l; i++)
+		with(chartNotesArrayActivated[i])
+			if(noteType == 1) {
+				draw_event();
+			}
+	

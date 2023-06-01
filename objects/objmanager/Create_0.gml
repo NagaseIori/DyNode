@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.11.5"
+#macro VERSION "v0.1.12-dev.2"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -32,6 +32,7 @@ global.FMOD_MP3_DELAY = 60;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
+global.beatlineStyle = BeatlineStyles.BS_DEFAULT;
 global.graphics = {
 	AA : 4,
 	VSync : true

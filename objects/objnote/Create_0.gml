@@ -215,10 +215,13 @@ image_yscale = global.scaleYAdjust;
     	return _prop;
     }
     
-    function set_prop(props) {
+    function set_prop(props, record = false) {
     	if(!is_struct(props))
     		show_error("property must be a struct.", true);
     	
+    	if(record)
+    		origProp = get_prop();
+    		
     	time = props.time;
     	side = props.side;
     	width = props.width;
@@ -235,6 +238,11 @@ image_yscale = global.scaleYAdjust;
     		sinst.time = time + lastTime;
     		_prop_hold_update();
     	}
+    	
+    	if(record)
+    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+    	
+    	update_prop();
     }
     
     function update_prop() {
@@ -250,6 +258,13 @@ image_yscale = global.scaleYAdjust;
     	arrayPointer.beginTime = beginTime;
     	arrayPointer.lastAttachBar = lastAttachBar;
     }
+    
+    // If a note is moving out of screen, throw a warning.
+	function note_outscreen_check() {
+		_prop_init();
+		if(_outscreen_check(x, y, side))
+			announcement_warning("warning_note_outbound", 5000, "wob");
+	}
     
     // _outbound_check was moved to scrNote
 
@@ -508,8 +523,7 @@ image_yscale = global.scaleYAdjust;
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
                     	}
                     	
-                    	if(_outscreen_check(x, y, side))
-                			announcement_warning("warning_note_outbound", 5000, "wob");
+                    	note_outscreen_check();
                     }
                     
                     note_sort_request();
@@ -580,6 +594,18 @@ image_yscale = global.scaleYAdjust;
 		    if(_timechg != 0 || _poschg != 0)
 		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		    	
+        }
+        
+        function draw_event() {
+        	if(!drawVisible) return;
+			if(side == 0) {
+			    draw_sprite_ext(sprNote2, image_number, x - pWidth / 2, y, 
+			        image_xscale, image_yscale, image_angle, image_blend, image_alpha);
+			}
+			else {
+			    draw_sprite_ext(sprNote2, image_number, x, y + pWidth / 2 * (side == 1?-1:1), 
+			        image_xscale, image_yscale, image_angle, image_blend, image_alpha);
+			}
         }
 
     state = undefined;			// shouldn't be assigned with function index immediately

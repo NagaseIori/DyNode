@@ -103,6 +103,7 @@ depth = 0;
     chartFile = "";
     
     chartNotesArray = [];
+    chartNotesArrayActivated = [];		// Activated notes in a step.
     chartNotesArrayAt = 0;
     chartNotesCount = 0;
     chartNotesMap = array_create(3);
@@ -150,7 +151,7 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
-    titleAlphaL = 0.5;
+    titleAlphaL = 0.7;
     titleAlpha = titleAlphaL;
     animTargetTitleAlpha = titleAlphaL;
     

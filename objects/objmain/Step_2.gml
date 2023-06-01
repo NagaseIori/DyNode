@@ -1,4 +1,4 @@
-/// @description Mixer Update
+/// @description Mixer Update & Update activated notes array
 
 // Mixer Update
 
@@ -12,3 +12,13 @@
         mixerShadow[i].y = mixerX[i];
         mixerShadow[i].x = i*global.resolutionW + (i? -1:1) * targetLineBeside;
     }
+
+// Get activated notes
+
+	array_resize(chartNotesArrayActivated, 0);
+	with(objNote) {
+		if(noteType <= 2)
+			array_push(objMain.chartNotesArrayActivated, self);
+    }
+    // Sort by array position
+    array_sort(chartNotesArrayActivated, function(_a, _b) { return _a.arrayPos - _b.arrayPos; });
