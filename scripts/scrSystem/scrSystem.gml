@@ -1122,6 +1122,9 @@ function vars_init() {
 	global.fpsAdjust = BASE_FPS / global.fps;
 	global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 	global.scaleYAdjust = global.resolutionH / BASE_RES_H;
+	
+	if(instance_exists(objMain))
+		with(objMain) _partsys_init();
 }
 
 function switch_debug_info() {

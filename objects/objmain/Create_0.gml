@@ -231,9 +231,9 @@ depth = 0;
         }
         
         partTypeNoteDL = part_type_create();
-        _parttype_noted_init(partTypeNoteDL);
+        
         partTypeNoteDR = part_type_create();
-        _parttype_noted_init(partTypeNoteDR, 1, 180);
+        
         
         // Hold
         function _parttype_hold_init(_pt, _scl = 1.0, _ang = 0.0) {
@@ -256,7 +256,13 @@ depth = 0;
             part_type_direction(_pt, _ang, _ang+180, 0, 0);
         }
         partTypeHold = part_type_create();
-        _parttype_hold_init(partTypeHold);
+        
+        function _partsys_init() {
+        	_parttype_noted_init(partTypeNoteDL);
+        	_parttype_noted_init(partTypeNoteDR, 1, 180);
+        	_parttype_hold_init(partTypeHold);
+        }
+        _partsys_init();
         
     // Part Emitter
     
