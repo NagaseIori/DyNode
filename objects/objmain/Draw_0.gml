@@ -124,3 +124,14 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 				draw_event();
 			}
 	
+	// Draw Attaching Notes
+	with(objNote)
+		if(attaching) {
+			if(noteType < 2)
+				draw_event();
+			else if(noteType == 2) {
+				draw_event(false);
+				draw_event(true);
+			}
+		}
+	

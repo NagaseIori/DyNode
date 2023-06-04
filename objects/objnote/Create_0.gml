@@ -1,6 +1,7 @@
 
+depth = 0;
 drawVisible = false;
-origDepth = -10000000;
+priority = int64(-10000000);
 image_yscale = global.scaleYAdjust;
 
 // In-Variables
@@ -76,12 +77,12 @@ image_yscale = global.scaleYAdjust;
 // In-Functions
 
     function _prop_init() {
-    	origDepth = -20000000;
-    	if(noteType == 1) origDepth *= 2;
-    	else if(noteType == 2) origDepth /= 2;
-    	if(side != 0) origDepth += 5000000;
+    	priority = -20000000;
+    	if(noteType == 1) priority = priority * 2;
+    	else if(noteType == 2) priority = priority / 2;
+    	if(side != 0) priority += 5000000;
     	
-    	if(attaching) origDepth = -100000000;
+    	if(attaching) priority = -100000000;
         originalWidth = sprite_get_width(sprite);
         
         // Properties Limitation
@@ -91,9 +92,9 @@ image_yscale = global.scaleYAdjust;
         pWidth = max(pWidth, originalWidth) * global.scaleXAdjust;
         image_xscale = pWidth / originalWidth;
         image_angle = (side == 0 ? 0 : (side == 1 ? 270 : 90));
-        depth = origDepth - arrayPos*16;
+        priority = priority - arrayPos*16;
         if(noteType == 3 && instance_exists(finst))
-        	depth = finst.depth;
+        	priority = finst.priority;
         
         noteprop_set_xy(position, time, side);
     }
@@ -176,7 +177,7 @@ image_yscale = global.scaleYAdjust;
 	        }
 	        var _shadow = objShadow;
 	        
-	        var _inst = instance_create_depth(_x, _y, origDepth * 3, _shadow), _scl = 1;
+	        var _inst = instance_create_depth(_x, _y, -100, _shadow), _scl = 1;
 	        _inst.nowWidth = pWidth;
 	        _inst.visible = true;
 	        _inst.image_angle = image_angle;

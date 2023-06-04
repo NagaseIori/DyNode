@@ -208,8 +208,8 @@ function editor_snap_width(_width) {
 function editor_select_compare(ida, idb) {
 	if(!instance_exists(ida)) return idb;
 	else if(!instance_exists(idb)) return ida;
-	else if(ida.depth < idb.depth) return ida;
-	else if(ida.depth > idb.depth) return idb;
+	else if(ida.priority < idb.priority) return ida;
+	else if(ida.priority > idb.priority) return idb;
 	else if(ida.time < idb.time) return ida;
 	else if(ida.time > idb.time) return idb;
 	else return min(ida, idb);
