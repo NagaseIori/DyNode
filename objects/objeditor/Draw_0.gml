@@ -1,7 +1,8 @@
 
 #region Beatlines
 
-    if(array_length(timingPoints)) {
+	var beatlineVisible = beatlineAlpha[0] + beatlineAlpha[1] + beatlineAlpha[2] > 0.01;
+    if(beatlineVisible && array_length(timingPoints)) {
         var _nw = global.resolutionW, _nh = global.resolutionH;
         var nowTime = objMain.nowTime;
         var targetLineBelow = objMain.targetLineBelow + objMain.targetLineBelowH / 2;
