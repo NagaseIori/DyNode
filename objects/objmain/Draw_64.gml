@@ -48,7 +48,8 @@ _debug_str += "FMOD CPU Usage: " + string(FMODGMS_Sys_Get_CPUUsage()) + "\n";
 // _debug_str += "C_TIME: " + string(_stat.collection_time) + "\n";
 _debug_str += "INST_C: " + string(instance_count) + "\n";
 _debug_str += "V_STATUS: " + string(video_get_status()) + "\n";
-_debug_str += "SAMPLERATE: " + string(sampleRate)+ "\n";
+_debug_str += $"SAMPLERATE: {sampleRate}\n";
+_debug_str += $"Lst_key: {keyboard_lastkey}\n";
 if(instance_exists(editor))
 	_debug_str += "EDITMODE: " + string(editor.editorMode)+ "\n";
 draw_set_font(fMono16);

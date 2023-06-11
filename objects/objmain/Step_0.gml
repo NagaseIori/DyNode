@@ -101,6 +101,15 @@
     if(keycheck_down(ord("U")))
     	map_add_offset("", true);
     
+    // Latency Adjust (using key '-' and '=')
+    var _map_offset_d = keycheck_down(187) - keycheck_down(189);
+    if(_map_offset_d!=0)
+    	map_add_offset(_map_offset_d * latencyAdjustStep, true);
+    var _global_offset_d = keycheck_down_ctrl(187) - keycheck_down_ctrl(189);
+    if(_global_offset_d!=0)
+    	global_add_delay(_global_offset_d * latencyAdjustStep);
+    
+    
     if(keycheck_down(ord("N"))) {
     	global.simplify = !global.simplify;
     	announcement_adjust("anno_simplify", global.simplify);

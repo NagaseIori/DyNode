@@ -748,7 +748,9 @@ function map_add_offset(_offset = "", record = false) {
 	}
 	notes_array_update();
 	
-	announcement_play("anno_add_offset_complete");
+	announcement_play(i18n_get("anno_add_offset", _offset));
+	
+	note_activation_reset();
 	
 	if(record)
 		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
@@ -1079,6 +1081,7 @@ function load_config() {
 	_check_set(_con, "updatechannel");
 	_check_set(_con, "graphics");
 	_check_set(_con, "beatlineStyle");
+	_check_set(_con, "musicDelay");
 		
 	vars_init();
 	
@@ -1102,7 +1105,8 @@ function save_config() {
 		simplify: global.simplify,
 		updatechannel: global.updatechannel,
 		graphics: global.graphics,
-		beatlineStyle: global.beatlineStyle
+		beatlineStyle: global.beatlineStyle,
+		musicDelay: global.musicDelay
 	}, true));
 	
 }
@@ -1187,6 +1191,29 @@ function stat_string(stype, ntype) {
 
 #endregion
 
+#region FMOD Functions
+
+function sfmod_channel_get_position(channel, spr) {
+    var _ret = FMODGMS_Chan_Get_Position(channel);
+    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3 - global.musicDelay;
+    return _ret;
+}
+
+function sfmod_channel_set_position(pos, channel, spr) {
+    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3 + global.musicDelay;
+    FMODGMS_Chan_Set_Position(channel, pos);
+}
+
+#endregion
+
+#region Misc Functions
+
+function game_end_confirm() {
+	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
+	if(_confirm_exit)
+		game_end();
+}
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;
@@ -1197,19 +1224,12 @@ function reset_scoreboard() {
 	}
 }
 
-function sfmod_channel_get_position(channel, spr) {
-    var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3;
-    return _ret;
+function global_add_delay(delay) {
+	global.musicDelay += delay;
+	with(objMain)
+		nowTime -= delay;
+	save_config();
+	announcement_set("global_music_delay", global.musicDelay);
 }
 
-function sfmod_channel_set_position(pos, channel, spr) {
-    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3;
-    FMODGMS_Chan_Set_Position(channel, pos);
-}
-
-function game_end_confirm() {
-	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
-	if(_confirm_exit)
-		game_end();
-}
+#endregion

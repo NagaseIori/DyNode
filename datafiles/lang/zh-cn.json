@@ -52,7 +52,7 @@
     "old_version_warn_1": "检测到来自特定旧版本的项目。\n该谱面是否使用了从 .osu 中导入校时信息并添加了 64ms 的延迟？\n这个延迟在新的版本中建议被撤销。如果你选择“是”，则所有放置的 Note 和 Timing Point 都会被提前 64ms 。\n在调整之前我们建议你先对 .dyn 文件进行备份。你也可以在之后手动进行调整。\n这个警告不会出现第二遍。",
     "new_project_warn": "确定要创建新的工程吗？所有未保存的更改都将丢失。",
     "box_add_offset": "请输入你想要添加的全局时间偏移量（以毫秒记，正数代表增加延迟）。这将会影响所有的 Timing Points 和 Notes 所在的时间。",
-    "anno_add_offset_complete": "全局时间偏移添加完毕。",
+    "anno_add_offset": "谱面音符时间偏移添加：$0 ms",
     "box_set_global_bar_1": "请输入自定义的全局 Bar Per Minute",
     "box_set_global_bar_2": "请输入用于 Bar 显示与导出的全局 Offset （毫秒）",
     "anno_set_global_bar_complete": "已更改全局 BarPM 与 Offset 至",
@@ -138,6 +138,7 @@
     "beatline_style": "拍线样式",
     "extra_sub_fix": "检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。",
     "expr_catch_error": "表达式执行错误。\n错误信息：$0\n错误表达式：$1",
-    "advanced_expr_error": "表达式在计算时出现错误，请检查表达式语法。批量操作已中止。"
+    "advanced_expr_error": "表达式在计算时出现错误，请检查表达式语法。批量操作已中止。",
+    "global_music_delay": "全局音乐延迟"
   }
 }

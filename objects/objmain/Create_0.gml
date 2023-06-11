@@ -38,7 +38,7 @@ depth = 0;
 	
 #endregion
 
-#region Layouts Init
+#region Layouts Vars
 
 // Target Line
 
@@ -88,7 +88,7 @@ depth = 0;
 
 #endregion
 
-#region Chart Properties
+#region Chart Vars
 
     chartTitle = "Last Train at 25 O'Clock"
     chartBeatPerMin = 180;
@@ -309,6 +309,10 @@ depth = 0;
     musicLength = 0;
     usingMP3 = false;		// For Latency Workaround
     
+// Tool Related
+
+	latencyAdjustStep = 5;	// in ms
+
 #region Methods
 
 // Set music's time to [time].
@@ -361,6 +365,9 @@ function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
 
 // Sync the time with music.
 function time_music_sync() {
+	if(!nowPlaying)
+		return;
+	
 	// Set the fmod channel
 	sfmod_channel_set_position(nowTime, channel, sampleRate);
 	// Resync with fmod's position because of fmod's lower precision
