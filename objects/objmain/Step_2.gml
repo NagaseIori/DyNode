@@ -17,7 +17,7 @@
 
 	array_resize(chartNotesArrayActivated, 0);
 	with(objNote) {
-		if(noteType <= 2)
+		if(noteType <= 2 && !attaching)
 			array_push(objMain.chartNotesArrayActivated, self);
     }
     // Sort by array position

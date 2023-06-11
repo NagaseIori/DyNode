@@ -38,7 +38,7 @@ depth = 0;
 	
 #endregion
 
-#region Layouts Init
+#region Layouts Vars
 
 // Target Line
 
@@ -88,7 +88,7 @@ depth = 0;
 
 #endregion
 
-#region Chart Properties
+#region Chart Vars
 
     chartTitle = "Last Train at 25 O'Clock"
     chartBeatPerMin = 180;
@@ -231,9 +231,9 @@ depth = 0;
         }
         
         partTypeNoteDL = part_type_create();
-        _parttype_noted_init(partTypeNoteDL);
+        
         partTypeNoteDR = part_type_create();
-        _parttype_noted_init(partTypeNoteDR, 1, 180);
+        
         
         // Hold
         function _parttype_hold_init(_pt, _scl = 1.0, _ang = 0.0) {
@@ -256,7 +256,13 @@ depth = 0;
             part_type_direction(_pt, _ang, _ang+180, 0, 0);
         }
         partTypeHold = part_type_create();
-        _parttype_hold_init(partTypeHold);
+        
+        function _partsys_init() {
+        	_parttype_noted_init(partTypeNoteDL);
+        	_parttype_noted_init(partTypeNoteDR, 1, 180);
+        	_parttype_hold_init(partTypeHold);
+        }
+        _partsys_init();
         
     // Part Emitter
     
@@ -294,6 +300,12 @@ depth = 0;
 
 #endregion
 
+#region TopBar Init
+
+	topbar = instance_create_depth(0, 0, 0, objTopBar);
+
+#endregion
+
 // FMODGMS Related
 
     channel = FMODGMS_Chan_CreateChannel();
@@ -303,6 +315,10 @@ depth = 0;
     musicLength = 0;
     usingMP3 = false;		// For Latency Workaround
     
+// Tool Related
+
+	latencyAdjustStep = 5;	// in ms
+
 #region Methods
 
 // Set music's time to [time].
@@ -355,6 +371,9 @@ function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
 
 // Sync the time with music.
 function time_music_sync() {
+	if(!nowPlaying)
+		return;
+	
 	// Set the fmod channel
 	sfmod_channel_set_position(nowTime, channel, sampleRate);
 	// Resync with fmod's position because of fmod's lower precision
@@ -364,6 +383,31 @@ function time_music_sync() {
     if(bgVideoLoaded) {
     	time_source_start(timesourceSyncVideo);
     }
+}
+
+function volume_get_hitsound() {
+	if(!objMain.hitSoundOn)
+		return 0;
+    return audio_sound_get_gain(sndHit);
+}
+
+function volume_set_hitsound(_vol) {
+	if(_vol == 0) {
+    	objMain.hitSoundOn = false;
+    }
+    else {
+    	objMain.hitSoundOn = true;
+    	audio_sound_gain(sndHit, _vol, 0);
+    }
+}
+
+function volume_get_main() {
+	if(music==undefined) return 0;
+	return FMODGMS_Chan_Get_Volume(objMain.channel);
+}
+
+function volume_set_main(_vol) {
+	FMODGMS_Chan_Set_Volume(objMain.channel, _vol);
 }
 
 #endregion

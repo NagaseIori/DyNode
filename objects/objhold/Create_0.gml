@@ -5,7 +5,7 @@ event_inherited();
 
 noteType = 2;
 holdAlpha = 0.8;
-bgLightness = 0.6;
+bgLightness = 0.45;
 
 image_yscale = 0.6 * global.scaleYAdjust;
 

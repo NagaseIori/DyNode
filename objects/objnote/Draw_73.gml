@@ -58,5 +58,5 @@ if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
 	draw_set_font(fDynamix16)
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_top);
-    draw_text(x, y+5, stateString + " " + string(depth) + " " + string(arrayPos))
+    draw_text(x, y+5, stateString + " " + string(priority) + " " + string(arrayPos))
 }

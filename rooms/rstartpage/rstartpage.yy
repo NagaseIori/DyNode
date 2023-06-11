@@ -13,6 +13,7 @@
     {"name":"inst_3FCB4889","path":"rooms/rStartPage/rStartPage.yy",},
     {"name":"inst_483B85AA","path":"rooms/rStartPage/rStartPage.yy",},
     {"name":"inst_7B577985","path":"rooms/rStartPage/rStartPage.yy",},
+    {"name":"inst_6FCDFC63","path":"rooms/rStartPage/rStartPage.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -27,7 +28,7 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_6C7B47DC","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"properties":[
             {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"propertyId":{"name":"scale","path":"objects/objUIButton/objUIButton.yy",},"value":"2",},
             {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"propertyId":{"name":"content","path":"objects/objUIButton/objUIButton.yy",},"value":"button_project_open",},
-          ],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":192.0,"y":608.0,},
+          ],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":192.0,"y":512.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_3FCB4889","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objTextBox","path":"objects/objTextBox/objTextBox.yy",},"properties":[
             {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objTextBox","path":"objects/objTextBox/objTextBox.yy",},"propertyId":{"name":"text","path":"objects/objTextBox/objTextBox.yy",},"value":"start_page_hint",},
             {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objTextBox","path":"objects/objTextBox/objTextBox.yy",},"propertyId":{"name":"scl","path":"objects/objTextBox/objTextBox.yy",},"value":"0.8",},
@@ -35,6 +36,10 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_483B85AA","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objUILangList","path":"objects/objUILangList/objUILangList.yy",},"properties":[
             {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objUIListInput","path":"objects/objUIListInput/objUIListInput.yy",},"propertyId":{"name":"lists","path":"objects/objUIListInput/objUIListInput.yy",},"value":"[\"zh-cn\", \"zh-tw\", \"en-us\"]",},
           ],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1344.0,"y":64.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_6FCDFC63","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"properties":[
+            {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"propertyId":{"name":"scale","path":"objects/objUIButton/objUIButton.yy",},"value":"1.5",},
+            {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},"propertyId":{"name":"content","path":"objects/objUIButton/objUIButton.yy",},"value":"button_about",},
+          ],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":192.0,"y":768.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Instance_bg","depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_7B577985","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objTriangle","path":"objects/objTriangle/objTriangle.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":0.0,},

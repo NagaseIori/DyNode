@@ -23,11 +23,10 @@ function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) cons
         return objMain.music!=undefined;
     }
     get_value = function () {
-        if(!active) return 0;
-        return FMODGMS_Chan_Get_Volume(objMain.channel);
+        return objMain.volume_get_main();
     }
     custom_action = function() {
-        FMODGMS_Chan_Set_Volume(objMain.channel, value);
+        objMain.volume_set_main(value);
     }
     
     update_active();
@@ -36,7 +35,7 @@ function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) cons
     atval = value;
 }
 
-function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) constructor {
+function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Hitsound Volume", 0, 0) constructor {
 	range = [0, 1];
 	active = true;
 	get_active = function() {
@@ -44,18 +43,30 @@ function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) 
 	}
     get_value = function () {
     	if(!active) return;
-    	if(!objMain.hitSoundOn)
-    		return 0;
-        return audio_sound_get_gain(sndHit);
+    	return objMain.volume_get_hitsound();
     }
     custom_action = function() {
-        if(value == 0) {
-        	objMain.hitSoundOn = false;
-        }
-        else {
-        	objMain.hitSoundOn = true;
-        	audio_sound_gain(sndHit, value, 0);
-        }
+        objMain.volume_set_hitsound(value);
+    }
+    
+    update_active();
+    value = get_value();
+    aval = value;
+    atval = value;
+}
+
+function BarBackgroundDim(_id, _x, _y) : Bar(_id, _x, _y, "Background Dim", 0, 0) constructor {
+	range = [0, 1];
+	active = true;
+	get_active = function() {
+		return instance_exists(objMain);
+	}
+	get_value = function () {
+    	if(!active) return;
+    	return objMain.bgDim;
+    }
+    custom_action = function() {
+    	objMain.bgDim = value;
     }
     
     update_active();

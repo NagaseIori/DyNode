@@ -143,7 +143,7 @@ function editor_snap_to_grid_y(_y, _side) {
         var _nowtp = timingPoints[_nowat];
         var _nowbeats = floor((_time - _nowtp.time) / _nowtp.beatLength);
         var _nexttime = (_nowat + 1 == _l ? objMain.musicLength:timingPoints[_nowat+1].time)
-        var _nowdivb = beatlineDivs[beatlineNowGroup][beatlineNowMode]; // divs per beat
+        var _nowdivb = objEditor.get_div(); // divs per beat
         var _nowdiv = 1 / _nowdivb * _nowtp.beatLength;
         var _nowdivbm = _nowdivb * _nowtp.meter; // divs per bar
         
@@ -208,8 +208,8 @@ function editor_snap_width(_width) {
 function editor_select_compare(ida, idb) {
 	if(!instance_exists(ida)) return idb;
 	else if(!instance_exists(idb)) return ida;
-	else if(ida.depth < idb.depth) return ida;
-	else if(ida.depth > idb.depth) return idb;
+	else if(ida.priority < idb.priority) return ida;
+	else if(ida.priority > idb.priority) return idb;
 	else if(ida.time < idb.time) return ida;
 	else if(ida.time > idb.time) return idb;
 	else return min(ida, idb);
@@ -612,4 +612,20 @@ function advanced_expr() {
 		if(_global)
 			note_activation_reset();
 	}
+}
+
+function editor_set_div() {
+	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
+	if(_div == "") return 0;
+	try {
+		_div = int64(_div);
+		if(_div<1) throw "Bad range.";
+		else {
+			objEditor.set_div(_div);
+		}
+	} catch (e) {
+		announcement_error("Please input a valid number.");
+		return -1;
+	}
+	return 1;
 }

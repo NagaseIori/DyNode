@@ -12,6 +12,7 @@ function map_close() {
 		instance_destroy(objPerfectIndc);
 		instance_destroy(objEditor);
 		instance_destroy(objShadow);
+		instance_destroy(objTopBar);
 		
 		time_source_destroy(timesourceResumeDelay);
 		time_source_destroy(timesourceDeactivateFlush);
@@ -748,7 +749,9 @@ function map_add_offset(_offset = "", record = false) {
 	}
 	notes_array_update();
 	
-	announcement_play("anno_add_offset_complete");
+	announcement_play(i18n_get("anno_add_offset", _offset));
+	
+	note_activation_reset();
 	
 	if(record)
 		operation_step_add(OPERATION_TYPE.OFFSET, _offset, -1);
@@ -857,7 +860,11 @@ function project_get_settings() {
 		defaultWidth: objEditor.editorDefaultWidth,
 		defaultWidthMode: objEditor.editorDefaultWidthMode,
 		ntime: objMain.nowTime,
-		fade: objMain.fadeOtherNotes
+		fade: objMain.fadeOtherNotes,
+		bgdim: objMain.bgDim,
+		pbspd: objMain.playbackSpeed,
+		hitvol: objMain.volume_get_hitsound(),
+		mainvol: objMain.volume_get_main()
 	};
 }
 
@@ -875,6 +882,19 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "fade")) {
 		objMain.fadeOtherNotes = str.fade;
+	}
+	if(variable_struct_exists(str, "bgdim")) {
+		objMain.bgDim = str.bgdim;
+	}
+	if(variable_struct_exists(str, "pbspd")) {
+		objMain.playbackSpeed = str.pbspd;
+		objMain.animTargetPlaybackSpeed = str.pbspd;
+	}
+	if(variable_struct_exists(str, "hitvol")) {
+		objMain.volume_set_hitsound(str.hitvol);
+	}
+	if(variable_struct_exists(str, "mainvol")) {
+		objMain.volume_set_main(str.mainvol);
 	}
 }
 
@@ -1075,6 +1095,7 @@ function load_config() {
 	_check_set(_con, "updatechannel");
 	_check_set(_con, "graphics");
 	_check_set(_con, "beatlineStyle");
+	_check_set(_con, "musicDelay");
 		
 	vars_init();
 	
@@ -1098,7 +1119,8 @@ function save_config() {
 		simplify: global.simplify,
 		updatechannel: global.updatechannel,
 		graphics: global.graphics,
-		beatlineStyle: global.beatlineStyle
+		beatlineStyle: global.beatlineStyle,
+		musicDelay: global.musicDelay
 	}, true));
 	
 }
@@ -1118,6 +1140,9 @@ function vars_init() {
 	global.fpsAdjust = BASE_FPS / global.fps;
 	global.scaleXAdjust = global.resolutionW / BASE_RES_W;
 	global.scaleYAdjust = global.resolutionH / BASE_RES_H;
+	
+	if(instance_exists(objMain))
+		with(objMain) _partsys_init();
 }
 
 function switch_debug_info() {
@@ -1180,6 +1205,29 @@ function stat_string(stype, ntype) {
 
 #endregion
 
+#region FMOD Functions
+
+function sfmod_channel_get_position(channel, spr) {
+    var _ret = FMODGMS_Chan_Get_Position(channel);
+    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3 - global.musicDelay;
+    return _ret;
+}
+
+function sfmod_channel_set_position(pos, channel, spr) {
+    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3 + global.musicDelay;
+    FMODGMS_Chan_Set_Position(channel, pos);
+}
+
+#endregion
+
+#region Misc Functions
+
+function game_end_confirm() {
+	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
+	if(_confirm_exit)
+		game_end();
+}
+
 function reset_scoreboard() {
 	with(objScoreBoard) {
 		nowScore = 0;
@@ -1190,19 +1238,13 @@ function reset_scoreboard() {
 	}
 }
 
-function sfmod_channel_get_position(channel, spr) {
-    var _ret = FMODGMS_Chan_Get_Position(channel);
-    _ret = _ret - global.FMOD_MP3_DELAY * objMain.usingMP3;
-    return _ret;
+function global_add_delay(delay) {
+	global.musicDelay += delay;
+	with(objMain)
+		if(nowPlaying)
+			nowTime -= delay;
+	save_config();
+	announcement_set("global_music_delay", global.musicDelay);
 }
 
-function sfmod_channel_set_position(pos, channel, spr) {
-    pos = pos + global.FMOD_MP3_DELAY * objMain.usingMP3;
-    FMODGMS_Chan_Set_Position(channel, pos);
-}
-
-function game_end_confirm() {
-	var _confirm_exit = instance_exists(objMain) ? show_question_i18n("confirm_close") : true;
-	if(_confirm_exit)
-		game_end();
-}
+#endregion
