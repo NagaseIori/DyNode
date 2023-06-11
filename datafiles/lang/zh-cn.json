@@ -4,6 +4,8 @@
   "content": {
     "title_new_project": "项目创建",
     "title_start_page": "开始页面",
+    "title_about": "关于",
+    "button_about": "关于",
     "button_project_create": "新建项目",
     "button_project_open": "打开已有项目",
     "button_goback": "返回上一页",
@@ -139,6 +141,7 @@
     "extra_sub_fix": "检测到 $0 个未被引用的 SUB 音符。\n这些 SUB 音符已被删除。",
     "expr_catch_error": "表达式执行错误。\n错误信息：$0\n错误表达式：$1",
     "advanced_expr_error": "表达式在计算时出现错误，请检查表达式语法。批量操作已中止。",
-    "global_music_delay": "全局音乐延迟"
+    "global_music_delay": "全局音乐延迟",
+    "credits": "Yet another Dynamix charting tool.\n\n[scale,1.2]by NagaseIori (NordLandeW)[scale,0.6]    [nord]\n\n[scale,1.2]繁体 / 英语翻译：Jmakxd[scale,0.6]    [jmak][/scale][/rainbow]\n\nDyNode 使用的大多数美术资源来自游戏 Dynamix ，由 C4Cat Entertainment Limited 制作。\n\nDyNode 以 MIT 许可协议进行许可。\n\nDyNode 使用 / 借鉴了以下项目的代码 / 资源 / 布局。\n\nScribble (under MIT License) Copyright (c) 2022 @jujuadams\n\nClean Shapes (under MIT License) Copyright (c) 2020 Juju Adams\n\nSNAP (under MIT License) Copyright (c) 2020 Juju Adams\n\nJSON (under MIT License) Copyright © 2013-2022 Niels Lohmann\n\ndelaunator-cpp (under MIT License) Copyright (c) 2018 Volodymyr Bilonenko\n\nFMODGMS (under BSD 2-Clause \"Simplified\" License) Copyright (c) 2016-2017, M.S.T.O.P.\n\nDynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd\n\nDynamaker (under MIT License) Copyright (c) 2019 omegaPi\n\nDynamix produced by C4Cat Entertainment Limited\n\nArcaea produced by lowiro limited\n"
   }
 }

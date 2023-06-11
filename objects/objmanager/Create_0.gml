@@ -138,7 +138,7 @@ _update_url = "";
 
 // Init finished
 
-if(debug_mode) room_goto(rMain);
+if(debug_mode) room_goto(rCredits);
 else
 	room_goto(rStartPage);
 
