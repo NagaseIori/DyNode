@@ -55,9 +55,14 @@ function expr_get_var(name) {
 	return variable_struct_get(global.__expr_symbols, name).value;
 }
 
-function expr_get_sym(name) {
-	if(!variable_struct_exists(global.__expr_symbols, name))
-		throw $"Variable {name} was not defined before reading.";
+function expr_get_sym(name, init_not_existed = false) {
+	if(!variable_struct_exists(global.__expr_symbols, name)) {
+		if(init_not_existed)
+			expr_set_var(name, 0);
+		else
+			throw $"Variable {name} was not defined before reading.";
+	}
+		
 	return variable_struct_get(global.__expr_symbols, name);
 }
 
@@ -183,7 +188,7 @@ function expr_eval(_expr) {
 				_ch = string_char_at(_expr, _j);
 			}
 			var _varn = string_copy(_expr, _i, _j - _i);
-			ds_stack_push(_stnum, expr_get_sym(_varn));
+			ds_stack_push(_stnum, expr_get_sym(_varn, true));
 			_i = _j-1;
 		}
 		// If a number
@@ -229,10 +234,10 @@ function expr_eval(_expr) {
 				_opt += _ch;
 				_ch = string_char_at(_expr, _i + 1);
 				if(!(is_alpha(_ch) || _ch = "_" || is_number(_ch) || _ch == "(" || _ch == " "))	
-					throw "Expression error: "+ _expr +" - an unexists operation.";
+					throw "Expression error: "+ _expr +" - an unexisted operation.";
 			}
 			if(!ds_map_exists(_prio, _opt))
-				throw "Expression error: "+ _expr +" - an unexists operation " + _opt + " .";
+				throw "Expression error: "+ _expr +" - an unexisted operation " + _opt + " .";
 				
 			
 			// Caculation
