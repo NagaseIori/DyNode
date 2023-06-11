@@ -64,6 +64,7 @@
     "anno_import_info_complete": "Imported beatmap information.",
     "box_set_chart_title": "Please enter the beatmap title",
     "box_set_change_default_width": "Please enter the default width value you would like to set",
+    "box_set_div": "请输入你想设置的节拍细分 x (1/x)",
     "box_q_osu_import_objects": "Import items in .osu file? (Would you like to do a conversion?)",
     "box_q_clear_objects": "Clear all original beatmap items? This cannot be undone!",
     "box_q_import_dymm_bpm": "Would you like to import the BPM information in the Dynamaker Modified Beatmap file?",
