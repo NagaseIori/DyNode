@@ -555,6 +555,7 @@ function advanced_expr() {
 		var _global = editorSelectCount == 0;
 		var _scope_str = _global?"你正在对谱面的所有音符进行高级操作。":"你正在对选定的音符进行高级操作。";
 		var _expr = get_string(_scope_str+"请填写表达式：", editorLastExpr);
+		if(_expr == "") return;
 		var _using_bar = string_last_pos(_expr, "bar");
 		var _success = 1;
 		
