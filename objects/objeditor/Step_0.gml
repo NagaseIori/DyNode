@@ -19,9 +19,9 @@
         }
         
         if(keycheck_down(192)) {
-        	editor_set_div();
-        	announcement_play(i18n_get("beatline_divs", string(get_div()),
-            	chr(beatlineNowGroup+ord("A"))), 3000, "beatlineDiv");
+        	if(editor_set_div())
+	        	announcement_play(i18n_get("beatline_divs", string(get_div()),
+	            	chr(beatlineNowGroup+ord("A"))), 3000, "beatlineDiv");
         }
         
         animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);

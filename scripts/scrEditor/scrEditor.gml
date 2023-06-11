@@ -616,10 +616,16 @@ function advanced_expr() {
 
 function editor_set_div() {
 	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
+	if(_div == "") return 0;
 	try {
-		_div = real(_div);
-		objEditor.set_div(_div);
+		_div = int64(_div);
+		if(_div<1) throw "Bad range.";
+		else {
+			objEditor.set_div(_div);
+		}
 	} catch (e) {
 		announcement_error("Please input a valid number.");
+		return -1;
 	}
+	return 1;
 }
