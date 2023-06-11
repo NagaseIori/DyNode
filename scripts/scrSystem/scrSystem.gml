@@ -860,7 +860,8 @@ function project_get_settings() {
 		defaultWidthMode: objEditor.editorDefaultWidthMode,
 		ntime: objMain.nowTime,
 		fade: objMain.fadeOtherNotes,
-		bgdim: objMain.bgDim
+		bgdim: objMain.bgDim,
+		pbspd: objMain.playbackSpeed
 	};
 }
 
@@ -881,6 +882,10 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "bgdim")) {
 		objMain.bgDim = str.bgdim;
+	}
+	if(variable_struct_exists(str, "pbspd")) {
+		objMain.playbackSpeed = str.pbspd;
+		objMain.animTargetPlaybackSpeed = str.pbspd;
 	}
 }
 
