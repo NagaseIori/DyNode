@@ -72,12 +72,12 @@
     {"name":"Utility","order":5,"path":"folders/Snitch/Utility.yy",},
     {"name":"Sounds","order":3,"path":"folders/Sounds.yy",},
     {"name":"Sprites","order":1,"path":"folders/Sprites.yy",},
+    {"name":"Avatars","order":34,"path":"folders/Sprites/Avatars.yy",},
     {"name":"Difficulties","order":30,"path":"folders/Sprites/Difficulties.yy",},
     {"name":"Fonts","order":32,"path":"folders/Sprites/Fonts.yy",},
     {"name":"Notes","order":21,"path":"folders/Sprites/Notes.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"Avatars","order":34,"path":"folders/Sprites/Avatars.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"SnapToXML","order":3,"path":"scripts/SnapToXML/SnapToXML.yy",},
