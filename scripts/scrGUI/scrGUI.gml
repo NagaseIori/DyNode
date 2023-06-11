@@ -18,6 +18,7 @@ function GUIElement() constructor {
     fontColor = c_white;
     // font = "sprMsdfNotoSans";
     font = "fMono16";
+    titlePadding = 5;
     
     // States
     inbound = false;
@@ -321,6 +322,8 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
     // amagnet = 0.01;
     aspdval = 0.4;
     
+    title = true;
+    
     static get_progress = function() {
         var _prog = clamp((mouse_x - x)/width, 0, 1);
         return _prog;
@@ -368,6 +371,13 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
             .Border(0, color_invert(color), 0)
             .Rounding(rounding)
             .Draw();
+        
+        if(title) {
+            scribble(content)
+                .starting_format("fMono16", c_white)
+                .align(fa_left, fa_bottom)
+                .draw(x, y - titlePadding);
+        }
     }
     
     static update = function() {
@@ -410,4 +420,13 @@ function GUIManager() constructor {
         delete global.__GUIManager;
         global.__GUIManager = undefined;
     }
+}
+
+function gui_manager_create() {
+    return new GUIManager();
+}
+
+function gui_manager_destroy() {
+    if(global.__GUIManager != undefined)
+        global.__GUIManager.destroy();
 }

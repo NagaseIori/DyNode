@@ -230,6 +230,7 @@
     {"id":{"name":"sprShadow","path":"sprites/sprShadow/sprShadow.yy",},},
     {"id":{"name":"objUIButton","path":"objects/objUIButton/objUIButton.yy",},},
     {"id":{"name":"FMODGMS_Util_SamplesToBeats","path":"scripts/FMODGMS_Util_SamplesToBeats/FMODGMS_Util_SamplesToBeats.yy",},},
+    {"id":{"name":"objTopBar","path":"objects/objTopBar/objTopBar.yy",},},
     {"id":{"name":"scribble_anim_jitter","path":"scripts/scribble_anim_jitter/scribble_anim_jitter.yy",},},
     {"id":{"name":"scribble_typist","path":"scripts/scribble_typist/scribble_typist.yy",},},
     {"id":{"name":"SnapStringToFile","path":"scripts/SnapStringToFile/SnapStringToFile.yy",},},

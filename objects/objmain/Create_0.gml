@@ -300,6 +300,12 @@ depth = 0;
 
 #endregion
 
+#region TopBar Init
+
+	topbar = instance_create_depth(0, 0, 0, objTopBar);
+
+#endregion
+
 // FMODGMS Related
 
     channel = FMODGMS_Chan_CreateChannel();
@@ -377,6 +383,31 @@ function time_music_sync() {
     if(bgVideoLoaded) {
     	time_source_start(timesourceSyncVideo);
     }
+}
+
+function volume_get_hitsound() {
+	if(!objMain.hitSoundOn)
+		return 0;
+    return audio_sound_get_gain(sndHit);
+}
+
+function volume_set_hitsound(_vol) {
+	if(_vol == 0) {
+    	objMain.hitSoundOn = false;
+    }
+    else {
+    	objMain.hitSoundOn = true;
+    	audio_sound_gain(sndHit, _vol, 0);
+    }
+}
+
+function volume_get_main() {
+	if(music==undefined) return 0;
+	return FMODGMS_Chan_Get_Volume(objMain.channel);
+}
+
+function volume_set_main(_vol) {
+	FMODGMS_Chan_Set_Volume(objMain.channel, _vol);
 }
 
 #endregion

@@ -12,6 +12,7 @@ function map_close() {
 		instance_destroy(objPerfectIndc);
 		instance_destroy(objEditor);
 		instance_destroy(objShadow);
+		instance_destroy(objTopBar);
 		
 		time_source_destroy(timesourceResumeDelay);
 		time_source_destroy(timesourceDeactivateFlush);
@@ -861,7 +862,9 @@ function project_get_settings() {
 		ntime: objMain.nowTime,
 		fade: objMain.fadeOtherNotes,
 		bgdim: objMain.bgDim,
-		pbspd: objMain.playbackSpeed
+		pbspd: objMain.playbackSpeed,
+		hitvol: objMain.volume_get_hitsound(),
+		mainvol: objMain.volume_get_main()
 	};
 }
 
@@ -886,6 +889,12 @@ function project_set_settings(str) {
 	if(variable_struct_exists(str, "pbspd")) {
 		objMain.playbackSpeed = str.pbspd;
 		objMain.animTargetPlaybackSpeed = str.pbspd;
+	}
+	if(variable_struct_exists(str, "hitvol")) {
+		objMain.volume_set_hitsound(str.hitvol);
+	}
+	if(variable_struct_exists(str, "mainvol")) {
+		objMain.volume_set_main(str.mainvol);
 	}
 }
 
