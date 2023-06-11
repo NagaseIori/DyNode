@@ -1241,7 +1241,8 @@ function reset_scoreboard() {
 function global_add_delay(delay) {
 	global.musicDelay += delay;
 	with(objMain)
-		nowTime -= delay;
+		if(nowPlaying)
+			nowTime -= delay;
 	save_config();
 	announcement_set("global_music_delay", global.musicDelay);
 }
