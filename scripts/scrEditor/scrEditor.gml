@@ -143,7 +143,7 @@ function editor_snap_to_grid_y(_y, _side) {
         var _nowtp = timingPoints[_nowat];
         var _nowbeats = floor((_time - _nowtp.time) / _nowtp.beatLength);
         var _nexttime = (_nowat + 1 == _l ? objMain.musicLength:timingPoints[_nowat+1].time)
-        var _nowdivb = beatlineDivs[beatlineNowGroup][beatlineNowMode]; // divs per beat
+        var _nowdivb = objEditor.get_div(); // divs per beat
         var _nowdiv = 1 / _nowdivb * _nowtp.beatLength;
         var _nowdivbm = _nowdivb * _nowtp.meter; // divs per bar
         
@@ -611,5 +611,15 @@ function advanced_expr() {
 		note_sort_all();
 		if(_global)
 			note_activation_reset();
+	}
+}
+
+function editor_set_div() {
+	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
+	try {
+		_div = real(_div);
+		objEditor.set_div(_div);
+	} catch (e) {
+		announcement_error("Please input a valid number.");
 	}
 }

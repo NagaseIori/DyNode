@@ -138,6 +138,7 @@ beatlineModes = [
 beatlineDivs = [[1, 2, 3, 4, 6, 8, 16, 12, 32, 64, 128], [1, 5, 7, 10, 14, 20, 28]];
 beatlineNowGroup = 0;
 beatlineNowMode = 3;
+beatlineDiv = -1;
 beatlineEnabled = array_create(28, 0);
 
 beatlineHardWidth = 6;
@@ -167,3 +168,27 @@ operationStackStep = [];
 operationPointer = -1;
 operationCount = 0;
 operationSyncTime = [INF, -INF];		// The earliest operated instance's time on last step
+
+// Methods
+
+/// Get editor's divisor number
+function get_div() {
+	return beatlineDiv;
+}
+
+/// Set editor's divisor to [_div]
+/// If [_match], then set the beatlineNowGroup and beatlineNowMode to match the divisor.
+function set_div(_div, _match = true) {
+	beatlineDiv = _div;
+	if(_match)
+	for(var i=0; i<2; i++)
+	for(var j=0; j<array_length(beatlineDivs[i]); j++) {
+		if(beatlineDivs[i][j] == _div) {
+			beatlineNowGroup = i;
+			beatlineNowMode = j;
+			return;
+		}
+	}
+}
+
+set_div(4);			// Default divisor set to 4

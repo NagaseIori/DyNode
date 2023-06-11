@@ -43,7 +43,7 @@
         
         while(((_nowTpTime - nowTime) * playbackSpeed <= _nh || _nowat == 0) && beatlineAlphaMul > 0.01) {
             for(var i = _nowBeats; i * _nowTp.beatLength + _nowTpTime + 1 < _nextTpTime && (i * _nowTp.beatLength + _nowTpTime - nowTime) * playbackSpeed <= _nh; i++) {
-                for(var j = 28; j >= 1; j--) if(beatlineEnabled[j]) {
+                for(var j = 28; j >= 1; j--) if(j == get_div() || beatlineEnabled[j]) {
                     for(var k = (j == 1? 0:1/j); k < 1 && (i + k) * _nowTp.beatLength + _nowTpTime < _nextTpTime; k += ((j&1)? 1:2)/j) {
                         _ny =  note_time_to_y(_nowTpTime + (i + k) * _nowTp.beatLength, 0);
                         _nyl = note_time_to_y(_nowTpTime + (i + k) * _nowTp.beatLength, 1);
@@ -53,11 +53,12 @@
                         _nowl = _nowhard ? beatlineHardLength : beatlineLength;
                         _nowh = _nowhard ? beatlineHardHeight : beatlineHeight;
                         _noww = _noww * 3;
-                        _nowl += beatlineLengthOffset[j];
+                        if(j<=28)
+                        	_nowl += beatlineLengthOffset[j];
                         if(_ny < 0 && _nyl > _nw / 2)
                             break;
                         
-                        var _ncol = beatlineColors[j];
+                        var _ncol = j<=28?beatlineColors[j]:0;
                         /// If beatline style is mono
                         if(beatlineStyleCurrent == BeatlineStyles.BS_MONO ||
                            beatlineStyleCurrent == BeatlineStyles.BS_MONOLONG) {
@@ -69,7 +70,10 @@
                            		_nowl = _nowhard ? beatlineHardLength : beatlineLengthLong;
                            }
                         
-                        draw_set_color(beatlineColors[j]);
+                        if(_ncol == 0)
+                        	_ncol = c_grey;
+                        
+                        // draw_set_color(beatlineColors[j]);
                         // LR
                         if(_nyl > targetLineBeside && _nyl <= _nw / 2) {
                             if(beatlineAlpha[1]>0.01) {
@@ -151,6 +155,9 @@
                             }
                         }
                     }
+                    
+                    if(j > 28)
+                    	j = 29;
                 }
             }
             _totalBeats += ceil((_nextTpTime - _nowTpTime) / (_nowTp.beatLength * _nowTp.meter));

@@ -13,9 +13,15 @@
         beatlineNowMode = clamp(beatlineNowMode, 0, array_length(beatlineModes[beatlineNowGroup])-1);
         
         if(_modchg != 0 || _groupchg != 0) {
-            announcement_play(i18n_get("beatline_divs", string(beatlineDivs[beatlineNowGroup][beatlineNowMode]),
+        	set_div(beatlineDivs[beatlineNowGroup][beatlineNowMode], false);
+            announcement_play(i18n_get("beatline_divs", string(get_div()),
             	chr(beatlineNowGroup+ord("A"))), 3000, "beatlineDiv");
-            
+        }
+        
+        if(keycheck_down(192)) {
+        	editor_set_div();
+        	announcement_play(i18n_get("beatline_divs", string(get_div()),
+            	chr(beatlineNowGroup+ord("A"))), 3000, "beatlineDiv");
         }
         
         animBeatlineTargetAlpha[0] += 0.7 * keycheck_down(vk_down);
@@ -28,11 +34,19 @@
         }
             
         
+        
         for(var i=0; i<=28; i++)
             beatlineEnabled[i] = 0;
-        var l = array_length(beatlineModes[beatlineNowGroup][beatlineNowMode]);
-        for(var i=0; i<l; i++)
-            beatlineEnabled[beatlineModes[beatlineNowGroup][beatlineNowMode][i]] = 1;
+        if(beatlineDivs[beatlineNowGroup][beatlineNowMode] == get_div()) {
+        	var l = array_length(beatlineModes[beatlineNowGroup][beatlineNowMode]);
+	        for(var i=0; i<l; i++)
+	            beatlineEnabled[beatlineModes[beatlineNowGroup][beatlineNowMode][i]] = 1;
+        }
+        else {
+        	beatlineEnabled[1] = 1;
+        	if(get_div()<=28)
+        		beatlineEnabled[get_div()] = 1;
+        }
     }
 
 #endregion

@@ -64,6 +64,7 @@
     "anno_import_info_complete": "导入谱面信息完毕。",
     "box_set_chart_title": "请输入新的谱面标题",
     "box_set_change_default_width": "请输入你想设置的默认宽度值",
+    "box_set_div": "请输入你想设置的节拍细分 x (1/x)",
     "box_q_osu_import_objects": "是否导入 .osu 中的物件？（要进行转谱吗？）",
     "box_q_clear_objects": "是否清除所有原谱面物件？此操作不可撤销！",
     "box_q_import_dymm_bpm": "是否导入 Dynamaker Modified 谱面文件中的变 BPM 数据？",
