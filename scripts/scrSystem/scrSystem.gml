@@ -610,8 +610,7 @@ function map_export_xml() {
 	
 	_str.prolog = {
 		attributes: {
-			version: "1.0",
-			encoding: "UTF-8"
+			version: "1.0"
 		}
 	};
 	
