@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.12.1"
+#macro VERSION "v0.1.12.2-dev"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -122,9 +122,12 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 		texture_prefetch(_texarr[i]);
 	}
 
-// Window Frame Init
+// Window Init
 
-_windowframe_inited = false;
+windowDisplayRatio = 0.7;
+window_set_borderless_fullscreen(global.fullscreen);
+if(os_type == os_windows)
+	window_command_hook(window_command_close);
 
 // Randomize
 

@@ -348,6 +348,32 @@ function file_path_fix(_file) {
 }
 #endregion
 
+#region WINDOWS
+
+function window_reset() {
+	var _ratio = min(display_get_width() / global.resolutionW, display_get_height() / global.resolutionH) * objManager.windowDisplayRatio;
+	var w = global.resolutionW * _ratio, h = global.resolutionH * _ratio
+    window_set_rectangle(
+		(display_get_width() - w) * 0.5,
+		(display_get_height() - h) * 0.5,
+		w,
+		h
+	);
+}
+
+function window_set_borderless_fullscreen(_state) {
+	if(_state && window_get_showborder()) {
+		window_set_showborder(false);
+		window_set_rectangle(0, 0, display_get_width(), display_get_height())
+	}
+	else if(!_state && !window_get_showborder()) {
+		window_reset();
+		window_set_showborder(true);
+	}
+}
+
+#endregion
+
 function in_between(x, l, r) {
 	return abs(r-x) + abs(x-l) == abs(r-l);
 }
