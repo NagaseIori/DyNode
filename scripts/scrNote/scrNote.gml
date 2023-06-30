@@ -157,7 +157,7 @@ function note_delete(_inst, _record = false) {
             chartNotesArray[i].time = INF;
         }
         else
-        	show_error("NOTE DELETE ERROR.", true);
+        	announcement_error("音符删除错误。请导出您的谱面以避免进一步的问题。请将该界面截图并反馈开发者以帮助我们修复这个问题。");
     }
     note_sort_request();
 }
@@ -216,8 +216,8 @@ function notes_reallocate_id() {
 
 function note_check_and_activate(_posistion_in_array) {
 	var _struct = objMain.chartNotesArray[_posistion_in_array];
+	_struct.inst.arrayPos = _posistion_in_array;
 	if(instance_exists(_struct.inst)) {
-		_struct.inst.arrayPos = _posistion_in_array;
 		return 0;
 	}
 	var _str = _struct;
@@ -228,7 +228,6 @@ function note_check_and_activate(_posistion_in_array) {
 	if(_note_inbound || _hold_intersect || _str.inst.state != _str.inst.stateOut) {
 		// instance_activate_object(_str.inst);
 		note_activate(_str.inst);
-		_str.inst.arrayPos = _posistion_in_array;
 		return 1;
 	}
 	else if(!_note_inbound && _outbound_check_t(_str.time, !(_str.side))) {
