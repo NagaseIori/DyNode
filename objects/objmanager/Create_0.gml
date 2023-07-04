@@ -191,5 +191,7 @@ else
 		}
 		, [], -1);
 	// time_source_start(tsConfigLiveChange);
+	
+	debugLayer = false;
 
 #endregion

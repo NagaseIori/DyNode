@@ -64,6 +64,12 @@ if(keycheck_down(vk_f10)) {
 	load_config();
 	announcement_play("anno_reload_config");
 }
+
+if(keycheck_down_ctrl(vk_f11)) {
+	debugLayer = !debugLayer;
+	show_debug_overlay(debugLayer);
+}
+	
 	
 
 if(room == rMain) {
