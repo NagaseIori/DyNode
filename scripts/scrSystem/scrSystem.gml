@@ -770,6 +770,12 @@ function project_load(_file = "") {
     var _buf = buffer_load(_file);
     var _contents = json_parse(buffer_read(_buf, buffer_text));
     buffer_delete(_buf);
+    var _propath = filename_path(_file);
+    
+    var _path_deal = function(_pth, _propath) {
+    	if(filename_path(_pth)=="") return _propath+_pth;
+    	return _pth;
+    }
     
     map_reset();
     
@@ -789,11 +795,11 @@ function project_load(_file = "") {
 	    else
 	    	map_load(chartPath);
 	    
-	    music_load(musicPath);
+	    music_load(_path_deal(musicPath, _propath));
 	    if(backgroundPath != "")
-	    	background_load(backgroundPath);
+	    	background_load(_path_deal(backgroundPath, _propath));
 	    if(videoPath != "")
-	    	background_load(videoPath);
+	    	background_load(_path_deal(videoPath, _propath));
 	    	
 	    timing_point_reset();
 	    objEditor.timingPoints = _contents.timingPoints;
@@ -845,11 +851,47 @@ function project_save_as(_file = "") {
 	
 	_contents.charts = map_get_struct();
 	
-	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
-	
 	objManager.projectPath = _file;
 	
+	try {
+		project_file_duplicate(_contents);
+	} catch (e) {
+		announcement_warning("复制音乐/背景/视频文件时出现错误。[scale, 0.7]\n"+string(e));
+	}
+	
+	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
+	
 	return 1;
+}
+
+function project_file_duplicate(_project) {
+	var _bg = _project.backgroundPath;
+	var _vd = _project.videoPath;
+	var _mu = _project.musicPath;
+	var _propath = filename_path(objManager.projectPath);
+	var _new_file_path = function (_old_path, _propath) {
+		return _propath + filename_name(_old_path);
+	}
+	var _nbg = _new_file_path(_bg, _propath);
+	var _nvd = _new_file_path(_vd, _propath);
+	var _nmu = _new_file_path(_mu, _propath);
+	
+	if(file_exists(_bg)) {
+		if(!file_exists(_nbg))
+			file_copy(_bg, _nbg);
+		_project.backgroundPath = filename_name(_nbg);
+	}
+	if(file_exists(_vd)) {
+		if(!file_exists(_nvd))
+			file_copy(_vd, _nvd);
+		_project.videoPath = filename_name(_nvd);
+	}
+	if(file_exists(_mu)) {
+		if(!file_exists(_nmu))
+			file_copy(_mu, _nmu);
+		_project.musicPath = filename_name(_nmu);
+	}
+	return;
 }
 
 function project_get_settings() {
