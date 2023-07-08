@@ -876,21 +876,24 @@ function project_file_duplicate(_project) {
 	var _nvd = _new_file_path(_vd, _propath);
 	var _nmu = _new_file_path(_mu, _propath);
 	
-	if(file_exists(_bg)) {
-		if(!file_exists(_nbg))
-			file_copy(_bg, _nbg);
-		_project.backgroundPath = filename_name(_nbg);
+	var _process = function(_pro, _varname, _file, _nfile) {
+		if(filename_path(_file)=="") return;	// If already relative path
+		if(file_exists(_file)) {
+			if(!file_exists(_nfile))
+				file_copy(_file, _nfile);
+			else if(md5_file(_nfile) != md5_file(_file)) {
+				_nfile = filename_path(_nfile)+filename_name_no_ext(_nfile)+"_"+random_id(4)+filename_ext(_nfile);
+				file_copy(_file, _nfile);
+			}
+			_nfile = filename_name(_nfile);
+			variable_struct_set(_pro, _varname, _nfile);
+			variable_instance_set(objManager, _varname, _nfile);
+		}
 	}
-	if(file_exists(_vd)) {
-		if(!file_exists(_nvd))
-			file_copy(_vd, _nvd);
-		_project.videoPath = filename_name(_nvd);
-	}
-	if(file_exists(_mu)) {
-		if(!file_exists(_nmu))
-			file_copy(_mu, _nmu);
-		_project.musicPath = filename_name(_nmu);
-	}
+	_process(_project, "backgroundPath", _bg, _nbg);
+	_process(_project, "videoPath", _vd, _nvd);
+	_process(_project, "musicPath", _mu, _nmu);
+	
 	return;
 }
 

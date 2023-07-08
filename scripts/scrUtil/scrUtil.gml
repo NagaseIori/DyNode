@@ -594,3 +594,7 @@ function assert(expression) {
 	if(!expression)
 		show_error("Assertion failed.", true);
 }
+
+function filename_name_no_ext(file_name) {
+	return string_replace(filename_name(file_name), filename_ext(file_name), "");
+}
