@@ -274,12 +274,14 @@ depth = 0;
 
 #endregion
 
+
+
 #region Scoreboard Init
 
     scbDepth = 1000;
-    scbLeft = create_scoreboard(resor_to_x(0.29), resor_to_y(0.54),
+    scbLeft = create_scoreboard(resor_to_x(295/1920), resor_to_y(555/1080),
         scbDepth, 7, fa_middle, 0);
-    scbRight = create_scoreboard(resor_to_x(0.88), resor_to_y(0.54),
+    scbRight = create_scoreboard(resor_to_x(1-295/1920), resor_to_y(555/1080),
         scbDepth, 0, fa_right, 3);
 
 #endregion
@@ -287,9 +289,9 @@ depth = 0;
 #region Perfect Indicator Init
 
     perfDepth = 1000;
-    perfLeft = instance_create_depth(resor_to_x(0.27), resor_to_y(0.64), 
+    perfLeft = instance_create_depth(resor_to_x(295/1920), resor_to_y(636/1080), 
         perfDepth, objPerfectIndc);
-    perfRight = instance_create_depth(resor_to_x(0.744), resor_to_y(0.64), 
+    perfRight = instance_create_depth(resor_to_x(1212/1920), resor_to_y(636/1080), 
         perfDepth, objPerfectIndc);
         
 #endregion
