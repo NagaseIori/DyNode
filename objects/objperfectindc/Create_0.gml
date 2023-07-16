@@ -21,7 +21,7 @@ alpha = 0.0;
 alphaMul = 1.0;
 bloomAlpha = 0.0;
 
-animSpeed = 0.2;
+animSpeed = 0.4;
 animTargetScore = 0;
 animTargetScaleMul = 1.0;
 animTargetAlphaMul = alphaMul;
@@ -30,7 +30,7 @@ animCurvChan = animcurve_get_channel(curvShadowFade, "curve1");
 animLastTime = 400; // ms
 
 function _hitit() {
-    scaleMul = 1.2;
+    scaleMul = 1.5;
     bloomAlpha = 1.0;
     nowTime = 0;
 }

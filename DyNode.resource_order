@@ -211,6 +211,7 @@
     {"name":"CleanLine","order":5,"path":"scripts/CleanLine/CleanLine.yy",},
     {"name":"shd_lazer","order":11,"path":"shaders/shd_lazer/shd_lazer.yy",},
     {"name":"__scribble_font_add_sprite","order":16,"path":"scripts/__scribble_font_add_sprite/__scribble_font_add_sprite.yy",},
+    {"name":"Scoreboard layout","order":3,"path":"notes/Scoreboard layout/Scoreboard layout.yy",},
     {"name":"scribble_font_get_default","order":9,"path":"scripts/scribble_font_get_default/scribble_font_get_default.yy",},
     {"name":"rMain","order":1,"path":"rooms/rMain/rMain.yy",},
     {"name":"scribble_anim_cycle","order":1,"path":"scripts/scribble_anim_cycle/scribble_anim_cycle.yy",},

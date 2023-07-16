@@ -12,4 +12,4 @@ alpha = lerp_a(alpha, animTargetAlpha, animSpeed);
 nowString = string_format(abs(nowScore), preZero, 0);
 nowString = string_replace_all(nowString, " ", "0");
 
-if(SCOREBOARD_DEBUG) alpha = 1;
+if(debug_mode && SCOREBOARD_DEBUG) alpha = 1;

@@ -151,7 +151,7 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
-    titleAlphaL = 0.7;
+    titleAlphaL = 0.5;
     titleAlpha = titleAlphaL;
     animTargetTitleAlpha = titleAlphaL;
     

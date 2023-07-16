@@ -404,6 +404,8 @@ function lerp_lim_a(from, to, amount, limit) {
 
 function lerp_a(from, to, amount) {
     return lerp_safe(from, to, amount * global.fpsAdjust);
+    // amount *= global.fpsAdjust;		// Keep the parameters effect
+    // return lerp_safe(from, to, 1 - power(amount, delta_time/1000000*BASE_FPS))
 }
 
 function lerp_safe(from, to, amount) {

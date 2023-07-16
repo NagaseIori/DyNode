@@ -20,7 +20,7 @@ align = fa_middle;
 scoreLimit = 0;
 alpha = 0;
 
-animSpeed = 0.2;
+animSpeed = 0.3;
 animTargetScore = 0;
 animTargetScaleMul = 1.0;
 animTargetAlpha = 0;
@@ -35,7 +35,7 @@ scale = SCOREBOARD_NUMBER_WIDTH / (sprWidth - SCOREBOARD_NUMBER_SPRITE_PADDING *
 visible = true;
 
 function _update_score(_scr, _hit = true, _force = false) {
-    if(_hit) scaleMul = 1.1;
+    if(_hit) scaleMul = 1.2;
     animTargetScore = _scr;
     if(_force) nowScore = _scr;
 }
