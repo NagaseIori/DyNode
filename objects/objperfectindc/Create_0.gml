@@ -7,6 +7,9 @@
 #macro PERFECTINDC_ALPHABETS_Y 53
 #macro PERFECTINDC_DEBUG true
 
+#macro PERFECTINDC_ANIMATION_SPEED 0.35
+#macro PERFECTINDC_ANIMATION_LASTTIME 400       // in ms
+
 nowTime = 9999;
 lastTime = 3000; // ms
 lastTimeBloom = 100;
@@ -21,16 +24,14 @@ alpha = 0.0;
 alphaMul = 1.0;
 bloomAlpha = 0.0;
 
-animSpeed = 0.4;
 animTargetScore = 0;
 animTargetScaleMul = 1.0;
 animTargetAlphaMul = alphaMul;
 
 animCurvChan = animcurve_get_channel(curvShadowFade, "curve1");
-animLastTime = 400; // ms
 
 function _hitit() {
-    scaleMul = 1.5;
+    scaleMul = 1.3;
     bloomAlpha = 1.0;
     nowTime = 0;
 }

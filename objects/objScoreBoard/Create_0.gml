@@ -35,7 +35,7 @@ scale = SCOREBOARD_NUMBER_WIDTH / (sprWidth - SCOREBOARD_NUMBER_SPRITE_PADDING *
 visible = true;
 
 function _update_score(_scr, _hit = true, _force = false) {
-    if(_hit) scaleMul = 1.2;
+    if(_hit) scaleMul = 1.1;
     animTargetScore = _scr;
     if(_force) nowScore = _scr;
 }
