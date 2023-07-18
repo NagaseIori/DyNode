@@ -310,7 +310,7 @@ depth = 0;
 
 // FMODGMS Related
 
-    channel = FMODGMS_Chan_CreateChannel();
+    channel = undefined;
     music = undefined;
     sampleRate = 0;
     channelPaused = false;	// Only used for time correction
@@ -412,4 +412,23 @@ function volume_set_main(_vol) {
 	FMODGMS_Chan_Set_Volume(objMain.channel, _vol);
 }
 
+function _create_channel() {
+	FMODGMS_Chan_RemoveChannel(channel);
+	channel = FMODGMS_Chan_CreateChannel();
+	if(USE_DSP_PITCHSHIFT)
+		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+}
+
+function _set_channel_speed(spd) {
+	FMODGMS_Chan_Set_Pitch(channel, spd);
+	if(USE_DSP_PITCHSHIFT) {
+		FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_PITCH, 1.0/spd);
+		FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
+		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+	}
+	
+}
+
 #endregion
+
+_create_channel();	// Channel init.

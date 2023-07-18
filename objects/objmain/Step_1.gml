@@ -14,7 +14,7 @@ var _music_resync_request = false;
     if(_muspdchange != 0) {
         musicSpeed += 0.1 * _muspdchange;
         musicSpeed = max(musicSpeed, 0.1);
-        FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
+        _set_channel_speed(musicSpeed);
         
         announcement_play(i18n_get("anno_music_speed") + ": x" + string_format(musicSpeed, 1, 1), 3000, "music_speed");
     }
@@ -127,10 +127,9 @@ var _music_resync_request = false;
         if(FMODGMS_Chan_Is_Playing(channel)<=0 && nowPlaying) {
         	
             // Channel gets invalid, create another one.
-            FMODGMS_Chan_RemoveChannel(channel);
-            channel = FMODGMS_Chan_CreateChannel();
+            _create_channel();
             FMODGMS_Snd_PlaySound(music, channel);
-            FMODGMS_Chan_Set_Pitch(channel, musicSpeed);
+            _set_channel_speed(musicSpeed);
             FMODGMS_Chan_PauseChannel(channel);
             nowTime = musicLength;
             animTargetTime = musicLength;
