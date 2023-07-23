@@ -16,7 +16,7 @@ function ButtonSideSwitcher(_id, _x, _y, _side) : StateButton(_id, _x, _y, "", 0
     }
 }
 
-function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) constructor {
+function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, i18n_get("tab_main_volume"), 0, 0) constructor {
 	range = [0, 1];
 // 	updateColddown = 200;
     get_active = function () {
@@ -35,7 +35,7 @@ function BarVolumeMain(_id, _x, _y) : Bar(_id, _x, _y, "Main Volume", 0, 0) cons
     atval = value;
 }
 
-function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Hitsound Volume", 0, 0) constructor {
+function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, i18n_get("tab_hitsound_volume"), 0, 0) constructor {
 	range = [0, 1];
 	active = true;
 	get_active = function() {
@@ -55,7 +55,7 @@ function BarVolumeHitSound(_id, _x, _y) : Bar(_id, _x, _y, "Hitsound Volume", 0,
     atval = value;
 }
 
-function BarBackgroundDim(_id, _x, _y) : Bar(_id, _x, _y, "Background Dim", 0, 0) constructor {
+function BarBackgroundDim(_id, _x, _y) : Bar(_id, _x, _y, i18n_get("tab_bg_dim"), 0, 0) constructor {
 	range = [0, 1];
 	active = true;
 	get_active = function() {

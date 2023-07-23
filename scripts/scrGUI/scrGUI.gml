@@ -16,7 +16,7 @@ function GUIElement() constructor {
     alpha = 0.85;
     fontSize = 16;
     fontColor = c_white;
-    // font = "sprMsdfNotoSans";
+    // fontCJK = "sprMsdfNotoSans";
     font = "fMono16";
     titlePadding = 5;
     
@@ -373,7 +373,15 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
             .Draw();
         
         if(title) {
-            scribble(content)
+            if(has_cjk(content)) {
+                scribble(cjk_prefix() + content)
+                    .starting_format(font, c_white)
+                    .msdf_shadow(c_black, 0.5, 0, 3, 2)
+                    .scale(0.8, 0.8)
+                    .align(fa_left, fa_bottom)
+                    .draw(x, y - titlePadding);
+            }
+            else scribble(content)
                 .starting_format("fMono16", c_white)
                 .align(fa_left, fa_bottom)
                 .draw(x, y - titlePadding);

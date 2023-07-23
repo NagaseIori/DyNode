@@ -313,9 +313,10 @@ depth = 0;
     channel = undefined;
     music = undefined;
     sampleRate = 0;
-    channelPaused = false;	// Only used for time correction
+    channelPaused = false;		// Only used for time correction
     musicLength = 0;
-    usingMP3 = false;		// For Latency Workaround
+    usingMP3 = false;			// For Latency Workaround
+    usingPitchShift = false;
     
 // Tool Related
 
@@ -385,6 +386,22 @@ function time_music_sync() {
     if(bgVideoLoaded) {
     	time_source_start(timesourceSyncVideo);
     }
+}
+
+// Switch whether channel using Pitch Shift effect.
+function music_effect_switch(enable) {
+	if(enable != usingPitchShift) {
+		usingPitchShift = enable;
+		if(channel>=0) {
+			if(enable) {
+				FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+			}
+			else {
+				FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
+			}
+		}
+		
+	}
 }
 
 function volume_get_hitsound() {

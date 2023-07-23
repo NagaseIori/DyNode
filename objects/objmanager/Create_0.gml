@@ -17,7 +17,7 @@
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
-#macro USE_DSP_PITCHSHIFT false
+#macro USE_DSP_PITCHSHIFT (objMain.usingPitchShift)
 #macro NULL_FUN function() {}
 math_set_epsilon(0.00000001);				// 1E-8
 
