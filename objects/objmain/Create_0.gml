@@ -389,12 +389,12 @@ function time_music_sync() {
 }
 
 // Switch whether channel using Pitch Shift effect.
-function music_effect_switch(enable) {
+function music_pitchshift_switch(enable) {
 	if(enable != usingPitchShift) {
 		usingPitchShift = enable;
 		if(channel>=0) {
 			if(enable) {
-				FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+				FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 1);
 			}
 			else {
 				FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
@@ -441,7 +441,7 @@ function _set_channel_speed(spd) {
 	if(USE_DSP_PITCHSHIFT) {
 		FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_PITCH, 1.0/spd);
 		FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
-		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 1);
 	}
 	
 }

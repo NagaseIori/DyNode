@@ -908,7 +908,8 @@ function project_get_settings() {
 		bgdim: objMain.bgDim,
 		pbspd: objMain.playbackSpeed,
 		hitvol: objMain.volume_get_hitsound(),
-		mainvol: objMain.volume_get_main()
+		mainvol: objMain.volume_get_main(),
+		pitchshift: objMain.usingPitchShift
 	};
 }
 
@@ -939,6 +940,9 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "mainvol")) {
 		objMain.volume_set_main(str.mainvol);
+	}
+	if(variable_struct_exists(str, "pitchshift")) {
+		objMain.music_pitchshift_switch(str.pitchshift);
 	}
 }
 

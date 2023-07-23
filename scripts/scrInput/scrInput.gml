@@ -1,6 +1,7 @@
 
 function InputManager() constructor {
     #macro INPUT_GROUP_DEFAULT_NAME "default"
+    #macro INPUT_MOUSE_HOLD_THRESHOLD 300 // Time Threshold to judge if a mouse press is a hold
     
     // In-functions
     
@@ -16,7 +17,6 @@ function InputManager() constructor {
         mouseHoldTime = array_create(mouseButtonCount, 0);
         mouseClick = array_create(mouseButtonCount, -1);
         
-        mouseHoldThreshold = 125;
         mouseHoldDistanceThreshold = 20;
         mouseHoldClear = true;
     }
@@ -43,8 +43,6 @@ function InputManager() constructor {
     mouseClick = array_create(mouseButtonCount, -1);
             // -1 = no input; 0 = not sure if is click (pressing); 1 = is click
     
-    mouseHoldThreshold = 125;
-            // Time Threshold to judge if a mouse press is a hold
     mouseHoldDistanceThreshold = 20;
             // Distance Threshold to judge if a mouse press is a drag (also hold)
     mouseHoldClear = true;
@@ -83,7 +81,7 @@ function InputManager() constructor {
                 
             
             if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
-                mouseClick[i] = !(mouseHoldTime[i] > mouseHoldThreshold);
+                mouseClick[i] = !(mouseHoldTime[i] > INPUT_MOUSE_HOLD_THRESHOLD);
             }
             else if(mouseHoldClear) mouseClick[i] = -1;
             
@@ -152,13 +150,13 @@ function mouse_clear_hold() {
 }
 
 function mouse_ishold_l() {
-    return global.__InputManager.mouseHoldTime[0] > global.__InputManager.mouseHoldThreshold;
+    return global.__InputManager.mouseHoldTime[0] > INPUT_MOUSE_HOLD_THRESHOLD;
 }
 function mouse_isclick_l() {
     return global.__InputManager.mouseClick[0] > 0;
 }
 function mouse_ishold_r() {
-    return global.__InputManager.mouseHoldTime[1] > global.__InputManager.mouseHoldThreshold;
+    return global.__InputManager.mouseHoldTime[1] > INPUT_MOUSE_HOLD_THRESHOLD;
 }
 function mouse_isclick_r() {
     return global.__InputManager.mouseClick[1] > 0;

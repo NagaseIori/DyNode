@@ -101,7 +101,8 @@ display_reset(global.graphics.AA, global.graphics.VSync);
     if(global.__DSP_Effect < 0)
     	announcement_error($"FMOD Cannot create pitchshift effect.\nMessage:{FMODGMS_Util_GetErrorMessage()}");
     else {
-    	FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_FFTSIZE, 4096);
+    	// FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_FFTSIZE, 4096);
+    	// FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_MAXCHANNELS, 10);
     }
     // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     
