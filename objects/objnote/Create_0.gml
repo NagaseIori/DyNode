@@ -266,6 +266,12 @@ image_yscale = global.scaleYAdjust;
 		if(_outscreen_check(x, y, side))
 			announcement_warning("warning_note_outbound", 5000, "wob");
 	}
+	
+	// Change to selected state.
+	function select() {
+		state = stateSelected;
+		state();
+	}
     
     // _outbound_check was moved to scrNote
 
@@ -427,11 +433,13 @@ image_yscale = global.scaleYAdjust;
             
             
             if(mouse_check_button_released(mb_left)) {
+                var _toSelectState = objEditor.singlePaste;
             	if(editor_get_editmode() > 0)
                 	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
-                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true);
+                		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true,
+                                    _toSelectState);
                 		instance_destroy();
                 		return;
                 	}
@@ -442,7 +450,8 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
                     return;
                 }
-                build_note(random_id(9), noteType, time, position, width, -1, side, false, true);
+                var _note = build_note(random_id(9), noteType, time, position, width, -1, side, false, true,
+                            _toSelectState);
                 
                 if(_outscreen_check(x, y, side))
                 	announcement_warning("warning_note_outbound");
@@ -581,6 +590,13 @@ image_yscale = global.scaleYAdjust;
 		    	announcement_play(i18n_get("copy_width", string_format(width, 1, 2)));
 		    }
 		    
+		    // If double click then send attach request.
+		    if(mouse_isclick_double(0) && _mouse_inbound_check(1)) {
+                if(noteType <= 2)
+		    	    objEditor.attach(id);
+                else
+                    objEditor.attach(finst);
+		    }
 		    
 		    // Pos / Time Adjustment
 		    var _poschg = (keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left)) * (shift_ishold() ? 0.05: 0.01);

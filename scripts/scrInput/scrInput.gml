@@ -2,6 +2,7 @@
 function InputManager() constructor {
     #macro INPUT_GROUP_DEFAULT_NAME "default"
     #macro INPUT_MOUSE_HOLD_THRESHOLD 300 // Time Threshold to judge if a mouse press is a hold
+    #macro INPUT_MOUSE_DOUBLE_CLICK_THRESHOLD 500
     
     // In-functions
     
@@ -23,6 +24,8 @@ function InputManager() constructor {
     
     static _pressclear = function () {
         array_fill(mouseClick, -1, 0, 2);
+        array_fill(mouseClickDouble, -1, 0, 2);
+        array_fill(mouseClickLastTime, 0, 0, 2);
     }
     
     static _holdclear = function () {
@@ -41,12 +44,15 @@ function InputManager() constructor {
         lastMousePressedPos[i] = [0, 0];
     mouseHoldTime = array_create(mouseButtonCount, 0);
     mouseClick = array_create(mouseButtonCount, -1);
-            // -1 = no input; 0 = not sure if is click (pressing); 1 = is click
+    mouseClickDouble = array_create(mouseButtonCount, -1);
+        // -1 = no input; 0 = not sure if is click (pressing); 1 = is click
+    mouseClickLastTime = array_create(mouseButtonCount, 0);
     
     mouseHoldDistanceThreshold = 20;
             // Distance Threshold to judge if a mouse press is a drag (also hold)
     mouseHoldClear = true;
             // Whethere to clear the state of mouse hold
+    
     
     // For Input Reset
     windowNFocusTime = 0;
@@ -72,7 +78,12 @@ function InputManager() constructor {
         
         for(var i=0; i<mouseButtonCount; i++) {
             var _nbut = mouseButtons[i];
-            if(mouseClick[i] == 1) mouseClick[i] = -1;
+            if(mouseClick[i] == 1) {
+                mouseClick[i] = -1;
+            }
+            if(mouseClickDouble[i] == 1) {
+                mouseClickDouble[i] = -1;
+            }
             if(mouse_check_button_pressed(_nbut)) {
                 lastMousePressedPos[i][0] = mouse_x;
                 lastMousePressedPos[i][1] = mouse_y;
@@ -81,13 +92,31 @@ function InputManager() constructor {
                 
             
             if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
-                mouseClick[i] = !(mouseHoldTime[i] > INPUT_MOUSE_HOLD_THRESHOLD);
+                var clicking = !(mouseHoldTime[i] > INPUT_MOUSE_HOLD_THRESHOLD)
+                if(clicking) {
+                    var double_clicking = get_timer() - mouseClickLastTime[i] < 
+                            INPUT_MOUSE_DOUBLE_CLICK_THRESHOLD * 1000;
+                    if(!double_clicking) {
+                        mouseClickLastTime[i] = get_timer();
+                        // show_debug_message($"Set timer {mouseClickLastTime[i]}");
+                        mouseClick[i] = 1;
+                    }
+                    else {
+                        mouseClick[i] = 1;
+                        mouseClickDouble[i] = 1;
+                        mouseClickLastTime[i] = 0;
+                    }
+                }
+                else {
+                    mouseClick[i] = -1;
+                }
             }
             else if(mouseHoldClear) mouseClick[i] = -1;
             
             if(mouse_check_button(_nbut) && !mouseHoldClear) {
                 mouseHoldTime[i] += delta_time / 1000;
-                if(point_distance(mouse_x, mouse_y, lastMousePressedPos[i][0], lastMousePressedPos[i][1]) > mouseHoldDistanceThreshold)
+                if(point_distance(mouse_x, mouse_y, lastMousePressedPos[i][0], lastMousePressedPos[i][1]) 
+                    > mouseHoldDistanceThreshold)
                     mouseHoldTime[i] = 1000000;
             }
             else {
@@ -160,6 +189,9 @@ function mouse_ishold_r() {
 }
 function mouse_isclick_r() {
     return global.__InputManager.mouseClick[1] > 0;
+}
+function mouse_isclick_double(button) {
+    return global.__InputManager.mouseClickDouble[button] > 0;
 }
 function mouse_clear_click() {
     global.__InputManager._pressclear();
