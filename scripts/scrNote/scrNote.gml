@@ -146,19 +146,25 @@ function note_delete(_inst, _record = false) {
 	if(_inst.arrayPos == -1) {
 		return;
 	}
-    with(objMain) {
-        var i = _inst.arrayPos;
-        if(chartNotesArray[i].inst == _inst) {
-        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
-        	if(_record)
-        		operation_step_add(OPERATION_TYPE.REMOVE, SnapDeepCopy(chartNotesArray[i]), -1);
-        	
-        	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
-            chartNotesArray[i].time = INF;
-        }
-        else
-        	announcement_error("音符删除错误。请导出您的谱面以避免进一步的问题。请将该界面截图并反馈开发者以帮助我们修复这个问题。");
-    }
+	try {
+		with(objMain) {
+	        var i = _inst.arrayPos;
+	        if(chartNotesArray[i].inst == _inst) {
+	        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
+	        	if(_record)
+	        		operation_step_add(OPERATION_TYPE.REMOVE, SnapDeepCopy(chartNotesArray[i]), -1);
+	        	
+	        	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
+	            chartNotesArray[i].time = INF;
+	        }
+	        else {
+	        	throw "Note id in array not matching instance id."
+	        }
+	    }
+	} catch (e) {
+		announcement_error($"音符删除出现错误。请将谱面导出并备份以避免问题进一步恶化。您可以选择将该信息反馈开发者以帮助我们解决问题。错误信息：{e}");
+	}
+    
     note_sort_request();
 }
 
