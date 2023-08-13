@@ -137,6 +137,9 @@ depth = 0;
     
     hideScoreboard = true;			// hide score board under editor mode
     hitSoundOn = false;
+
+    volumeMain = 1.0;           // Music sound volume
+    volumeHit = 1.0;            // Hit sound volume
     
     showDebugInfo = debug_mode;
     showStats = false;
@@ -407,7 +410,7 @@ function music_pitchshift_switch(enable) {
 function volume_get_hitsound() {
 	if(!objMain.hitSoundOn)
 		return 0;
-    return audio_sound_get_gain(sndHit);
+    return volumeHit;
 }
 
 function volume_set_hitsound(_vol) {
@@ -417,27 +420,30 @@ function volume_set_hitsound(_vol) {
     else {
     	objMain.hitSoundOn = true;
     	audio_sound_gain(sndHit, _vol, 0);
+        volumeHit = _vol;
     }
 }
 
 function volume_get_main() {
 	if(music==undefined) return 0;
-	return FMODGMS_Chan_Get_Volume(objMain.channel);
+	return volumeMain;
 }
 
 function volume_set_main(_vol) {
-	FMODGMS_Chan_Set_Volume(objMain.channel, _vol);
+	volumeMain = _vol;
+    FMODGMS_Chan_Set_Volume(channel, _vol);
 }
 
 function _create_channel() {
 	FMODGMS_Chan_RemoveChannel(channel);
 	channel = FMODGMS_Chan_CreateChannel();
 	if(USE_DSP_PITCHSHIFT)
-		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+    FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
 }
 
 function _set_channel_speed(spd) {
-	FMODGMS_Chan_Set_Pitch(channel, spd);
+    FMODGMS_Chan_Set_Pitch(channel, spd);
+    FMODGMS_Chan_Set_Volume(channel, volumeMain);
 	if(USE_DSP_PITCHSHIFT) {
 		FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_PITCH, 1.0/spd);
 		FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
