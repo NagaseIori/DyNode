@@ -677,6 +677,7 @@ function advanced_expr() {
 	}
 }
 
+// Advanced divisor setter
 function editor_set_div() {
 	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
 	if(_div == "") return 0;
@@ -693,4 +694,36 @@ function editor_set_div() {
 		return -1;
 	}
 	return 1;
+}
+
+// error correction
+
+function error_correction(_limit) {
+	if(_limit <= 0) {
+		announcement_error($"不合法的修正参数{_limit}。请使用大于零的误差。");
+		return;
+	}
+	with(objMain) {
+		instance_activate_object(objNote);
+		var notes_to_fix = [];
+		for(var i=0, l=array_length(chartNotesArray); i < l; i++) {
+			if(i==0) {
+				array_push(notes_to_fix, chartNotesArray[i]);
+			}
+			else {
+				if(chartNotesArray[i].time - notes_to_fix[0].time <= _limit)
+					array_push(chartNotesArray[i]);
+				else {
+					if(array_length(notes_to_fix) > 1) {
+						for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
+							notes_to_fix[_i].time = notes_to_fix[0].time;
+							notes_to_fix[_i].inst.set_prop(notes_to_fix[_i]);
+						}
+					}
+					notes_to_fix = [chartNotesArray[i]];
+				}
+			}
+		}
+		note_activation_reset();
+	}
 }
