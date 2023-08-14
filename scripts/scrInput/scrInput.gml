@@ -93,7 +93,6 @@ function InputManager() constructor {
                 lastMousePressedPos[i][0][1] = mouse_y;
                 mouseClick[i] = 0;
             }
-                
             
             if(mouse_check_button_released(_nbut) && !mouseHoldClear && mouseClick[i] == 0) {
                 var clicking = !(mouseHoldTime[i] > INPUT_MOUSE_HOLD_THRESHOLD)
