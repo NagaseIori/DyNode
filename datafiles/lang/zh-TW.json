@@ -83,6 +83,7 @@
     "fileformat_chart": "支持的譜面文件",
     "timing_point_create_with_note_question": "檢測到你已經選擇一個 Note，它的時間是: $0 ms。要以這個時間作為 offset 嗎？",
     "export_fix_decimal_question": "導出時是否將導出的所有音符時間對毫秒取整？\n使用該功能導出後的譜面將無法在再次導入後正常編輯。",
+    "export_fix_error_question": "是否对导出的谱面进行误差修正？\n该功能将误差在 2 毫秒内的音符对齐。",
     "export_to_dym_question": "是否導出用於 Dynamaker-modified 的相關信息？使用該選項導出的譜面僅能用於編輯器編輯。\n若選擇“是”，所有已經設置的 Bar 信息將由 DyNode 以默認方式覆寫。",
     "export_timing_error": "你還沒有配置 Timing ，因此無法導出譜面。",
     "anno_simplify": "簡化模式",
