@@ -14,7 +14,7 @@ function InputManager() constructor {
         mouseButtonCount = array_length(mouseButtons);
         lastMousePressedPos = [];
         for(var i=0; i<mouseButtonCount; i++)
-            lastMousePressedPos[i] = [0, 0];
+            lastMousePressedPos[i] = [[0, 0], [0, 0]];
         mouseHoldTime = array_create(mouseButtonCount, 0);
         mouseClick = array_create(mouseButtonCount, -1);
         
@@ -41,7 +41,7 @@ function InputManager() constructor {
     mouseButtonCount = array_length(mouseButtons);
     lastMousePressedPos = [];
     for(var i=0; i<mouseButtonCount; i++)
-        lastMousePressedPos[i] = [0, 0];
+        lastMousePressedPos[i] = [[0, 0], [0, 0]];
     mouseHoldTime = array_create(mouseButtonCount, 0);
     mouseClick = array_create(mouseButtonCount, -1);
     mouseClickDouble = array_create(mouseButtonCount, -1);
@@ -61,6 +61,8 @@ function InputManager() constructor {
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
     checkGroup = "default";     // the focusing group
+
+    _ioclear();
     
     static step = function () {
         windowNFocusTime = delta_time / 1000;
@@ -85,8 +87,10 @@ function InputManager() constructor {
                 mouseClickDouble[i] = -1;
             }
             if(mouse_check_button_pressed(_nbut)) {
-                lastMousePressedPos[i][0] = mouse_x;
-                lastMousePressedPos[i][1] = mouse_y;
+                lastMousePressedPos[i][1][0] = lastMousePressedPos[i][0][0];
+                lastMousePressedPos[i][1][1] = lastMousePressedPos[i][0][1];
+                lastMousePressedPos[i][0][0] = mouse_x;
+                lastMousePressedPos[i][0][1] = mouse_y;
                 mouseClick[i] = 0;
             }
                 
@@ -115,7 +119,7 @@ function InputManager() constructor {
             
             if(mouse_check_button(_nbut) && !mouseHoldClear) {
                 mouseHoldTime[i] += delta_time / 1000;
-                if(point_distance(mouse_x, mouse_y, lastMousePressedPos[i][0], lastMousePressedPos[i][1]) 
+                if(point_distance(mouse_x, mouse_y, lastMousePressedPos[i][0][0], lastMousePressedPos[i][0][1]) 
                     > mouseHoldDistanceThreshold)
                     mouseHoldTime[i] = 1000000;
             }
@@ -140,21 +144,21 @@ function mouse_get_delta_y() {
 
 // Get mouse's delta x from last pressed mb_left frame
 function mouse_get_delta_last_x_l() {
-    return mouse_x - global.__InputManager.lastMousePressedPos[0][0];
+    return mouse_x - global.__InputManager.lastMousePressedPos[0][0][0];
 }
 function mouse_get_delta_last_y_l() {
-    return mouse_y - global.__InputManager.lastMousePressedPos[0][1];
+    return mouse_y - global.__InputManager.lastMousePressedPos[0][0][1];
 }
 
 function mouse_get_delta_last_x_r() {
-    return mouse_x - global.__InputManager.lastMousePressedPos[1][0];
+    return mouse_x - global.__InputManager.lastMousePressedPos[1][0][0];
 }
 function mouse_get_delta_last_y_r() {
-    return mouse_y - global.__InputManager.lastMousePressedPos[1][1];
+    return mouse_y - global.__InputManager.lastMousePressedPos[1][0][1];
 }
 
 function mouse_get_last_pos(button) {
-    return global.__InputManager.lastMousePressedPos[button];
+    return global.__InputManager.lastMousePressedPos[button][0];
 }
 
 function mouse_inbound(x1, y1, x2, y2) {
@@ -164,14 +168,24 @@ function mouse_square_inbound(x, y, a) {
     return pos_inbound(mouse_x, mouse_y, x-a/2, y-a/2, x+a/2, y+a/2);
 }
 function mouse_inbound_last_l(x1, y1, x2, y2) {
-    var _nx = global.__InputManager.lastMousePressedPos[0][0];
-    var _ny = global.__InputManager.lastMousePressedPos[0][1];
+    var _nx = global.__InputManager.lastMousePressedPos[0][0][0];
+    var _ny = global.__InputManager.lastMousePressedPos[0][0][1];
     return pos_inbound(_nx, _ny, x1, y1, x2, y2);
 }
 function mouse_square_inbound_last_l(x, y, a) {
-    var _nx = global.__InputManager.lastMousePressedPos[0][0];
-    var _ny = global.__InputManager.lastMousePressedPos[0][1];
+    var _nx = global.__InputManager.lastMousePressedPos[0][0][0];
+    var _ny = global.__InputManager.lastMousePressedPos[0][0][1];
     return pos_inbound(_nx, _ny, x-a/2, y-a/2, x+a/2, y+a/2);
+}
+
+function mouse_inbound_last_double_l(x1, y1, x2, y2) {
+    var _result = true;
+    for(var i=0; i<2; i++) {
+        var _nx = global.__InputManager.lastMousePressedPos[0][i][0];
+        var _ny = global.__InputManager.lastMousePressedPos[0][i][1];
+        _result = _result && pos_inbound(_nx, _ny, x1, y1, x2, y2);
+    }
+    return _result;
 }
 
 function mouse_clear_hold() {

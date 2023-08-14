@@ -193,6 +193,8 @@ image_yscale = global.scaleYAdjust;
                 return mouse_inbound(bbox_left, bbox_top, bbox_right, bbox_bottom);
             case 1:
                 return mouse_inbound_last_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
+            case 2:
+                return mouse_inbound_last_double_l(bbox_left, bbox_top, bbox_right, bbox_bottom);
         }
         
     }
@@ -591,7 +593,7 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    
 		    // If double click then send attach request.
-		    if(mouse_isclick_double(0) && _mouse_inbound_check(1)) {
+		    if(mouse_isclick_double(0) && _mouse_inbound_check(2)) {
                 if(noteType <= 2)
 		    	    objEditor.attach(id);
                 else
