@@ -83,6 +83,7 @@
     "fileformat_chart": "Supported Beatmap Files",
     "timing_point_create_with_note_question": "It has been detected that you have selected a Note, which time: $0 ms. Do you want to use this time as offset?",
     "export_fix_decimal_question": "Do you want to export all note timings rounded to the nearest millisecond?\nThe beatmap exported with this function cannot be re-edited after re-importing.",
+    "export_fix_error_question": "是否对导出的谱面进行误差修正？\n该功能将误差在 2 毫秒内的音符对齐。",
     "export_to_dym_question": "Export relevant information for Dynamaker-modified? Use this option to export the beatmap only for editor editing.\nIf \"Yes\" is chosen, all set Bar information will be overridden by DyNode.",
     "export_timing_error": "You haven't configured Timing, so you can't export beatmap yet.",
     "anno_simplify": "Simplified Display",
