@@ -697,33 +697,34 @@ function editor_set_div() {
 }
 
 // error correction
-
-function error_correction(_limit) {
+function note_error_correction(_limit, _array = objMain.chartNotesArray, _sync_to_instance = true) {
 	if(_limit <= 0) {
 		announcement_error($"不合法的修正参数{_limit}。请使用大于零的误差。");
 		return;
 	}
-	with(objMain) {
-		instance_activate_object(objNote);
-		var notes_to_fix = [];
-		for(var i=0, l=array_length(chartNotesArray); i < l; i++) {
-			if(i==0) {
-				array_push(notes_to_fix, chartNotesArray[i]);
-			}
+	
+	instance_activate_object(objNote);
+	var notes_to_fix = [];
+	for(var i=0, l=array_length(_array); i < l; i++) {
+		if(i==0) {
+			array_push(notes_to_fix, _array[i]);
+		}
+		else {
+			assert(_array[i].time >= _array[i-1].time);
+
+			if(_array[i].time - notes_to_fix[0].time <= _limit)
+				array_push(notes_to_fix, _array[i]);
 			else {
-				if(chartNotesArray[i].time - notes_to_fix[0].time <= _limit)
-					array_push(chartNotesArray[i]);
-				else {
-					if(array_length(notes_to_fix) > 1) {
-						for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
-							notes_to_fix[_i].time = notes_to_fix[0].time;
+				if(array_length(notes_to_fix) > 1) {
+					for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
+						notes_to_fix[_i].time = notes_to_fix[0].time;
+						if(_sync_to_instance)
 							notes_to_fix[_i].inst.set_prop(notes_to_fix[_i]);
-						}
 					}
-					notes_to_fix = [chartNotesArray[i]];
 				}
+				notes_to_fix = [_array[i]];
 			}
 		}
-		note_activation_reset();
 	}
+	note_activation_reset();
 }

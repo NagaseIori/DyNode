@@ -516,8 +516,9 @@ function map_export_xml() {
     
     // For Compatibility
     notes_reallocate_id();
-    instance_activate_object(objNote); // Temporarily activate all notes
+    instance_activate_object(objNote);  // Temporarily activate all notes
     note_extra_sub_removal();
+	notes_array_update();				// Sync main notes array
     
     var _export_to_dym = show_question_i18n("export_to_dym_question");
     if(!objMain.chartBarUsed && !_export_to_dym)
@@ -526,24 +527,33 @@ function map_export_xml() {
     	// Force reset all bar settings
     	timing_point_sync_with_chart_prop(true, true);
     }
-    var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
+    // var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
+	var _fix_dec = false;
+    var _fix_error = _export_to_dym? false:show_question_i18n("export_fix_error_question");
+
+	var _notes_array = SnapDeepCopy(objMain.chartNotesArray);
+
+	// Correct error in 2 milliseconds
+	if(_fix_error) {
+		note_error_correction(2, _notes_array, false);
+	}
     
-    var _gen_narray = function (_side, _dec, _dym) {
+    var _gen_narray = function (_side, _dec, _dym, _array) {
     	var _ret = [];
     	var _bfun = _dym? time_to_bar_for_dym:time_to_bar;
-		var l = array_length(objMain.chartNotesArray);
-    	for(var i=0; i<l; i++) with (objMain.chartNotesArray[i].inst) {
+		var l = array_length(_array);
+    	for(var i=0; i<l; i++) with (_array[i]) {
             if(side == _side) {
             	var _time = _dec?round(time):time;
             	if(!_dym)
             		_time = mtime_to_time(_time);
                 array_push(_ret, {
-                	m_id : { text : nid },
+                	m_id : { text : inst.nid },
                 	m_type : { text : note_type_num_to_string(noteType) },
                 	m_time : { text : string_format(_bfun(_time), 1, EXPORT_XML_EPS) },
                 	m_position : { text : string_format(position - width / 2, 1, 4) },
                 	m_width : { text : width },
-                	m_subId: { text : sid }
+                	m_subId: { text : inst.sid }
                 });
             }
         }
@@ -554,9 +564,9 @@ function map_export_xml() {
         };
     }
     
-    var _narray = [_gen_narray(0, _fix_dec, _export_to_dym),
-    			   _gen_narray(1, _fix_dec, _export_to_dym),
-    			   _gen_narray(2, _fix_dec, _export_to_dym)];
+    var _narray = [_gen_narray(0, _fix_dec, _export_to_dym, _notes_array),
+    			   _gen_narray(1, _fix_dec, _export_to_dym, _notes_array),
+    			   _gen_narray(2, _fix_dec, _export_to_dym, _notes_array)];
     
     var _str = {
     	CMap : {
