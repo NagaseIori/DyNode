@@ -41,10 +41,10 @@ function note_sort_all() {
     	chartNotesCount = array_length(chartNotesArray);
     	
     	for(var i=0; i<chartNotesCount; i++)
-    		if(instance_exists(chartNotesArray[i].inst))
-    			chartNotesArray[i].inst.arrayPos = i;
+    		if(chartNotesArray[i].inst > 0)
+				chartNotesArray[i].inst.arrayPos = i;
     	
-    	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).time == INF) {
+    	while(array_length(chartNotesArray) > 0 && array_last(chartNotesArray).inst < 0) {
     		array_pop(chartNotesArray);
     		chartNotesCount --;
     	}
@@ -55,7 +55,8 @@ function note_sort_request() {
 	objEditor.editorNoteSortRequest = true;
 }
 
-function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxml = false, _record = false, _selecting = false) {
+function build_note(_id, _type, _time, _position, _width, 
+	_subid, _side, _fromxml = false, _record = false, _selecting = false) {
     var _obj = undefined;
     switch(_type) {
         case "NORMAL":
@@ -115,9 +116,12 @@ function build_note(_id, _type, _time, _position, _width, _subid, _side, _fromxm
     return _inst;
 }
 
-function build_hold(_id, _time, _position, _width, _subid, _subtime, _side, _record = false, _selecting = false) {
-	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side, false, false, _selecting);
-	var _inst = build_note(_id, 2, _time, _position, _width, _subid, _side, false, false, _selecting);
+function build_hold(_id, _time, _position, _width, _subid, _subtime,
+					_side, _record = false, _selecting = false) {
+	var _sinst = build_note(_subid, 3, _subtime, _position, _width, -1, _side,
+							false, false, _selecting);
+	var _inst = build_note(_id, 2, _time, _position, _width, _subid, 
+						   _side, false, false, _selecting);
 	_sinst.beginTime = _time;
 	// assert(_inst.sinst == _sinst);
 	if(_record)
@@ -133,7 +137,8 @@ function build_note_withprop(prop, record = false, selecting = false) {
 	}
 	else {
 		return build_hold(random_id(9), prop.time, prop.position, prop.width,
-			random_id(9), prop.time + prop.lastTime, prop.side, record, selecting);
+						  random_id(9), prop.time + prop.lastTime,
+						  prop.side, record, selecting);
 	}
 }
 
@@ -152,10 +157,12 @@ function note_delete(_inst, _record = false) {
 	        if(chartNotesArray[i].inst == _inst) {
 	        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
 	        	if(_record)
-	        		operation_step_add(OPERATION_TYPE.REMOVE, SnapDeepCopy(chartNotesArray[i]), -1);
+	        		operation_step_add(OPERATION_TYPE.REMOVE, 
+	        						   SnapDeepCopy(chartNotesArray[i]), -1);
 	        	
 	        	ds_map_delete(chartNotesMap[chartNotesArray[i].side], _inst.nid);
 	            chartNotesArray[i].time = INF;
+	            chartNotesArray[i].inst = -10;
 	        }
 	        else {
 	        	throw "Note id in array not matching instance id."
@@ -188,9 +195,8 @@ function notes_array_update() {
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
 		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
-			if(instance_exists(chartNotesArray[i].inst))
-				chartNotesArray[i].inst.update_prop();
-			
+			chartNotesArray[i].inst.update_prop();
+			chartNotesArray[i].inst.arrayPos = i;
 			stat_count(chartNotesArray[i].side, chartNotesArray[i].noteType);
 		}
 	}
@@ -222,7 +228,8 @@ function notes_reallocate_id() {
 
 function note_check_and_activate(_posistion_in_array) {
 	var _struct = objMain.chartNotesArray[_posistion_in_array];
-	_struct.inst.arrayPos = _posistion_in_array;
+	if(_struct.inst > 0)
+		_struct.inst.arrayPos = _posistion_in_array;
 	if(instance_exists(_struct.inst)) {
 		return 0;
 	}

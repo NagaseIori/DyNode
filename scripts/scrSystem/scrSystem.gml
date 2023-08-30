@@ -848,20 +848,31 @@ function project_save_as(_file = "") {
 	
 	if(_file == "") return 0;
 	
-	var _contents = {
-		version : VERSION,
-		musicPath: objManager.musicPath,
-		backgroundPath: objManager.backgroundPath,
-		chartPath: objManager.chartPath,
-		videoPath: objManager.videoPath,
-		timingPoints: objEditor.timingPoints,
-		charts: [],
-		settings: project_get_settings()
-	};
+	var _contents;
+	var _corruption = false;
+	var _corruption_file_id = random_id(6);
 	
-	_contents.charts = map_get_struct();
+	try {
+		_contents = {
+			version : VERSION,
+			musicPath: objManager.musicPath,
+			backgroundPath: objManager.backgroundPath,
+			chartPath: objManager.chartPath,
+			videoPath: objManager.videoPath,
+			timingPoints: objEditor.timingPoints,
+			charts: [],
+			settings: project_get_settings()
+		};
+		_contents.charts = map_get_struct();
 	
-	objManager.projectPath = _file;
+		objManager.projectPath = _file;
+	} catch (e) {
+		_corruption = true;
+		
+		_file = $"{filename_path(_file)}{map_get_alt_title()}_{_corruption_file_id}.dyn";
+		
+		announcement_error($"保存项目时出现错误，项目文件可能损坏。原项目未改动，当前保存的项目位置为:{_file}\n错误信息:\n{e}");
+	}
 	
 	try {
 		project_file_duplicate(_contents);

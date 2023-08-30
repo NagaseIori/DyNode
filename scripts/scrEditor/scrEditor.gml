@@ -1,4 +1,3 @@
-
 function editor_set_editmode(mode) {
 	with(objEditor) {
 		if(mode > 0) {
