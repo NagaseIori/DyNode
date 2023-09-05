@@ -1,5 +1,7 @@
 
 function GUIElement() constructor {
+    #macro GUI_MSDF_SCALE 0.8
+    
     value = undefined;      // contained value
     name = undefined;       // id
     content = undefined;   // things to draw
@@ -16,7 +18,7 @@ function GUIElement() constructor {
     alpha = 0.85;
     fontSize = 16;
     fontColor = c_white;
-    // font = "sprMsdfNotoSans";
+    // fontCJK = "sprMsdfNotoSans";
     font = "fMono16";
     titlePadding = 5;
     
@@ -303,6 +305,54 @@ function StateButton(_id, _x, _y, _content, _value, _action = undefined, _get_me
     }
 }
 
+// Checkbox: Click to do state change and do an action (in rectangle style)
+// _action(state_value): return a new value with the current state
+// _state_update(): rewriteget method
+function Checkbox(_id, _x, _y, _l, _content, _value, _action = undefined, _get_method = undefined, _active_check = undefined) : StateButton(_id, _x, _y, _content, _value, _action, _get_method, _active_check) constructor {
+    set_wh(_l, _l);
+    
+    #macro CHECKBOX_PADDING 10
+    
+    static draw = function() {
+        var _x = acenter.x;
+        var _y = acenter.y;
+        var _fcol = fontColor;
+        
+        if(value) {
+            var _col = c_white;
+            CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
+                .Blend(_col, 1)
+                .Border(0, c_white, 0)
+                .Rounding(rounding)
+                .Draw();
+        }
+        else {
+            CleanRectangleXYWH(_x, _y, width*ascale, height*ascale)
+                .Blend(color, alpha)
+                .Border(5, c_white, 1)
+                .Rounding(rounding)
+                .Draw();
+        }
+            
+        
+        if(has_cjk(content)) {
+            scribble(cjk_prefix() + content, "GUI_"+content)
+                .starting_format(font, c_white)
+                .scale(GUI_MSDF_SCALE, GUI_MSDF_SCALE)
+                .msdf_shadow(c_black, 0.5, 0, 3, 2)
+                .align(fa_left, fa_middle)
+                .draw(_x + width/2 + CHECKBOX_PADDING, _y);
+        }
+        else {
+            scribble(content, "GUI_"+content)
+                .starting_format(font, c_white)
+                .align(fa_left, fa_middle)
+                .draw(_x + width/2 + CHECKBOX_PADDING, _y);
+        }
+        
+    }
+}
+
 // Bar: Drag or Click to set value
 // _range: should be an array including 2 elements = [range_l, range_r]
 // _action: custom action, called when value is changed
@@ -373,10 +423,19 @@ function Bar(_id, _x, _y, _content, _value, _range, _action = undefined, _active
             .Draw();
         
         if(title) {
-            scribble(content)
-                .starting_format("fMono16", c_white)
-                .align(fa_left, fa_bottom)
-                .draw(x, y - titlePadding);
+            if(has_cjk(content)) {
+                scribble(cjk_prefix() + content)
+                    .starting_format(font, c_white)
+                    .msdf_shadow(c_black, 0.5, 0, 3, 2)
+                    .scale(0.8, 0.8)
+                    .align(fa_left, fa_bottom)
+                    .draw(x, y - titlePadding);
+            }
+            else
+                scribble(content)
+                    .starting_format(font, c_white)
+                    .align(fa_left, fa_bottom)
+                    .draw(x, y - titlePadding);
         }
     }
     

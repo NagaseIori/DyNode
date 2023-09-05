@@ -104,12 +104,12 @@ var _nw = global.resolutionW, _nh = global.resolutionH;
 	for(var i=0; i<_l; i++)
 		with(chartNotesArrayActivated[i])
 			if(noteType == 2) {
-				draw_event(false);
+				draw_event(false);		// Draw background
 			}
 	for(var i=0; i<_l; i++)
 		with(chartNotesArrayActivated[i])
 			if(noteType == 2) {
-				draw_event(true);
+				draw_event(true);		// Draw Edge
 			}
 	// Draw Notes
 	for(var i=0; i<_l; i++)

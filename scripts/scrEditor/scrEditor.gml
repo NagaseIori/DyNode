@@ -1,6 +1,14 @@
-
 function editor_set_editmode(mode) {
-	objEditor.editorMode = mode;
+	with(objEditor) {
+		if(mode > 0) {
+			singlePaste = false;
+			operation_merge_last_request_revoke();
+		}
+		else {
+			editorModeBeforeCopy = editorMode;
+		}
+		editorMode = mode;
+	}
 }
 
 function editor_get_editmode() {
@@ -276,7 +284,16 @@ function operation_step_flush(_array) {
 		array_push(operationStack, _array);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
-		// show_debug_message_safe("New operation: "+string(array_length(_array)));
+		// show_debug_message_safe($"New operation: {_array}");
+
+		if(operationMergeLastRequest > 0) {
+			operationMergeLastRequestCount ++;
+			if(operationMergeLastRequest == operationMergeLastRequestCount) {
+				operation_merge_last(operationMergeLastRequest);
+				operationMergeLastRequest = 0;
+				operationMergeLastRequestCount = 0;
+			}
+		}
 	}
 }
 
@@ -287,12 +304,13 @@ function operation_do(_type, _from, _to = -1) {
 		operation_synctime_set(_from.time);
 	switch(_type) {
 		case OPERATION_TYPE.ADD:
-			return build_note_withprop(_from);
+			return build_note_withprop(_from, false, true);
 			break;
 		case OPERATION_TYPE.MOVE:
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
 			_from.inst.note_outscreen_check();
+			_from.inst.select();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
@@ -330,72 +348,115 @@ function operation_refresh_inst(_origi, _nowi) {
 }
 
 function operation_undo() {
-	if(operationPointer == -1) return;
-	var _ops = operationStack[operationPointer];
-	
-	
-	for(var i=0, l=array_length(_ops); i<l; i++) {
-		switch(_ops[i].opType) {
-			case OPERATION_TYPE.MOVE:
-				operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
-				break;
-			case OPERATION_TYPE.ADD:
-				operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
-				break;
-			case OPERATION_TYPE.REMOVE:
-				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
-				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
-				operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
-				break;
-			case OPERATION_TYPE.TPADD:
-				operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
-				break;
-			case OPERATION_TYPE.TPREMOVE:
-				operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
-				break;
-			case OPERATION_TYPE.OFFSET:
-				operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
-				break;
-			default:
-				show_error("Unknown operation type.", true);
+	with(objEditor) {
+		if(operationPointer == -1) return;
+		var _ops = operationStack[operationPointer];
+		
+		note_select_reset();
+		for(var i=0, l=array_length(_ops); i<l; i++) {
+			switch(_ops[i].opType) {
+				case OPERATION_TYPE.MOVE:
+					operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
+					break;
+				case OPERATION_TYPE.ADD:
+					operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
+					break;
+				case OPERATION_TYPE.REMOVE:
+					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+					operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+					operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
+					break;
+				case OPERATION_TYPE.TPADD:
+					operation_do(OPERATION_TYPE.TPREMOVE, _ops[i].fromProp);
+					break;
+				case OPERATION_TYPE.TPREMOVE:
+					operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
+					break;
+				case OPERATION_TYPE.OFFSET:
+					operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
+					break;
+				default:
+					show_error("Unknown operation type.", true);
+			}
 		}
+		
+		operationPointer--;
+		
+		announcement_play(i18n_get("undo", string(array_length(_ops))));
+		note_sort_request();
+		// show_debug_message_safe("POINTER: "+ string(operationPointer));
 	}
 	
-	operationPointer--;
-	
-	announcement_play(i18n_get("undo", string(array_length(_ops))));
-	note_sort_request();
-	// show_debug_message_safe("POINTER: "+ string(operationPointer));
 }
 
 function operation_redo() {
-	if(operationPointer + 1 == operationCount) return;
-	operationPointer ++;
-	var _ops = operationStack[operationPointer];
-	
-	for(var i=0, l=array_length(_ops); i<l; i++) {
-		switch(_ops[i].opType) {
-			case OPERATION_TYPE.MOVE:
-				operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
-				break;
-			case OPERATION_TYPE.ADD:
-				var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
-				operation_refresh_inst(_ops[i].fromProp.inst, _inst);
-				operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
-				break;
-			case OPERATION_TYPE.REMOVE:
-			case OPERATION_TYPE.TPADD:
-			case OPERATION_TYPE.TPREMOVE:
-			case OPERATION_TYPE.OFFSET:
-				operation_do(_ops[i].opType, _ops[i].fromProp);
-				break;
-			default:
-				show_error("Unknown operation type.", true);
+	with(objEditor) {
+		if(operationPointer + 1 == operationCount) return;
+		operationPointer ++;
+		var _ops = operationStack[operationPointer];
+		note_select_reset();
+		for(var i=0, l=array_length(_ops); i<l; i++) {
+			switch(_ops[i].opType) {
+				case OPERATION_TYPE.MOVE:
+					operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
+					break;
+				case OPERATION_TYPE.ADD:
+					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
+					operation_refresh_inst(_ops[i].fromProp.inst, _inst);
+					operation_refresh_inst(_ops[i].fromProp.sinst, _inst.sinst);
+					break;
+				case OPERATION_TYPE.REMOVE:
+				case OPERATION_TYPE.TPADD:
+				case OPERATION_TYPE.TPREMOVE:
+				case OPERATION_TYPE.OFFSET:
+					operation_do(_ops[i].opType, _ops[i].fromProp);
+					break;
+				default:
+					show_error("Unknown operation type.", true);
+			}
 		}
+		
+		announcement_play(i18n_get("redo", string(array_length(_ops))));
+		note_sort_request();
 	}
-	
-	announcement_play(i18n_get("redo", string(array_length(_ops))));
-	note_sort_request();
+}
+
+/// @description Merge last operations to one operation.
+/// @param {Real} count The number of last operations to merge.
+function operation_merge_last(count) {
+	// show_debug_message($"Merge last {count} operations.");
+	if(count <= 1) {
+		show_debug_message("[Warning] At least merge 2 operations.");
+		return;
+	}
+	with(objEditor) {
+		var _new_ops = [];
+		for(var i=0; i<count; i++) {
+			_new_ops = array_concat(_new_ops, operationStack[operationPointer - i]);
+		}
+		operationPointer -= count - 1;
+		operationCount = operationPointer + 1;
+		operationStack[operationPointer] = _new_ops;
+	}
+}
+
+/// @description Send requests to merge the last new operations from now on.
+/// @param {Real} count The number of last operations to merge.
+function operation_merge_last_request(count) {
+	if(count <= 1) {
+		show_debug_message("[Warning] At least merge 2 operations.");
+		return;
+	}
+	with(objEditor) {
+		operationMergeLastRequestCount = 0;
+		operationMergeLastRequest = count;
+	}
+}
+
+/// @description Revoke the merge operations request.
+function operation_merge_last_request_revoke() {
+	objEditor.operationMergeLastRequest = 0;
+	objEditor.operationMergeLastRequestCount = 0;
 }
 
 #endregion
@@ -615,12 +676,15 @@ function advanced_expr() {
 	}
 }
 
+// Advanced divisor setter
 function editor_set_div() {
 	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
 	if(_div == "") return 0;
 	try {
 		_div = int64(_div);
-		if(_div<1) throw "Bad range.";
+		if(_div<1) {
+			throw "Bad range.";
+		}
 		else {
 			objEditor.set_div(_div);
 		}
@@ -629,4 +693,37 @@ function editor_set_div() {
 		return -1;
 	}
 	return 1;
+}
+
+// error correction
+function note_error_correction(_limit, _array = objMain.chartNotesArray, _sync_to_instance = true) {
+	if(_limit <= 0) {
+		announcement_error($"不合法的修正参数{_limit}。请使用大于零的误差。");
+		return;
+	}
+	
+	instance_activate_object(objNote);
+	var notes_to_fix = [];
+	for(var i=0, l=array_length(_array); i < l; i++) {
+		if(i==0) {
+			array_push(notes_to_fix, _array[i]);
+		}
+		else {
+			assert(_array[i].time >= _array[i-1].time);
+
+			if(_array[i].time - notes_to_fix[0].time <= _limit)
+				array_push(notes_to_fix, _array[i]);
+			else {
+				if(array_length(notes_to_fix) > 1) {
+					for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
+						notes_to_fix[_i].time = notes_to_fix[0].time;
+						if(_sync_to_instance)
+							notes_to_fix[_i].inst.set_prop(notes_to_fix[_i]);
+					}
+				}
+				notes_to_fix = [_array[i]];
+			}
+		}
+	}
+	note_activation_reset();
 }

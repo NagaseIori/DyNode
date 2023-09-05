@@ -207,17 +207,17 @@ editorSelectMultiple = editorSelectCount > 1;
         if(keycheck_down(ord(string(i)))) {
             if(editorMode != i)
                 _attach_reset_request = true;
-            editorMode = i;
+            editor_set_editmode(i);
         }
     
     if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
         editorModeBeforeCopy = editorMode;
-        editorMode = 0; // Paste Mode
+        editor_set_editmode(0); // Paste Mode
         _attach_reset_request = true;
     }
     if(keycheck_down(vk_escape)) {
         if(editorMode == 0) {
-            editorMode = editorModeBeforeCopy;
+            editor_set_editmode(editorModeBeforeCopy);
             _attach_reset_request = true;
         }
         else {
@@ -246,8 +246,12 @@ editorSelectMultiple = editorSelectCount > 1;
 
     // Sync or Destroy attached instance
     if(editorNoteAttaching != -1) {
-        if(!instance_exists(editorNoteAttaching[0]))
-            editorNoteAttaching = -1;
+        if(!instance_exists(editorNoteAttaching[0])) {
+        	if(singlePaste) {
+        		editor_set_editmode(editorModeBeforeCopy);
+            }
+        	editorNoteAttaching = -1;
+        }
         if(_attach_reset_request) {
             var i=0, l=array_length(editorNoteAttaching);
             for(; i<l; i++)
@@ -282,6 +286,11 @@ editorSelectMultiple = editorSelectCount > 1;
                         _str.time,
                         _str.lastTime
                         ));
+                    if(_str.inst == attachRequestCenter) {
+                        show_debug_message("Set attaching center.");
+                        editorNoteAttachingCenter = i;
+                        attachRequestCenter = undefined;
+                    }
                 }
             }
             
@@ -305,14 +314,19 @@ editorSelectMultiple = editorSelectCount > 1;
     }
     
     // Copy
-    if((keycheck_down_ctrl(ord("C")) || keycheck_down_ctrl(ord("X"))) && editorSelectCount > 0) {
+    
+    if(keycheck_down_ctrl(ord("C")))
+    	copy();
+    if(keycheck_down_ctrl(ord("X")))
+    	cut();
+    if(copyRequest || cutRequest || attachRequest) {
         var _cnt = 0;
         copyStack = [];
         with(objNote) {
             if(state == stateSelected && noteType <= 2) {
                 array_push(objEditor.copyStack, get_prop());
                 _cnt ++;
-                if(keycheck_down_ctrl(ord("X"))) {
+                if(objEditor.cutRequest || objEditor.attachRequest) {
                     recordRequest = true;
                     instance_destroy();
                 }
@@ -321,10 +335,21 @@ editorSelectMultiple = editorSelectCount > 1;
         array_sort(copyStack, function (_a, _b) { 
             return sign(_a.time == _b.time? _a.position - _b.position : _a.time - _b.time); });
         
-        if(keycheck_down_ctrl(ord("X")))
+        if(_cnt == 0) {
+            attachRequestCenter = undefined;
+            singlePaste = false;
+        }
+        else if(cutRequest)
             announcement_play(i18n_get("cut_notes", string(_cnt)));
-        else
+        else if(copyRequest)
             announcement_play(i18n_get("copy_notes", string(_cnt)));
+        else if(attachRequest) {
+            editor_set_editmode(0);
+            operation_merge_last_request(2);
+        }
     }
+    cutRequest = 0;
+    copyRequest = 0;
+    attachRequest = 0;
 
 #endregion

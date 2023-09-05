@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.12.2"
+#macro VERSION "v0.1.12.3"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -17,6 +17,7 @@
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
+#macro USE_DSP_PITCHSHIFT (objMain.usingPitchShift)
 #macro NULL_FUN function() {}
 math_set_epsilon(0.00000001);				// 1E-8
 
@@ -92,8 +93,17 @@ display_reset(global.graphics.AA, global.graphics.VSync);
     }
     
     // Initialize the system
-    FMODGMS_Sys_Set_DSPBufferSize(512, 4);
+    FMODGMS_Sys_Set_DSPBufferSize(1024, 4);
     FMODGMS_Sys_Initialize(32);
+    
+    // Create the pitch shift effect
+    global.__DSP_Effect = FMODGMS_Effect_Create(FMOD_DSP_TYPE.FMOD_DSP_TYPE_PITCHSHIFT);
+    if(global.__DSP_Effect < 0)
+    	announcement_error($"FMOD Cannot create pitchshift effect.\nMessage:{FMODGMS_Util_GetErrorMessage()}");
+    else {
+    	// FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_FFTSIZE, 4096);
+    	// FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_MAXCHANNELS, 10);
+    }
     // FMODGMS_Sys_Set_SoftwareFormat(48000, 0);
     
 // DyCore Initialization

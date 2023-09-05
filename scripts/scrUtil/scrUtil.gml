@@ -404,6 +404,8 @@ function lerp_lim_a(from, to, amount, limit) {
 
 function lerp_a(from, to, amount) {
     return lerp_safe(from, to, amount * global.fpsAdjust);
+    // amount *= global.fpsAdjust;		// Keep the parameters effect
+    // return lerp_safe(from, to, 1 - power(amount, delta_time/1000000*BASE_FPS))
 }
 
 function lerp_safe(from, to, amount) {
@@ -593,4 +595,8 @@ function color_invert(col) {
 function assert(expression) {
 	if(!expression)
 		show_error("Assertion failed.", true);
+}
+
+function filename_name_no_ext(file_name) {
+	return string_replace(filename_name(file_name), filename_ext(file_name), "");
 }

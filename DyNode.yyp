@@ -103,7 +103,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.6.0.89",
+    "IDEVersion": "2023.6.0.92",
   },
   "resources": [
     {"id":{"name":"SnapToXML","path":"scripts/SnapToXML/SnapToXML.yy",},},
@@ -248,6 +248,7 @@
     {"id":{"name":"CleanLine","path":"scripts/CleanLine/CleanLine.yy",},},
     {"id":{"name":"shd_lazer","path":"shaders/shd_lazer/shd_lazer.yy",},},
     {"id":{"name":"__scribble_font_add_sprite","path":"scripts/__scribble_font_add_sprite/__scribble_font_add_sprite.yy",},},
+    {"id":{"name":"Scoreboard layout","path":"notes/Scoreboard layout/Scoreboard layout.yy",},},
     {"id":{"name":"scribble_font_get_default","path":"scripts/scribble_font_get_default/scribble_font_get_default.yy",},},
     {"id":{"name":"rMain","path":"rooms/rMain/rMain.yy",},},
     {"id":{"name":"scribble_anim_cycle","path":"scripts/scribble_anim_cycle/scribble_anim_cycle.yy",},},
@@ -401,6 +402,7 @@
     {"id":{"name":"scribble_super_clear","path":"scripts/scribble_super_clear/scribble_super_clear.yy",},},
     {"id":{"name":"SnapBufferWriteJSON","path":"scripts/SnapBufferWriteJSON/SnapBufferWriteJSON.yy",},},
     {"id":{"name":"SnapBufferReadCSV","path":"scripts/SnapBufferReadCSV/SnapBufferReadCSV.yy",},},
+    {"id":{"name":"FMODGMS_Enums","path":"scripts/FMODGMS_Enums/FMODGMS_Enums.yy",},},
     {"id":{"name":"objUILangList","path":"objects/objUILangList/objUILangList.yy",},},
     {"id":{"name":"SnapBufferWriteXML","path":"scripts/SnapBufferWriteXML/SnapBufferWriteXML.yy",},},
     {"id":{"name":"sprGiga","path":"sprites/sprGiga/sprGiga.yy",},},

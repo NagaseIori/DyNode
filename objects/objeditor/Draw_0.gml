@@ -2,7 +2,7 @@
 #region Beatlines
 
 	var beatlineVisible = beatlineAlpha[0] + beatlineAlpha[1] + beatlineAlpha[2] > 0.01;
-    if(beatlineVisible && array_length(timingPoints)) {
+    if(array_length(timingPoints)) {
         var _nw = global.resolutionW, _nh = global.resolutionH;
         var nowTime = objMain.nowTime;
         var targetLineBelow = objMain.targetLineBelow + objMain.targetLineBelowH / 2;
@@ -33,14 +33,14 @@
         var _nowhard = false, _noww, _nowl, _nowh;
         var _ny, _nyl, _nyr;
         
-        
             // Background Glow
             with(objMain) {
                 animCurvFaintEval = animcurve_channel_evaluate(
                     animCurvFaintChan, frac(frac((nowTime - _nowTp.time) / _nowTp.beatLength / _nowTp.meter)+1));
                 animCurvFaintEval = lerp(0.5, 1.0, animCurvFaintEval);
             }
-        
+            
+        if(beatlineVisible)
         while(((_nowTpTime - nowTime) * playbackSpeed <= _nh || _nowat == 0) && beatlineAlphaMul > 0.01) {
             for(var i = _nowBeats; i * _nowTp.beatLength + _nowTpTime + 1 < _nextTpTime && (i * _nowTp.beatLength + _nowTpTime - nowTime) * playbackSpeed <= _nh; i++) {
                 for(var j = 28; j >= 1; j--) if(j == get_div() || beatlineEnabled[j]) {

@@ -19,16 +19,23 @@ if(drawVisible && editor_get_editmode() <= 4){
             animTargetNodeA = 1.0;
             animTargetInfoA = ctrl_ishold()? 1:0;
         }
-        else if(objEditor.editorHighlightLine && objEditor.editorHighlightSide == side) {
-            var _position = objEditor.editorHighlightPosition == position;
-            var _width = objEditor.editorHighlightWidth == width;
-            if(_position || _width) {
+        else if(objEditor.editorHighlightLine) {
+            var _position = objEditor.editorHighlightPosition == position
+            				&& objEditor.editorHighlightSide == side;
+            var _width = objEditor.editorHighlightWidth == width 
+            			 && objEditor.editorHighlightSide == side;
+            var _time = round(objEditor.editorHighlightTime) == round(time);
+            if(_position || _width || _time) {
             	animTargetNodeA = 1.0;
             	animTargetInfoA = ctrl_ishold()? 1:0;
             }
             else animTargetNodeA = 0;
             if(_position && _width)
             	_col = 0xa1A1fe;
+            else if(_time && _width)
+            	_col = 0x50af4c;
+            else if(_time)
+            	_col = 0x2257ff;
             else if(_position)
             	_col = 0xc2577e;
             else if(_width)

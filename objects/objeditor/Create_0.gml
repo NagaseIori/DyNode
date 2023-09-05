@@ -160,6 +160,11 @@ animBeatlineTargetAlphaM = 0;
 // Copy & Paste
 
 copyStack = [];
+copyRequest = false;
+cutRequest = false;
+attachRequest = false;
+attachRequestCenter = undefined;
+singlePaste = false;		// Only paste for one time then return
 
 // Undo & Redo
 
@@ -168,6 +173,8 @@ operationStackStep = [];
 operationPointer = -1;
 operationCount = 0;
 operationSyncTime = [INF, -INF];		// The earliest operated instance's time on last step
+operationMergeLastRequest = 0;
+operationMergeLastRequestCount = 0;
 
 // Methods
 
@@ -189,6 +196,23 @@ function set_div(_div, _match = true) {
 			return;
 		}
 	}
+}
+
+/// Send copy request.
+function copy() {
+	copyRequest = true;
+}
+
+/// Send cut request.
+function cut() {
+	cutRequest = true;
+}
+
+/// Send attach request.
+function attach(inst) {
+	attachRequest = true;
+	singlePaste = true;
+    attachRequestCenter = inst;
 }
 
 set_div(4);			// Default divisor set to 4

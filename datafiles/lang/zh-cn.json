@@ -83,6 +83,7 @@
     "fileformat_chart": "支持的谱面文件",
     "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是: $0 ms。要以这个时间作为 offset 吗？",
     "export_fix_decimal_question": "导出时是否将导出的所有音符时间对毫秒取整？\n使用该功能导出后的谱面将无法在再次导入后正常编辑。",
+    "export_fix_error_question": "是否对导出的谱面进行误差修正？\n该功能将误差在 2 毫秒内的音符对齐。",
     "export_to_dym_question": "是否导出用于 Dynamaker-modified 的相关信息？使用该选项导出的谱面仅能用于编辑器编辑。\n若选择“是”，所有已经设置的 Bar 信息将由 DyNode 以默认方式覆写。",
     "export_timing_error": "你还没有配置 Timing ，因此无法导出谱面。",
     "anno_simplify": "简化模式",
@@ -143,6 +144,10 @@
     "expr_catch_error": "表达式执行错误。\n错误信息：$0\n错误表达式：$1",
     "advanced_expr_error": "表达式在计算时出现错误，请检查表达式语法。批量操作已中止。",
     "global_music_delay": "全局音乐延迟",
-    "credits": "Yet another Dynamix charting tool.\n\n[scale,1.2]by NagaseIori (NordLandeW)[scale,0.6]    [nord]\n\n[scale,1.2]繁体 / 英语翻译：Jmakxd[scale,0.6]    [jmak][/scale][/rainbow]\n\nDyNode 使用的大多数美术资源来自游戏 Dynamix ，由 C4Cat Entertainment Limited 制作。\n\nDyNode 以 MIT 许可协议进行许可。\n\nDyNode 使用 / 借鉴了以下项目的代码 / 资源 / 布局。\n\nScribble (under MIT License) Copyright (c) 2022 @jujuadams\n\nClean Shapes (under MIT License) Copyright (c) 2020 Juju Adams\n\nSNAP (under MIT License) Copyright (c) 2020 Juju Adams\n\nJSON (under MIT License) Copyright © 2013-2022 Niels Lohmann\n\ndelaunator-cpp (under MIT License) Copyright (c) 2018 Volodymyr Bilonenko\n\nFMODGMS (under BSD 2-Clause \"Simplified\" License) Copyright (c) 2016-2017, M.S.T.O.P.\n\nDynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd\n\nDynamaker (under MIT License) Copyright (c) 2019 omegaPi\n\nDynamix produced by C4Cat Entertainment Limited\n\nArcaea produced by lowiro limited\n"
+    "credits": "Yet another Dynamix charting tool.\n\n[scale,1.2]by NagaseIori (NordLandeW)[scale,0.6]    [nord]\n\n[scale,1.2]繁体 / 英语翻译：Jmakxd[scale,0.6]    [jmak][/scale][/rainbow]\n\nDyNode 使用的大多数美术资源来自游戏 Dynamix ，由 C4Cat Entertainment Limited 制作。\n\nDyNode 以 MIT 许可协议进行许可。\n\nDyNode 使用 / 借鉴了以下项目的代码 / 资源 / 布局。\n\nScribble (under MIT License) Copyright (c) 2022 @jujuadams\n\nClean Shapes (under MIT License) Copyright (c) 2020 Juju Adams\n\nSNAP (under MIT License) Copyright (c) 2020 Juju Adams\n\nJSON (under MIT License) Copyright © 2013-2022 Niels Lohmann\n\ndelaunator-cpp (under MIT License) Copyright (c) 2018 Volodymyr Bilonenko\n\nFMODGMS (under BSD 2-Clause \"Simplified\" License) Copyright (c) 2016-2017, M.S.T.O.P.\n\nDynamaker-modifed (under MIT License) Copyright (c) 2021 jmakxd\n\nDynamaker (under MIT License) Copyright (c) 2019 omegaPi\n\nDynamix produced by C4Cat Entertainment Limited\n\nArcaea produced by lowiro limited\n",
+    "tab_main_volume": "音乐音量",
+    "tab_hitsound_volume": "打击音量",
+    "tab_bg_dim": "背景亮度",
+    "tab_pitchshift": "禁用变调（实验性）"
   }
 }

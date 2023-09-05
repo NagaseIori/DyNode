@@ -137,6 +137,9 @@ depth = 0;
     
     hideScoreboard = true;			// hide score board under editor mode
     hitSoundOn = false;
+
+    volumeMain = 1.0;           // Music sound volume
+    volumeHit = 1.0;            // Hit sound volume
     
     showDebugInfo = debug_mode;
     showStats = false;
@@ -151,7 +154,7 @@ depth = 0;
     animTargetLazerAlpha = [1.0, 1.0, 1.0];
     lineMix = [1.0, 1.0, 1.0];
     animTargetLineMix = [1.0, 1.0, 1.0];
-    titleAlphaL = 0.7;
+    titleAlphaL = 0.5;
     titleAlpha = titleAlphaL;
     animTargetTitleAlpha = titleAlphaL;
     
@@ -274,12 +277,14 @@ depth = 0;
 
 #endregion
 
+
+
 #region Scoreboard Init
 
     scbDepth = 1000;
-    scbLeft = create_scoreboard(resor_to_x(0.29), resor_to_y(0.54),
+    scbLeft = create_scoreboard(resor_to_x(295/1920), resor_to_y(555/1080),
         scbDepth, 7, fa_middle, 0);
-    scbRight = create_scoreboard(resor_to_x(0.88), resor_to_y(0.54),
+    scbRight = create_scoreboard(resor_to_x(1-295/1920), resor_to_y(555/1080),
         scbDepth, 0, fa_right, 3);
 
 #endregion
@@ -287,9 +292,9 @@ depth = 0;
 #region Perfect Indicator Init
 
     perfDepth = 1000;
-    perfLeft = instance_create_depth(resor_to_x(0.27), resor_to_y(0.64), 
+    perfLeft = instance_create_depth(resor_to_x(295/1920), resor_to_y(636/1080), 
         perfDepth, objPerfectIndc);
-    perfRight = instance_create_depth(resor_to_x(0.744), resor_to_y(0.64), 
+    perfRight = instance_create_depth(resor_to_x(1212/1920), resor_to_y(636/1080), 
         perfDepth, objPerfectIndc);
         
 #endregion
@@ -308,12 +313,13 @@ depth = 0;
 
 // FMODGMS Related
 
-    channel = FMODGMS_Chan_CreateChannel();
+    channel = undefined;
     music = undefined;
     sampleRate = 0;
-    channelPaused = false;	// Only used for time correction
+    channelPaused = false;		// Only used for time correction
     musicLength = 0;
-    usingMP3 = false;		// For Latency Workaround
+    usingMP3 = false;			// For Latency Workaround
+    usingPitchShift = false;
     
 // Tool Related
 
@@ -385,10 +391,26 @@ function time_music_sync() {
     }
 }
 
+// Switch whether channel using Pitch Shift effect.
+function music_pitchshift_switch(enable) {
+	if(enable != usingPitchShift) {
+		usingPitchShift = enable;
+		if(channel>=0) {
+			if(enable) {
+				FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 1);
+			}
+			else {
+				FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
+			}
+		}
+		
+	}
+}
+
 function volume_get_hitsound() {
 	if(!objMain.hitSoundOn)
 		return 0;
-    return audio_sound_get_gain(sndHit);
+    return volumeHit;
 }
 
 function volume_set_hitsound(_vol) {
@@ -398,16 +420,38 @@ function volume_set_hitsound(_vol) {
     else {
     	objMain.hitSoundOn = true;
     	audio_sound_gain(sndHit, _vol, 0);
+        volumeHit = _vol;
     }
 }
 
 function volume_get_main() {
 	if(music==undefined) return 0;
-	return FMODGMS_Chan_Get_Volume(objMain.channel);
+	return volumeMain;
 }
 
 function volume_set_main(_vol) {
-	FMODGMS_Chan_Set_Volume(objMain.channel, _vol);
+	volumeMain = _vol;
+    FMODGMS_Chan_Set_Volume(channel, _vol);
+}
+
+function _create_channel() {
+	FMODGMS_Chan_RemoveChannel(channel);
+	channel = FMODGMS_Chan_CreateChannel();
+	if(USE_DSP_PITCHSHIFT)
+    FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 0);
+}
+
+function _set_channel_speed(spd) {
+    FMODGMS_Chan_Set_Pitch(channel, spd);
+    FMODGMS_Chan_Set_Volume(channel, volumeMain);
+	if(USE_DSP_PITCHSHIFT) {
+		FMODGMS_Effect_Set_Parameter(global.__DSP_Effect, FMOD_DSP_PITCHSHIFT.FMOD_DSP_PITCHSHIFT_PITCH, 1.0/spd);
+		FMODGMS_Chan_Remove_Effect(channel, global.__DSP_Effect);
+		FMODGMS_Chan_Add_Effect(channel, global.__DSP_Effect, 1);
+	}
+	
 }
 
 #endregion
+
+_create_channel();	// Channel init.
