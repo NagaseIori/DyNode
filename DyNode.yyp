@@ -103,7 +103,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.6.0.92",
+    "IDEVersion": "2023.8.1.102",
   },
   "resources": [
     {"id":{"name":"SnapToXML","path":"scripts/SnapToXML/SnapToXML.yy",},},
@@ -152,7 +152,6 @@
     {"id":{"name":"CleanConvex","path":"scripts/CleanConvex/CleanConvex.yy",},},
     {"id":{"name":"__scribble_gen_7_build_pages","path":"scripts/__scribble_gen_7_build_pages/__scribble_gen_7_build_pages.yy",},},
     {"id":{"name":"SnapMD5","path":"scripts/SnapMD5/SnapMD5.yy",},},
-    {"id":{"name":"libfilesystem","path":"extensions/libfilesystem/libfilesystem.yy",},},
     {"id":{"name":"objPerfectIndc","path":"objects/objPerfectIndc/objPerfectIndc.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"objMain","path":"objects/objMain/objMain.yy",},},
@@ -506,6 +505,7 @@
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"roomId":{"name":"rCredits","path":"rooms/rCredits/rCredits.yy",},},
   ],
+  "templateType": null,
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"texFonts","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":false,"loadType":"default","mipsToGenerate":0,"targets":-1,},

@@ -121,7 +121,6 @@
     {"name":"CleanConvex","order":3,"path":"scripts/CleanConvex/CleanConvex.yy",},
     {"name":"__scribble_gen_7_build_pages","order":7,"path":"scripts/__scribble_gen_7_build_pages/__scribble_gen_7_build_pages.yy",},
     {"name":"SnapMD5","order":6,"path":"scripts/SnapMD5/SnapMD5.yy",},
-    {"name":"libfilesystem","order":3,"path":"extensions/libfilesystem/libfilesystem.yy",},
     {"name":"objPerfectIndc","order":6,"path":"objects/objPerfectIndc/objPerfectIndc.yy",},
     {"name":"Room1","order":5,"path":"rooms/Room1/Room1.yy",},
     {"name":"objMain","order":3,"path":"objects/objMain/objMain.yy",},

@@ -351,9 +351,14 @@ function map_import_dyn(_file) {
 }
 
 function map_set_title() {
-	var _title = get_string_i18n(i18n_get("box_set_chart_title") + ": ", objMain.chartTitle);
+	var _title = get_string_i18n(i18n_get("box_set_chart_title") + ": ", map_get_title());
 	
 	if(_title == "") return;
+	
+	var _scribble_tag = string_last_pos("[_scribble]", _title) != 0
+	
+	if (!_scribble_tag)
+		_title = string_replace_all(_title, "[", "[[")
 	
 	objMain.chartTitle = _title;
 }
@@ -574,7 +579,7 @@ function map_export_xml() {
     			"xmlns:xsi" : "http://www.w3.org/2001/XMLSchema-instance",
     			"xmlns:xsd" : "http://www.w3.org/2001/XMLSchema"
     		},
-    		m_path : { text : objMain.chartTitle },
+    		m_path : { text : map_get_title() },
 	    	m_barPerMin : { text : string_format(objMain.chartBarPerMin, 1, EXPORT_XML_EPS) },
 	    	m_timeOffset : { text : string_format(objMain.chartBarOffset, 1, EXPORT_XML_EPS) },
 	    	m_leftRegion : { text : objMain.chartSideType[0] },
@@ -694,10 +699,32 @@ function map_load_struct(_str, _import_info = true, _import_tp = true) {
 	show_debug_message_safe("Load map from struct sucessfully.");
 }
 
+function map_get_title() {
+	var _title = objMain.chartTitle;
+	var _scribble_tag = string_last_pos("[_scribble]", _title) != 0;
+	
+	if (!_scribble_tag)
+		_title = string_replace_all(_title, "[[", "[")
+	else {
+		var _new_title = "";
+		var _in_bracket = false;
+		for(var i=1; i<=string_length(_title); i++) {
+			if (string_char_at(_title, i) == "[") _in_bracket = true;
+			if (!_in_bracket) {
+				_new_title += string_char_at(_title, i);
+			}
+			if (string_char_at(_title, i) == "]") _in_bracket = false;
+		}
+		_title = _new_title;
+	}
+	
+	return _title;
+}
+
 function map_get_alt_title() {
 	if(!instance_exists(objMain)) return "example";
 	var _forbidden_chars = "?*:\"<>\\/|"
-	var _title = objMain.chartTitle;
+	var _title = map_get_title();
 	for(var i=1, l=string_length(_forbidden_chars); i<l; i++)
 		_title = string_replace_all(_title, string_char_at(_forbidden_chars, i), "_");
 	
