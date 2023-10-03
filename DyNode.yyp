@@ -152,7 +152,6 @@
     {"id":{"name":"CleanConvex","path":"scripts/CleanConvex/CleanConvex.yy",},},
     {"id":{"name":"__scribble_gen_7_build_pages","path":"scripts/__scribble_gen_7_build_pages/__scribble_gen_7_build_pages.yy",},},
     {"id":{"name":"SnapMD5","path":"scripts/SnapMD5/SnapMD5.yy",},},
-    {"id":{"name":"libfilesystem","path":"extensions/libfilesystem/libfilesystem.yy",},},
     {"id":{"name":"objPerfectIndc","path":"objects/objPerfectIndc/objPerfectIndc.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"objMain","path":"objects/objMain/objMain.yy",},},
