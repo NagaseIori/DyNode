@@ -154,7 +154,7 @@ beatlineSideInfoX = resor_to_x(0.5)+beatlineHardLength/2;
 beatlineSideInfoDivWidth = 100;
 
 animSpeed = 0.4;
-animBeatlineTargetAlpha = [0, 0, 0];
+animBeatlineTargetAlpha = [0.7, 0, 0];
 animBeatlineTargetAlphaM = 0;
 
 // Copy & Paste
