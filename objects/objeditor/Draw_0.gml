@@ -103,10 +103,10 @@
                         // Down
                         if(_ny <= _nh - targetLineBelow && _ny >= 0 && beatlineAlpha[0]>0.01) {
                             CleanLine(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny)
-                                    .Blend(_ncol, beatlineAlpha[0])
-                                    .Thickness(_noww)
-                                    .Cap("round", "round")
-                                    .Draw();
+                                .Blend(_ncol, beatlineAlpha[0])
+                                .Thickness(_noww)
+                                .Cap("round", "round")
+                                .Draw();
                             
                             // draw_set_alpha(beatlineAlpha[0]);
                             // draw_line_width(_nw / 2 - _nowl / 2, _ny, _nw / 2 + _nowl / 2, _ny, _noww);
