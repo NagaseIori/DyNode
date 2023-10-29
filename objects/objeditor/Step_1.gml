@@ -321,10 +321,11 @@ editorSelectMultiple = editorSelectCount > 1;
     	cut();
     if(copyRequest || cutRequest || attachRequest) {
         var _cnt = 0;
-        copyStack = [];
+        var _newCopyStack = [];
+        _newCopyStack = [];
         with(objNote) {
             if(state == stateSelected && noteType <= 2) {
-                array_push(objEditor.copyStack, get_prop());
+                array_push(_newCopyStack, get_prop());
                 _cnt ++;
                 if(objEditor.cutRequest || objEditor.attachRequest) {
                     recordRequest = true;
@@ -332,21 +333,25 @@ editorSelectMultiple = editorSelectCount > 1;
                 }
             }
         }
-        array_sort(copyStack, function (_a, _b) { 
+        array_sort(_newCopyStack, function (_a, _b) { 
             return sign(_a.time == _b.time? _a.position - _b.position : _a.time - _b.time); });
         
         if(_cnt == 0) {
             attachRequestCenter = undefined;
             singlePaste = false;
         }
-        else if(cutRequest)
-            announcement_play(i18n_get("cut_notes", string(_cnt)));
-        else if(copyRequest)
-            announcement_play(i18n_get("copy_notes", string(_cnt)));
-        else if(attachRequest) {
-            editor_set_editmode(0);
-            operation_merge_last_request(2);
+        else {
+        	copyStack = _newCopyStack;
+        	if(cutRequest)
+	            announcement_play(i18n_get("cut_notes", string(_cnt)));
+	        else if(copyRequest)
+	            announcement_play(i18n_get("copy_notes", string(_cnt)));
+	        else if(attachRequest) {
+	            editor_set_editmode(0);
+	            operation_merge_last_request(2);
+	        }
         }
+        
     }
     cutRequest = 0;
     copyRequest = 0;
