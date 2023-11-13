@@ -324,6 +324,7 @@
     {"name":"SnitchNetworkingAsyncEvent","order":8,"path":"scripts/SnitchNetworkingAsyncEvent/SnitchNetworkingAsyncEvent.yy",},
     {"name":"FMODGMS_Util_SamplesToSeconds","order":6,"path":"scripts/FMODGMS_Util_SamplesToSeconds/FMODGMS_Util_SamplesToSeconds.yy",},
     {"name":"CleanRing","order":10,"path":"scripts/CleanRing/CleanRing.yy",},
+    {"name":"scrTest","order":17,"path":"scripts/scrTest/scrTest.yy",},
     {"name":"scribble_super_glyph_copy","order":2,"path":"scripts/scribble_super_glyph_copy/scribble_super_glyph_copy.yy",},
     {"name":"__CleanConfig","order":5,"path":"scripts/__CleanConfig/__CleanConfig.yy",},
     {"name":"SnapToQML","order":3,"path":"scripts/SnapToQML/SnapToQML.yy",},

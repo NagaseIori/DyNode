@@ -75,16 +75,37 @@ depth = 0;
 
 #region Mixer
     
+    #macro MIXER_AVERAGE_TIME_THRESHOLD 10 // ms
+    
     mixerX = array_create(2, global.resolutionH/2);
     mixerNextX = array_create(2, note_pos_to_x(2.5, 1));
     mixerSpeed = 0.5;
     mixerMaxSpeed = 250; // px per frame
-    mixerNextNote = [-1, -1]
     mixerShadow = [];
     mixerShadow[0] = instance_create(0, 0, objShadowMIX);
     mixerShadow[1] = instance_create(0, 0, objShadowMIX);
     mixerShadow[0].image_angle = 270;
     mixerShadow[1].image_angle = 90;
+
+    function mixer_get_next_x(side) {
+    	var found = false, beginTime = 0, result = 0, accum = 0;
+        for(var i=chartNotesArrayAt; i<chartNotesCount
+        	&& (chartNotesArray[i].time - nowTime) * playbackSpeed / global.resolutionW <= MIXER_REACTION_RANGE; i++)
+        	if(chartNotesArray[i].side == side) {
+        		var _note = chartNotesArray[i];
+        		if(!found) {
+        			found = true;
+        			beginTime = _note.time;
+        		}
+        		if(_note.time - beginTime > MIXER_AVERAGE_TIME_THRESHOLD)
+        			break;
+        		result += _note.position * (1 / _note.width);
+        		accum += 1/_note.width;
+        	}
+        if(!found) return undefined;
+        result /= accum;
+        return note_pos_to_x(result, side);
+    }
 
 #endregion
 
@@ -102,7 +123,7 @@ depth = 0;
     chartMusicFile = "";
     chartFile = "";
     
-    chartNotesArray = [];
+    chartNotesArray = [];				// Type is objNote.get_prop()'s return struct.
     chartNotesArrayActivated = [];		// Activated notes in a step.
     chartNotesArrayAt = 0;
     chartNotesCount = 0;

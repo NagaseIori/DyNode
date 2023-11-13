@@ -1,9 +1,5 @@
 /// @description Reset Tags & Time Update & Activate notes
 
-// Mixer
-    
-    array_fill(mixerNextNote, -1, 0, 2);
-    
 #region TIME UPDATE
 
 var _music_resync_request = false;

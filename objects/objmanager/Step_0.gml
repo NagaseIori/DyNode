@@ -39,6 +39,7 @@ var _h = 0;
 var _margin = 10;
 var _l = array_length(announcements);
 for(var i=array_length(announcements)-1; i>=0; i--) {
+	/// @self Id.Instance.objAnnouncement
 	with(announcements[i]) {
 		targetY = _h;
 		_h += element.get_height() + _margin;

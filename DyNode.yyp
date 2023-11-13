@@ -391,6 +391,7 @@
     {"id":{"name":"SnitchNetworkingAsyncEvent","path":"scripts/SnitchNetworkingAsyncEvent/SnitchNetworkingAsyncEvent.yy",},},
     {"id":{"name":"FMODGMS_Util_SamplesToSeconds","path":"scripts/FMODGMS_Util_SamplesToSeconds/FMODGMS_Util_SamplesToSeconds.yy",},},
     {"id":{"name":"CleanRing","path":"scripts/CleanRing/CleanRing.yy",},},
+    {"id":{"name":"scrTest","path":"scripts/scrTest/scrTest.yy",},},
     {"id":{"name":"scribble_super_glyph_copy","path":"scripts/scribble_super_glyph_copy/scribble_super_glyph_copy.yy",},},
     {"id":{"name":"__CleanConfig","path":"scripts/__CleanConfig/__CleanConfig.yy",},},
     {"id":{"name":"SnapToQML","path":"scripts/SnapToQML/SnapToQML.yy",},},

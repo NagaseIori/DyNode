@@ -5,6 +5,9 @@
     for(var i=0; i<2; i++) {
         
         // Mixer Restriction
+        var _nextX = mixer_get_next_x(i+1);
+        if(!is_undefined(_nextX))
+        	mixerNextX[i] = _nextX;
         mixerNextX[i] = clamp(mixerNextX[i], resor_to_y(198/1080), resor_to_y(858/1080));
         
         mixerX[i] = lerp_lim_a(mixerX[i], mixerNextX[i], mixerSpeed, mixerMaxSpeed);

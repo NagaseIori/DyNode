@@ -151,6 +151,8 @@ _update_url = "";
 
 // Init finished
 
+if(debug_mode) test_at_start();
+
 if(debug_mode) room_goto(rMain);
 else
 	room_goto(rStartPage);

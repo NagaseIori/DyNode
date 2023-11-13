@@ -600,3 +600,13 @@ function assert(expression) {
 function filename_name_no_ext(file_name) {
 	return string_replace(filename_name(file_name), filename_ext(file_name), "");
 }
+
+function array_lower_bound(array, lim) {
+	var l = 0, r = array_length(array), mid;
+	while(l!=r) {
+		mid = (l+r)>>1;
+		if(array[mid] < lim) l = mid+1;
+		else r = mid;
+	}
+	return l;
+}
