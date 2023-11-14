@@ -14,10 +14,13 @@ image_yscale = global.scaleYAdjust;
     time = 0;
     nid = -1;						// Note id
     sid = -1;						// Sub id
+    /// @type {Id.Instance.objHoldSub} 
     sinst = -999;					// Sub instance id
+    /// @type {Id.Instance.objHold} 
     finst = -999;					// Father instance id
     noteType = 0;					// 0 Note 1 Chain 2 Hold
     arrayPos = -1;					// Position in chartNotesArray
+    /// @type {Struct.Note} 
     arrayPointer = undefined;		// Pointer to chartNotesArray
     
     // For Editor
@@ -215,7 +218,7 @@ image_yscale = global.scaleYAdjust;
     	if(_set_pointer) {
     		arrayPointer = _prop;
     	}
-    	return _prop;
+    	return new Note(_prop);
     }
     
     function set_prop(props, record = false) {
