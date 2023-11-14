@@ -1,18 +1,3 @@
-
-/// @description Note's property.
-function Note(init_property) constructor {
-	time = init_property.time;
-	side = init_property.side;
-	width = init_property.width;
-	position = init_property.position;
-	lastTime = init_property.lastTime;
-	noteType = init_property.noteType;
-	inst = init_property.inst;
-	sinst = init_property.sinst;
-	beginTime = init_property.beginTime;
-	lastAttachBar= init_property.lastAttachBar;
-}
-
 function _outbound_check(_x, _y, _side) {
     if(_side == 0 && _y < -100)
         return true;
@@ -93,7 +78,6 @@ function build_note(_id, _type, _time, _position, _width,
         default:
             return;
     }
-	/// @type {Id.Instance.objNote} 
     var _inst = instance_create_depth(0, 0, 0, _obj);
     _inst.width = real(_width);
     _inst.side = real(_side);

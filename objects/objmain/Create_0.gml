@@ -123,7 +123,6 @@ depth = 0;
     chartMusicFile = "";
     chartFile = "";
     
-    /// @type {Array<Struct.Note>} 
     chartNotesArray = [];				// Type is objNote.get_prop()'s return struct.
     chartNotesArrayActivated = [];		// Activated notes in a step.
     chartNotesArrayAt = 0;
