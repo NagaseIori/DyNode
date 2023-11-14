@@ -42,6 +42,7 @@ function safe_video_update() {
             var _status = video_draw();
         	if(_status[0] == -1) {
         		announcement_error("video_playback_error");
+                surface_reset_target();
         		safe_video_free();
         		bgVideoLoaded = false;
         	}
