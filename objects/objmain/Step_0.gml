@@ -32,7 +32,9 @@
     if(keycheck_down_ctrl(vk_f4))
     	background_reset();
     if(keycheck_down(vk_f5))
-    	map_export_xml();
+    	map_export_xml(false);
+    if(keycheck_down_ctrl(vk_f5))
+    	map_export_xml(true);
     if(keycheck_down(vk_f6))
     	map_set_global_bar();
     if(keycheck_down(vk_f11))

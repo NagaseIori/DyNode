@@ -499,7 +499,7 @@ function image_load(_file) {
     sprite_delete(_spr);
 }
 
-function map_export_xml() {
+function map_export_xml(_export_to_dym) {
 	if(array_length(objEditor.timingPoints) == 0) {
 		announcement_error("export_timing_error");
 		return;
@@ -525,7 +525,6 @@ function map_export_xml() {
     note_extra_sub_removal();
 	notes_array_update();				// Sync main notes array
     
-    var _export_to_dym = show_question_i18n("export_to_dym_question");
     if(!objMain.chartBarUsed && !_export_to_dym)
     	timing_point_sync_with_chart_prop();
     if(_export_to_dym) {
