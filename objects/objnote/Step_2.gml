@@ -20,10 +20,13 @@ if(drawVisible && editor_get_editmode() <= 4){
             animTargetInfoA = ctrl_ishold()? 1:0;
         }
         else if(objEditor.editorHighlightLine) {
+        	var _sameside = 
+        		objEditor.editorHighlightSide == side ||
+        		(objEditor.editorHighlightSide > 0 && side > 0)
             var _position = objEditor.editorHighlightPosition == position
-            				&& objEditor.editorHighlightSide == side;
+            				&& _sameside;
             var _width = objEditor.editorHighlightWidth == width 
-            			 && objEditor.editorHighlightSide == side;
+            			 && _sameside;
             var _time = round(objEditor.editorHighlightTime) == round(time);
             if(_position || _width || _time) {
             	animTargetNodeA = 1.0;
