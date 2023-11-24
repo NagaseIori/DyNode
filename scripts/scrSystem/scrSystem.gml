@@ -847,7 +847,7 @@ function project_load(_file = "") {
 	    	project_set_settings(_contents.settings);
     }
     
-    ///// Old version workaround
+    /// Old version workaround
     
 	    if(version_cmp(_contents.version, "v0.1.5") < 0) {
 	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
@@ -855,7 +855,7 @@ function project_load(_file = "") {
 				map_add_offset(-64, true);
 	    }
 		
-	/////
+	///
     
     announcement_play("anno_project_load_complete");
     
@@ -956,7 +956,8 @@ function project_get_settings() {
 		pbspd: objMain.playbackSpeed,
 		hitvol: objMain.volume_get_hitsound(),
 		mainvol: objMain.volume_get_main(),
-		pitchshift: objMain.usingPitchShift
+		pitchshift: objMain.usingPitchShift,
+		beatlineAlpha: objEditor.animBeatlineTargetAlpha
 	};
 }
 
@@ -990,6 +991,9 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "pitchshift")) {
 		objMain.music_pitchshift_switch(str.pitchshift);
+	}
+	if(variable_struct_exists(str, "beatlineAlpha")) {
+		objEditor.animBeatlineTargetAlpha = str.beatlineAlpha;
 	}
 }
 
