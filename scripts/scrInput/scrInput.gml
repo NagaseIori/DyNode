@@ -8,6 +8,7 @@ function InputManager() constructor {
     // In-functions
     
     static _ioclear = function () {
+        io_clear();
         last_mouse_x = 0;
         last_mouse_y = 0;
         
@@ -57,7 +58,7 @@ function InputManager() constructor {
     
     // For Input Reset
     windowNFocusTime = 0;
-    windowNFocusTimeThreshold = 500;
+    windowNFocusTimeThreshold = 75;
     
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
