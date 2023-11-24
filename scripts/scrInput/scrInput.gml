@@ -1,8 +1,9 @@
 
 function InputManager() constructor {
     #macro INPUT_GROUP_DEFAULT_NAME "default"
-    #macro INPUT_MOUSE_HOLD_THRESHOLD 300 // Time Threshold to judge if a mouse press is a hold
+    #macro INPUT_MOUSE_HOLD_THRESHOLD 300 // Time Threshold to judge if the mouse inputs a hold
     #macro INPUT_MOUSE_DOUBLE_CLICK_THRESHOLD 500
+    #macro INPUT_MOUSE_HOLD_DISTANCE_THRESHOLD 15 // Pixels to judge if the mouse inputs a hold
     
     // In-functions
     
@@ -18,7 +19,7 @@ function InputManager() constructor {
         mouseHoldTime = array_create(mouseButtonCount, 0);
         mouseClick = array_create(mouseButtonCount, -1);
         
-        mouseHoldDistanceThreshold = 20;
+        mouseHoldDistanceThreshold = INPUT_MOUSE_HOLD_DISTANCE_THRESHOLD;
         mouseHoldClear = true;
     }
     

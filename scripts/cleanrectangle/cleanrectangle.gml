@@ -77,6 +77,10 @@ function __CleanClassRectangle(_left, _top, _right, _bottom) constructor
     
     static Border = function(_thickness, _colour, _alpha)
     {
+        if (_thickness <= 0) {
+            __borderThickness = 0;
+            return self;
+        }
         __borderThickness = _thickness;
         __borderColour1 = _colour;
         __borderAlpha1  = _alpha;

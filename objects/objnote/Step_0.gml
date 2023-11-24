@@ -39,6 +39,7 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
     
     nodeAlpha = lerp_a(nodeAlpha, animTargetNodeA, animSpeed);
     infoAlpha = lerp_a(infoAlpha, animTargetInfoA, animSpeed);
+    nodeBorderAlpha = lerp_a(nodeBorderAlpha, animTargetNodeBorderA, animSpeed);
 }
 
 // If no longer visible then deactivate self

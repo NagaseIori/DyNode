@@ -4,14 +4,12 @@ if(_outroom_check(x, y)) return;
 
 if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() <= 4) {
     var _inv = noteType == 3 ? -1:1;
-    
-    // Draw Node
-    if(nodeAlpha>EPS) {
-    	CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
-	        .Rounding(5)
-	        .Blend(nodeColor, nodeAlpha)
-	        .Draw();
-    }
+	if(nodeAlpha>EPS) {
+		CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
+			.Rounding(5)
+			.Blend(merge_color(nodeColor, c_fuchsia, nodeBorderAlpha * 0.8), nodeAlpha)
+			.Draw();
+	}
     
     // Draw Information
     if(infoAlpha > EPS) {

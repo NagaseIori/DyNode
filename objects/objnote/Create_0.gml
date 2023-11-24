@@ -48,8 +48,10 @@ image_yscale = global.scaleYAdjust;
     selected = false;
     selBlendColor = 0x4fd5ff;
     nodeAlpha = 0;
+    nodeBorderAlpha = 0;
     infoAlpha = 0;
     animTargetNodeA = 0;
+    animTargetNodeBorderA = 0;
     animTargetInfoA = 0;
     recordRequest = false;
     selectInbound = false;			// If time inbound multi selection
@@ -501,7 +503,10 @@ image_yscale = global.scaleYAdjust;
                 state = stateNormal;
             
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
-                if(!isDragging) {
+                var _select_self_or_ignore = 
+                    objEditor.editorSelectedSingleInboundLast == id || 
+                    objEditor.editorSelectedSingleInboundLast < 0;
+                if(!isDragging && _select_self_or_ignore) {
                     isDragging = true;
                     objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
@@ -560,6 +565,11 @@ image_yscale = global.scaleYAdjust;
                         }
                     }
                 }
+            } else {
+                if(!editor_select_is_dragging())
+                if(_mouse_inbound_check())
+                    objEditor.editorSelectedSingleInbound =
+                        editor_select_compare(objEditor.editorSelectedSingleInbound, id);
             }
             
             if((keycheck_down(vk_delete) || keycheck_down(vk_backspace)) && noteType != 3) {

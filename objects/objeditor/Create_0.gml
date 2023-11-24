@@ -39,6 +39,8 @@ editorSelectArea = false;                   // selecting area
 editorSelectAreaPosition = undefined;
 editorSelectInbound = false;                // if at least mouse is inbound one selected note
 editorSelectResetRequest = false;
+editorSelectedSingleInbound = -999;         // Selected single note mouse inbound checker
+editorSelectedSingleInboundLast = -999;         // Selected single note mouse inbound checker
 editorNoteSortRequest = false;
 
 editorHighlightLine = false;

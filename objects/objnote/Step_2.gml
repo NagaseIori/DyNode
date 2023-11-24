@@ -50,6 +50,14 @@ if(drawVisible && editor_get_editmode() <= 4){
         	_col = c_white;
         animTargetNodeA = 1.0;
         animTargetInfoA = 1;
+
+        if(objEditor.editorSelectedSingleInbound == id || isDragging)
+            animTargetNodeBorderA = 1;
+        else
+            animTargetNodeBorderA = 0;
+    }
+    else {
+        animTargetNodeBorderA = 0;
     }
 	if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
 		animTargetNodeA = 0.0;

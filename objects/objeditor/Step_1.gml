@@ -3,6 +3,8 @@
 // Clear selection tags and then update
 editorSelectSingleTarget = -999;
 editorSelectSingleTargetInbound = -999;
+editorSelectedSingleInboundLast = editorSelectedSingleInbound;
+editorSelectedSingleInbound = -999;
 editorSelectOccupied = false;
 editorSelectDragOccupied = false;
 editorSelectInbound = false;
