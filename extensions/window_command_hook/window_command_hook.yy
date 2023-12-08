@@ -18,7 +18,7 @@
   "exportToGame": true,
   "extensionVersion": "1.0.0",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":9223372036854775807,"filename":"window_command_hook.dll","final":"","functions":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"window_command_hook.dll","constants":[],"copyToTargets":9223372036854775807,"filename":"window_command_hook.dll","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"window_command_hook_raw","argCount":2,"args":[
             1,
             2,
@@ -88,7 +88,7 @@
       ],"origname":"extensions\\window_command_hook.dll","ProxyFiles":[
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"window_command_hook_x64.dll","TargetMask":6,},
       ],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"window_command_hook.gml","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"window_command_close","hidden":false,"value":"$F060",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"window_command_maximize","hidden":false,"value":"$F030",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"window_command_minimize","hidden":false,"value":"$F020",},
@@ -104,7 +104,7 @@
         {"name":"window_command_hook_init","path":"extensions/window_command_hook/window_command_hook.yy",},
         {"name":"window_command_hook_prepare_buffer","path":"extensions/window_command_hook/window_command_hook.yy",},
       ],"origname":"extensions\\gml.gml","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":-1,"filename":"autogen.gml","final":"","functions":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"autogen.gml","constants":[],"copyToTargets":-1,"filename":"autogen.gml","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"window_command_hook","argCount":1,"args":[
             2,
           ],"documentation":"","externalName":"window_command_hook","help":"window_command_hook(command:int)->bool","hidden":false,"kind":2,"returnType":2,},

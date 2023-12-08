@@ -346,6 +346,10 @@ depth = 0;
 
 	latencyAdjustStep = 5;	// in ms
 
+// Project stats
+
+    projectTime = 0;    // in ms
+
 #region Methods
 
 // Set music's time to [time].

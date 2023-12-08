@@ -18,7 +18,7 @@
   "exportToGame": true,
   "extensionVersion": "0.0.1",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":192,"filename":"DyCore.dll","final":"","functions":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"DyCore.dll","constants":[],"copyToTargets":192,"filename":"DyCore.dll","final":"","functions":[
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"DyCore_init","argCount":0,"args":[],"documentation":"","externalName":"DyCore_init","help":"DyCore_init()","hidden":false,"kind":1,"returnType":1,},
         {"resourceType":"GMExtensionFunction","resourceVersion":"1.0","name":"DyCore_delaunator","argCount":0,"args":[
             1,

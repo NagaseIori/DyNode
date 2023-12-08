@@ -38,33 +38,35 @@ function safe_video_update() {
             safe_video_seek_to(nowTime);
         
         surface_set_target(bgVideoSurf);
-            draw_clear_alpha(c_black, 0);
-            var _status = video_draw();
-        	if(_status[0] == -1) {
-        		announcement_error("video_playback_error");
-                surface_reset_target();
-        		safe_video_free();
-        		bgVideoLoaded = false;
-        	}
-        	else {
-        		var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
-        		var _wscl = global.resolutionW / _w;
-    		    var _hscl = global.resolutionH / _h;
-    		    var _scl = max(_wscl, _hscl); // Centre & keep ratios
-    		    var _nx = global.resolutionW/2 - _scl * _w / 2;
-    		    var _ny = global.resolutionH/2 - _scl * _h / 2;
-    		    draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
-        	}
-    	surface_reset_target();
+        draw_clear_alpha(c_black, 0);
+        var _status = video_draw();
+        if(_status[0] == -1) {
+            announcement_error("video_playback_error");
+            surface_reset_target();
+            safe_video_free();
+            bgVideoLoaded = false;
+        }
+        else {
+            var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
+            var _wscl = global.resolutionW / _w;
+            var _hscl = global.resolutionH / _h;
+            var _scl = max(_wscl, _hscl); // Centre & keep ratios
+            var _nx = global.resolutionW/2 - _scl * _w / 2;
+            var _ny = global.resolutionH/2 - _scl * _h / 2;
+            draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
+            surface_reset_target();
+        }
     }
     return true;
 }
 
 function safe_video_draw(x, y, alp) {
+
     with(objMain) {
         if(!surface_exists(bgVideoSurf))
             safe_video_update();
-        draw_surface_ext(bgVideoSurf, 0, 0, 1, 1, 0, c_white, alp);
+		if(bgVideoLoaded)
+			draw_surface_ext(bgVideoSurf, 0, 0, 1, 1, 0, c_white, alp);
     }
 }
 

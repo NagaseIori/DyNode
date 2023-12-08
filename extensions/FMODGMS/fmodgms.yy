@@ -18,7 +18,7 @@
   "exportToGame": true,
   "extensionVersion": "0.10.1",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"FMODGMS.dll","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"FMODGMS_LOOPPOINT_START","hidden":false,"value":"0",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"FMODGMS_LOOPPOINT_END","hidden":false,"value":"1",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"FMODGMS_SOUND_TYPE_UNKNOWN","hidden":false,"value":"0",},
@@ -413,9 +413,9 @@
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libFMODGMS.dylib","TargetMask":1,},
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libfmodgms.so","TargetMask":7,},
       ],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":64,"filename":"fmod.dll","final":"","functions":[],"init":"","kind":1,"order":[],"origname":"extensions\\fmod.dll","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":2,"filename":"libfmod.dylib","final":"","functions":[],"init":"","kind":1,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":17179869312,"filename":"libfmod.so.12","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"fmod.dll","constants":[],"copyToTargets":64,"filename":"fmod.dll","final":"","functions":[],"init":"","kind":1,"order":[],"origname":"extensions\\fmod.dll","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"libfmod.dylib","constants":[],"copyToTargets":2,"filename":"libfmod.dylib","final":"","functions":[],"init":"","kind":1,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"libfmod.so.12","constants":[],"copyToTargets":17179869312,"filename":"libfmod.so.12","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject": "",
   "hasConvertedCodeInjection": true,
