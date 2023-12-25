@@ -41,10 +41,13 @@ function safe_video_update() {
         draw_clear_alpha(c_black, 0);
         var _status = video_draw();
         if(_status[0] == -1) {
-            announcement_error("video_playback_error");
+            // announcement_error("video_playback_error");
             surface_reset_target();
-            safe_video_free();
-            bgVideoLoaded = false;
+            //! Bug in runtime 2023.11
+            //! Occasional error message will occur.
+            show_debug_message_safe("VIDEO PLAYBACK ERROR.");
+            // safe_video_free();
+            // bgVideoLoaded = false;
         }
         else {
             var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);

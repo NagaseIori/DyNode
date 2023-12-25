@@ -460,9 +460,9 @@ function video_load(_file, _safe = true) {
     		video_open(objManager.videoPath);
 			video_set_volume(0);
     	}
-    	else {
-    		if(global.__tmp_handlevo_time >= 3000)
-    			announcement_error("video_playback_open_timeout");
+    	else if(video_get_status() != video_status_preparing) {
+    		if(global.__tmp_handlevo_time >= 10000)
+    			announcement_error("video_playback_open_timeout"); 
     		call_cancel(global.__tmp_handlevo);
     		global.__tmp_handlevo = undefined;
     	}
