@@ -1,6 +1,10 @@
 
 // _position_update();
 
+// Project Stat
+
+projectTime += round(delta_time / 1000);
+
 #region GUI Management
 	if(mouse_ishold_r() && !instance_exists(objUISideSwitcher))
 		instance_create(mouse_get_last_pos(1)[0], mouse_get_last_pos(1)[1], objUISideSwitcher);

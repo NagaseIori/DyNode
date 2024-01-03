@@ -18,7 +18,7 @@
   "exportToGame": true,
   "extensionVersion": "1.0.0",
   "files": [
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"libdlgmod.dll","constants":[
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ws_win32","hidden":false,"value":"\"Win32\"",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ws_cocoa","hidden":false,"value":"\"Cocoa\"",},
         {"resourceType":"GMExtensionConstant","resourceVersion":"1.0","name":"ws_x11_zenity","hidden":false,"value":"\"Zenity\"",},
@@ -228,9 +228,9 @@
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libdlgmod_arm64.so","TargetMask":7,},
         {"resourceType":"GMProxyFile","resourceVersion":"1.0","name":"libdlgmod.so","TargetMask":7,},
       ],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":0,"filename":"libdlgmod.zip","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":2,"filename":"dlgmod","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
-    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"","constants":[],"copyToTargets":0,"filename":"dlgmod.zip","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"libdlgmod.zip","constants":[],"copyToTargets":0,"filename":"libdlgmod.zip","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"dlgmod","constants":[],"copyToTargets":2,"filename":"dlgmod","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
+    {"resourceType":"GMExtensionFile","resourceVersion":"1.0","name":"dlgmod.zip","constants":[],"copyToTargets":0,"filename":"dlgmod.zip","final":"","functions":[],"init":"","kind":4,"order":[],"origname":"","ProxyFiles":[],"uncompress":false,"usesRunnerInterface":false,},
   ],
   "gradleinject": "",
   "hasConvertedCodeInjection": true,

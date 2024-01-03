@@ -6,7 +6,7 @@
   "option_windows_borderless": false,
   "option_windows_company_info": "",
   "option_windows_copy_exe_to_dest": false,
-  "option_windows_copyright_info": "NagaseIori © 2023",
+  "option_windows_copyright_info": "NagaseIori © 2024",
   "option_windows_description_info": "DyNode - Yet another Dynamix charting tool",
   "option_windows_disable_sandbox": true,
   "option_windows_display_cursor": true,
@@ -29,6 +29,6 @@
   "option_windows_steam_use_alternative_launcher": false,
   "option_windows_texture_page": "4096x4096",
   "option_windows_use_splash": false,
-  "option_windows_version": "0.1.12.4",
+  "option_windows_version": "0.1.12.5",
   "option_windows_vsync": false,
 }

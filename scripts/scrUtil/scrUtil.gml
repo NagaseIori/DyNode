@@ -397,15 +397,19 @@ function lerp_lim(from, to, amount, limit) {
     return from+_delta;
 }
 
+// Fix: Keep the lerp animation frame-rate independent
+// (based on the parameters tweaked on 165FPS, which is now using a fix parameter instead
+// to keep them work normally)
 function lerp_lim_a(from, to, amount, limit) {
+	var fix_parameter = 60 / 165;
     return lerp_lim(from, to, 
-        amount * global.fpsAdjust, limit * global.fpsAdjust);
+        1 - power(1 - amount * fix_parameter, delta_time / 1000000 * 165),
+		limit * global.fpsAdjust);
 }
 
 function lerp_a(from, to, amount) {
-    return lerp_safe(from, to, amount * global.fpsAdjust);
-    // amount *= global.fpsAdjust;		// Keep the parameters effect
-    // return lerp_safe(from, to, 1 - power(amount, delta_time/1000000*BASE_FPS))
+	var fix_parameter = 60 / 165;
+	return lerp_safe(from, to, 1 - power(1 - amount * fix_parameter, delta_time / 1000000 * 165));
 }
 
 function lerp_safe(from, to, amount) {
