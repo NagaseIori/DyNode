@@ -149,10 +149,10 @@
     "tab_hitsound_volume": "Hit Sound Volume",
     "tab_bg_dim": "Background Brightness",
     "tab_pitchshift": "Disable Pitch Shift (Experimental)",
-    "timing_point_change": "You are modifying the Timing Point at $0 ms. Please enter a string in the format <BPM>,<meter> to make changes.",
+    "timing_point_change": "You are modifying the Timing Point at $0 ms. Please enter a string in the format <offset>,<BPM>,<meter> to make changes.",
     "timing_point_change_err": "An error occurred while modifying the Timing Point. Please ensure that your input string format is valid.",
-    "timing_point_change_success": "位于 $0 ms 上的 Timing Point 被修改为:\nBPM: $1 节拍: $2/4",
-    "timing_fix_question": "检测到修改该 Timing Point 将影响 $0ms 至 $1ms 上的 $2 个音符。是否尝试修正这些音符的时间到新的 BPM 上？",
-    "timing_fix_cross_warning": "检测到有音符在修正后进入了另一个 Timing Point 的区域内。\n如果修正的结果出现问题，你可以随时使用 Ctrl + Z 撤销此修正操作。"
+    "timing_point_change_success": "The Timing Point at $0 ms has been modified to:\nBPM: $1 Beat: $2/4",
+    "timing_fix_question": "Detected that modifying this Timing Point will affect $2 notes from $0ms to $1ms. Would you like to attempt to adjust these notes' timings to the new BPM?",
+    "timing_fix_cross_warning": "Detected that some notes will enter another Timing Point's area after adjustment.\nIf there are issues with the results, you can always undo this action with Ctrl + Z."
   }
 }
