@@ -324,6 +324,7 @@ function operation_do(_type, _from, _to = -1) {
 			break;
 		case OPERATION_TYPE.TPCHANGE:
 			var _tp = timing_point_get_at(_from.time);
+			_tp.time = _to.time;
 			_tp.beatLength = _to.beatLength;
 			_tp.meter = _to.meter;
 			break;
@@ -526,29 +527,42 @@ function timing_point_create(record = false) {
 }
 
 function timing_point_change(tp, record = false) {
-	var _current_setting = $"{mspb_to_bpm(tp.beatLength)},{tp.meter}";
+	var _current_setting = $"{tp.time} , {mspb_to_bpm(tp.beatLength)} , {tp.meter}";
 	var _setting = get_string(i18n_get("timing_point_change", tp.time), _current_setting);
 	if(_setting == _current_setting || _setting == "")
 		return;
 	try {
 		var _arr = string_split(_setting, ",", true);
-		var _nbpm = real(_arr[0]);
-		var _nmeter = int64(_arr[1]);
+		var _oarr = string_split(_current_setting, ",", true);
+		var _noffset = real(_arr[0]);
+		var _nbpm = real(_arr[1]);
+		var _nmeter = int64(_arr[2]);
 
 		var _tpBefore = SnapDeepCopy(tp);
 		var _tpAfter = SnapDeepCopy(tp);
-		_tpAfter.beatLength = bpm_to_mspb(_nbpm);
-		_tpAfter.meter = _nmeter;
+		var _fixable = false;
+		if(_oarr[0] != _arr[0]) {
+			_tpAfter.time = _noffset;
+			_fixable = true;
+		}
+		if(_oarr[1] != _arr[1]) {
+			_tpAfter.beatLength = bpm_to_mspb(_nbpm);
+			_fixable = true;
+		}
+		if(_oarr[2] != _arr[2])
+			_tpAfter.meter = _nmeter;
 
-		timing_fix(tp, _tpAfter);
+		if(_fixable)
+			timing_fix(tp, _tpAfter);
 
-		tp.meter = _nmeter;
+		tp.meter = _tpAfter.meter;
 		tp.beatLength = _tpAfter.beatLength;
+		tp.time = _tpAfter.time;
 
 		if(record)
 			operation_step_add(OPERATION_TYPE.TPCHANGE, _tpBefore, _tpAfter);
 		
-		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter));
+		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter), 5000);
 	} catch (e) {
 		announcement_error(i18n_get("timing_point_change_err") + "\n[scale,0.5]" + string(e));
 		return;
@@ -566,6 +580,7 @@ function timing_fix(tpBefore, tpAfter) {
 			}
 		// Get affected time range.
 		var _timeL = tpBefore.time, _timeR = at+1 == l? 1000000000: timingPoints[at+1].time - 1;
+		var _timeM = at - 1 < 0 ? -1000000000: timingPoints[at-1].time;
 		var _noteArr = objMain.chartNotesArray;
 		var nl = array_length(_noteArr);
 		// Get affected notes.
@@ -588,11 +603,15 @@ function timing_fix(tpBefore, tpAfter) {
 		for(var i=0; i<nl; i++) {
 			var _prop = _affectedNotes[i].inst.get_prop();
 			_prop.time = bar_to_time_dyn(_bar[i]);
+			// Add the offset's delta.
+			_prop.time += tpAfter.time - tpBefore.time;
 			_prop.lastTime = -1;	// Detatch the sub and the hold.
 			if(_prop.time > _timeR)
 				_cross_timing_warning = true;
 			_affectedNotes[i].inst.set_prop(_prop, true);
 		}
+		if(tpAfter.time < _timeM)
+			_cross_timing_warning = true;	// Timing's offset conflicts with another timing.
 		note_sort_request();
 		if(_cross_timing_warning)
 			announcement_warning("timing_fix_cross_warning");

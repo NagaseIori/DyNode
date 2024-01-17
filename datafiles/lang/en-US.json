@@ -149,7 +149,7 @@
     "tab_hitsound_volume": "Hit Sound Volume",
     "tab_bg_dim": "Background Brightness",
     "tab_pitchshift": "Disable Pitch Shift (Experimental)",
-    "timing_point_change": "You are modifying the Timing Point at $0 ms. Please enter a string in the format <BPM>,<meter> to make changes.",
+    "timing_point_change": "You are modifying the Timing Point at $0 ms. Please enter a string in the format <offset>,<BPM>,<meter> to make changes.",
     "timing_point_change_err": "An error occurred while modifying the Timing Point. Please ensure that your input string format is valid.",
     "timing_point_change_success": "The Timing Point at $0 ms has been modified to:\nBPM: $1 Beat: $2/4",
     "timing_fix_question": "Detected that modifying this Timing Point will affect $2 notes from $0ms to $1ms. Would you like to attempt to adjust these notes' timings to the new BPM?",
