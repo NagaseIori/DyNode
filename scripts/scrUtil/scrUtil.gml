@@ -165,49 +165,53 @@ function time_to_bar_for_dym(time) {
 
 // Accurate bar in DyNode's concept.
 // limit argument only used by timing_fix.
-function time_to_bar_dyn(time, limit = -1) {
-    if (!array_length(objEditor.timingPoints)) return 0;
-
-    var totalBars = 1;
-    var nowAt = 0;
-    var l = array_length(objEditor.timingPoints);
-
-    while (nowAt + 1 != l && objEditor.timingPoints[nowAt + 1].time <= time+1) {	// Error correction.
-		if(objEditor.timingPoints[nowAt + 1] > limit) break;
-        totalBars += ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
-            (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
-        nowAt++;
-    }
-
-    var nowTP = objEditor.timingPoints[nowAt];
-    var nowBeats = (time - nowTP.time) / nowTP.beatLength;
-    var nowBars = nowBeats / nowTP.meter;
-
-    return totalBars + nowBars;
+function time_to_bar_dyn(time, limit = 0x7fffffff) {
+	with(objEditor) {
+		if (!array_length(timingPoints)) return 0;
+	
+		var totalBars = 1;
+		var nowAt = 0;
+		var l = array_length(timingPoints);
+	
+		while (nowAt + 1 != l && timingPoints[nowAt + 1].time <= time+1) {	// Error correction.
+			if(timingPoints[nowAt + 1].time > limit) break;
+			totalBars += ceil((timingPoints[nowAt + 1].time - timingPoints[nowAt].time) /
+				(timingPoints[nowAt].beatLength * timingPoints[nowAt].meter));
+			nowAt++;
+		}
+	
+		var nowTP = timingPoints[nowAt];
+		var nowBeats = (time - nowTP.time) / nowTP.beatLength;
+		var nowBars = nowBeats / nowTP.meter;
+	
+		return totalBars + nowBars;
+	}
 }
 
 function bar_to_time_dyn(bar) {
-	if (!array_length(objEditor.timingPoints) || bar <= 0) return 0;
-
-    var totalBars = 1;
-    var nowAt = 0;
-    var l = array_length(objEditor.timingPoints);
-
-    while (nowAt + 1 != l) {
-        var nextTotalBars = totalBars + ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
-            (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
-
-        if (nextTotalBars > bar) break;
-        totalBars = nextTotalBars;
-        nowAt++;
-    }
-
-    var nowTP = objEditor.timingPoints[nowAt];
-    var remainingBars = bar - totalBars;
-    var remainingBeats = remainingBars * nowTP.meter;
-    var time = nowTP.time + remainingBeats * nowTP.beatLength;
-
-    return time;
+	with(objEditor) {
+		if (!array_length(timingPoints) || bar <= 0) return 0;
+	
+		var totalBars = 1;
+		var nowAt = 0;
+		var l = array_length(timingPoints);
+	
+		while (nowAt + 1 != l) {
+			var nextTotalBars = totalBars + ceil((timingPoints[nowAt + 1].time - timingPoints[nowAt].time) /
+				(timingPoints[nowAt].beatLength * timingPoints[nowAt].meter));
+	
+			if (nextTotalBars > bar) break;
+			totalBars = nextTotalBars;
+			nowAt++;
+		}
+	
+		var nowTP = timingPoints[nowAt];
+		var remainingBars = bar - totalBars;
+		var remainingBeats = remainingBars * nowTP.meter;
+		var time = nowTP.time + remainingBeats * nowTP.beatLength;
+	
+		return time;
+	}
 }
 
 #endregion
