@@ -230,12 +230,18 @@ function keycheck_ctrl(key) {
 function keycheck_down_ctrl(key) {
     return ctrl_ishold() && keyboard_check_pressed(key);
 }
-
-function keycheck(key) {
-    return nofunkey_ishold() && keyboard_check(key);
+function keycheck_shift(key) {
+    return shift_ishold() && keyboard_check(key);
 }
-function keycheck_down(key) {
-    return nofunkey_ishold() && keyboard_check_pressed(key);
+function keycheck_down_shift(key) {
+    return shift_ishold() && keyboard_check_pressed(key);
+}
+
+function keycheck(key, nofun = true) {
+    return (nofunkey_ishold() || !nofun) && keyboard_check(key);
+}
+function keycheck_down(key, nofun = true) {
+    return (nofunkey_ishold() || !nofun) && keyboard_check_pressed(key);
 }
 function keycheck_up(key) {
     return keyboard_check_released(key);
