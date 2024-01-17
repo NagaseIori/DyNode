@@ -238,7 +238,7 @@ image_yscale = global.scaleYAdjust;
     	if(variable_struct_exists(props, "lastAttachBar"))
     		lastAttachBar = props.lastAttachBar;
     	
-    	if(noteType == 2 && sinst > 0) {
+    	if(noteType == 2 && sinst > 0 && lastTime >= 0) {
     		note_activate(sinst);
     		sinst.time = time + lastTime;
     		_prop_hold_update();

@@ -550,7 +550,7 @@ function timing_point_change(tp, record = false) {
 		
 		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter));
 	} catch (e) {
-		announcement_error(i18n_get("timing_point_change_err") + "\n" + string(e));
+		announcement_error(i18n_get("timing_point_change_err") + "\n[scale,0.5]" + string(e));
 		return;
 	}
 }
@@ -588,6 +588,7 @@ function timing_fix(tpBefore, tpAfter) {
 		for(var i=0; i<nl; i++) {
 			var _prop = _affectedNotes[i].inst.get_prop();
 			_prop.time = bar_to_time_dyn(_bar[i]);
+			_prop.lastTime = -1;	// Detatch the sub and the hold.
 			if(_prop.time > _timeR)
 				_cross_timing_warning = true;
 			_affectedNotes[i].inst.set_prop(_prop, true);
