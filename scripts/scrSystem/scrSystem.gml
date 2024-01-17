@@ -928,7 +928,8 @@ function project_get_settings() {
 		hitvol: objMain.volume_get_hitsound(),
 		mainvol: objMain.volume_get_main(),
 		pitchshift: objMain.usingPitchShift,
-		beatlineAlpha: objEditor.animBeatlineTargetAlpha
+		beatlineAlpha: objEditor.animBeatlineTargetAlpha,
+		particlesEnabled: objMain.particlesEnabled
 	};
 }
 
@@ -965,6 +966,9 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "beatlineAlpha")) {
 		objEditor.animBeatlineTargetAlpha = str.beatlineAlpha;
+	}
+	if(variable_struct_exists(str, "particlesEnabled")) {
+		objMain.particlesEnabled = str.particlesEnabled;
 	}
 }
 
