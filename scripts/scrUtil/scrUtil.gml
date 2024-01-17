@@ -117,6 +117,7 @@ function generate_pause_shadow(height, indent = 30) {
 #endregion
 
 #region TIME & BAR & BPM
+
 function time_to_bar(time, barpm = objMain.chartBarPerMin) {
     return time * barpm / 60000;
 }
@@ -160,6 +161,27 @@ function time_to_bar_for_dym(time) {
 	}
 	
 	show_error("CONVERSION FATAL ERROR", true);
+}
+
+// Accurate bar in DyNode's concept.
+function time_to_bar_dyn(time) {
+    if (!array_length(objEditor.timingPoints)) return 0;
+
+    var totalBars = 1;
+    var nowAt = 0;
+    var l = array_length(objEditor.timingPoints);
+
+    while (nowAt + 1 != l && objEditor.timingPoints[nowAt + 1].time <= time+1) {	// Error correction.
+        totalBars += ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
+            (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
+        nowAt++;
+    }
+
+    var nowTP = objEditor.timingPoints[nowAt];
+    var nowBeats = (time - nowTP.time) / nowTP.beatLength;
+    var nowBars = nowBeats / nowTP.meter;
+
+    return totalBars + nowBars;
 }
 
 #endregion

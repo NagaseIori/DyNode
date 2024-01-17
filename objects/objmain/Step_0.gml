@@ -44,13 +44,8 @@ projectTime += round(delta_time / 1000);
     if(keycheck_down(vk_f11))
     	switch_debug_info();
     if(keycheck_down_ctrl(ord("B"))) {
-    	if(!chartBarUsed) {
-    		announcement_warning("anno_show_bar_warn");
-    	}
-    	else {
-    		showBar = !showBar;
-    		announcement_adjust("anno_show_bar", showBar);
-    	}
+		showBar = !showBar;
+		announcement_adjust("anno_show_bar", showBar);
     }
     if(keycheck_down(ord("P"))) {
     	hideScoreboard = !hideScoreboard;
