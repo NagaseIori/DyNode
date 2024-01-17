@@ -164,7 +164,8 @@ function time_to_bar_for_dym(time) {
 }
 
 // Accurate bar in DyNode's concept.
-function time_to_bar_dyn(time) {
+// limit argument only used by timing_fix.
+function time_to_bar_dyn(time, limit = -1) {
     if (!array_length(objEditor.timingPoints)) return 0;
 
     var totalBars = 1;
@@ -172,6 +173,7 @@ function time_to_bar_dyn(time) {
     var l = array_length(objEditor.timingPoints);
 
     while (nowAt + 1 != l && objEditor.timingPoints[nowAt + 1].time <= time+1) {	// Error correction.
+		if(objEditor.timingPoints[nowAt + 1] > limit) break;
         totalBars += ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
             (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
         nowAt++;
@@ -421,7 +423,7 @@ function window_set_borderless_fullscreen(_state) {
 #endregion
 
 function in_between(x, l, r) {
-	return abs(r-x) + abs(x-l) == abs(r-l);
+	return abs(abs(r-x) + abs(x-l) - abs(r-l))<=0.0001;
 }
 function pos_inbound(xo, yo, x1, y1, x2, y2, onlytime = -1) {
 	if(onlytime == 0)

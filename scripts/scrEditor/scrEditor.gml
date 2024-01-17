@@ -536,17 +536,65 @@ function timing_point_change(tp, record = false) {
 		var _nmeter = int64(_arr[1]);
 
 		var _tpBefore = SnapDeepCopy(tp);
-
-		tp.beatLength = bpm_to_mspb(_nbpm);
-		tp.meter = _nmeter;
-
 		var _tpAfter = SnapDeepCopy(tp);
+		_tpAfter.beatLength = bpm_to_mspb(_nbpm);
+		_tpAfter.meter = _nmeter;
+
+		timing_fix(tp, _tpAfter);
+
+		tp.meter = _nmeter;
+		tp.beatLength = _tpAfter.beatLength;
 
 		if(record)
 			operation_step_add(OPERATION_TYPE.TPCHANGE, _tpBefore, _tpAfter);
+		
+		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter));
 	} catch (e) {
-		announcement_error("timing_point_change_error");
+		announcement_error(i18n_get("timing_point_change_err") + "\n" + string(e));
 		return;
+	}
+}
+
+function timing_fix(tpBefore, tpAfter) {
+	with(objEditor) {
+		var l = array_length(timingPoints);
+		var at = -1;
+		for(var i=0; i<l; i++)
+			if(timingPoints[i] == tpBefore) {
+				at = i;
+				break;
+			}
+		// Get affected time range.
+		var _timeL = tpBefore.time, _timeR = at+1 == l? 1000000000: timingPoints[at+1].time - 1;
+		var _noteArr = objMain.chartNotesArray;
+		var nl = array_length(_noteArr);
+		// Get affected notes.
+		var _affectedNotes = [];
+		for(var i=0; i<nl; i++)
+			if(in_between(_noteArr[i].time, _timeL, _timeR))
+				array_push(_affectedNotes, _noteArr[i]);
+		if(array_length(_affectedNotes) == 0)
+			return;
+		var _que = show_question(i18n_get("timing_fix_question", _timeL, at+1 == l?objMain.musicLength:_timeR, array_length(_affectedNotes)));
+		if(!_que) return;
+		var _bar = [];
+		nl = array_length(_affectedNotes);
+		// Caculate the notes' bars before.
+		for(var i=0; i<nl; i++)
+			array_push(_bar, time_to_bar_dyn(_affectedNotes[i].time, _timeR));
+		tpBefore.beatLength = tpAfter.beatLength;
+		var _cross_timing_warning = false;
+		// Convert bar to the new time.
+		for(var i=0; i<nl; i++) {
+			var _prop = _affectedNotes[i].inst.get_prop();
+			_prop.time = bar_to_time_dyn(_bar[i]);
+			if(_prop.time > _timeR)
+				_cross_timing_warning = true;
+			_affectedNotes[i].inst.set_prop(_prop, true);
+		}
+		note_sort_request();
+		if(_cross_timing_warning)
+			announcement_warning("timing_fix_cross_warning");
 	}
 }
 

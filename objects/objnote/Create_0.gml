@@ -263,6 +263,20 @@ image_yscale = global.scaleYAdjust;
     	arrayPointer.beginTime = beginTime;
     	arrayPointer.lastAttachBar = lastAttachBar;
     }
+
+    function pull_prop() {
+        if(!is_struct(arrayPointer)) return;
+    	time = arrayPointer.time;
+    	side = arrayPointer.side;
+    	width = arrayPointer.width;
+    	position = arrayPointer.position;
+    	lastTime = arrayPointer.lastTime;
+    	noteType = arrayPointer.noteType;
+    	inst = arrayPointer.id;
+    	sinst = arrayPointer.sinst;
+    	beginTime = arrayPointer.beginTime;
+    	lastAttachBar = arrayPointer.lastAttachBar;
+    }
     
     // If a note is moving out of screen, throw a warning.
 	function note_outscreen_check() {
