@@ -730,35 +730,6 @@ function map_get_alt_title() {
 	return _title;
 }
 
-function map_set_global_bar() {
-	if(objMain.chartBarUsed) {
-		var _resetq = show_question_i18n("bar_reset_question");
-		if(_resetq) {
-			objMain.chartBarUsed = false;
-			objMain.showBar = false;
-			announcement_play("bar_reset_complete");
-		}
-		return;
-	}
-	
-	if(timing_point_sync_with_chart_prop(false, false))
-		return;
-	var _barpm = get_string_i18n(i18n_get("box_set_global_bar_1")+ " :", "");
-	_barpm = string_real(_barpm);
-	if(_barpm == "") return;
-	var _offset = string_digits(get_string_i18n(i18n_get("box_set_global_bar_2")+":", ""));
-	if(_offset == "") return;
-	with(objMain) {
-		chartBarPerMin = real(_barpm);
-		chartBarUsed = true;
-		chartTimeOffset = real(_offset);
-		chartBarOffset = time_to_bar(chartTimeOffset);
-	}
-	
-	announcement_play(i18n_get("anno_set_global_bar_complete") + ": " +_barpm+"/"+string(_offset));
-	
-}
-
 function map_add_offset(_offset = "", record = false) {
 	var _record = false;
 	if(_offset == "") {

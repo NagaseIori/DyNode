@@ -39,8 +39,6 @@ projectTime += round(delta_time / 1000);
     	map_export_xml(false);
     if(keycheck_down_ctrl(vk_f5))
     	map_export_xml(true);
-    if(keycheck_down(vk_f6))
-    	map_set_global_bar();
     if(keycheck_down(vk_f11))
     	switch_debug_info();
     if(keycheck_down_ctrl(ord("B"))) {
