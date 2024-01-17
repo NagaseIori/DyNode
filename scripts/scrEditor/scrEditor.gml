@@ -562,6 +562,7 @@ function timing_point_change(tp, record = false) {
 		if(record)
 			operation_step_add(OPERATION_TYPE.TPCHANGE, _tpBefore, _tpAfter);
 		
+		timing_point_sort();
 		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter), 5000);
 	} catch (e) {
 		announcement_error(i18n_get("timing_point_change_err") + "\n[scale,0.5]" + string(e));

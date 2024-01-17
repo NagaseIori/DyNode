@@ -197,7 +197,7 @@ function bar_to_time_dyn(bar) {
         var nextTotalBars = totalBars + ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
             (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
 
-        if (nextTotalBars >= bar) break;
+        if (nextTotalBars > bar) break;
         totalBars = nextTotalBars;
         nowAt++;
     }
