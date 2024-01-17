@@ -184,6 +184,30 @@ function time_to_bar_dyn(time) {
     return totalBars + nowBars;
 }
 
+function bar_to_time_dyn(bar) {
+	if (!array_length(objEditor.timingPoints) || bar <= 0) return 0;
+
+    var totalBars = 1;
+    var nowAt = 0;
+    var l = array_length(objEditor.timingPoints);
+
+    while (nowAt + 1 != l) {
+        var nextTotalBars = totalBars + ceil((objEditor.timingPoints[nowAt + 1].time - objEditor.timingPoints[nowAt].time) /
+            (objEditor.timingPoints[nowAt].beatLength * objEditor.timingPoints[nowAt].meter));
+
+        if (nextTotalBars >= bar) break;
+        totalBars = nextTotalBars;
+        nowAt++;
+    }
+
+    var nowTP = objEditor.timingPoints[nowAt];
+    var remainingBars = bar - totalBars;
+    var remainingBeats = remainingBars * nowTP.meter;
+    var time = nowTP.time + remainingBeats * nowTP.beatLength;
+
+    return time;
+}
+
 #endregion
 
 #region POSITION TRANSFORM

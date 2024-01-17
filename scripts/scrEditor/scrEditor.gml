@@ -322,6 +322,11 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.TPREMOVE:
 			timing_point_delete_at(_from.time);
 			break;
+		case OPERATION_TYPE.TPCHANGE:
+			var _tp = timing_point_get_at(_from.time);
+			_tp.beatLength = _to.beatLength;
+			_tp.meter = _to.meter;
+			break;
 		case OPERATION_TYPE.OFFSET:
 			map_add_offset(_from);
 			break;
@@ -372,6 +377,9 @@ function operation_undo() {
 				case OPERATION_TYPE.TPREMOVE:
 					operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
 					break;
+				case OPERATION_TYPE.TPCHANGE:
+					operation_do(OPERATION_TYPE.TPCHANGE, _ops[i].toProp, _ops[i].fromProp);
+					break;
 				case OPERATION_TYPE.OFFSET:
 					operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
 					break;
@@ -398,7 +406,8 @@ function operation_redo() {
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
-					operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
+				case OPERATION_TYPE.TPCHANGE:
+					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp);
 					break;
 				case OPERATION_TYPE.ADD:
 					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
@@ -488,6 +497,11 @@ function timing_point_create(record = false) {
 		with(objNote)
 			if(state == stateSelected)
 				_ntime = time;
+		var _ptp = timing_point_get_at(_ntime);
+		if(_ptp != undefined) {
+			timing_point_change(_ptp, record);
+			return;
+		}
 		var _que = show_question_i18n(i18n_get("tpc_extra_question", string_format(_ntime, 1, 3)));
 		if(_que) _time = _ntime;
 	}
@@ -509,7 +523,40 @@ function timing_point_create(record = false) {
     announcement_play(
     	i18n_get("add_timing_point", format_time_ms(_time), string(mspb_to_bpm(_bpm)), string(_meter)), 
     	5000);
-    
+}
+
+function timing_point_change(tp, record = false) {
+	var _current_setting = $"{mspb_to_bpm(tp.beatLength)},{tp.meter}";
+	var _setting = get_string(i18n_get("timing_point_change", tp.time), _current_setting);
+	if(_setting == _current_setting || _setting == "")
+		return;
+	try {
+		var _arr = string_split(_setting, ",", true);
+		var _nbpm = real(_arr[0]);
+		var _nmeter = int64(_arr[1]);
+
+		var _tpBefore = SnapDeepCopy(tp);
+
+		tp.beatLength = bpm_to_mspb(_nbpm);
+		tp.meter = _nmeter;
+
+		var _tpAfter = SnapDeepCopy(tp);
+
+		if(record)
+			operation_step_add(OPERATION_TYPE.TPCHANGE, _tpBefore, _tpAfter);
+	} catch (e) {
+		announcement_error("timing_point_change_error");
+		return;
+	}
+}
+
+function timing_point_get_at(_time) {
+	with(objEditor) {
+		for(var i=0, l=array_length(timingPoints); i<l; i++)
+			if(abs(timingPoints[i].time-_time) <= 1)
+				return timingPoints[i];
+		return undefined;
+	}
 }
 
 function timing_point_delete_at(_time, record = false) {
