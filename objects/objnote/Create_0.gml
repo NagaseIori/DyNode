@@ -64,9 +64,9 @@ image_yscale = global.scaleYAdjust;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
-    animTargetA = 0;
+    animTargetA = 1;
     animTargetLstA = lastAlpha;
-    image_alpha = 0;
+    image_alpha = 1;
     
     // Particles Number
     partNumber = 12;
@@ -404,6 +404,7 @@ image_yscale = global.scaleYAdjust;
         function stateAttach() {
             stateString = "ATCH";
             animTargetA = 0.5;
+            animTargetInfoA = 1.0;
             
             if(editor_get_note_attaching_center() == id) {
             	if(side == 0) {
@@ -521,6 +522,7 @@ image_yscale = global.scaleYAdjust;
         // State Selected
         function stateSelected() {
         	animTargetA = 1;
+            animTargetInfoA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
                 origSubTime = sinst.time;

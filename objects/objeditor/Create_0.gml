@@ -46,6 +46,7 @@ editorSelectedSingleInboundLast = -999;         // Selected single note mouse in
 editorNoteSortRequest = false;
 
 editorHighlightLine = false;
+editorHighlightLineFix = 1;                 // Fix the flickering issue by last at least 2 frames.
 editorHighlightLineEnabled = true;
 editorHighlightTime = 0;
 editorHighlightPosition = 0;

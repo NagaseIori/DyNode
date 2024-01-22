@@ -8,9 +8,9 @@ editorSelectedSingleInbound = -999;
 editorSelectOccupied = false;
 editorSelectDragOccupied = false;
 editorSelectInbound = false;
-editorHighlightLine = false;
 
 editorSelectCount = 0;
+var _note_found = false;
 with(objNote) {
     var _hl = false;
     if(state == stateSelected) {
@@ -29,7 +29,9 @@ with(objNote) {
     
     // Update Highlight Lines
     if(_hl && objEditor.editorHighlightLineEnabled) {
+        _note_found = true;
         objEditor.editorHighlightLine = true;
+        objEditor.editorHighlightLineFix = 1;
         objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;
@@ -37,6 +39,16 @@ with(objNote) {
         if(state == stateAttachSub || state == stateDropSub) {
             objEditor.editorHighlightTime = sinst.time;
         }
+    }
+}
+
+// Fix: highlight line flickering issue
+if(!_note_found) {
+    with(objEditor) {
+        if(editorHighlightLineFix)
+            editorHighlightLineFix --;
+        else
+            editorHighlightLine = false;
     }
 }
 
@@ -77,7 +89,7 @@ editorSelectMultiple = editorSelectCount > 1;
     	editorDefaultWidthMode ++;
     	editorDefaultWidthMode %= 4;
     	announcement_set("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
-    	_attach_sync_request = true;
+    	_attach_reset_request = true;
     }
     if(keycheck_down(ord("K"))) {
     	_attach_sync_request = editor_set_default_width_qbox();
