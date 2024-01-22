@@ -156,6 +156,7 @@
     "timing_fix_cross_warning": "Detected that some notes will enter another Timing Point's area after adjustment.\nIf there are issues with the results, you can always undo this action with Ctrl + Z.",
     "dym_old_version_warning": "DyNode 暂不支持导入来自过旧版本的 Dynamaker 谱面。\n你可以将该谱面读取到最新的 Dynamaker 版本后再次导出以更新谱面格式后重新导入。",
     "bad_xml_chart_format": "该 XML 谱面格式不受 DyNode 支持。DyNode 目前仅支持读取从最新版 Dynamaker 导出的 XML 谱面。\n请在检查谱面格式后重新导入谱面。",
-    "need_a_music_file_error": "创建项目需要一个音乐文件。\n请至少选择填写音乐文件或导入一个含有音乐文件的.dy谱面文件。"
+    "need_a_music_file_error": "创建项目需要一个音乐文件。\n请至少选择填写音乐文件或导入一个含有音乐文件的.dy谱面文件。",
+    "multiple_sides_selection_property_binding": "异侧多选属性绑定"
   }
 }
