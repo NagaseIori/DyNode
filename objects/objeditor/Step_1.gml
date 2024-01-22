@@ -110,8 +110,10 @@ editorSelectMultiple = editorSelectCount > 1;
         announcement_adjust("multiple_sides_selection_property_binding", editorSelectMultiSidesBinding);
     }
 
-    if(keycheck_down_ctrl(ord("A")))
+    if(keycheck_down_ctrl(ord("A"))) {
         editor_select_all();
+        global.__InputManager._ioclear();
+    }
     
     // Notes operation
     
