@@ -75,12 +75,12 @@ function editor_set_default_width(width) {
 	}
 }
 
-function editor_set_editside(side) {
+function editor_set_editside(side, same_then_silence = false) {
 	var _sidename = ["editside_down", "editside_left", "editside_right"];
 	
+	if(!(same_then_silence && objEditor.editorSide == side))
+		announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
 	objEditor.editorSide = side;
-	
-	announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
 	
 	if(editor_get_editmode() == 5)
 		editor_set_editmode(4);
@@ -101,6 +101,9 @@ function editor_select_is_dragging() {
 }
 function editor_select_is_area() {
 	return objEditor.editorSelectArea;
+}
+function editor_editside_allowed(side) {
+	return side == editor_get_editside();
 }
 function editor_select_get_area_position() {
 	var _pos;
@@ -251,6 +254,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     return _inst;
 }
 
+/// @returns {Id.Instance.objNote} Note instance.
 function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }

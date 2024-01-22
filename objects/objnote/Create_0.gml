@@ -59,6 +59,8 @@ image_yscale = global.scaleYAdjust;
     selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
     lastAttachBar = -1;
+    dropWidthError = 0.125;
+    dropWidthAdjustable = false;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
@@ -426,6 +428,7 @@ image_yscale = global.scaleYAdjust;
                 with(objNote) if(state == stateAttach) {
                 	state = stateDrop;
                 	origWidth = width;
+                    dropWidthAdjustable = false;
                 }
             }
                 
@@ -435,7 +438,6 @@ image_yscale = global.scaleYAdjust;
         function stateDrop() {
             stateString = "DROP";
             animTargetA = 0.8;
-            
             
             if(mouse_check_button_released(mb_left)) {
                 var _toSelectState = objEditor.singlePaste;
@@ -467,10 +469,14 @@ image_yscale = global.scaleYAdjust;
             if(!mouse_ishold_l())
             	width = origWidth;
             else {
-            	if(side == 0)
-	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
-	            else
-	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+                if(!dropWidthAdjustable && 2.5 * abs(mouse_get_delta_last_x_l()) / 300 * (side>0?2:1) > dropWidthError)
+                    dropWidthAdjustable = true;
+                if(dropWidthAdjustable) {
+                    if(side == 0)
+                        width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+                    else
+                        width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+                }
             }
             
             width = editor_snap_width(width);
@@ -510,17 +516,16 @@ image_yscale = global.scaleYAdjust;
             }
             stateString = "SEL";
             
-            if(editor_get_editmode() != 4 || editor_get_editside() != side)
+            if(editor_get_editmode() != 4)
                 state = stateNormal;
             
             if(editor_select_is_multiple() && noteType == 3)
                 state = stateNormal;
             
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
-                var _select_self_or_ignore = 
-                    objEditor.editorSelectedSingleInboundLast == id || 
-                    objEditor.editorSelectedSingleInboundLast < 0;
-                if(!isDragging && _select_self_or_ignore) {
+                var _select_self = 
+                    objEditor.editorSelectedSingleInboundLast == id;
+                if(!isDragging && _select_self) {
                     isDragging = true;
                     objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
@@ -528,6 +533,8 @@ image_yscale = global.scaleYAdjust;
                         	origProp = get_prop();
                             origX = x;
                             origY = y;
+                            origTime = time;
+                            origPosition = position;
                         }
                     }
                 }
@@ -548,6 +555,8 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             if(isDragging) {
+                var _delta_time;
+                var _delta_pos;
                 if(side == 0) {
                 	lastAttachBar = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
                     y = lastAttachBar.y;
@@ -562,17 +571,16 @@ image_yscale = global.scaleYAdjust;
                     position = x_to_note_pos(y, side);
                     time = y_to_note_time(x, side);
                 }
+
+                _delta_time = time - origTime;
+                _delta_pos = position - origPosition;
                 
-                var _delta_x = x - origX;
-                var _delta_y = y - origY;
                 
                 with(objNote) {
-                    if(state == stateSelected) {
-                        x = origX + _delta_x;
-                        y = origY + _delta_y;
-                        
-                        position = x_to_note_pos(side?y:x, side);
-                        time = y_to_note_time(side?x:y, side);
+                    if(state == stateSelected) {                        
+                        position = origPosition + _delta_pos;
+                        time = origTime + _delta_time;
+                        _prop_init();
                         if(noteType == 2) {
                             sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
                             _prop_hold_update();
@@ -582,6 +590,7 @@ image_yscale = global.scaleYAdjust;
             } else {
                 if(!editor_select_is_dragging())
                 if(_mouse_inbound_check())
+                if(editor_editside_allowed(side))
                     objEditor.editorSelectedSingleInbound =
                         editor_select_compare(objEditor.editorSelectedSingleInbound, id);
             }

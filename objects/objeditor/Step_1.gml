@@ -262,11 +262,21 @@ editorSelectMultiple = editorSelectCount > 1;
             if(editorMode != 0) editorNoteAttachingCenter = 0;
         }
         if(_attach_sync_request) {
-            var i=0, l=array_length(editorNoteAttaching);
-            for(; i<l; i++) {
-            	editorNoteAttaching[i].side = editorSide;
-            	if(editorMode != 0)
-            		editorNoteAttaching[i].width = editor_get_default_width();
+            if(!copyMultipleSides) {
+                var i=0, l=array_length(editorNoteAttaching);
+                for(; i<l; i++) {
+                    editorNoteAttaching[i].side = editorSide;
+                    if(editorMode != 0)
+                        editorNoteAttaching[i].width = editor_get_default_width();
+                }
+            }
+            else {
+                var i=0, l=array_length(editorNoteAttaching);
+                var _side_delta = editorSide - editor_get_note_attaching_center().side;
+                for(; i<l; i++) {
+                    editorNoteAttaching[i].side += 3 + _side_delta;
+					editorNoteAttaching[i].side %= 3;
+                }
             }
         }
     }
@@ -277,12 +287,14 @@ editorSelectMultiple = editorSelectCount > 1;
     switch editorMode {
         case 0:
             if(editorNoteAttaching == -1) {
+                var _side_mask = 0;
                 editorNoteAttaching = [];
                 for(var i=0, l=array_length(copyStack); i<l; i++) {
                     var _str = copyStack[i];
+                    _side_mask |= 1<<_str.side;
                     array_push(editorNoteAttaching, note_build_attach(
                         _str.noteType,
-                        editorSide,
+                        _str.side,
                         _str.width,
                         _str.position,
                         _str.time,
@@ -294,11 +306,27 @@ editorSelectMultiple = editorSelectCount > 1;
                         attachRequestCenter = undefined;
                     }
                 }
+                if(_side_mask == 1 || _side_mask == 2 || _side_mask == 4) {
+                    for (var i = 0; i < array_length(editorNoteAttaching); i += 1) {
+                        /// @self Id.Instance.objNote
+                        with(editorNoteAttaching[i]) {
+                            side = editor_get_editside();
+                            _prop_init();
+                        }
+                    }
+                    copyMultipleSides = false;
+                }
+                else {
+                    copyMultipleSides = true;
+                    editor_set_editside(editor_get_note_attaching_center().side, true);
+                }
             }
             
             var _chg = keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
             var _len = array_length(editorNoteAttaching);
             editorNoteAttachingCenter = (editorNoteAttachingCenter + _chg + _len) % _len; 
+            if(copyMultipleSides)
+                editor_set_editside(editor_get_note_attaching_center().side, true);
             
             break;
         case 1:

@@ -166,6 +166,7 @@ copyRequest = false;
 cutRequest = false;
 attachRequest = false;
 attachRequestCenter = undefined;
+copyMultipleSides = false;
 singlePaste = false;		// Only paste for one time then return
 
 // Undo & Redo
