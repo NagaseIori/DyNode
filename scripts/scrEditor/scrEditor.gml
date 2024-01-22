@@ -694,7 +694,8 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 			chartBarOffset = time_to_bar(chartTimeOffset);
 			chartBarUsed = true;
 			
-			announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
+			// Deprecated
+			// announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
 			
 			return true;
 		}
