@@ -36,7 +36,7 @@
     "anno_adjust_enabled": "Enabled",
     "anno_adjust_disabled": "Disabled",
     "anno_debug_info": "Debug Information",
-    "anno_show_bar": "Display as Bar instead of Time",
+    "anno_show_bar": "以小节数代替时间显示",
     "anno_show_bar_warn": "You have not set global Bar Per Minute and Offset. Unable to switch between Bar/Time display.\nUse F6 to set.",
     "anno_hide_scoreboard": "Hide scoreboard in edit mode",
     "anno_particles_effect": "Particle Effects",
