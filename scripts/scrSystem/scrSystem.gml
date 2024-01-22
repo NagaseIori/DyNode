@@ -558,8 +558,9 @@ function map_export_xml(_export_to_dym) {
     _default_file_name += string(current_hour) + "-";
     _default_file_name += string(current_minute) + "-";
     _default_file_name += string(current_second);
-    _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, 
-        "Export Dynamix Chart as XMl File 导出谱面XML文件");
+
+	var _file_title = _export_to_dym ? "Export Dynamaker-modified Chart as XML File 导出 DyM 谱面文件" : "Export Dynamix Chart as XML File 导出 XML 谱面文件";
+    _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, _file_title);
     
     if(_file == "") return;
     
