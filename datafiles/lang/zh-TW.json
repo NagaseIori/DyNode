@@ -36,7 +36,7 @@
     "anno_adjust_enabled": "開啟",
     "anno_adjust_disabled": "關閉",
     "anno_debug_info": "調試信息",
-    "anno_show_bar": "以 Bar 代替 Time 顯示",
+    "anno_show_bar": "以小节数代替时间显示",
     "anno_show_bar_warn": "你還未設置全局 Bar Per Minute 與 Offset 。無法切換 Bar/Time 顯示。\n使用 F6 即可進行設置。",
     "anno_hide_scoreboard": "編輯模式下隱藏分數顯示",
     "anno_particles_effect": "粒狀效果",
