@@ -59,6 +59,7 @@ function InputManager() constructor {
     // For Input Reset
     windowNFocusTime = 0;
     windowNFocusTimeThreshold = 75;
+    lowFrameRateFix = false;
     
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
@@ -70,12 +71,15 @@ function InputManager() constructor {
         windowNFocusTime = delta_time / 1000;
 
         if(windowNFocusTime > windowNFocusTimeThreshold) {
-            io_clear_diag();
-            
-            _ioclear();
-            
-            show_debug_message_safe("IO Cleared.");
+            if(!lowFrameRateFix) {
+                io_clear_diag();
+                
+                _ioclear();
+                show_debug_message_safe("IO Cleared.");
+                lowFrameRateFix = true;
+            }
         }
+        else lowFrameRateFix = false;
         
         last_mouse_x = mouse_x;
         last_mouse_y = mouse_y;
