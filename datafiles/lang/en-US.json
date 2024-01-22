@@ -156,6 +156,7 @@
     "timing_fix_cross_warning": "Detected that some notes will enter another Timing Point's area after adjustment.\nIf there are issues with the results, you can always undo this action with Ctrl + Z.",
     "dym_old_version_warning": "DyNode currently does not support importing charts from older versions of Dynamaker. You can open the chart in the latest version of Dynamaker and export it again to update the chart format before re-importing.",
     "bad_xml_chart_format": "This XML chart format is not supported by DyNode. DyNode currently only supports reading XML charts exported from the latest version of Dynamaker. Please check the chart format and re-import the chart after verification.",
-    "need_a_music_file_error": "Creating a project requires a music file.\nPlease select and fill in a music file, or import a .dy chart file that contains a music file."
+    "need_a_music_file_error": "Creating a project requires a music file.\nPlease select and fill in a music file, or import a .dy chart file that contains a music file.",
+    "multiple_sides_selection_property_binding": "Property Binding for Multiple Side Selection"
   }
 }
