@@ -29,6 +29,7 @@ editorDefaultWidthModeName = [
 	];
 editorDefaultWidthMode = 0;
 
+editorSelectMultiSidesBinding = true;       // multiple sides selected notes' properties' binding
 editorSelectSingleTarget = -999;            // instance for single selection target
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;               // selecting note

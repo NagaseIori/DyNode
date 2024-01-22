@@ -577,9 +577,16 @@ image_yscale = global.scaleYAdjust;
                 
                 
                 with(objNote) {
-                    if(state == stateSelected) {                        
-                        position = origPosition + _delta_pos;
-                        time = origTime + _delta_time;
+                    if(state == stateSelected)
+                    {
+                        if(objEditor.editorSelectMultiSidesBinding || side == editor_get_editside()) {
+                            position = origPosition + _delta_pos;
+                            time = origTime + _delta_time;
+                        }
+                        else {
+                            position = origPosition;
+                            time = origTime;
+                        }
                         _prop_init();
                         if(noteType == 2) {
                             sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;

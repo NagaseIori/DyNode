@@ -93,7 +93,10 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down(ord("0")))
     	advanced_expr();
     
-    
+    if(keycheck_down(ord("B"))) {
+        editorSelectMultiSidesBinding = !editorSelectMultiSidesBinding;
+        announcement_adjust("multiple_sides_selection_property_binding", editorSelectMultiSidesBinding);
+    }
     
     // Notes operation
     
