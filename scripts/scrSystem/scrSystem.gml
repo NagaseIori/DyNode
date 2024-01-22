@@ -109,6 +109,14 @@ function map_import_xml(_file) {
     var _tp_lists = [], _nbpm;
     
     // Import Information & bpm
+	if(variable_struct_exists(_str, "DynamixMap")) {
+		announcement_warning("dym_old_version_warning", 10000);
+		return;
+	}
+	else if(!variable_struct_exists(_str, "CMap")) {
+		announcement_error("bad_xml_chart_format");
+		return;
+	}
     var _main = _str.CMap;
     if(_import_info) {
     	objMain.chartTitle = _main.m_path.text;

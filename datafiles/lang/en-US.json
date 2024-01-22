@@ -153,6 +153,8 @@
     "timing_point_change_err": "An error occurred while modifying the Timing Point. Please ensure that your input string format is valid.",
     "timing_point_change_success": "The Timing Point at $0 ms has been modified to:\nBPM: $1 Beat: $2/4",
     "timing_fix_question": "Detected that modifying this Timing Point will affect $2 notes from $0ms to $1ms. Would you like to attempt to adjust these notes' timings to the new BPM?",
-    "timing_fix_cross_warning": "Detected that some notes will enter another Timing Point's area after adjustment.\nIf there are issues with the results, you can always undo this action with Ctrl + Z."
+    "timing_fix_cross_warning": "Detected that some notes will enter another Timing Point's area after adjustment.\nIf there are issues with the results, you can always undo this action with Ctrl + Z.",
+    "dym_old_version_warning": "DyNode currently does not support importing charts from older versions of Dynamaker. You can open the chart in the latest version of Dynamaker and export it again to update the chart format before re-importing.",
+    "bad_xml_chart_format": "This XML chart format is not supported by DyNode. DyNode currently only supports reading XML charts exported from the latest version of Dynamaker. Please check the chart format and re-import the chart after verification."
   }
 }
