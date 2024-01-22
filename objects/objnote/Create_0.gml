@@ -292,6 +292,17 @@ image_yscale = global.scaleYAdjust;
 		state = stateSelected;
 		state();
 	}
+
+    function change_side(to_side, vis_consistency = (objEditor.editorDefaultWidthMode == 1)) {
+        if(vis_consistency) {
+            if(side == 0 && to_side > 0)
+                width *= 2;
+            else if(side > 0 && to_side == 0)
+                width /= 2;
+        }
+        side = to_side;
+        _prop_init();
+    }
     
     // _outbound_check was moved to scrNote
 
@@ -392,7 +403,7 @@ image_yscale = global.scaleYAdjust;
         // State attached to cursor
         function stateAttach() {
             stateString = "ATCH";
-            animTargetA = _outbound_check(x, y, side) ? 0:0.5;
+            animTargetA = 0.5;
             
             if(editor_get_note_attaching_center() == id) {
             	if(side == 0) {
@@ -620,7 +631,7 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    
 		    // If double click then send attach request.
-		    if(mouse_isclick_double(0) && _mouse_inbound_check(2)) {
+		    if(mouse_isclick_double(0) && _mouse_inbound_check(2) && editor_editside_allowed(side)) {
                 if(noteType <= 2)
 		    	    objEditor.attach(id);
                 else

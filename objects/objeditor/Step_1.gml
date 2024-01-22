@@ -268,7 +268,7 @@ editorSelectMultiple = editorSelectCount > 1;
             if(!copyMultipleSides) {
                 var i=0, l=array_length(editorNoteAttaching);
                 for(; i<l; i++) {
-                    editorNoteAttaching[i].side = editorSide;
+                    editorNoteAttaching[i].change_side(editorSide);
                     if(editorMode != 0)
                         editorNoteAttaching[i].width = editor_get_default_width();
                 }
@@ -277,8 +277,10 @@ editorSelectMultiple = editorSelectCount > 1;
                 var i=0, l=array_length(editorNoteAttaching);
                 var _side_delta = editorSide - editor_get_note_attaching_center().side;
                 for(; i<l; i++) {
-                    editorNoteAttaching[i].side += 3 + _side_delta;
-					editorNoteAttaching[i].side %= 3;
+                    var _side = editorNoteAttaching[i].side;
+                    _side += 3 + _side_delta;
+					_side %= 3;
+                    editorNoteAttaching[i].change_side(_side);
                 }
             }
         }
@@ -311,11 +313,7 @@ editorSelectMultiple = editorSelectCount > 1;
                 }
                 if(_side_mask == 1 || _side_mask == 2 || _side_mask == 4) {
                     for (var i = 0; i < array_length(editorNoteAttaching); i += 1) {
-                        /// @self Id.Instance.objNote
-                        with(editorNoteAttaching[i]) {
-                            side = editor_get_editside();
-                            _prop_init();
-                        }
+                        editorNoteAttaching[i].change_side(editor_get_editside())
                     }
                     copyMultipleSides = false;
                 }
