@@ -974,7 +974,8 @@ function project_get_settings() {
 		mainvol: objMain.volume_get_main(),
 		pitchshift: objMain.usingPitchShift,
 		beatlineAlpha: objEditor.animBeatlineTargetAlpha,
-		particlesEnabled: objMain.particlesEnabled
+		particlesEnabled: objMain.particlesEnabled,
+		editorSelectMultiSidesBinding: objEditor.editorSelectMultiSidesBinding
 	};
 }
 
@@ -1014,6 +1015,9 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "particlesEnabled")) {
 		objMain.particlesEnabled = str.particlesEnabled;
+	}
+	if(variable_struct_exists(str, "editorSelectMultiSidesBinding")) {
+		objEditor.editorSelectMultiSidesBinding = str.editorSelectMultiSidesBinding;
 	}
 }
 
