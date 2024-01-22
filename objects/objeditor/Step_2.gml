@@ -2,7 +2,7 @@
 
 if(editorMode == 4) {
     // If the note being selected selectable
-    var _selectable = instance_exists(editorSelectSingleTarget) && !keycheck_down(vk_up) && !editorSelectInbound;
+    var _selectable = instance_exists(editorSelectSingleTarget) && !editorSelectInbound;
     // Detect if the mouse is dragging to enable selecting area
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
@@ -17,7 +17,7 @@ if(editorMode == 4) {
         editorSelectArea = false;
     
     // If necessary reset all selected notes
-    if((_selectable && !ctrl_ishold()) || keycheck_down(vk_up)) { 
+    if(_selectable && !ctrl_ishold()) { 
         editorSelectResetRequest = true;
     }
     if(mouse_isclick_l() && !editorSelectInbound && !_selectable) {
