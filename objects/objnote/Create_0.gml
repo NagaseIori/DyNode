@@ -523,9 +523,9 @@ image_yscale = global.scaleYAdjust;
                 state = stateNormal;
             
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
-                var _select_self = 
-                    objEditor.editorSelectedSingleInboundLast == id;
-                if(!isDragging && _select_self) {
+                var _select_self_or_fast_drag = 
+                    objEditor.editorSelectedSingleInboundLast == id || objEditor.editorSelectedSingleInboundLast < 0;
+                if(!isDragging && _select_self_or_fast_drag && side == editor_get_editside()) {
                     isDragging = true;
                     objEditor.editorSelectDragOccupied = 1;
                     with(objNote) {
