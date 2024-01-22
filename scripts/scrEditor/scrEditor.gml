@@ -128,6 +128,12 @@ function editor_select_reset() {
 	objEditor.editorSelectResetRequest = true;
 }
 
+function editor_select_all() {
+	instance_activate_all();
+	with(objNote)
+		state = stateSelected;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
 	var _ret = {
 	    	y: _y,

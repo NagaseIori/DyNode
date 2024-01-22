@@ -109,6 +109,9 @@ editorSelectMultiple = editorSelectCount > 1;
         editorSelectMultiSidesBinding = !editorSelectMultiSidesBinding;
         announcement_adjust("multiple_sides_selection_property_binding", editorSelectMultiSidesBinding);
     }
+
+    if(keycheck_down_ctrl(ord("A")))
+        editor_select_all();
     
     // Notes operation
     
@@ -227,7 +230,7 @@ editorSelectMultiple = editorSelectCount > 1;
             editor_set_editmode(i);
         }
     
-    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
+    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0) {
         editorModeBeforeCopy = editorMode;
         editor_set_editmode(0); // Paste Mode
         _attach_reset_request = true;

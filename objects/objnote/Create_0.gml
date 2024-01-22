@@ -452,13 +452,15 @@ image_yscale = global.scaleYAdjust;
             animTargetA = 0.8;
             
             if(mouse_check_button_released(mb_left)) {
-                var _toSelectState = objEditor.singlePaste;
+                var _singlePaste = objEditor.singlePaste;
+                var _toSelectState = _singlePaste;
             	if(editor_get_editmode() > 0)
                 	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
                 		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true,
                                     _toSelectState);
+                        if(_singlePaste) instance_destroy();
                 		state = stateAttach;
                 		return;
                 	}
@@ -475,7 +477,9 @@ image_yscale = global.scaleYAdjust;
                 if(_outscreen_check(x, y, side))
                 	announcement_warning("warning_note_outbound");
                 
+                if(_singlePaste) instance_destroy();
                 state = stateAttach;
+                return;
             }
             
             if(!mouse_ishold_l())
