@@ -1,7 +1,6 @@
 /// @description Update colored squares
 
-// If visible then update the colored squares
-if(drawVisible && editor_get_editmode() <= 4){
+if(editor_get_editmode() <= 4){
 	var _col = c_blue;
     
     animTargetInfoA = 0;
