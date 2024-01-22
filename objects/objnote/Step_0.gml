@@ -22,7 +22,7 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 	if(editor_get_editmode() < 5 && objMain.fadeOtherNotes && side != editor_get_editside())
     	_factor = 0.5;
     if(state == stateAttach || state == stateSelected) {
-        if(image_alpha < 0.01)
+        if(image_alpha > 0.99)
             image_alpha = animTargetA;      // Prevent weird fade in when attaching notes are reset.
         if(infoAlpha < 0.01)
             infoAlpha = animTargetInfoA;

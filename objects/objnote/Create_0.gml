@@ -459,7 +459,7 @@ image_yscale = global.scaleYAdjust;
                 	if(fixedLastTime != -1) {
                 		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true,
                                     _toSelectState);
-                		instance_destroy();
+                		state = stateAttach;
                 		return;
                 	}
                     var _time = time;
@@ -475,7 +475,7 @@ image_yscale = global.scaleYAdjust;
                 if(_outscreen_check(x, y, side))
                 	announcement_warning("warning_note_outbound");
                 
-                instance_destroy();
+                state = stateAttach;
             }
             
             if(!mouse_ishold_l())
@@ -515,7 +515,6 @@ image_yscale = global.scaleYAdjust;
                 var _teid = random_id(9);
                 build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
                 instance_destroy();
-                sinst = -999;
             }
         }
         

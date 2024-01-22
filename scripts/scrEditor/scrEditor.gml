@@ -233,6 +233,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     var _inst = instance_create_depth(mouse_x, mouse_y, 
                 depth, _obj);
     
+	/// @self Id.Instance.objNote
     with(_inst) {
         state = stateAttach;
         width = _width;
@@ -242,7 +243,6 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
         origTime = _time;
         attaching = true;
         _prop_init();
-        
         
         if(_lasttime != -1 && _type == 2) {
         	sinst = instance_create(x, y, objHoldSub);

@@ -70,6 +70,9 @@ if(drawVisible && editor_get_editmode() <= 4){
 		animTargetNodeA = 0;
 		animTargetInfoA = 0;
 	}
+
+    if(alt_ishold())
+        animTargetInfoA = 1;
 	
 	if(animTargetNodeA > 0)
 	    nodeColor = _col;
