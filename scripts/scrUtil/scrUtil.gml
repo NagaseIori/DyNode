@@ -666,3 +666,73 @@ function array_lower_bound(array, lim) {
 	}
 	return l;
 }
+
+/**
+ * @description Converts a MIME+Base64 encoded string to a file in the temporary directory.
+ *              This function supports different media categories including audio, video, and image.
+ * @param {String} category - The media category to process. Valid options are "audio", "video", "image".
+ * @param {String} base64_string - The Base64 encoded string with MIME type prefix.
+ * @param {String} [file_prefix=""] - Optional prefix for the output file name. Defaults to an empty string.
+ * @returns {String} The path to the converted file in the temporary directory. Returns an empty string
+ *                   if the MIME type is unsupported or if the Base64 string is invalid.
+ *
+ * @example
+ * Example usage
+ * var file_path = convert_mime_base64_to_file("audio", "data:audio/mpeg;base64,SSBsb3ZlIHNjaWVuY2U=");
+ * console.log("File saved to: " + file_path);
+ *
+ * @note The function will show a debug message and return an empty string if the MIME type is not supported.
+ *       It also assumes that the MIME type and Base64 data are correctly formatted in the input string.
+ */
+function convert_mime_base64_to_file(category, base64_string, file_prefix = "") {
+	if(string_length(base64_string) < 12) return "";
+	if(file_prefix != "")
+		file_prefix += "_";
+	static mime_map = {
+		audio: {
+			"audio/mpeg": ".mp3",
+			"audio/wav": ".wav",
+			"audio/aac": ".aac",
+			"audio/ogg": ".ogg",
+			"audio/midi": ".midi",
+			"audio/flac": ".flac"
+		},
+		video: {
+			"video/mp4": ".mp4",
+			"video/x-msvideo": ".avi",
+			"video/quicktime": ".mov",
+			"video/x-ms-wmv": ".wmv",
+			"video/x-flv": ".flv",
+			"video/x-matroska": ".mkv"
+		},
+		image: {
+			"image/jpeg": ".jpeg",
+			"image/png": ".png",
+			"image/gif": ".gif",
+			"image/bmp": ".bmp",
+			"image/svg+xml": ".svg",
+			"image/tiff": ".tiff"
+		}
+	};
+
+	var _current_map = struct_get(mime_map, category);
+    var _start = string_pos(";", base64_string) + 1;
+    var _end = string_pos(",", base64_string);
+    var mime_type = string_copy(base64_string, 6, _start - 6 - 1);
+    var base64_data = string_copy(base64_string, _end + 1, string_length(base64_string) - _end);
+
+    var buffer = buffer_base64_decode(base64_data);
+
+    var file_extension = struct_get(_current_map, mime_type);
+    
+    if (file_extension != undefined) {
+        var file_name = temp_directory + file_prefix + category + file_extension;
+        buffer_save(buffer, file_name);
+		buffer_delete(buffer);
+		return file_name;
+    } else {
+		show_debug_message("Unsupported mime type.");
+		buffer_delete(buffer);
+		return "";
+    }
+}

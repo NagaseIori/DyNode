@@ -52,7 +52,7 @@ function map_load(_file = "") {
 	}
 	var _direct = _file != "";
 	if(_file == "")
-	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.dyn;*.osu)|*.xml;*.dyn;*.osu", "", 
+	    _file = get_open_filename_ext(i18n_get("fileformat_chart") + " (*.xml;*.dyn;*dy;*.osu)|*.xml;*.dyn;*dy;*.osu", "", 
 	        program_directory, "Load Dynamix Chart File 加载谱面文件");
         
     if(_file == "") return;
@@ -76,7 +76,8 @@ function map_load(_file = "") {
     
     switch filename_ext(_file) {
     	case ".xml":
-    		map_import_xml(_file);
+		case ".dy":
+    		map_import_dym(_file, _direct);
     		break;
     	case ".osu":
     		map_import_osu(_file);
@@ -96,13 +97,33 @@ function map_load(_file = "") {
     announcement_play("anno_import_chart_complete");
 }
 
-function map_import_xml(_file) {
+function map_import_dym(_file, _direct = false) {
     var _buf = buffer_load(_file);
-    var _str = snap_alter_from_xml(SnapBufferReadXML(_buf, 0, buffer_get_size(_buf)));
+    var _str;
+	var _dy_format = false;
+	if(filename_ext(_file) == ".xml") {
+		_str = snap_alter_from_xml(SnapBufferReadXML(_buf, 0, buffer_get_size(_buf)));
+	}
+	else {
+		// Parse .dy format
+		_dy_format = true;
+		_str = json_parse(buffer_read(_buf, buffer_text));
+	}
+	static _arg_parser = function(_dy_format, arg) {
+		if(_dy_format)
+			return arg;
+		else
+			return arg.text;
+	}
     buffer_delete(_buf);
-
-	var _import_info = show_question_i18n("box_q_import_info");
-    var _import_tp = show_question_i18n("box_q_import_bpm");
+	var _import_info, _import_tp;
+	if(!_direct) {
+		_import_info = show_question_i18n("box_q_import_info");
+		_import_tp = show_question_i18n("box_q_import_bpm");
+	} else {
+		_import_info = true;
+		_import_tp = true;
+	}
     var _note_id, _note_type, _note_time,
         _note_position, _note_width, _note_subid;
     var _barpm, _offset;
@@ -119,28 +140,31 @@ function map_import_xml(_file) {
 	}
     var _main = _str.CMap;
     if(_import_info) {
-    	objMain.chartTitle = _main.m_path.text;
-    	objMain.chartSideType[0] = _main.m_leftRegion.text;
-    	objMain.chartSideType[1] = _main.m_rightRegion.text;
-    	objMain.chartID = _main.m_mapID.text;
+    	objMain.chartTitle = _arg_parser(_dy_format, _main.m_path);
+    	objMain.chartSideType[0] = _arg_parser(_dy_format, _main.m_leftRegion);
+    	objMain.chartSideType[1] = _arg_parser(_dy_format, _main.m_rightRegion);
+    	objMain.chartID = _arg_parser(_dy_format, _main.m_mapID);
     }
-    _barpm = real(_main.m_barPerMin.text);
-	_offset = real(_main.m_timeOffset.text);
+    _barpm = real(_arg_parser(_dy_format, _main.m_barPerMin));
+	_offset = real(_arg_parser(_dy_format, _main.m_timeOffset));
 	
 	// Import 3 sides Notes
 	
-	var _import_fun = function (_arr, _side) {
+	var _import_fun = function (_dy_format, _arg_parser, _arr, _side) {
+		if(!variable_struct_exists(_arr, "m_notes"))
+			return;
+		_arr = _arr.m_notes;
 		if(!variable_struct_exists(_arr, "CMapNoteAsset"))
 			return;
 		_arr = _arr.CMapNoteAsset;
 		if(!is_array(_arr)) _arr = [_arr];
 		for(var i=0, l=array_length(_arr); i<l; i++) if(variable_struct_names_count(_arr[i]) >= 6) {
-			_note_id = _arr[i].m_id.text;
-			_note_type = _arr[i].m_type.text;
-			_note_time = _arr[i].m_time.text;
-			_note_position = _arr[i].m_position.text;
-			_note_width = _arr[i].m_width.text;
-			_note_subid = _arr[i].m_subId.text;
+			_note_id = _arg_parser(_dy_format, _arr[i].m_id);
+			_note_type = _arg_parser(_dy_format, _arr[i].m_type);
+			_note_time = _arg_parser(_dy_format, _arr[i].m_time);
+			_note_position = _arg_parser(_dy_format, _arr[i].m_position);
+			_note_width = _arg_parser(_dy_format, _arr[i].m_width);
+			_note_subid = _arg_parser(_dy_format, _arr[i].m_subId);
 			
 			if(_note_subid != "-1")
 				_note_subid += "_imported";
@@ -154,11 +178,12 @@ function map_import_xml(_file) {
 	}
 	
 	try {
-		_import_fun(_main.m_notes.m_notes, 0);
-		_import_fun(_main.m_notesLeft.m_notes, 1);
-		_import_fun(_main.m_notesRight.m_notes, 2);
+		_import_fun(_dy_format, _arg_parser, _main.m_notes, 0);
+		_import_fun(_dy_format, _arg_parser, _main.m_notesLeft, 1);
+		_import_fun(_dy_format, _arg_parser, _main.m_notesRight, 2);
 	} catch (e) {
 		announcement_error("error_dym_note_load_failed");
+		show_debug_message(string(e));
 		return;
 	}
 	
@@ -170,8 +195,8 @@ function map_import_xml(_file) {
 				var _bpms = _main.m_argument.m_bpmchange.CBpmchange;
 				if(!is_array(_bpms)) _bpms = [_bpms];
 				for(var i=0, l=array_length(_bpms); i<l; i++) {
-					_note_time = real(_bpms[i].m_time.text);
-					_nbpm = real(_bpms[i].m_value.text);
+					_note_time = real(_arg_parser(_dy_format, _bpms[i].m_time));
+					_nbpm = real(_arg_parser(_dy_format, _bpms[i].m_value));
 				
 					array_push(_tp_lists, {
 			    		time: _note_time,
@@ -262,7 +287,18 @@ function map_import_xml(_file) {
         }
     }
     
-    
+	// Read background & image from .dy format.
+    if(_import_info && _dy_format) {
+		var _music = convert_mime_base64_to_file("audio", _str.remix.music, objMain.chartTitle);
+		if(_music != "")
+			music_load(_music);
+		var _image = convert_mime_base64_to_file("image", _str.remix.bg, objMain.chartTitle);
+		if(_image != "")
+			image_load(_image);
+		var _video = convert_mime_base64_to_file("video", _str.remix.bg, objMain.chartTitle);
+		if(_video != "")
+			video_load(_video);
+	}
 }
 
 function map_import_osu(_file = "") {
