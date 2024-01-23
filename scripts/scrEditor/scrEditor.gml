@@ -76,11 +76,19 @@ function editor_set_default_width(width) {
 }
 
 function editor_set_editside(side, same_then_silence = false) {
-	var _sidename = ["editside_down", "editside_left", "editside_right"];
-	
-	if(!(same_then_silence && objEditor.editorSide == side))
-		announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
-	objEditor.editorSide = side;
+	var _sidename = ["editside_down", "editside_left", "editside_right", "editside_LR"];
+
+	if(side < 3) {
+		if(!(same_then_silence && objEditor.editorSide == side))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		objEditor.editorSide = side;
+		editor_lrside_set(false);
+	}
+	else {
+		if(!(same_then_silence && editor_lrside_get()))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		editor_lrside_set(true);
+	}
 	
 	if(editor_get_editmode() == 5)
 		editor_set_editmode(4);
@@ -103,7 +111,21 @@ function editor_select_is_area() {
 	return objEditor.editorSelectArea;
 }
 function editor_editside_allowed(side) {
+	if(objEditor.editorLRSide && side > 0)
+		return true;
 	return side == editor_get_editside();
+}
+function editor_lrside_set(enable) {
+	with(objEditor) {
+		editorLRSide = enable;
+		editorLRSideLock = false;
+	}
+}
+function editor_lrside_get() {
+	return objEditor.editorLRSide;
+}
+function edtior_lrside_lock_set(lock) {
+	objEditor.editorLRSideLock = lock;
 }
 function editor_select_get_area_position() {
 	var _pos;
@@ -117,7 +139,7 @@ function editor_select_get_area_position() {
 }
 function editor_select_inbound(x, y, side, type, onlytime = -1) {
 	var _pos = editor_select_get_area_position();
-	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
+	return editor_editside_allowed(side) && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
 }
 
 function editor_select_count() {
@@ -129,6 +151,7 @@ function editor_select_reset() {
 }
 
 function editor_select_all() {
+	if(editor_get_editmode() != 4) return;
 	instance_activate_all();
 	with(objNote)
 		state = stateSelected;

@@ -50,7 +50,7 @@ if(editorMode == 4) {
             editorSelectArea = false;
             
             with(objNote) {
-                if(side == editor_get_editside() && 
+                if(editor_editside_allowed(side) && 
                     (state == stateNormal || state == stateSelected) && 
                     editor_select_inbound(x, y, side, noteType)) {
                         state = (state == stateSelected ? stateNormal : stateSelected);

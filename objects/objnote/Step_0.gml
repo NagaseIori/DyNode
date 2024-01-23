@@ -19,7 +19,7 @@ selectUnlock = false;
 
 if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 	var _factor = 1;
-	if(editor_get_editmode() < 5 && objMain.fadeOtherNotes && side != editor_get_editside())
+	if(editor_get_editmode() < 5 && objMain.fadeOtherNotes && !editor_editside_allowed(side))
     	_factor = 0.5;
     if(state == stateAttach || state == stateSelected) {
         if(image_alpha > 0.99)

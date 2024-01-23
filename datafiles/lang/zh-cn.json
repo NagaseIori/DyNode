@@ -80,6 +80,7 @@
     "editside_down": "正面",
     "editside_left": "左侧",
     "editside_right": "右侧",
+    "editside_LR": "双侧",
     "fileformat_chart": "支持的谱面文件",
     "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是: $0 ms。要以这个时间作为 offset 吗？",
     "export_fix_decimal_question": "导出时是否将导出的所有音符时间对毫秒取整？\n使用该功能导出后的谱面将无法在再次导入后正常编辑。",
