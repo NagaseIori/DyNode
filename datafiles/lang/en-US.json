@@ -80,6 +80,7 @@
     "editside_down": "Front",
     "editside_left": "Left Side",
     "editside_right": "Right Side",
+    "editside_LR": "Left Side & Right Side",
     "fileformat_chart": "Supported Chart File Formats",
     "timing_point_create_with_note_question": "A Note has been detected with the time: $0 ms. Would you like to use this time as the offset?",
     "export_fix_decimal_question": "Do you want to round off all note timings to the nearest millisecond when exporting?\nUsing this function, the chart cannot be edited properly after re-importation.",
