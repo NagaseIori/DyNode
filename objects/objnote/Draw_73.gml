@@ -29,7 +29,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	    	.align(fa_left, fa_middle)
 	    	.draw(x + _dx, y + _dy);
 	    
-	    var _time = objMain.showBar ? "Bar " + string_format(time_to_bar(mtime_to_time(time)), 1, 6) : string_format(time, 1, 0);
+	    var _time = objMain.showBar ? "Bar " + string_format(time_to_bar_dyn(time), 1, 5) : string_format(time, 1, 0) + " ms";
 	    scribble(_time)
 	    	.starting_format("fDynamix16", scribble_rgb_to_bgr(0xb2fab4))
 	    	.transform(global.scaleXAdjust, global.scaleYAdjust)
@@ -39,7 +39,7 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	    
 	    if(is_struct(lastAttachBar) && lastAttachBar.bar != undefined) {
 	    	var _bar = string_format(lastAttachBar.bar, 1, 0)+" + "+string_format(lastAttachBar.diva, 1, 0)+"/"+string(lastAttachBar.divb)
-	    	_bar += " [0xFFAB91]("+string(lastAttachBar.divc)+")"
+	    	_bar += " [#FFAB91]("+string(lastAttachBar.divc)+")"
 	    	scribble(_bar)
 		    	.starting_format("fDynamix16", scribble_rgb_to_bgr(0xFFE082))
 		    	.transform(global.scaleXAdjust, global.scaleYAdjust)
@@ -51,10 +51,3 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
     
 }
 else animTargetNodeA = 0;
-
-if(debug_mode && objMain.showDebugInfo && !_outroom_check(x, y)) {
-	draw_set_font(fDynamix16)
-	draw_set_halign(fa_center);
-	draw_set_valign(fa_top);
-    draw_text(x, y+5, stateString + " " + string(priority) + " " + string(arrayPos))
-}

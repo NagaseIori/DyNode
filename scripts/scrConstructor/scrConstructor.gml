@@ -11,6 +11,7 @@ enum OPERATION_TYPE {
     REMOVE,
     TPADD,
     TPREMOVE,
+    TPCHANGE,
     OFFSET
 }
 

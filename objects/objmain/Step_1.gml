@@ -32,6 +32,7 @@ var _music_resync_request = false;
     
     var _timchange = keycheck(ord("D")) - keycheck(ord("A"));
     var _timscr = wheelcheck_up() - wheelcheck_down();
+    _timchange += 3 * (keycheck_shift(ord("D")) - keycheck_shift(ord("A")))
     
     if(_timchange != 0 || _timscr != 0) {
         if(nowPlaying) {

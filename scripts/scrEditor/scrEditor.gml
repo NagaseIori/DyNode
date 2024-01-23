@@ -75,12 +75,20 @@ function editor_set_default_width(width) {
 	}
 }
 
-function editor_set_editside(side) {
-	var _sidename = ["editside_down", "editside_left", "editside_right"];
-	
-	objEditor.editorSide = side;
-	
-	announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+function editor_set_editside(side, same_then_silence = false) {
+	var _sidename = ["editside_down", "editside_left", "editside_right", "editside_LR"];
+
+	if(side < 3) {
+		if(!(same_then_silence && objEditor.editorSide == side))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		objEditor.editorSide = side;
+		editor_lrside_set(false);
+	}
+	else {
+		if(!(same_then_silence && editor_lrside_get()))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		editor_lrside_set(true);
+	}
 	
 	if(editor_get_editmode() == 5)
 		editor_set_editmode(4);
@@ -102,6 +110,23 @@ function editor_select_is_dragging() {
 function editor_select_is_area() {
 	return objEditor.editorSelectArea;
 }
+function editor_editside_allowed(side) {
+	if(objEditor.editorLRSide && side > 0)
+		return true;
+	return side == editor_get_editside();
+}
+function editor_lrside_set(enable) {
+	with(objEditor) {
+		editorLRSide = enable;
+		editorLRSideLock = false;
+	}
+}
+function editor_lrside_get() {
+	return objEditor.editorLRSide;
+}
+function edtior_lrside_lock_set(lock) {
+	objEditor.editorLRSideLock = lock;
+}
 function editor_select_get_area_position() {
 	var _pos;
 	with(objEditor) {
@@ -114,7 +139,7 @@ function editor_select_get_area_position() {
 }
 function editor_select_inbound(x, y, side, type, onlytime = -1) {
 	var _pos = editor_select_get_area_position();
-	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
+	return editor_editside_allowed(side) && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
 }
 
 function editor_select_count() {
@@ -123,6 +148,13 @@ function editor_select_count() {
 
 function editor_select_reset() {
 	objEditor.editorSelectResetRequest = true;
+}
+
+function editor_select_all() {
+	if(editor_get_editmode() != 4) return;
+	instance_activate_all();
+	with(objNote)
+		state = stateSelected;
 }
 
 function editor_snap_to_grid_y(_y, _side) {
@@ -230,6 +262,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     var _inst = instance_create_depth(mouse_x, mouse_y, 
                 depth, _obj);
     
+	/// @self Id.Instance.objNote
     with(_inst) {
         state = stateAttach;
         width = _width;
@@ -239,7 +272,6 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
         origTime = _time;
         attaching = true;
         _prop_init();
-        
         
         if(_lasttime != -1 && _type == 2) {
         	sinst = instance_create(x, y, objHoldSub);
@@ -251,6 +283,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     return _inst;
 }
 
+/// @returns {Id.Instance.objNote} Note instance.
 function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
@@ -322,6 +355,12 @@ function operation_do(_type, _from, _to = -1) {
 		case OPERATION_TYPE.TPREMOVE:
 			timing_point_delete_at(_from.time);
 			break;
+		case OPERATION_TYPE.TPCHANGE:
+			var _tp = timing_point_get_at(_from.time);
+			_tp.time = _to.time;
+			_tp.beatLength = _to.beatLength;
+			_tp.meter = _to.meter;
+			break;
 		case OPERATION_TYPE.OFFSET:
 			map_add_offset(_from);
 			break;
@@ -372,6 +411,9 @@ function operation_undo() {
 				case OPERATION_TYPE.TPREMOVE:
 					operation_do(OPERATION_TYPE.TPADD, _ops[i].fromProp);
 					break;
+				case OPERATION_TYPE.TPCHANGE:
+					operation_do(OPERATION_TYPE.TPCHANGE, _ops[i].toProp, _ops[i].fromProp);
+					break;
 				case OPERATION_TYPE.OFFSET:
 					operation_do(OPERATION_TYPE.OFFSET, -_ops[i].fromProp);
 					break;
@@ -398,7 +440,8 @@ function operation_redo() {
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
-					operation_do(OPERATION_TYPE.MOVE, _ops[i].fromProp, _ops[i].toProp);
+				case OPERATION_TYPE.TPCHANGE:
+					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp);
 					break;
 				case OPERATION_TYPE.ADD:
 					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
@@ -488,6 +531,11 @@ function timing_point_create(record = false) {
 		with(objNote)
 			if(state == stateSelected)
 				_ntime = time;
+		var _ptp = timing_point_get_at(_ntime);
+		if(_ptp != undefined) {
+			timing_point_change(_ptp, record);
+			return;
+		}
 		var _que = show_question_i18n(i18n_get("tpc_extra_question", string_format(_ntime, 1, 3)));
 		if(_que) _time = _ntime;
 	}
@@ -509,7 +557,108 @@ function timing_point_create(record = false) {
     announcement_play(
     	i18n_get("add_timing_point", format_time_ms(_time), string(mspb_to_bpm(_bpm)), string(_meter)), 
     	5000);
-    
+}
+
+function timing_point_change(tp, record = false) {
+	var _current_setting = $"{tp.time} , {mspb_to_bpm(tp.beatLength)} , {tp.meter}";
+	var _setting = get_string(i18n_get("timing_point_change", tp.time), _current_setting);
+	if(_setting == _current_setting || _setting == "")
+		return;
+	try {
+		var _arr = string_split(_setting, ",", true);
+		var _oarr = string_split(_current_setting, ",", true);
+		var _noffset = real(_arr[0]);
+		var _nbpm = real(_arr[1]);
+		var _nmeter = int64(_arr[2]);
+
+		var _tpBefore = SnapDeepCopy(tp);
+		var _tpAfter = SnapDeepCopy(tp);
+		var _fixable = false;
+		if(_oarr[0] != _arr[0]) {
+			_tpAfter.time = _noffset;
+			_fixable = true;
+		}
+		if(_oarr[1] != _arr[1]) {
+			_tpAfter.beatLength = bpm_to_mspb(_nbpm);
+			_fixable = true;
+		}
+		if(_oarr[2] != _arr[2])
+			_tpAfter.meter = _nmeter;
+
+		if(_fixable)
+			timing_fix(tp, _tpAfter);
+
+		tp.meter = _tpAfter.meter;
+		tp.beatLength = _tpAfter.beatLength;
+		tp.time = _tpAfter.time;
+
+		if(record)
+			operation_step_add(OPERATION_TYPE.TPCHANGE, _tpBefore, _tpAfter);
+		
+		timing_point_sort();
+		announcement_play(i18n_get("timing_point_change_success", tp.time, _nbpm, _nmeter), 5000);
+	} catch (e) {
+		announcement_error(i18n_get("timing_point_change_err") + "\n[scale,0.5]" + string(e));
+		return;
+	}
+}
+
+function timing_fix(tpBefore, tpAfter) {
+	with(objEditor) {
+		var l = array_length(timingPoints);
+		var at = -1;
+		for(var i=0; i<l; i++)
+			if(timingPoints[i] == tpBefore) {
+				at = i;
+				break;
+			}
+		// Get affected time range.
+		var _timeL = tpBefore.time, _timeR = at+1 == l? 1000000000: timingPoints[at+1].time - 1;
+		var _timeM = at - 1 < 0 ? -1000000000: timingPoints[at-1].time;
+		var _noteArr = objMain.chartNotesArray;
+		var nl = array_length(_noteArr);
+		// Get affected notes.
+		var _affectedNotes = [];
+		for(var i=0; i<nl; i++)
+			if(in_between(_noteArr[i].time, _timeL, _timeR))
+				array_push(_affectedNotes, _noteArr[i]);
+		if(array_length(_affectedNotes) == 0)
+			return;
+		var _que = show_question(i18n_get("timing_fix_question", _timeL, at+1 == l?objMain.musicLength:_timeR, array_length(_affectedNotes)));
+		if(!_que) return;
+		var _bar = [];
+		nl = array_length(_affectedNotes);
+		// Caculate the notes' bars before.
+		for(var i=0; i<nl; i++)
+			array_push(_bar, time_to_bar_dyn(_affectedNotes[i].time, _timeR));
+		tpBefore.beatLength = tpAfter.beatLength;
+		var _cross_timing_warning = false;
+		// Convert bar to the new time.
+		for(var i=0; i<nl; i++) {
+			var _prop = _affectedNotes[i].inst.get_prop();
+			_prop.time = bar_to_time_dyn(_bar[i]);
+			// Add the offset's delta.
+			_prop.time += tpAfter.time - tpBefore.time;
+			_prop.lastTime = -1;	// Detatch the sub and the hold.
+			if(_prop.time > _timeR)
+				_cross_timing_warning = true;
+			_affectedNotes[i].inst.set_prop(_prop, true);
+		}
+		if(tpAfter.time < _timeM)
+			_cross_timing_warning = true;	// Timing's offset conflicts with another timing.
+		note_sort_request();
+		if(_cross_timing_warning)
+			announcement_warning("timing_fix_cross_warning");
+	}
+}
+
+function timing_point_get_at(_time) {
+	with(objEditor) {
+		for(var i=0, l=array_length(timingPoints); i<l; i++)
+			if(abs(timingPoints[i].time-_time) <= 1)
+				return timingPoints[i];
+		return undefined;
+	}
 }
 
 function timing_point_delete_at(_time, record = false) {
@@ -578,7 +727,8 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 			chartBarOffset = time_to_bar(chartTimeOffset);
 			chartBarUsed = true;
 			
-			announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
+			// Deprecated
+			// announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
 			
 			return true;
 		}

@@ -59,6 +59,7 @@ function InputManager() constructor {
     // For Input Reset
     windowNFocusTime = 0;
     windowNFocusTimeThreshold = 75;
+    lowFrameRateFix = false;
     
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
@@ -70,12 +71,15 @@ function InputManager() constructor {
         windowNFocusTime = delta_time / 1000;
 
         if(windowNFocusTime > windowNFocusTimeThreshold) {
-            io_clear_diag();
-            
-            _ioclear();
-            
-            show_debug_message_safe("IO Cleared.");
+            if(!lowFrameRateFix) {
+                io_clear_diag();
+                
+                _ioclear();
+                show_debug_message_safe("IO Cleared.");
+                lowFrameRateFix = true;
+            }
         }
+        else lowFrameRateFix = false;
         
         last_mouse_x = mouse_x;
         last_mouse_y = mouse_y;
@@ -230,12 +234,18 @@ function keycheck_ctrl(key) {
 function keycheck_down_ctrl(key) {
     return ctrl_ishold() && keyboard_check_pressed(key);
 }
-
-function keycheck(key) {
-    return nofunkey_ishold() && keyboard_check(key);
+function keycheck_shift(key) {
+    return shift_ishold() && keyboard_check(key);
 }
-function keycheck_down(key) {
-    return nofunkey_ishold() && keyboard_check_pressed(key);
+function keycheck_down_shift(key) {
+    return shift_ishold() && keyboard_check_pressed(key);
+}
+
+function keycheck(key, nofun = true) {
+    return (nofunkey_ishold() || !nofun) && keyboard_check(key);
+}
+function keycheck_down(key, nofun = true) {
+    return (nofunkey_ishold() || !nofun) && keyboard_check_pressed(key);
 }
 function keycheck_up(key) {
     return keyboard_check_released(key);

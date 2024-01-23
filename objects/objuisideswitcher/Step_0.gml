@@ -1,5 +1,7 @@
 
-if(mouse_x < x - sideButtonWidth / 2) choosing = 0;
+if(mouse_y < y - sideButtonWidth / 2 && in_between(mouse_x, x-sideButtonWidth/2, x+sideButtonWidth/2))
+    choosing = 3;
+else if(mouse_x < x - sideButtonWidth / 2) choosing = 0;
 else if(mouse_x > x + sideButtonWidth / 2) choosing = 2;
 else choosing = 1;
 
@@ -8,5 +10,5 @@ if(mouse_check_button_released(mb_right)) {
     instance_destroy();
 }
 
-animTargetGradAlpha = [0, 0, 0];
+animTargetGradAlpha = [0, 0, 0, 0];
 animTargetGradAlpha[choosing] = 1;

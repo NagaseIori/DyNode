@@ -7,7 +7,10 @@ depth = -10000;
 editorMode = 5;                             // 1 note 2 chain 3 hold 4 view 5 play 0 copy
 editorModeBeforeCopy = 5;
 editorSide = 0;                             // 0 down 1 left 2 right
+editorLRSide = false;                       // Special mode
+editorLRSideLock = false;                   // For special mode lock
 editorLastSide = 0;
+/// @type {Array<Id.Instance.objNote>} 
 editorNoteAttaching = -1;                   // instances that attached to cursor now
 editorNoteAttachingCenter = 0;           // attached instances' center
 
@@ -29,6 +32,7 @@ editorDefaultWidthModeName = [
 	];
 editorDefaultWidthMode = 0;
 
+editorSelectMultiSidesBinding = true;       // multiple sides selected notes' properties' binding
 editorSelectSingleTarget = -999;            // instance for single selection target
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;               // selecting note
@@ -44,6 +48,7 @@ editorSelectedSingleInboundLast = -999;         // Selected single note mouse in
 editorNoteSortRequest = false;
 
 editorHighlightLine = false;
+editorHighlightLineFix = 1;                 // Fix the flickering issue by last at least 2 frames.
 editorHighlightLineEnabled = true;
 editorHighlightTime = 0;
 editorHighlightPosition = 0;
@@ -166,6 +171,7 @@ copyRequest = false;
 cutRequest = false;
 attachRequest = false;
 attachRequestCenter = undefined;
+copyMultipleSides = false;
 singlePaste = false;		// Only paste for one time then return
 
 // Undo & Redo

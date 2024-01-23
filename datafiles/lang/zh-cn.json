@@ -36,7 +36,7 @@
     "anno_adjust_enabled": "开启",
     "anno_adjust_disabled": "关闭",
     "anno_debug_info": "调试信息",
-    "anno_show_bar": "以 Bar 代替 Time 显示",
+    "anno_show_bar": "以小节数代替时间显示",
     "anno_show_bar_warn": "你还未设置全局 Bar Per Minute 与 Offset 。无法切换 Bar/Time 显示。\n使用 F6 即可进行设置。",
     "anno_hide_scoreboard": "编辑模式下隐藏分数显示",
     "anno_particles_effect": "粒子效果",
@@ -80,6 +80,7 @@
     "editside_down": "正面",
     "editside_left": "左侧",
     "editside_right": "右侧",
+    "editside_LR": "双侧",
     "fileformat_chart": "支持的谱面文件",
     "timing_point_create_with_note_question": "检测到你已经选择一个 Note，它的时间是: $0 ms。要以这个时间作为 offset 吗？",
     "export_fix_decimal_question": "导出时是否将导出的所有音符时间对毫秒取整？\n使用该功能导出后的谱面将无法在再次导入后正常编辑。",
@@ -95,7 +96,7 @@
     "anno_default_width": "设置默认宽度为",
     "error_config_file_corrupted": "检测到配置文件损坏。将还原所有的配置为默认值。",
     "anno_reload_config": "配置已重载。一部分配置可能需要重启游戏来生效。",
-    "start_page_hint": "F7: 切换无边框全屏\nF12: 查看全部快捷键\nDyNode目前仅支持1920x1080的渲染分辨率。",
+    "start_page_hint": "F7: 切换无边框全屏\nF12: 查看快捷键 / 在线文档\nDyNode目前仅支持1920x1080的渲染分辨率。",
     "error_dym_note_load_failed": "导入谱面音符时出错，导入过程已终止。\n建议使用最新版本的 Dynamaker-modified 来导出谱面，你也可以选择向开发者反馈该错误。",
     "error_dym_bpm_load_failed": "未能读取谱面中的变 BPM 信息。\n建议使用最新版本的 Dynamaker-modified 来导出谱面的变 BPM 数据。",
     "error_default_width_must_be_real": "输入的默认宽度必须是一个实数。",
@@ -148,6 +149,15 @@
     "tab_main_volume": "音乐音量",
     "tab_hitsound_volume": "打击音量",
     "tab_bg_dim": "背景亮度",
-    "tab_pitchshift": "禁用变调（实验性）"
+    "tab_pitchshift": "禁用变调（实验性）",
+    "timing_point_change": "你正在修改位于 $0 ms 上的 Timing Point。请以 <offset>,<BPM>,<meter> 的形式来输入字符串进行修改。",
+    "timing_point_change_err": "Timing Point 修改出现错误。请确认你输入的字符串形式是合法的。",
+    "timing_point_change_success": "位于 $0 ms 上的 Timing Point 被修改为:\nBPM: $1 节拍: $2/4",
+    "timing_fix_question": "检测到修改该 Timing Point 将影响 $0ms 至 $1ms 上的 $2 个音符。是否尝试修正这些音符的时间到新的 BPM 上？",
+    "timing_fix_cross_warning": "检测到有音符在修正后进入了另一个 Timing Point 的区域内。\n如果修正的结果出现问题，你可以随时使用 Ctrl + Z 撤销此修正操作。",
+    "dym_old_version_warning": "DyNode 暂不支持导入来自过旧版本的 Dynamaker 谱面。\n你可以将该谱面读取到最新的 Dynamaker 版本后再次导出以更新谱面格式后重新导入。",
+    "bad_xml_chart_format": "该 XML 谱面格式不受 DyNode 支持。DyNode 目前仅支持读取从最新版 Dynamaker 导出的 XML 谱面。\n请在检查谱面格式后重新导入谱面。",
+    "need_a_music_file_error": "创建项目需要一个音乐文件。\n请至少选择填写音乐文件或导入一个含有音乐文件的.dy谱面文件。",
+    "multiple_sides_selection_property_binding": "异侧多选属性绑定"
   }
 }

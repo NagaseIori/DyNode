@@ -52,11 +52,11 @@ _prop_init();
 		    }
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
+			update_prop();
         }
     }
     
     _prop_hold_update();
-    update_prop();
     
     function draw_event (_draw_edge) {
 		if(!drawVisible) return;

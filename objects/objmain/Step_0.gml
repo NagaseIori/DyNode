@@ -39,18 +39,11 @@ projectTime += round(delta_time / 1000);
     	map_export_xml(false);
     if(keycheck_down_ctrl(vk_f5))
     	map_export_xml(true);
-    if(keycheck_down(vk_f6))
-    	map_set_global_bar();
     if(keycheck_down(vk_f11))
     	switch_debug_info();
     if(keycheck_down_ctrl(ord("B"))) {
-    	if(!chartBarUsed) {
-    		announcement_warning("anno_show_bar_warn");
-    	}
-    	else {
-    		showBar = !showBar;
-    		announcement_adjust("anno_show_bar", showBar);
-    	}
+		showBar = !showBar;
+		announcement_adjust("anno_show_bar", showBar);
     }
     if(keycheck_down(ord("P"))) {
     	hideScoreboard = !hideScoreboard;
@@ -68,7 +61,7 @@ projectTime += round(delta_time / 1000);
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
     if(keycheck_down_ctrl(ord("F"))) {
-    	if(editor_get_editside() > 0) {
+    	if(editor_get_editside() >= 1 && editor_get_editside() <= 2) {
     		var _side = editor_get_editside() - 1;
     		var _type = chartSideType[_side];
     		
@@ -86,7 +79,7 @@ projectTime += round(delta_time / 1000);
     		}
     		
 	    	chartSideType[_side] = _type;
-	    	announcement_play("anno_switch_sidetype"+chartSideType[_side]);
+	    	announcement_play(i18n_get("anno_switch_sidetype")+chartSideType[_side]);
     	}
     	else {
     		announcement_warning("anno_switch_sidetype_warn");
@@ -202,8 +195,11 @@ projectTime += round(delta_time / 1000);
 	}
 	else {
 		array_fill(animTargetLazerAlpha, 0, 0, 3);
-		animTargetLazerAlpha[editor_get_editside()] = 1.0;
-		animTargetLineMix[editor_get_editside()] = 0.5;
+		for(var i=0; i<3; i++)
+			if(editor_editside_allowed(i)) {
+				animTargetLazerAlpha[i] = 1.0;
+				animTargetLineMix[i] = 0.5;
+			}
 	}
 	
 	for(var i=0; i<3; i++) {
