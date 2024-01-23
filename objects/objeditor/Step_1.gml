@@ -316,6 +316,9 @@ editorSelectMultiple = editorSelectCount > 1;
                         _side %= 3;
                         editorNoteAttaching[i].change_side(_side);
                     }   // Rotate clockwise
+                    
+                    if(editorMode != 0)
+                        editorNoteAttaching[i].width = editor_get_default_width();
                 }
             }
         }
