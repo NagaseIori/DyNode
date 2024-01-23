@@ -152,7 +152,8 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	}
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate", string(_found)));
-	    		editorSide = 1 + (!(editorSide - 1));
+                if(!editor_lrside_get() && !objEditor.copyMultipleSides)
+	    		    editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
@@ -172,7 +173,8 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	}
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate_copy", string(_found)));
-	    		editorSide = 1 + (!(editorSide - 1));
+                if(!editor_lrside_get() && !objEditor.copyMultipleSides)
+	    		    editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
