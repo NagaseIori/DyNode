@@ -478,7 +478,7 @@ image_yscale = global.scaleYAdjust;
                     sinst.time = time;
 
                     // Lock the LR side mode.
-                    edtior_lrside_lock_set(true);
+                    editor_lrside_lock_set(true);
                     return;
                 }
                 var _note = build_note(random_id(9), noteType, time, position, width, -1, side, false, true,

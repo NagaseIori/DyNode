@@ -124,7 +124,7 @@ function editor_lrside_set(enable) {
 function editor_lrside_get() {
 	return objEditor.editorLRSide;
 }
-function edtior_lrside_lock_set(lock) {
+function editor_lrside_lock_set(lock) {
 	objEditor.editorLRSideLock = lock;
 }
 function editor_select_get_area_position() {

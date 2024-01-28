@@ -8,5 +8,5 @@ if(noteType == 2) {
 note_delete(id, recordRequest);
 
 if(state == stateAttachSub || state == stateDropSub) {
-	edtior_lrside_lock_set(false);
+	editor_lrside_lock_set(false);
 }
