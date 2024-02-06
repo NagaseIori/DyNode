@@ -146,6 +146,9 @@ function mouse_get_delta_x() {
 function mouse_get_delta_y() {
     return mouse_y - global.__InputManager.last_mouse_y;
 }
+function mouse_set_last_pos_l() {
+    global.__InputManager.lastMousePressedPos[0][0] = [mouse_x, mouse_y];
+}
 
 // Get mouse's delta x from last pressed mb_left frame
 function mouse_get_delta_last_x_l() {

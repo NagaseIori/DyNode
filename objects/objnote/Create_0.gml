@@ -500,6 +500,7 @@ image_yscale = global.scaleYAdjust;
                         (2.5 * mouse_get_delta_last_x_l() / 300):
                         (2.5 * mouse_get_delta_last_y_l() / 150)
                         ) > dropWidthError) {
+                    mouse_set_last_pos_l();
                     dropWidthAdjustable = true;
                 }
                 if(dropWidthAdjustable) {
