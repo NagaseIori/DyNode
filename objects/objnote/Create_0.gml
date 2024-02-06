@@ -60,7 +60,7 @@ image_yscale = global.scaleYAdjust;
     selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
     lastAttachBar = -1;
-    dropWidthError = 0.125;
+    dropWidthError = global.dropAdjustError;
     dropWidthAdjustable = false;
     
     animSpeed = 0.4;

@@ -1219,7 +1219,7 @@ function load_config() {
 	_check_set(_con, "graphics");
 	_check_set(_con, "beatlineStyle");
 	_check_set(_con, "musicDelay");
-		
+	_check_set(_con, "dropAdjustError");
 	vars_init();
 	
 	return md5_file(pth);
@@ -1243,7 +1243,8 @@ function save_config() {
 		updatechannel: global.updatechannel,
 		graphics: global.graphics,
 		beatlineStyle: global.beatlineStyle,
-		musicDelay: global.musicDelay
+		musicDelay: global.musicDelay,
+		dropAdjustError: global.dropAdjustError
 	}, true));
 	
 }

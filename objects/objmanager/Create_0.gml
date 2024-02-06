@@ -39,6 +39,7 @@ global.graphics = {
 	AA : 4,
 	VSync : true
 };
+global.dropAdjustError = 0.125;
 
 // Themes Init
 
