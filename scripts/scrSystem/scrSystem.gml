@@ -74,18 +74,23 @@ function map_load(_file = "") {
     if(_timing_reset)
     	timing_point_reset();
     
-    switch filename_ext(_file) {
-    	case ".xml":
-		case ".dy":
-    		map_import_dym(_file, _direct);
-    		break;
-    	case ".osu":
-    		map_import_osu(_file);
-    		break;
-    	case ".dyn":
-    		map_import_dyn(_file);
-    		break;
-    }
+	try {
+		switch filename_ext(_file) {
+			case ".xml":
+			case ".dy":
+				map_import_dym(_file, _direct);
+				break;
+			case ".osu":
+				map_import_osu(_file);
+				break;
+			case ".dyn":
+				map_import_dyn(_file);
+				break;
+		}
+	} catch (e) {
+		announcement_error("谱面解析错误。请确认谱面的格式受 DyNode 支持。\n错误信息：[scale,0.7]"+string(e));
+		return;
+	}
     
     // Notes information init & Remove extra sub notes.
     notes_array_update();
