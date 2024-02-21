@@ -146,8 +146,14 @@ function map_import_dym(_file, _direct = false) {
     var _main = _str.CMap;
     if(_import_info) {
     	objMain.chartTitle = _arg_parser(_dy_format, _main.m_path);
-    	objMain.chartSideType[0] = _arg_parser(_dy_format, _main.m_leftRegion);
-    	objMain.chartSideType[1] = _arg_parser(_dy_format, _main.m_rightRegion);
+		if(variable_struct_exists(_main, "m_leftRegion"))
+    		objMain.chartSideType[0] = _arg_parser(_dy_format, _main.m_leftRegion);
+		else
+			objMain.chartSideType[0] = "PAD";
+		if(variable_struct_exists(_main, "m_rightRegion"))
+    		objMain.chartSideType[1] = _arg_parser(_dy_format, _main.m_rightRegion);
+		else
+			objMain.chartSideType[1] = "PAD";
     	objMain.chartID = _arg_parser(_dy_format, _main.m_mapID);
     }
     _barpm = real(_arg_parser(_dy_format, _main.m_barPerMin));
