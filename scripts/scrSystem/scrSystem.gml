@@ -1231,6 +1231,7 @@ function load_config() {
 	_check_set(_con, "beatlineStyle");
 	_check_set(_con, "musicDelay");
 	_check_set(_con, "dropAdjustError");
+	_check_set(_con, "lastCheckedVersion");
 	vars_init();
 	
 	return md5_file(pth);
@@ -1255,7 +1256,8 @@ function save_config() {
 		graphics: global.graphics,
 		beatlineStyle: global.beatlineStyle,
 		musicDelay: global.musicDelay,
-		dropAdjustError: global.dropAdjustError
+		dropAdjustError: global.dropAdjustError,
+		lastCheckedVersion: global.lastCheckedVersion
 	}, true));
 	
 }

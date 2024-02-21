@@ -40,6 +40,7 @@ global.graphics = {
 	VSync : true
 };
 global.dropAdjustError = 0.125;
+global.lastCheckedVersion = "";
 
 // Themes Init
 
