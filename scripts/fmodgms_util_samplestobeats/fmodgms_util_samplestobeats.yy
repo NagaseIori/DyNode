@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "FMODGMS_Util_SamplesToBeats",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "FMODGMS",
-    "path": "folders/Scripts/FMODGMS.yy",
+  "$GMScript":"",
+  "%Name":"FMODGMS_Util_SamplesToBeats",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FMODGMS_Util_SamplesToBeats",
+  "parent":{
+    "name":"FMODGMS",
+    "path":"folders/Scripts/FMODGMS.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

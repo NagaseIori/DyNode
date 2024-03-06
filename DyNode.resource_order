@@ -1,5 +1,5 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Animation Curves","order":12,"path":"folders/Animation Curves.yy",},
     {"name":"Clean Shapes","order":19,"path":"folders/Clean Shapes.yy",},
     {"name":"(System)","order":1,"path":"folders/Clean Shapes/(System).yy",},
@@ -79,7 +79,7 @@
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
-  "ResourceOrderSettings": [
+  "ResourceOrderSettings":[
     {"name":"SnapToXML","order":3,"path":"scripts/SnapToXML/SnapToXML.yy",},
     {"name":"sprChainL","order":11,"path":"sprites/sprChainL/sprChainL.yy",},
     {"name":"kawase_blur","order":2,"path":"scripts/kawase_blur/kawase_blur.yy",},

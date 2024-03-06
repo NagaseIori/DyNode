@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "FMODGMS_Snd_TagTypeToString",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "FMODGMS",
-    "path": "folders/Scripts/FMODGMS.yy",
+  "$GMScript":"",
+  "%Name":"FMODGMS_Snd_TagTypeToString",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FMODGMS_Snd_TagTypeToString",
+  "parent":{
+    "name":"FMODGMS",
+    "path":"folders/Scripts/FMODGMS.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
