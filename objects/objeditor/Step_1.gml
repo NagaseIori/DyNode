@@ -330,7 +330,7 @@ editorSelectMultiple = editorSelectCount > 1;
     switch editorMode {
         case 0:
             if(editorNoteAttaching == -1) {
-                var _side_mask = editorLRSide ? 6:0;
+                var _side_mask = 0;
                 editorNoteAttaching = [];
                 for(var i=0, l=array_length(copyStack); i<l; i++) {
                     var _str = copyStack[i];
@@ -350,7 +350,7 @@ editorSelectMultiple = editorSelectCount > 1;
                     }
                 }
                 if(_side_mask == 1 || _side_mask == 2 || _side_mask == 4) {
-                    for (var i = 0; i < array_length(editorNoteAttaching); i += 1) {
+                    for (var i = 0; i < array_length(editorNoteAttaching); i ++) {
                         editorNoteAttaching[i].change_side(editor_get_editside())
                     }
                     copyMultipleSides = false;
