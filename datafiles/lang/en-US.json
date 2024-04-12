@@ -111,7 +111,7 @@
     "copy_timing_point": "Copy last Timing Point to $0 ms\nBPM: $1\nMeter: $2/4",
     "error_no_timing_point": "No Timing Point set. Press Y to place at least one Timing Point.",
     "beatline_divs": "Beat Snap Divisor: 1/$0\nDivisor Group: $1",
-    "warning_note_outbound": "You are placing a note whose center is off-screen. This note may not be visible and will be uneditable later. You can use undo to revert this action.",
+    "warning_note_outbound": "你正在放置一个屏幕内完全不可见的音符，该音符可能之后将因此无法被编辑。\n你可以使用撤销来退回上一步操作。",
     "copy_width": "Copy width: $0",
     "adjust_grid_y": "Time Grid Snap",
     "adjust_grid_x": "Position Grid Snap",
