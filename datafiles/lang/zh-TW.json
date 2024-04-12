@@ -111,7 +111,7 @@
     "copy_timing_point": "複製末尾 Timing Point 至時間 $0 處\nBPM: $1\n節拍: $2/4",
     "error_no_timing_point": "你沒有設置任何 Timing Point 。需按 Y 鍵放置至少一個 Timing Point 。",
     "beatline_divs": "節拍細分:  1/$0\n節拍細分組: $1",
-    "warning_note_outbound": "你正在放置一個中心超出屏幕的音符。\n該音符可能在屏幕內不可見，並且之後將因此無法編輯。\n你可以使用撤銷來退回上一步操作。",
+    "warning_note_outbound": "你正在放置一个屏幕内完全不可见的音符，该音符可能之后将因此无法被编辑。\n你可以使用撤销来退回上一步操作。",
     "copy_width": "複製寬度: $0",
     "adjust_grid_y": "時間方向網格吸附",
     "adjust_grid_x": "位置方向網格吸附",
