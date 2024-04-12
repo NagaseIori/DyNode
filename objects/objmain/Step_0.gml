@@ -164,6 +164,9 @@ projectTime += round(delta_time / 1000);
             sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
             time_source_start(timesourceResumeDelay);
             // nowTime = sfmod_channel_get_position(channel, sampleRate);
+
+			// Multiple hacks are used for video resume,
+			// so there is no need to add safe_video_resume or safe_video_seek_to at here.
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);

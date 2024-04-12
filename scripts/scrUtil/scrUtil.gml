@@ -744,3 +744,14 @@ function convert_mime_base64_to_file(category, base64_string, file_prefix = "") 
 		return "";
     }
 }
+
+function surface_clear(surface) {
+	var orig_target = surface_get_target();
+	if(orig_target > 0) surface_reset_target();
+
+	surface_set_target(surface);
+		draw_clear_alpha(c_black, 0);
+	surface_reset_target();
+
+	if(orig_target > 0) surface_set_target(surface);
+}

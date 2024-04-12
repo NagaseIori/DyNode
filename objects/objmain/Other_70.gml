@@ -14,6 +14,7 @@ if(_type == "video_start") {
 	bgVideoDisplay = true;
 	bgVideoReloading = false;
 }
+// ! Deprecated part
 else if(_type == "video_end") {
 	if(bgVideoDestroying) {
 		bgVideoDestroying = false;
@@ -27,5 +28,5 @@ else if(_type == "video_end") {
 		bgVideoDisplay = false;
 		show_debug_message_safe("Video reloading.");
 	}
-		
 }
+// ! Deprecated part ends

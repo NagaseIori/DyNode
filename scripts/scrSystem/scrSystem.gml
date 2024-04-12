@@ -513,6 +513,7 @@ function video_load(_file, _safe = true) {
     		global.__tmp_handlevo_time += delta_time / 1000;
     	if(video_get_status() == video_status_closed && global.__tmp_handlevo_time < 3000) {
     		video_open(objManager.videoPath);
+			video_enable_loop(true);	// Prevent weird bugs
 			video_set_volume(0);
     	}
     	else if(video_get_status() != video_status_preparing) {
