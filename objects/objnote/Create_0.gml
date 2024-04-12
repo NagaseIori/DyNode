@@ -285,7 +285,7 @@ image_yscale = global.scaleYAdjust;
 	function note_outscreen_check() {
 		_prop_init();
 		if(_outscreen_check(x, y, side))
-			announcement_warning("warning_note_outbound", 5000, "wob");
+			note_outbound_warning();
 	}
 	
 	// Change to selected state.
@@ -484,8 +484,7 @@ image_yscale = global.scaleYAdjust;
                 var _note = build_note(random_id(9), noteType, time, position, width, -1, side, false, true,
                             _toSelectState);
                 
-                if(_outscreen_check(x, y, side))
-                	announcement_warning("warning_note_outbound");
+                note_outscreen_check();
                 
                 if(_singlePaste) instance_destroy();
                 state = stateAttach;

@@ -877,3 +877,7 @@ function note_error_correction(_limit, _array = objMain.chartNotesArray, _sync_t
 	}
 	note_activation_reset();
 }
+
+function note_outbound_warning() {
+	announcement_warning("warning_note_outbound", 5000, "wob");
+}
