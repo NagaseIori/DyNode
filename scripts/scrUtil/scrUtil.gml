@@ -427,7 +427,15 @@ function window_set_borderless_fullscreen(_state) {
 #endregion
 
 function in_between(x, l, r) {
-	return abs(abs(r-x) + abs(x-l) - abs(r-l))<=0.0001;
+	var _l, _r;
+	if(l>r) {
+		_l = r; _r = l;
+	}
+	else {
+		_l = l; _r = r;
+	}
+
+	return x >= _l && x <= _r;
 }
 function pos_inbound(xo, yo, x1, y1, x2, y2, onlytime = -1) {
 	if(onlytime == 0)
