@@ -284,7 +284,18 @@ image_yscale = global.scaleYAdjust;
     // If a note is moving out of screen, throw a warning.
 	function note_outscreen_check() {
 		_prop_init();
-		if(_outscreen_check(x, y, side))
+        var _outbound = false;
+        if(side == 0) {
+            var _xl = x - pWidth / 2, _xr = x + pWidth / 2;
+            if(_xr <= 0 || _xl >= global.resolutionW)
+                _outbound = true;
+        }
+        else {
+            var _yl = y - pWidth / 2, _yr = y + pWidth / 2;
+            if(_yr <= 0 || _yl >= global.resolutionH)
+                _outbound = true;
+        }
+		if(_outbound)
 			note_outbound_warning();
 	}
 	
