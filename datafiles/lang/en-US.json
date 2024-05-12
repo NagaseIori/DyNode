@@ -84,7 +84,7 @@
     "fileformat_chart": "Supported Chart File Formats",
     "timing_point_create_with_note_question": "A Note has been detected with the time: $0 ms. Would you like to use this time as the offset?",
     "export_fix_decimal_question": "Do you want to round off all note timings to the nearest millisecond when exporting?\nUsing this function, the chart cannot be edited properly after re-importation.",
-    "export_fix_error_question": "Do you want to correct errors in the exported chart?\nThis function will align notes with errors within 2 milliseconds.",
+    "export_fix_error_question": "是否对导出的谱面进行误差修正？\n该功能将误差在 $0 毫秒内的音符对齐。",
     "export_to_dym_question": "Do you want to export relevant information for Dynamaker-modified? This option allows the chart to be edited only in the editor.\nIf 'Yes' is selected, all Bar information set will be overwritten by DyNode.",
     "export_timing_error": "You haven't configured Timing, so the chart cannot be exported.",
     "anno_simplify": "Simplified Mode",
