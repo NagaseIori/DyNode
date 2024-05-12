@@ -590,13 +590,13 @@ function map_export_xml(_export_to_dym) {
     }
     // var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
 	var _fix_dec = false;
-    var _fix_error = _export_to_dym? false:show_question_i18n("export_fix_error_question");
+    var _fix_error = _export_to_dym? false:show_question(i18n_get("export_fix_error_question", global.offsetCorrection));
 
 	var _notes_array = SnapDeepCopy(objMain.chartNotesArray);
 
-	// Correct error in 2 milliseconds
+	// Correct the offset error
 	if(_fix_error) {
-		note_error_correction(2, _notes_array, false);
+		note_error_correction(global.offsetCorrection, _notes_array, false);
 	}
     
     var _gen_narray = function (_side, _dec, _dym, _array) {
@@ -1233,6 +1233,9 @@ function load_config() {
 	_check_set(_con, "musicDelay");
 	_check_set(_con, "dropAdjustError");
 	_check_set(_con, "lastCheckedVersion");
+	_check_set(_con, "offsetCorrection");
+	// Clamp the offset correction.
+	global.offsetCorrection = max(0, global.offsetCorrection)
 	vars_init();
 	
 	return md5_file(pth);
@@ -1258,7 +1261,8 @@ function save_config() {
 		beatlineStyle: global.beatlineStyle,
 		musicDelay: global.musicDelay,
 		dropAdjustError: global.dropAdjustError,
-		lastCheckedVersion: global.lastCheckedVersion
+		lastCheckedVersion: global.lastCheckedVersion,
+		offsetCorrection: global.offsetCorrection
 	}, true));
 	
 }
