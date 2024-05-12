@@ -430,14 +430,14 @@ image_yscale = global.scaleYAdjust;
 	                lastAttachBar = editor_snap_to_grid_y(mouse_y, side);
 	                y = lastAttachBar.y;
 	                position = x_to_note_pos(x, side);
-	                time = y_to_note_time(y, side);
+	                time = lastAttachBar.time;
 	            }
 	            else {
 	                y = editor_snap_to_grid_x(mouse_y, side);
 	                lastAttachBar = editor_snap_to_grid_y(mouse_x, side);
 	                x = lastAttachBar.y;
 	                position = x_to_note_pos(y, side);
-	                time = y_to_note_time(x, side);
+	                time = lastAttachBar.time;
 	            }
 	            
 	            var _pos = position, _time = time;
@@ -529,7 +529,7 @@ image_yscale = global.scaleYAdjust;
         function stateAttachSub() {
             stateString = "ATCHS";
             sinst.lastAttachBar = editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side);
-            sinst.time = y_to_note_time(sinst.lastAttachBar.y, side);
+            sinst.time = sinst.lastAttachBar.time;
             
             if(mouse_check_button_pressed(mb_left)) {
                 state = stateDropSub;
@@ -613,14 +613,14 @@ image_yscale = global.scaleYAdjust;
                         y = lastAttachBar.y;
                         x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
                         position = x_to_note_pos(x, side);
-                        time = y_to_note_time(y, side);
+                        time = lastAttachBar.time;
                     }
                     else {
                         lastAttachBar = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
                         x = lastAttachBar.y;
                         y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
                         position = x_to_note_pos(y, side);
-                        time = y_to_note_time(x, side);
+                        time = lastAttachBar.time;
                     }
                 }
                 _caculation();

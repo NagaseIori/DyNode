@@ -158,16 +158,17 @@ function editor_select_all() {
 }
 
 function editor_snap_to_grid_y(_y, _side) {
-	var _ret = {
-	    	y: _y,
-	    	bar: undefined
-    	};
-    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
+	if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
     
     var _time = y_to_note_time(_y, _side);
     var _nowat = 0;
+	var _ret = {
+	    	y: _y,
+			time: _time,
+	    	bar: undefined
+    	};
     
     with(objEditor) {
         var targetLineBelow = objMain.targetLineBelow;
@@ -203,27 +204,30 @@ function editor_snap_to_grid_y(_y, _side) {
         	_nowdivb: _nowdivb,
         	_nowdivbm: _nowdivbm,
         	_totalBar: _totalBar
-        }, function (_ny, _d) {
+        }, function (_ny, _d, _t) {
         	return {
         		y: _ny,
             	bar: floor((_d + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
             	diva: ((_d + _nowbeats * _nowdivb) % _nowdivbm + _nowdivbm) % _nowdivbm,
             	divb: _nowdivbm,
-            	divc: _nowdivb * 4
+            	divc: _nowdivb * 4,
+				time: _t
         	};
         });
         
         if(_side == 0) {
-            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
-                _ret = _f_genret(_ry, _rd);
-            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
-                _ret = _f_genret(_rby, _rbd);
+            // if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
+            if(in_between(_ry, 0, _nh - targetLineBelow) && _rt + _eps <= _nexttime)
+                _ret = _f_genret(_ry, _rd, _rt);
+            // else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
+            else if(in_between(_rby, 0, _nh - targetLineBelow) && _rbt + _eps <= _nexttime)
+                _ret = _f_genret(_rby, _rbd, _rbt);
         }
         else {
-            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
-                _ret = _f_genret(_side == 1?_ry:_nw - _ry, _rd);
-            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
-                _ret = _f_genret(_side == 1?_rby:_nw - _rby, _rbd);
+            if(in_between(_ry, targetLineBeside, _nw/2) && _rt + _eps <= _nexttime)
+                _ret = _f_genret(note_time_to_y(_rt, _side), _rd, _rt);
+            else if(in_between(_rby, targetLineBeside, _nw/2) && _rbt + _eps <= _nexttime)
+                _ret = _f_genret(note_time_to_y(_rbt, _side), _rbd, _rbt);
         }
     }
     
