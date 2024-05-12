@@ -875,6 +875,14 @@ function note_error_correction(_limit, _array = objMain.chartNotesArray, _sync_t
 			}
 		}
 	}
+
+	if(array_length(notes_to_fix) > 1) {
+		for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
+			notes_to_fix[_i].time = notes_to_fix[0].time;
+			if(_sync_to_instance)
+				notes_to_fix[_i].inst.set_prop(notes_to_fix[_i]);
+		}
+	}
 	note_activation_reset();
 }
 
