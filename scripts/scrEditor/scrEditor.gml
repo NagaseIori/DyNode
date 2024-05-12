@@ -158,7 +158,6 @@ function editor_select_all() {
 }
 
 function editor_snap_to_grid_y(_y, _side) {
-	if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
     
@@ -169,6 +168,8 @@ function editor_snap_to_grid_y(_y, _side) {
 			time: _time,
 	    	bar: undefined
     	};
+	
+	if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     with(objEditor) {
         var targetLineBelow = objMain.targetLineBelow;
