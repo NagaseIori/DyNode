@@ -1,7 +1,6 @@
 /// @description Update colored squares
 
-// If visible then update the colored squares
-if(drawVisible && editor_get_editmode() <= 4){
+if(editor_get_editmode() <= 4){
 	var _col = c_blue;
     
     animTargetInfoA = 0;
@@ -70,6 +69,9 @@ if(drawVisible && editor_get_editmode() <= 4){
 		animTargetNodeA = 0;
 		animTargetInfoA = 0;
 	}
+
+    if(alt_ishold())
+        animTargetInfoA = 1;
 	
 	if(animTargetNodeA > 0)
 	    nodeColor = _col;

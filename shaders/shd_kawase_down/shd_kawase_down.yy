@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "shd_kawase_down",
-  "parent": {
-    "name": "(System)",
-    "path": "folders/Kawase/(System).yy",
+  "$GMShader":"",
+  "%Name":"shd_kawase_down",
+  "name":"shd_kawase_down",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Kawase/(System).yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

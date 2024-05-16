@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "kawase_get_max_iterations",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Kawase",
-    "path": "folders/Kawase.yy",
+  "$GMScript":"",
+  "%Name":"kawase_get_max_iterations",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"kawase_get_max_iterations",
+  "parent":{
+    "name":"Kawase",
+    "path":"folders/Kawase.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

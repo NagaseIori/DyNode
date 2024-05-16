@@ -29,6 +29,7 @@ image_yscale = global.scaleYAdjust;
     origLength = 0;					// For hold
     origSubTime = 0;				// For hold's sub
     origProp = -1;					// For Undo & Redo
+    origSide = side;                // For special LR mode
     fixedLastTime = -1; 			// For hold's copy and paste
     isDragging = false;
     nodeRadius = 22;				// in Pixels
@@ -59,12 +60,14 @@ image_yscale = global.scaleYAdjust;
     selectTolerance = false;		// Make the notes display normally when being or might be selected
     attaching = false;				// If is a attaching note
     lastAttachBar = -1;
+    dropWidthError = global.dropAdjustError;
+    dropWidthAdjustable = false;
     
     animSpeed = 0.4;
     animPlaySpeedMul = 1;
-    animTargetA = 0;
+    animTargetA = 1;
     animTargetLstA = lastAlpha;
-    image_alpha = 0;
+    image_alpha = 1;
     
     // Particles Number
     partNumber = 12;
@@ -281,8 +284,19 @@ image_yscale = global.scaleYAdjust;
     // If a note is moving out of screen, throw a warning.
 	function note_outscreen_check() {
 		_prop_init();
-		if(_outscreen_check(x, y, side))
-			announcement_warning("warning_note_outbound", 5000, "wob");
+        var _outbound = false;
+        if(side == 0) {
+            var _xl = x - pWidth / 2, _xr = x + pWidth / 2;
+            if(_xr <= 0 || _xl >= global.resolutionW)
+                _outbound = true;
+        }
+        else {
+            var _yl = y - pWidth / 2, _yr = y + pWidth / 2;
+            if(_yr <= 0 || _yl >= global.resolutionH)
+                _outbound = true;
+        }
+		if(_outbound)
+			note_outbound_warning();
 	}
 	
 	// Change to selected state.
@@ -290,6 +304,23 @@ image_yscale = global.scaleYAdjust;
 		state = stateSelected;
 		state();
 	}
+
+    function cac_LR_side() {
+        return x < global.resolutionW / 2 ? 1:2;
+    }
+
+    function change_side(to_side, vis_consistency = (objEditor.editorDefaultWidthMode == 1)) {
+        if(vis_consistency) {
+            if(side == 0 && to_side > 0)
+                width *= 2;
+            else if(side > 0 && to_side == 0)
+                width /= 2;
+        }
+        side = to_side;
+        if(side == 3)
+            side = cac_LR_side();
+        _prop_init();
+    }
     
     // _outbound_check was moved to scrNote
 
@@ -328,7 +359,7 @@ image_yscale = global.scaleYAdjust;
         
         
         // Check Selecting
-        if(editor_get_editmode() == 4 && side == editor_get_editside() && !objMain.topBarMousePressed
+        if(editor_get_editmode() == 4 && editor_editside_allowed(side) && !objMain.topBarMousePressed
             && !(objEditor.editorSelectOccupied && noteType == 3)) {
         	var _mouse_click_to_select = mouse_isclick_l() && _mouse_inbound_check();
         	var _mouse_drag_to_select = mouse_ishold_l() && _mouse_inbound_check(1) 
@@ -390,7 +421,8 @@ image_yscale = global.scaleYAdjust;
         // State attached to cursor
         function stateAttach() {
             stateString = "ATCH";
-            animTargetA = _outbound_check(x, y, side) ? 0:0.5;
+            animTargetA = 0.5;
+            animTargetInfoA = 1.0;
             
             if(editor_get_note_attaching_center() == id) {
             	if(side == 0) {
@@ -398,14 +430,14 @@ image_yscale = global.scaleYAdjust;
 	                lastAttachBar = editor_snap_to_grid_y(mouse_y, side);
 	                y = lastAttachBar.y;
 	                position = x_to_note_pos(x, side);
-	                time = y_to_note_time(y, side);
+	                time = lastAttachBar.time;
 	            }
 	            else {
 	                y = editor_snap_to_grid_x(mouse_y, side);
 	                lastAttachBar = editor_snap_to_grid_y(mouse_x, side);
 	                x = lastAttachBar.y;
 	                position = x_to_note_pos(y, side);
-	                time = y_to_note_time(x, side);
+	                time = lastAttachBar.time;
 	            }
 	            
 	            var _pos = position, _time = time;
@@ -426,6 +458,7 @@ image_yscale = global.scaleYAdjust;
                 with(objNote) if(state == stateAttach) {
                 	state = stateDrop;
                 	origWidth = width;
+                    dropWidthAdjustable = false;
                 }
             }
                 
@@ -436,16 +469,17 @@ image_yscale = global.scaleYAdjust;
             stateString = "DROP";
             animTargetA = 0.8;
             
-            
             if(mouse_check_button_released(mb_left)) {
-                var _toSelectState = objEditor.singlePaste;
+                var _singlePaste = objEditor.singlePaste;
+                var _toSelectState = _singlePaste;
             	if(editor_get_editmode() > 0)
                 	editor_set_default_width(width);
                 if(noteType == 2) {
                 	if(fixedLastTime != -1) {
                 		build_hold(random_id(9), time, position, width, random_id(9), time + fixedLastTime, side, true,
                                     _toSelectState);
-                		instance_destroy();
+                        if(_singlePaste) instance_destroy();
+                		state = stateAttach;
                 		return;
                 	}
                     var _time = time;
@@ -453,24 +487,38 @@ image_yscale = global.scaleYAdjust;
                     sinst = instance_create_depth(x, y, depth, objHoldSub);
                     sinst.dummy = true;
                     sinst.time = time;
+
+                    // Lock the LR side mode.
+                    editor_lrside_lock_set(true);
                     return;
                 }
                 var _note = build_note(random_id(9), noteType, time, position, width, -1, side, false, true,
                             _toSelectState);
                 
-                if(_outscreen_check(x, y, side))
-                	announcement_warning("warning_note_outbound");
+                note_outscreen_check();
                 
-                instance_destroy();
+                if(_singlePaste) instance_destroy();
+                state = stateAttach;
+                return;
             }
             
             if(!mouse_ishold_l())
             	width = origWidth;
             else {
-            	if(side == 0)
-	                width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
-	            else
-	                width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+                if(!dropWidthAdjustable && 
+                    abs(side == 0?
+                        (2.5 * mouse_get_delta_last_x_l() / 300):
+                        (2.5 * mouse_get_delta_last_y_l() / 150)
+                        ) > dropWidthError) {
+                    mouse_set_last_pos_l();
+                    dropWidthAdjustable = true;
+                }
+                if(dropWidthAdjustable) {
+                    if(side == 0)
+                        width = origWidth + 2.5 * mouse_get_delta_last_x_l() / 300;
+                    else
+                        width = origWidth - 2.5 * mouse_get_delta_last_y_l() / 150;
+                }
             }
             
             width = editor_snap_width(width);
@@ -481,7 +529,7 @@ image_yscale = global.scaleYAdjust;
         function stateAttachSub() {
             stateString = "ATCHS";
             sinst.lastAttachBar = editor_snap_to_grid_y(side == 0?mouse_y:mouse_x, side);
-            sinst.time = y_to_note_time(sinst.lastAttachBar.y, side);
+            sinst.time = sinst.lastAttachBar.time;
             
             if(mouse_check_button_pressed(mb_left)) {
                 state = stateDropSub;
@@ -497,37 +545,41 @@ image_yscale = global.scaleYAdjust;
                 var _teid = random_id(9);
                 build_hold(_teid, time, position, width, _subid, sinst.time, side, true);
                 instance_destroy();
-                sinst = -999;
             }
         }
         
         // State Selected
         function stateSelected() {
         	animTargetA = 1;
+            animTargetInfoA = 1;
             if(stateString != "SEL" && instance_exists(sinst)) {
                 origLength = sinst.time - time;
                 origSubTime = sinst.time;
             }
             stateString = "SEL";
             
-            if(editor_get_editmode() != 4 || editor_get_editside() != side)
+            if(editor_get_editmode() != 4)
                 state = stateNormal;
             
             if(editor_select_is_multiple() && noteType == 3)
                 state = stateNormal;
             
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
-                var _select_self_or_ignore = 
-                    objEditor.editorSelectedSingleInboundLast == id || 
-                    objEditor.editorSelectedSingleInboundLast < 0;
-                if(!isDragging && _select_self_or_ignore) {
+                var _select_self_or_fast_drag = 
+                    objEditor.editorSelectedSingleInboundLast == id || objEditor.editorSelectedSingleInboundLast < 0;
+                if(!isDragging && _select_self_or_fast_drag && editor_editside_allowed(side)) {
                     isDragging = true;
                     objEditor.editorSelectDragOccupied = 1;
+                    if(noteType == 3)
+                        editor_lrside_lock_set(true);
                     with(objNote) {
                         if(state == stateSelected) {
                         	origProp = get_prop();
                             origX = x;
                             origY = y;
+                            origTime = time;
+                            origPosition = position;
+                            origSide = side;
                         }
                     }
                 }
@@ -535,6 +587,9 @@ image_yscale = global.scaleYAdjust;
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
+                    
+                    if(noteType == 3)
+                        editor_lrside_lock_set(false);
                     
                     with(objNote) {
                     	if(state == stateSelected) {
@@ -548,31 +603,55 @@ image_yscale = global.scaleYAdjust;
                 }
             }
             if(isDragging) {
-                if(side == 0) {
-                	lastAttachBar = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
-                    y = lastAttachBar.y;
-                    x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
-                    position = x_to_note_pos(x, side);
-                    time = y_to_note_time(y, side);
+                var _delta_time;
+                var _delta_pos;
+                var _delta_side;
+                /// @self Id.Instance.objNote
+                var _caculation = function() {
+                    if(side == 0) {
+                        lastAttachBar = editor_snap_to_grid_y(origY + mouse_get_delta_last_y_l(), side);
+                        y = lastAttachBar.y;
+                        x = editor_snap_to_grid_x(origX + mouse_get_delta_last_x_l(), side);
+                        position = x_to_note_pos(x, side);
+                        time = lastAttachBar.time;
+                    }
+                    else {
+                        lastAttachBar = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
+                        x = lastAttachBar.y;
+                        y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
+                        position = x_to_note_pos(y, side);
+                        time = lastAttachBar.time;
+                    }
                 }
-                else {
-                	lastAttachBar = editor_snap_to_grid_y(origX + mouse_get_delta_last_x_l(), side);
-                    x = lastAttachBar.y;
-                    y = editor_snap_to_grid_x(origY + mouse_get_delta_last_y_l(), side);
-                    position = x_to_note_pos(y, side);
-                    time = y_to_note_time(x, side);
+                _caculation();
+
+                if(objEditor.editorLRSide) {
+                    var _side = cac_LR_side();
+                    if(_side != side) {
+                        side = _side;
+                        _caculation();
+                    }
                 }
-                
-                var _delta_x = x - origX;
-                var _delta_y = y - origY;
+
+                _delta_time = time - origTime;
+                _delta_pos = position - origPosition;
+                _delta_side = side - origSide;
                 
                 with(objNote) {
-                    if(state == stateSelected) {
-                        x = origX + _delta_x;
-                        y = origY + _delta_y;
-                        
-                        position = x_to_note_pos(side?y:x, side);
-                        time = y_to_note_time(side?x:y, side);
+                    if(state == stateSelected)
+                    {
+                        if(objEditor.editorSelectMultiSidesBinding || editor_editside_allowed(side)) {
+                            position = origPosition + _delta_pos;
+                            time = origTime + _delta_time;
+                            if(side > 0)
+                                side = (abs((origSide - 1) + _delta_side)&1) + 1;
+                        }
+                        else {
+                            position = origPosition;
+                            time = origTime;
+                            side = origSide;
+                        }
+                        _prop_init();
                         if(noteType == 2) {
                             sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
                             _prop_hold_update();
@@ -582,6 +661,7 @@ image_yscale = global.scaleYAdjust;
             } else {
                 if(!editor_select_is_dragging())
                 if(_mouse_inbound_check())
+                if(editor_editside_allowed(side))
                     objEditor.editorSelectedSingleInbound =
                         editor_select_compare(objEditor.editorSelectedSingleInbound, id);
             }
@@ -604,7 +684,7 @@ image_yscale = global.scaleYAdjust;
 		    }
 		    
 		    // If double click then send attach request.
-		    if(mouse_isclick_double(0) && _mouse_inbound_check(2)) {
+		    if(mouse_isclick_double(0) && _mouse_inbound_check(2) && editor_editside_allowed(side)) {
                 if(noteType <= 2)
 		    	    objEditor.attach(id);
                 else

@@ -8,19 +8,19 @@ eventFunc = function() {
 	var _bg = objUIInputManager.get_input("background");
 	var _chart = objUIInputManager.get_input("chart");
 	var _difficulty = objUIInputManager.get_input("difficulty");
-	if(_mus == "") {
-		announcement_error("必须选择一个音乐文件来创建项目。");
+	if(_mus == "" && (_chart == "" || filename_ext(_chart) != ".dy")) {
+		announcement_error("need_a_music_file_error");
 		return;
 	}
 	
 	objManager.initVars = {
-			mus: _mus,
-			title: _title,
-			ltype: _ltype,
-			rtype: _rtype,
-			bg: _bg,
-			chart: _chart,
-			diff: _difficulty
-		};
+		mus: _mus,
+		title: _title,
+		ltype: _ltype,
+		rtype: _rtype,
+		bg: _bg,
+		chart: _chart,
+		diff: _difficulty
+	};
 	room_goto(rMain);
 }

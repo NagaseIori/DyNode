@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.12.5"
+#macro VERSION "v0.1.13.4"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -29,7 +29,7 @@ global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
 global.fullscreen = false;
-global.FMOD_MP3_DELAY = 60;
+global.FMOD_MP3_DELAY = 0;
 global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
@@ -39,6 +39,9 @@ global.graphics = {
 	AA : 4,
 	VSync : true
 };
+global.dropAdjustError = 0.125;
+global.offsetCorrection = 2;
+global.lastCheckedVersion = "";
 
 // Themes Init
 

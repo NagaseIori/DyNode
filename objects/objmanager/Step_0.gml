@@ -85,7 +85,7 @@ if(room == rMain) {
 	
 	
 	
-	//// For New Project Initialization --- related codes in rStartPage or somewhere else.
+	// For New Project Initialization --- related codes in rStartPage or somewhere else.
 		// If there is a init struct
 		if(initVars != undefined) {
 			var _str = initVars;
@@ -95,7 +95,8 @@ if(room == rMain) {
 				chartSideType[1] = _str.rtype;
 				chartDifficulty = difficulty_char_to_num(string_char_at(_str.diff, 1));
 			}
-			music_load(_str.mus);
+			if(_str.mus != "")
+				music_load(_str.mus);
 			if(_str.bg != "") background_load(_str.bg);
 			if(_str.chart != "") map_load(_str.chart);
 			initVars = undefined;

@@ -2,7 +2,7 @@
 function safe_video_init() {
     with(objMain) {
         bgVideoSurf = surface_create(global.resolutionW, global.resolutionH);
-        
+        surface_clear(bgVideoSurf);
         if(room_speed > VIDEO_UPDATE_FREQUENCY) {
             timesourceUpdateVideo =
         		time_source_create(time_source_game, 1/VIDEO_UPDATE_FREQUENCY, 
@@ -25,6 +25,8 @@ function safe_video_init() {
     }
 }
 
+#macro VIDEO_PAUSE_AHEAD_ENDING 150
+
 function safe_video_update() {
     with(objMain) {
         bgVideoSurf = surface_checkate(bgVideoSurf, global.resolutionW, global.resolutionH);
@@ -33,32 +35,33 @@ function safe_video_update() {
             return false;
         if(video_get_status() <= 1)
             return false;
-        
-        if(nowPlaying && editor_get_editmode() == 5 && bgVideoPaused)
+
+        if(nowPlaying && nowTime > bgVideoLength - VIDEO_PAUSE_AHEAD_ENDING)
+            safe_video_pause();
+        else if(nowPlaying && editor_get_editmode() == 5 && bgVideoPaused)
             safe_video_seek_to(nowTime);
         
         surface_set_target(bgVideoSurf);
-        draw_clear_alpha(c_black, 0);
-        var _status = video_draw();
-        if(_status[0] == -1) {
-            // announcement_error("video_playback_error");
-            surface_reset_target();
-            //! Bug in runtime 2023.11
-            //! Occasional error message will occur.
-            show_debug_message_safe("VIDEO PLAYBACK ERROR.");
-            // safe_video_free();
-            // bgVideoLoaded = false;
-        }
-        else {
-            var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
-            var _wscl = global.resolutionW / _w;
-            var _hscl = global.resolutionH / _h;
-            var _scl = max(_wscl, _hscl); // Centre & keep ratios
-            var _nx = global.resolutionW/2 - _scl * _w / 2;
-            var _ny = global.resolutionH/2 - _scl * _h / 2;
-            draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
-            surface_reset_target();
-        }
+            draw_clear_alpha(c_black, 0);
+            var _status = video_draw();
+            if(_status[0] == -1) {
+                // announcement_error("video_playback_error");
+                //! Bug in runtime 2023.11
+                //! Occasional error message will occur.
+                show_debug_message_safe("VIDEO PLAYBACK ERROR.");
+                // safe_video_free();
+                // bgVideoLoaded = false;
+            }
+            else if(_status[0] == 0 && surface_exists(_status[1])) {
+                var _w = surface_get_width(_status[1]), _h = surface_get_height(_status[1]);
+                var _wscl = global.resolutionW / _w;
+                var _hscl = global.resolutionH / _h;
+                var _scl = max(_wscl, _hscl); // Centre & keep ratios
+                var _nx = global.resolutionW/2 - _scl * _w / 2;
+                var _ny = global.resolutionH/2 - _scl * _h / 2;
+                draw_surface_ext(_status[1], _nx, _ny, _scl, _scl, 0, c_white, 1);
+            }
+        surface_reset_target();
     }
     return true;
 }
@@ -81,9 +84,9 @@ function safe_video_free() {
         bgVideoDisplay = false;
         
         surface_free_f(bgVideoSurf);
-        if(video_get_status() != 0) {
-            bgVideoDestroying = true;
-        }
+        bgVideoDestroying = true;
+
+        //! Bug in runtime 2024.2: sometimes video_close will not work as expected.
         video_close();
         
         show_debug_message("VIDEO FREE!!");
@@ -92,7 +95,7 @@ function safe_video_free() {
 }
 
 function safe_video_seek_to(time) {
-    if(editor_get_editmode() != 5 || !objMain.nowPlaying)
+    if(editor_get_editmode() != 5)
         return;
     video_seek_to(time);
     safe_video_resume();

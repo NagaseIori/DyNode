@@ -8,9 +8,9 @@ editorSelectedSingleInbound = -999;
 editorSelectOccupied = false;
 editorSelectDragOccupied = false;
 editorSelectInbound = false;
-editorHighlightLine = false;
 
 editorSelectCount = 0;
+var _note_found = false;
 with(objNote) {
     var _hl = false;
     if(state == stateSelected) {
@@ -29,7 +29,9 @@ with(objNote) {
     
     // Update Highlight Lines
     if(_hl && objEditor.editorHighlightLineEnabled) {
+        _note_found = true;
         objEditor.editorHighlightLine = true;
+        objEditor.editorHighlightLineFix = 1;
         objEditor.editorHighlightTime = time;
         objEditor.editorHighlightPosition = position;
         objEditor.editorHighlightSide = side;
@@ -37,6 +39,16 @@ with(objNote) {
         if(state == stateAttachSub || state == stateDropSub) {
             objEditor.editorHighlightTime = sinst.time;
         }
+    }
+}
+
+// Fix: highlight line flickering issue
+if(!_note_found) {
+    with(objEditor) {
+        if(editorHighlightLineFix)
+            editorHighlightLineFix --;
+        else
+            editorHighlightLine = false;
     }
 }
 
@@ -77,7 +89,7 @@ editorSelectMultiple = editorSelectCount > 1;
     	editorDefaultWidthMode ++;
     	editorDefaultWidthMode %= 4;
     	announcement_set("default_width_mode", editorDefaultWidthModeName[editorDefaultWidthMode]);
-    	_attach_sync_request = true;
+    	_attach_reset_request = true;
     }
     if(keycheck_down(ord("K"))) {
     	_attach_sync_request = editor_set_default_width_qbox();
@@ -93,7 +105,15 @@ editorSelectMultiple = editorSelectCount > 1;
     if(keycheck_down(ord("0")))
     	advanced_expr();
     
-    
+    if(keycheck_down(ord("B"))) {
+        editorSelectMultiSidesBinding = !editorSelectMultiSidesBinding;
+        announcement_adjust("multiple_sides_selection_property_binding", editorSelectMultiSidesBinding);
+    }
+
+    if(keycheck_down_ctrl(ord("A"))) {
+        editor_select_all();
+        global.__InputManager._ioclear();
+    }
     
     // Notes operation
     
@@ -132,7 +152,8 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	}
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate", string(_found)));
-	    		editorSide = 1 + (!(editorSide - 1));
+                if(!editor_lrside_get() && !objEditor.copyMultipleSides)
+	    		    editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
@@ -152,7 +173,8 @@ editorSelectMultiple = editorSelectCount > 1;
 	    	}
 	    	if(_found>0) {
 	    		announcement_play(i18n_get("notes_rotate_copy", string(_found)));
-	    		editorSide = 1 + (!(editorSide - 1));
+                if(!editor_lrside_get() && !objEditor.copyMultipleSides)
+	    		    editorSide = 1 + (!(editorSide - 1));
 	    	}
 	    		
 	    	else
@@ -198,8 +220,15 @@ editorSelectMultiple = editorSelectCount > 1;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
-    if(keycheck_down(vk_up))
-        editor_set_editside((editor_get_editside() + 1) % 3);
+    if(keycheck_down(vk_up)) {
+        if(editorLRSide)
+            editor_set_editside(0);
+        else
+            editor_set_editside((editor_get_editside() + 1) % 4);
+    }
+    if(editorLRSide && !editorLRSideLock && !editor_select_is_area()) {
+        editorSide = mouse_x*2 < global.resolutionW? 1:2;
+    }
     if(editorSide != editorLastSide) {
         _attach_sync_request = true;
     }
@@ -212,7 +241,7 @@ editorSelectMultiple = editorSelectCount > 1;
             editor_set_editmode(i);
         }
     
-    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0 && editorMode != 0) {
+    if(keycheck_down_ctrl(ord("V")) && array_length(copyStack) && editorSelectCount == 0) {
         editorModeBeforeCopy = editorMode;
         editor_set_editmode(0); // Paste Mode
         _attach_reset_request = true;
@@ -262,11 +291,35 @@ editorSelectMultiple = editorSelectCount > 1;
             if(editorMode != 0) editorNoteAttachingCenter = 0;
         }
         if(_attach_sync_request) {
-            var i=0, l=array_length(editorNoteAttaching);
-            for(; i<l; i++) {
-            	editorNoteAttaching[i].side = editorSide;
-            	if(editorMode != 0)
-            		editorNoteAttaching[i].width = editor_get_default_width();
+            if(!copyMultipleSides) {
+                var i=0, l=array_length(editorNoteAttaching);
+                for(; i<l; i++) {
+                    editorNoteAttaching[i].change_side(editorSide);
+                    if(editorMode != 0)
+                        editorNoteAttaching[i].width = editor_get_default_width();
+                }
+            }
+            else {
+                var i=0, l=array_length(editorNoteAttaching);
+                var _orig_side = editor_get_note_attaching_center().side;
+                var _side_delta = editorSide - _orig_side;
+                for(; i<l; i++) {
+                    var _side = editorNoteAttaching[i].side;
+                    if(editorLRSide && _orig_side > 0) {
+                        if(_side > 0 && _side_delta != 0) {
+                            _side = _side == 1?2:1;
+                            editorNoteAttaching[i].change_side(_side);
+                        }
+                    }   // Flip the LR side.
+                    else {
+                        _side += 3 + _side_delta;
+                        _side %= 3;
+                        editorNoteAttaching[i].change_side(_side);
+                    }   // Rotate clockwise
+                    
+                    if(editorMode != 0)
+                        editorNoteAttaching[i].width = editor_get_default_width();
+                }
             }
         }
     }
@@ -277,12 +330,14 @@ editorSelectMultiple = editorSelectCount > 1;
     switch editorMode {
         case 0:
             if(editorNoteAttaching == -1) {
+                var _side_mask = 0;
                 editorNoteAttaching = [];
                 for(var i=0, l=array_length(copyStack); i<l; i++) {
                     var _str = copyStack[i];
+                    _side_mask |= 1<<_str.side;
                     array_push(editorNoteAttaching, note_build_attach(
                         _str.noteType,
-                        editorSide,
+                        _str.side,
                         _str.width,
                         _str.position,
                         _str.time,
@@ -294,11 +349,22 @@ editorSelectMultiple = editorSelectCount > 1;
                         attachRequestCenter = undefined;
                     }
                 }
+                if(_side_mask == 1 || _side_mask == 2 || _side_mask == 4) {
+                    for (var i = 0; i < array_length(editorNoteAttaching); i ++) {
+                        editorNoteAttaching[i].change_side(editor_get_editside())
+                    }
+                    copyMultipleSides = false;
+                }
+                else {
+                    copyMultipleSides = true;
+                }
             }
             
             var _chg = keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
             var _len = array_length(editorNoteAttaching);
             editorNoteAttachingCenter = (editorNoteAttachingCenter + _chg + _len) % _len; 
+            if(copyMultipleSides && !editorLRSide)
+                editor_set_editside(editor_get_note_attaching_center().side, true);
             
             break;
         case 1:

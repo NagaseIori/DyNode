@@ -75,12 +75,20 @@ function editor_set_default_width(width) {
 	}
 }
 
-function editor_set_editside(side) {
-	var _sidename = ["editside_down", "editside_left", "editside_right"];
-	
-	objEditor.editorSide = side;
-	
-	announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+function editor_set_editside(side, same_then_silence = false) {
+	var _sidename = ["editside_down", "editside_left", "editside_right", "editside_LR"];
+
+	if(side < 3) {
+		if(!(same_then_silence && objEditor.editorSide == side))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		objEditor.editorSide = side;
+		editor_lrside_set(false);
+	}
+	else {
+		if(!(same_then_silence && editor_lrside_get()))
+			announcement_play(i18n_get("anno_editside_switch") + ": " +i18n_get(_sidename[side]));
+		editor_lrside_set(true);
+	}
 	
 	if(editor_get_editmode() == 5)
 		editor_set_editmode(4);
@@ -102,6 +110,23 @@ function editor_select_is_dragging() {
 function editor_select_is_area() {
 	return objEditor.editorSelectArea;
 }
+function editor_editside_allowed(side) {
+	if(objEditor.editorLRSide && side > 0)
+		return true;
+	return side == editor_get_editside();
+}
+function editor_lrside_set(enable) {
+	with(objEditor) {
+		editorLRSide = enable;
+		editorLRSideLock = false;
+	}
+}
+function editor_lrside_get() {
+	return objEditor.editorLRSide;
+}
+function editor_lrside_lock_set(lock) {
+	objEditor.editorLRSideLock = lock;
+}
 function editor_select_get_area_position() {
 	var _pos;
 	with(objEditor) {
@@ -114,7 +139,7 @@ function editor_select_get_area_position() {
 }
 function editor_select_inbound(x, y, side, type, onlytime = -1) {
 	var _pos = editor_select_get_area_position();
-	return side == editor_get_editside() && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
+	return editor_editside_allowed(side) && type != 3 && pos_inbound(x, y, _pos[0], _pos[1], _pos[2], _pos[3], onlytime)
 }
 
 function editor_select_count() {
@@ -125,17 +150,26 @@ function editor_select_reset() {
 	objEditor.editorSelectResetRequest = true;
 }
 
+function editor_select_all() {
+	if(editor_get_editmode() != 4) return;
+	instance_activate_all();
+	with(objNote)
+		state = stateSelected;
+}
+
 function editor_snap_to_grid_y(_y, _side) {
-	var _ret = {
-	    	y: _y,
-	    	bar: undefined
-    	};
-    if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     var _nw = global.resolutionW, _nh = global.resolutionH;
     
     var _time = y_to_note_time(_y, _side);
     var _nowat = 0;
+	var _ret = {
+	    	y: _y,
+			time: _time,
+	    	bar: undefined
+    	};
+	
+	if(!objEditor.editorGridYEnabled || !array_length(objEditor.timingPoints)) return _ret;
     
     with(objEditor) {
         var targetLineBelow = objMain.targetLineBelow;
@@ -171,27 +205,30 @@ function editor_snap_to_grid_y(_y, _side) {
         	_nowdivb: _nowdivb,
         	_nowdivbm: _nowdivbm,
         	_totalBar: _totalBar
-        }, function (_ny, _d) {
+        }, function (_ny, _d, _t) {
         	return {
         		y: _ny,
             	bar: floor((_d + _nowbeats * _nowdivb)/_nowdivbm) + _totalBar,
             	diva: ((_d + _nowbeats * _nowdivb) % _nowdivbm + _nowdivbm) % _nowdivbm,
             	divb: _nowdivbm,
-            	divc: _nowdivb * 4
+            	divc: _nowdivb * 4,
+				time: _t
         	};
         });
         
         if(_side == 0) {
-            if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
-                _ret = _f_genret(_ry, _rd);
-            else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
-                _ret = _f_genret(_rby, _rbd);
+            // if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
+            if(in_between(_ry, 0, _nh - targetLineBelow) && _rt + _eps <= _nexttime)
+                _ret = _f_genret(_ry, _rd, _rt);
+            // else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
+            else if(in_between(_rby, 0, _nh - targetLineBelow) && _rbt + _eps <= _nexttime)
+                _ret = _f_genret(_rby, _rbd, _rbt);
         }
         else {
-            if(_ry >= targetLineBeside && _ry <= _nw/2 && _rt + _eps <= _nexttime)
-                _ret = _f_genret(_side == 1?_ry:_nw - _ry, _rd);
-            else if(_rby >= targetLineBeside && _rby <= _nw/2 && _rbt + _eps <= _nexttime)
-                _ret = _f_genret(_side == 1?_rby:_nw - _rby, _rbd);
+            if(in_between(_ry, targetLineBeside, _nw/2) && _rt + _eps <= _nexttime)
+                _ret = _f_genret(note_time_to_y(_rt, _side), _rd, _rt);
+            else if(in_between(_rby, targetLineBeside, _nw/2) && _rbt + _eps <= _nexttime)
+                _ret = _f_genret(note_time_to_y(_rbt, _side), _rbd, _rbt);
         }
     }
     
@@ -230,6 +267,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     var _inst = instance_create_depth(mouse_x, mouse_y, 
                 depth, _obj);
     
+	/// @self Id.Instance.objNote
     with(_inst) {
         state = stateAttach;
         width = _width;
@@ -239,7 +277,6 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
         origTime = _time;
         attaching = true;
         _prop_init();
-        
         
         if(_lasttime != -1 && _type == 2) {
         	sinst = instance_create(x, y, objHoldSub);
@@ -251,6 +288,7 @@ function note_build_attach(_type, _side, _width, _pos=0, _time=0, _lasttime = -1
     return _inst;
 }
 
+/// @returns {Id.Instance.objNote} Note instance.
 function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
@@ -694,7 +732,8 @@ function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = tr
 			chartBarOffset = time_to_bar(chartTimeOffset);
 			chartBarUsed = true;
 			
-			announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
+			// Deprecated
+			// announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
 			
 			return true;
 		}
@@ -841,5 +880,17 @@ function note_error_correction(_limit, _array = objMain.chartNotesArray, _sync_t
 			}
 		}
 	}
+
+	if(array_length(notes_to_fix) > 1) {
+		for(var _i=1, _l=array_length(notes_to_fix); _i < _l; _i++) {
+			notes_to_fix[_i].time = notes_to_fix[0].time;
+			if(_sync_to_instance)
+				notes_to_fix[_i].inst.set_prop(notes_to_fix[_i]);
+		}
+	}
 	note_activation_reset();
+}
+
+function note_outbound_warning() {
+	announcement_warning("warning_note_outbound", 5000, "wob");
 }

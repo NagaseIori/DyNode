@@ -230,6 +230,8 @@ function note_check_and_activate(_posistion_in_array) {
 	var _struct = objMain.chartNotesArray[_posistion_in_array];
 	if(_struct.inst > 0)
 		_struct.inst.arrayPos = _posistion_in_array;
+	else
+		return 0;
 	if(instance_exists(_struct.inst)) {
 		return 0;
 	}

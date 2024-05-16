@@ -61,7 +61,7 @@ projectTime += round(delta_time / 1000);
     if(keycheck_down_ctrl(ord("T")))
     	map_set_title();
     if(keycheck_down_ctrl(ord("F"))) {
-    	if(editor_get_editside() > 0) {
+    	if(editor_get_editside() >= 1 && editor_get_editside() <= 2) {
     		var _side = editor_get_editside() - 1;
     		var _type = chartSideType[_side];
     		
@@ -79,7 +79,7 @@ projectTime += round(delta_time / 1000);
     		}
     		
 	    	chartSideType[_side] = _type;
-	    	announcement_play("anno_switch_sidetype"+chartSideType[_side]);
+	    	announcement_play(i18n_get("anno_switch_sidetype")+chartSideType[_side]);
     	}
     	else {
     		announcement_warning("anno_switch_sidetype_warn");
@@ -164,6 +164,9 @@ projectTime += round(delta_time / 1000);
             sfmod_channel_set_position(nowTime-resumeDelay, channel, sampleRate);
             time_source_start(timesourceResumeDelay);
             // nowTime = sfmod_channel_get_position(channel, sampleRate);
+
+			// Multiple hacks are used for video resume,
+			// so there is no need to add safe_video_resume or safe_video_seek_to at here.
         }
         else {
             FMODGMS_Chan_PauseChannel(channel);
@@ -195,8 +198,11 @@ projectTime += round(delta_time / 1000);
 	}
 	else {
 		array_fill(animTargetLazerAlpha, 0, 0, 3);
-		animTargetLazerAlpha[editor_get_editside()] = 1.0;
-		animTargetLineMix[editor_get_editside()] = 0.5;
+		for(var i=0; i<3; i++)
+			if(editor_editside_allowed(i)) {
+				animTargetLazerAlpha[i] = 1.0;
+				animTargetLineMix[i] = 0.5;
+			}
 	}
 	
 	for(var i=0; i<3; i++) {

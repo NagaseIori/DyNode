@@ -59,6 +59,7 @@ function InputManager() constructor {
     // For Input Reset
     windowNFocusTime = 0;
     windowNFocusTimeThreshold = 75;
+    lowFrameRateFix = false;
     
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
@@ -70,12 +71,15 @@ function InputManager() constructor {
         windowNFocusTime = delta_time / 1000;
 
         if(windowNFocusTime > windowNFocusTimeThreshold) {
-            io_clear_diag();
-            
-            _ioclear();
-            
-            show_debug_message_safe("IO Cleared.");
+            if(!lowFrameRateFix) {
+                io_clear_diag();
+                
+                _ioclear();
+                show_debug_message_safe("IO Cleared.");
+                lowFrameRateFix = true;
+            }
         }
+        else lowFrameRateFix = false;
         
         last_mouse_x = mouse_x;
         last_mouse_y = mouse_y;
@@ -141,6 +145,9 @@ function mouse_get_delta_x() {
 }
 function mouse_get_delta_y() {
     return mouse_y - global.__InputManager.last_mouse_y;
+}
+function mouse_set_last_pos_l() {
+    global.__InputManager.lastMousePressedPos[0][0] = [mouse_x, mouse_y];
 }
 
 // Get mouse's delta x from last pressed mb_left frame
