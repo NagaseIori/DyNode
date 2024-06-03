@@ -562,7 +562,7 @@ function map_export_xml(_export_to_dym) {
 	}
 	
     var _file = "";
-    var _mapid = "_map_" + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
+    var _mapid = (_export_to_dym?"_dym_":"_map_") + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
     var _default_file_name = _mapid + "-";
     _default_file_name += string(current_year) + "-";
     _default_file_name += string(current_month) + "-";
@@ -571,7 +571,7 @@ function map_export_xml(_export_to_dym) {
     _default_file_name += string(current_minute) + "-";
     _default_file_name += string(current_second);
 
-	var _file_title = _export_to_dym ? "Export Dynamaker-modified Chart as XML File 导出 DyM 谱面文件" : "Export Dynamix Chart as XML File 导出 XML 谱面文件";
+	var _file_title = _export_to_dym ? "Export Dynamaker-modified Chart as XML File 导出 DyM 谱面文件" : "Export Dynamix Chart as XML File 导出实机 XML 谱面文件";
     _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, _file_title);
     
     if(_file == "") return;
