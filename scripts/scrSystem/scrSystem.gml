@@ -1,4 +1,10 @@
 
+#region Macros
+
+#macro MAX_STAT_TYPE 5
+
+#endregion
+
 #region MAP FUNCTIONS
 
 function map_close() {
@@ -1312,7 +1318,7 @@ function switch_autosave(state = !global.autosave) {
 
 #endregion
 
-#region Stat
+#region Stat Functions
 
 function stat_reset() {
 	objMain.statCount = [
@@ -1349,7 +1355,18 @@ function stat_note_string(stype, ntype) {
 
 function stat_next() {
 	objMain.showStats ++;
-	objMain.showStats %= 4;
+	objMain.showStats %= MAX_STAT_TYPE;
+}
+
+/// @description Caculate the avg notes' count between [_time-_range, _time] (in ms)
+function stat_kps(_time, _range) {
+	if(objMain.chartNotesCount == 0)
+		return 0;
+
+	var ff = function(array, at) { return array[at].time; }
+	var ub = array_upper_bound(objMain.chartNotesArray, _time, ff);
+	var lb = array_lower_bound(objMain.chartNotesArray, _time - _range, ff);
+	return (ub - lb) * 1000 / _range;
 }
 
 #endregion

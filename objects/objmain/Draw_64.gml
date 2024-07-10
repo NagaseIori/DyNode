@@ -19,6 +19,11 @@ if(topBarTimeA > 0) {
 // Chart stats
 
 if(showStats > 0) {
+	if(objMain.nowPlaying)
+		statKPS = lerp_a(statKPS, stat_kps(objMain.nowTime, 800), 0.15);
+	else
+		statKPS = lerp_a(statKPS, stat_kps(objMain.nowTime + 800, 800), 0.15);
+
 	var _stat_str = "";
 	// Current BPM
 	if(timing_point_count() > 0)
@@ -29,8 +34,12 @@ if(showStats > 0) {
 		+" [scale,0.5][sprChain][/s] "+stat_note_string(showStats, 1)
 		+" [scale,0.5][sprHoldEdge][/s] "+stat_note_string(showStats, 2)
 		+ " Total " + stat_note_string(showStats, 3);
-	else if(showStats < 4)
+	else if(showStats < 4) {
 		_stat_str += "Project Time " + format_time_string_hhmmss(objManager.projectTime);
+	}
+	else if(showStats < 5) {
+		_stat_str += "KPS " + string_format(statKPS, 3, 2);
+	}
 
 	// Draw the stat string.
 	scribble(_stat_str)

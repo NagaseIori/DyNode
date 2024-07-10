@@ -180,6 +180,9 @@ depth = 0;
     animTargetTitleAlpha = titleAlphaL;
     
     standardAlpha = 0; // For editmode switch usage
+
+    // Stat vars
+    statKPS = 0;
     
     // Bottom
         bottomDim = 0.5;
