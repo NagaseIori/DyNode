@@ -163,7 +163,7 @@ depth = 0;
     volumeHit = 1.0;            // Hit sound volume
     
     showDebugInfo = debug_mode;
-    showStats = false;
+    showStats = 0;
     showBar = false;
     fadeOtherNotes = false;
     

@@ -511,6 +511,11 @@ function operation_merge_last_request_revoke() {
 
 #region TIMING POINT FUNCTION
 
+// The number of timing points' count.
+function timing_point_count() {
+	return array_length(objEditor.timingPoints);
+}
+
 // Sort the "timingPoints" array
 function timing_point_sort() {
     var _f = function(_a, _b) {
@@ -663,6 +668,19 @@ function timing_point_get_at(_time) {
 			if(abs(timingPoints[i].time-_time) <= 1)
 				return timingPoints[i];
 		return undefined;
+	}
+}
+
+// To get current bpm at [_time].
+/// @returns {Struct.sTimingPoint} 
+function timing_point_get_in(_time) {
+	with(objEditor) {
+		return timingPoints[
+			max(array_upper_bound(
+				timingPoints,
+				_time,
+				function(array, at) { return array[at].time; }) - 1, 0)
+			];
 	}
 }
 

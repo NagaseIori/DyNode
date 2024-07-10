@@ -64,6 +64,7 @@ editorWidthAdjustTimeThreshold = 300;
     editorGridWidthEnabled = true;
 
 // Timings
+/// @type {Array<Struct.sTimingPoint>}  
 timingPoints = [];
 
 // Highlight lines

@@ -103,7 +103,6 @@ image_yscale = global.scaleYAdjust;
         
         noteprop_set_xy(position, time, side);
     }
-    _prop_init();
 
     function _emit_particle(_num, _type, _force = false) {
         
@@ -321,6 +320,8 @@ image_yscale = global.scaleYAdjust;
             side = cac_LR_side();
         _prop_init();
     }
+
+    _prop_init();
     
     // _outbound_check was moved to scrNote
 

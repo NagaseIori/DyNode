@@ -665,15 +665,32 @@ function filename_name_no_ext(file_name) {
 	return string_replace(filename_name(file_name), filename_ext(file_name), "");
 }
 
-function array_lower_bound(array, lim) {
+function array_lower_bound(array, lim, fetch_function=undefined) {
+	if(fetch_function == undefined)
+		fetch_function = function(array, at) { return array[at]; };
+
 	var l = 0, r = array_length(array), mid;
 	while(l!=r) {
 		mid = (l+r)>>1;
-		if(array[mid] < lim) l = mid+1;
+		if(fetch_function(array, mid) < lim) l = mid+1;
 		else r = mid;
 	}
 	return l;
 }
+
+function array_upper_bound(array, lim, fetch_function=undefined) {
+	if(fetch_function == undefined)
+		fetch_function = function(array, at) { return array[at]; };
+
+	var l = 0, r = array_length(array), mid;
+	while(l!=r) {
+		mid = (l+r)>>1;
+		if(fetch_function(array, mid) <= lim) l = mid+1;
+		else r = mid;
+	}
+	return l;
+}
+
 
 /**
  * @description Converts a MIME+Base64 encoded string to a file in the temporary directory.
