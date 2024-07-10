@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"SnitchNetworkingAsyncEvent",
   "isCompatibility":false,
   "isDnD":false,

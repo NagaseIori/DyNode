@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"FMODGMS_Snd_TypeToString",
   "isCompatibility":false,
   "isDnD":false,

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"FMODGMS_Util_SecondsToSamples",
   "isCompatibility":false,
   "isDnD":false,

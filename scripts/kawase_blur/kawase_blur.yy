@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"kawase_blur",
   "isCompatibility":false,
   "isDnD":false,

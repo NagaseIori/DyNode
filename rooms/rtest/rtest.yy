@@ -1,5 +1,5 @@
 {
-  "$GMRoom":"",
+  "$GMRoom":"v1",
   "%Name":"rTest",
   "creationCodeFile":"",
   "inheritCode":false,
