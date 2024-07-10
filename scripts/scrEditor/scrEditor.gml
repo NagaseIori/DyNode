@@ -152,7 +152,7 @@ function editor_select_reset() {
 
 function editor_select_all() {
 	if(editor_get_editmode() != 4) return;
-	instance_activate_all();
+
 	with(objNote)
 		state = stateSelected;
 }
@@ -431,6 +431,7 @@ function operation_undo() {
 		
 		announcement_play(i18n_get("undo", string(array_length(_ops))));
 		note_sort_request();
+		note_activation_reset();
 		// show_debug_message_safe("POINTER: "+ string(operationPointer));
 	}
 	
@@ -466,6 +467,7 @@ function operation_redo() {
 		
 		announcement_play(i18n_get("redo", string(array_length(_ops))));
 		note_sort_request();
+		note_activation_reset();
 	}
 }
 
