@@ -697,8 +697,8 @@ function map_get_struct() {
 	var _arr = [];
 	
 	with(objMain) {
-		instance_activate_all();
-		notes_array_update();
+		// instance_activate_all();
+		// notes_array_update();
 		var i=0, l=chartNotesCount, _inst;
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
