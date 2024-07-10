@@ -854,7 +854,12 @@ function project_load(_file = "") {
 	    }
 	    else
 	    	map_load(chartPath);
-	    
+		
+		if(variable_struct_exists(_contents, "projectTime"))
+			projectTime = _contents.projectTime;
+		else
+			projectTime = 0;
+
 	    music_load(_path_deal(musicPath, _propath));
 	    if(backgroundPath != "")
 	    	background_load(_path_deal(backgroundPath, _propath));
@@ -909,6 +914,7 @@ function project_save_as(_file = "") {
 			backgroundPath: objManager.backgroundPath,
 			chartPath: objManager.chartPath,
 			videoPath: objManager.videoPath,
+			projectTime: objManager.projectTime,
 			timingPoints: objEditor.timingPoints,
 			charts: [],
 			settings: project_get_settings()
@@ -1329,7 +1335,7 @@ function stat_count(side, type) {
 	}
 }
 
-function stat_string(stype, ntype) {
+function stat_note_string(stype, ntype) {
 	with(objMain)
 		if(stype == 1) {
 			return string(statCount[3][ntype]);
@@ -1339,6 +1345,11 @@ function stat_string(stype, ntype) {
 								 statCount[0][ntype],"/",
 								 statCount[2][ntype]);
 		}
+}
+
+function stat_next() {
+	objMain.showStats ++;
+	objMain.showStats %= 4;
 }
 
 #endregion

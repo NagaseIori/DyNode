@@ -356,6 +356,7 @@ function format_time_ms(_time) {
 	return string_format(_time, 1, 1) + "ms";
 }
 
+// Convert time (in ms) to standard string format
 function format_time_string(_time) {
 	var _min = floor(_time / 1000 / 60);
 	var _sec = floor((_time - _min * 60000)/1000);
@@ -363,6 +364,16 @@ function format_time_string(_time) {
 	var _str = string_format(_min, 2, 0) + ":" + string_format(_sec, 2, 0) + ":" + string_format(_ms, 3, 0);
 	_str = string_replace_all(_str, " ", "0");
 	return _str;
+}
+
+// Convert time (in ms) to standard string format in hh:mm:ss
+function format_time_string_hhmmss(_time) {
+    var _hour = floor(_time / 1000 / 60 / 60);
+    var _min = floor((_time - _hour * 3600000) / 1000 / 60);
+    var _sec = floor((_time - _hour * 3600000 - _min * 60000) / 1000);
+    var _str = string_format(_hour, 2, 0) + ":" + string_format(_min, 2, 0) + ":" + string_format(_sec, 2, 0);
+    _str = string_replace_all(_str, " ", "0");
+    return _str;
 }
 
 #endregion

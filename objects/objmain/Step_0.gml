@@ -122,8 +122,7 @@ projectTime += round(delta_time / 1000);
     }
     
     if(mouse_check_button_pressed(mb_middle)) {
-    	showStats ++;
-    	showStats %= 3;
+		stat_next();
     }
 
 #endregion

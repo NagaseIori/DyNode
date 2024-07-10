@@ -130,3 +130,8 @@ if(keycheck_down(vk_escape)) {
 	if(!instance_exists(objEditor))
 		game_end_confirm();
 }
+
+// Update project time
+
+if(delta_time < 1000000)
+	projectTime += delta_time / 1000;

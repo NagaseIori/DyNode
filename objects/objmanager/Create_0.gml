@@ -167,6 +167,7 @@ else
 	musicPath = "";
 	chartPath = "";
 	videoPath = "";
+	projectTime = 0;		// in ms
 	
 #endregion
 
