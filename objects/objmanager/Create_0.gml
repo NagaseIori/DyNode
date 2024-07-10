@@ -19,6 +19,7 @@
 #macro INF 0x7fffffff
 #macro USE_DSP_PITCHSHIFT (objMain.usingPitchShift)
 #macro NULL_FUN function() {}
+#macro MAX_SELECTION_LIMIT 4000
 math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs

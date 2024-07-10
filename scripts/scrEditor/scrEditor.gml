@@ -335,7 +335,7 @@ function operation_step_flush(_array) {
 	}
 }
 
-function operation_do(_type, _from, _to = -1) {
+function operation_do(_type, _from, _to = -1, _safe_ = false) {
 	if(_to != -1)
 		operation_synctime_set(_to.time);
 	else if(is_struct(_from))
@@ -348,7 +348,8 @@ function operation_do(_type, _from, _to = -1) {
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
 			_from.inst.note_outscreen_check();
-			_from.inst.select();
+			if(!_safe_)
+				_from.inst.select();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
@@ -400,7 +401,7 @@ function operation_undo() {
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
-					operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
+					operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp, l > MAX_SELECTION_LIMIT);
 					break;
 				case OPERATION_TYPE.ADD:
 					operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
@@ -447,7 +448,7 @@ function operation_redo() {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
 				case OPERATION_TYPE.TPCHANGE:
-					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp);
+					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp, l > MAX_SELECTION_LIMIT);
 					break;
 				case OPERATION_TYPE.ADD:
 					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
