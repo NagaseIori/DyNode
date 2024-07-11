@@ -1,3 +1,4 @@
+// Feather disable all
 /// Scribble's macros, used to customise and control behaviour throughout the library
 ///
 /// N.B. You never need to run this script yourself! All of these macros are handled automatically when Scribble is compiled into your project
@@ -20,6 +21,8 @@
 #macro SCRIBBLE_USE_KERNING                   true
 #macro SCRIBBLE_SPRITE_BILINEAR_FILTERING     true
 #macro SCRIBBLE_DELAY_LAST_CHARACTER          false
+#macro SCRIBBLE_USE_ASCENDER_OFFSET           false
+#macro SCRIBBLE_USE_FONT_ALIGNMENT_OFFSETS    false
 
 
 
