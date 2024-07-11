@@ -432,7 +432,6 @@ function operation_undo() {
 		
 		announcement_play(i18n_get("undo", string(array_length(_ops))));
 		note_sort_request();
-		note_activation_reset();
 		// show_debug_message_safe("POINTER: "+ string(operationPointer));
 	}
 	
@@ -468,7 +467,6 @@ function operation_redo() {
 		
 		announcement_play(i18n_get("redo", string(array_length(_ops))));
 		note_sort_request();
-		note_activation_reset();
 	}
 }
 
