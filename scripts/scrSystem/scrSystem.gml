@@ -21,7 +21,6 @@ function map_close() {
 		instance_destroy(objTopBar);
 		
 		time_source_destroy(timesourceResumeDelay);
-		time_source_destroy(timesourceDeactivateFlush);
 		part_emitter_destroy_all(partSysNote);
 		part_system_destroy(partSysNote);
 		part_type_destroy(partTypeNoteDL);

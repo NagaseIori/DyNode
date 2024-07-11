@@ -251,16 +251,15 @@ function note_check_and_activate(_posistion_in_array) {
 	return 0;
 }
 
-function note_deactivate_request(inst) {
-	objMain.deactivationQueue[? inst] = true;
+function note_deactivate(inst) {
+	instance_deactivate_object(inst);
 }
 
 function note_activate(inst) {
 	instance_activate_object(inst);
-	if(ds_map_exists(objMain.deactivationQueue, inst))
-		ds_map_delete(objMain.deactivationQueue, inst);
 }
 
+//! Deprecated
 function note_deactivate_flush() {
 	// return;
 	with(objMain) {

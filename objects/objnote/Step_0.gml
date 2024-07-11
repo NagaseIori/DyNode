@@ -53,7 +53,7 @@ if(drawVisible || nodeAlpha>EPS || infoAlpha>EPS || image_alpha>EPS) {
 
 // If no longer visible then deactivate self
 if(!drawVisible && nodeAlpha<EPS && infoAlpha < EPS && !instance_exists(finst)) {
-	note_deactivate_request(id);
+	note_deactivate(id);
 	return;
 }
 

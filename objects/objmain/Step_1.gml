@@ -199,8 +199,8 @@ var _music_resync_request = false;
 
 #region NOTES ACTIVATE & DEACTIVATE
 
-	if(ds_map_size(deactivationQueue) > NOTE_DEACTIVATION_LIMIT)
-		note_deactivate_flush();
+	// if(ds_map_size(deactivationQueue) > NOTE_DEACTIVATION_LIMIT)
+	// 	note_deactivate_flush();
 
 	var i=max(chartNotesArrayAt-3, 0), l=chartNotesCount;
 	
