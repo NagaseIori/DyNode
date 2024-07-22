@@ -220,6 +220,7 @@ _update_get_event_handle = undefined;
 _update_download_event_handle = undefined;
 _update_unzip_event_handle = undefined;
 
+_update_version = "";
 _update_url = "";
 _update_filename = "";
 _update_github_url = "";
@@ -271,6 +272,19 @@ function update_ready() {
 	_update_status = UPDATE_STATUS.READY;
 
 	announcement_play("autoupdate_process_4");
+}
+
+function skip_update() {
+	global.lastCheckedVersion = _update_version;
+
+	announcement_play("autoupdate_skip");
+}
+
+function stop_autoupdate() {
+	if(global.autoupdate) {
+		global.autoupdate = false;
+		announcement_play("autoupdate_remove");
+	}
 }
 
 // Check For Update

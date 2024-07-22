@@ -10,8 +10,8 @@ if (async_load[? "id"] == _update_get_event_handle) {
 				if(variable_struct_exists(_result, "message") && _result.message == "Not Found") {
 					announcement_warning("autoupdate_warn");
 				}
-				else if(version_cmp(_result.tag_name, VERSION)>0 && _result.tag_name != global.lastCheckedVersion) {
-					global.lastCheckedVersion = _result.tag_name;
+				else if(debug_mode || version_cmp(_result.tag_name, VERSION)>0 && _result.tag_name != global.lastCheckedVersion) {
+					_update_version = _result.tag_name;
 					_update_url = _result.html_url;
 					_update_filename = _result.assets[0].name;
 					_update_github_url = _result.assets[0].browser_download_url;
@@ -19,7 +19,9 @@ if (async_load[? "id"] == _update_get_event_handle) {
 					show_debug_message("Filename: "+_update_filename+"\nURL: "+_update_github_url);
 					announcement_play("[scale, 1.5]"+i18n_get("autoupdate_found_1")+"[#aed581]" + _result.tag_name + 
 						"[/c][scale,1.2]\n[region,update_2][cycle,0,30]" + i18n_get("autoupdate_found_3") + "[/cycle][/region]\n" +
-						"[/c][scale,1]\n[region,update][cycle,130,150]" + i18n_get("autoupdate_found_2") + "[/cycle][/region]\n\n" +
+						"[/c][scale,1]\n[region,update][cycle,130,150]" + i18n_get("autoupdate_found_2") + "[/cycle][/region]" +
+						"[/c][scale,0.8]\n[region,update_skip][c_white]" + i18n_get("autoupdate_found_4") + "[/cycle][/region]    " +
+						"[/c][scale,0.8][region,update_off][c_ltgray]" + i18n_get("autoupdate_found_5") + "[/cycle][/region]\n\n" +
 						"[c_ltgrey][scale, 1]"+format_markdown(_result.body)+"\n", 5000);
 				}
 			}
