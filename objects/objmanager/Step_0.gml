@@ -77,8 +77,12 @@ if(keycheck_down_ctrl(vk_f11)) {
 if(room == rMain) {
 	if(keycheck_down(vk_f2))
     	map_load();
-    if(keycheck_down_ctrl(ord("S")))
-    	project_save();
+    if(keycheck_down_ctrl(ord("S"))) {
+		if(!shift_ishold())
+    		project_save();
+		else if(shift_ishold() && !alt_ishold())
+			project_save_as();
+	}
 	if(keycheck_down(vk_f1))
 	    project_load();
 	if(keycheck_down_ctrl(ord("N")))
