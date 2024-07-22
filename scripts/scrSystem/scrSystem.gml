@@ -1251,9 +1251,9 @@ function load_config() {
 	// Version check.
 	if(_con[$ "version"] != VERSION) {
 		if(version_cmp(VERSION, _con[$ "version"]) > 0)
-			announcement_play("version_higher", VERSION);
+			announcement_play(i18n_get("version_higher", VERSION));
 		else
-			announcement_play("version_lower", VERSION);
+			announcement_warning(i18n_get("version_lower", VERSION));
 	}
 	
 	return md5_file(pth);

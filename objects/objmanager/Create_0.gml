@@ -22,6 +22,10 @@
 #macro AUTOSAVE_TIME (global.autoSaveTime)	// in seconds
 math_set_epsilon(0.00000001);				// 1E-8
 
+
+// Announcement init
+announcements = [];
+
 // Global Configs
 
 global.resolutionW = 1920
@@ -170,8 +174,6 @@ else
 
 #region Inner Variables
 
-	// For Announcement
-	announcements = [];
 	annoThresholdNumber = 7;
 	annoThresholdTime = 400;
 	annosY = [];
