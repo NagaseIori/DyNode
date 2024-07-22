@@ -499,6 +499,10 @@ image_yscale = global.scaleYAdjust;
                 note_outscreen_check();
                 
                 if(_singlePaste) instance_destroy();
+                else {
+                    if(editor_get_editmode() == 0)
+                        operation_merge_last_request(1, OPERATION_TYPE.PASTE);
+                }
                 state = stateAttach;
                 return;
             }

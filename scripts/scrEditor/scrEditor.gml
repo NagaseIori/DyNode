@@ -295,6 +295,58 @@ function editor_get_note_attaching_center() {
 
 #region UNDO & REDO FUNCTION
 
+function operation_get_name(opsType) {
+	var _result = "";
+	switch(opsType) {
+		case OPERATION_TYPE.MOVE:
+			_result = "ops_name_move";
+			break;
+		case OPERATION_TYPE.ADD:
+			_result = "ops_name_add";
+			break;
+		case OPERATION_TYPE.REMOVE:
+			_result = "ops_name_remove";
+			break;
+		case OPERATION_TYPE.TPADD:
+			_result = "ops_name_tpadd";
+			break;
+		case OPERATION_TYPE.TPCHANGE:
+			_result = "ops_name_tpchange";
+			break;
+		case OPERATION_TYPE.TPREMOVE:
+			_result = "ops_name_tpremove";
+			break;
+		case OPERATION_TYPE.OFFSET:
+			_result = "ops_name_offset";
+			break;
+		case OPERATION_TYPE.ATTACH:
+			_result = "ops_name_attach";
+			break;
+		case OPERATION_TYPE.CUT:
+			_result = "ops_name_cut";
+			break;
+		case OPERATION_TYPE.MIRROR:
+			_result = "ops_name_mirror";
+			break;
+		case OPERATION_TYPE.ROTATE:
+			_result = "ops_name_rotate";
+			break;
+		case OPERATION_TYPE.PASTE:
+			_result = "ops_name_paste";
+			break;
+		case OPERATION_TYPE.SETTYPE:
+			_result = "ops_name_settype";
+			break;
+		case OPERATION_TYPE.SETWIDTH:
+			_result = "ops_name_setwidth";
+			break;
+		case OPERATION_TYPE.RANDOMIZE:
+			_result = "ops_name_randomize";
+			break;
+	}
+	return i18n_get(_result);
+}
+
 function operation_synctime_set(time) {
 	with(objEditor) {
 		operationSyncTime[0] = min(operationSyncTime[0], time);
@@ -316,10 +368,16 @@ function operation_step_add(_type, _from, _to) {
 	}
 }
 
+/// @param {Struct.sOperation} _array 
 function operation_step_flush(_array) {
 	with(objEditor) {
+		var _operation_pack = {
+			type: _array[0].opType,
+			ops: _array
+		}
+
 		array_resize(operationStack, operationPointer + 1);
-		array_push(operationStack, _array);
+		array_push(operationStack, _operation_pack);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
 		// show_debug_message_safe($"New operation: {_array}");
@@ -327,7 +385,7 @@ function operation_step_flush(_array) {
 		if(operationMergeLastRequest > 0) {
 			operationMergeLastRequestCount ++;
 			if(operationMergeLastRequest == operationMergeLastRequestCount) {
-				operation_merge_last(operationMergeLastRequest);
+				operation_merge_last(operationMergeLastRequest, operationMergeLastRequestType);
 				operationMergeLastRequest = 0;
 				operationMergeLastRequestCount = 0;
 			}
@@ -376,7 +434,7 @@ function operation_do(_type, _from, _to = -1, _safe_ = false) {
 function operation_refresh_inst(_origi, _nowi) {
 	with(objEditor) {
 		for(var i=0, l=array_length(operationStack); i<l; i++) {
-			var _ops = operationStack[i];
+			var _ops = operationStack[i].ops;
 			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) if(variable_struct_exists(_ops[ii].fromProp, "inst")) {
 				if(_ops[ii].fromProp.inst == _origi)
 					_ops[ii].fromProp.inst = _nowi;
@@ -395,7 +453,8 @@ function operation_refresh_inst(_origi, _nowi) {
 function operation_undo() {
 	with(objEditor) {
 		if(operationPointer == -1) return;
-		var _ops = operationStack[operationPointer];
+		var _ops = operationStack[operationPointer].ops;
+		var _type = operationStack[operationPointer].type;
 		
 		note_select_reset();
 		for(var i=0, l=array_length(_ops); i<l; i++) {
@@ -430,7 +489,7 @@ function operation_undo() {
 		
 		operationPointer--;
 		
-		announcement_play(i18n_get("undo", string(array_length(_ops))));
+		announcement_play(i18n_get("undo", operation_get_name(_type), string(array_length(_ops))));
 		note_sort_request();
 		// show_debug_message_safe("POINTER: "+ string(operationPointer));
 	}
@@ -441,7 +500,8 @@ function operation_redo() {
 	with(objEditor) {
 		if(operationPointer + 1 == operationCount) return;
 		operationPointer ++;
-		var _ops = operationStack[operationPointer];
+		var _ops = operationStack[operationPointer].ops;
+		var _type = operationStack[operationPointer].type;
 		note_select_reset();
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
@@ -465,40 +525,37 @@ function operation_redo() {
 			}
 		}
 		
-		announcement_play(i18n_get("redo", string(array_length(_ops))));
+		announcement_play(i18n_get("redo", operation_get_name(_type), string(array_length(_ops))));
 		note_sort_request();
 	}
 }
 
 /// @description Merge last operations to one operation.
 /// @param {Real} count The number of last operations to merge.
-function operation_merge_last(count) {
-	// show_debug_message($"Merge last {count} operations.");
-	if(count <= 1) {
-		show_debug_message("[Warning] At least merge 2 operations.");
-		return;
-	}
+/// @param {Enum.OPERATION_TYPE} type The type of the merged operations.
+function operation_merge_last(count, type) {
 	with(objEditor) {
 		var _new_ops = [];
 		for(var i=0; i<count; i++) {
-			_new_ops = array_concat(_new_ops, operationStack[operationPointer - i]);
+			_new_ops = array_concat(_new_ops, operationStack[operationPointer - i].ops);
 		}
 		operationPointer -= count - 1;
 		operationCount = operationPointer + 1;
-		operationStack[operationPointer] = _new_ops;
+		operationStack[operationPointer] = {
+			type: type,
+			ops: _new_ops
+		};
 	}
 }
 
 /// @description Send requests to merge the last new operations from now on.
 /// @param {Real} count The number of last operations to merge.
-function operation_merge_last_request(count) {
-	if(count <= 1) {
-		show_debug_message("[Warning] At least merge 2 operations.");
-		return;
-	}
+/// @param {Enum.OPERATION_TYPE} type The type of the merged operations.
+function operation_merge_last_request(count, type) {
 	with(objEditor) {
 		operationMergeLastRequestCount = 0;
 		operationMergeLastRequest = count;
+		operationMergeLastRequestType = type;
 	}
 }
 
@@ -778,7 +835,7 @@ function chart_randomize() {
 			width = random_range(0.5, 5);
 			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		}
-		
+		operation_merge_last_request(1, OPERATION_TYPE.RANDOMIZE);
 	}
 	notes_array_update();
 	note_activation_reset();

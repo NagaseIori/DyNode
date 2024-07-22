@@ -107,8 +107,8 @@
     "error_dym_note_load_failed": "导入谱面音符时出错，导入过程已终止。\n建议使用最新版本的 Dynamaker-modified 来导出谱面，你也可以选择向开发者反馈该错误。",
     "error_dym_bpm_load_failed": "未能读取谱面中的变 BPM 信息。\n建议使用最新版本的 Dynamaker-modified 来导出谱面的变 BPM 数据。",
     "error_default_width_must_be_real": "输入的默认宽度必须是一个实数。",
-    "undo": "撤销操作 共 $0 处",
-    "redo": "还原操作 共 $0 处",
+    "undo": "撤销操作 $0",
+    "redo": "还原操作 $0",
     "tpc_extra_question": "检测到你已经选择一个 Note，它的时间是: $0 ms。要以这个时间作为 offset 吗？",
     "tpc_q1": "请输入该 Timing Point 的 offset（毫秒）: ",
     "tpc_q2": "请输入 BPM : ",
@@ -165,6 +165,21 @@
     "dym_old_version_warning": "DyNode 暂不支持导入来自过旧版本的 Dynamaker 谱面。\n你可以将该谱面读取到最新的 Dynamaker 版本后再次导出以更新谱面格式后重新导入。",
     "bad_xml_chart_format": "该 XML 谱面格式不受 DyNode 支持。DyNode 目前仅支持读取从最新版 Dynamaker 导出的 XML 谱面。\n请在检查谱面格式后重新导入谱面。",
     "need_a_music_file_error": "创建项目需要一个音乐文件。\n请至少选择填写音乐文件或导入一个含有音乐文件的.dy谱面文件。",
-    "multiple_sides_selection_property_binding": "异侧多选属性绑定"
+    "multiple_sides_selection_property_binding": "异侧多选属性绑定",
+    "ops_name_move": "移动音符",
+    "ops_name_add": "添加音符",
+    "ops_name_remove": "删除音符",
+    "ops_name_tpadd": "添加 Timing Point ",
+    "ops_name_tpchange": "修改 Timing Point ",
+    "ops_name_tpremove": "删除 Timing Point ",
+    "ops_name_offset": "修改时间偏移量",
+    "ops_name_attach": "吸附 / 移动音符",
+    "ops_name_cut": "剪切音符",
+    "ops_name_mirror": "镜像音符",
+    "ops_name_rotate": "对称音符",
+    "ops_name_paste": "粘贴音符",
+    "ops_name_settype": "修改音符类型",
+    "ops_name_setwidth": "修改音符宽度",
+    "ops_name_randomize": "随机化谱面"
   }
 }

@@ -173,7 +173,7 @@ cutRequest = false;
 attachRequest = false;
 attachRequestCenter = undefined;
 copyMultipleSides = false;
-singlePaste = false;		// Only paste for one time then return
+singlePaste = false;		// Only paste for one time then return (for attach mode)
 
 // Undo & Redo
 
@@ -184,6 +184,8 @@ operationCount = 0;
 operationSyncTime = [INF, -INF];		// The earliest operated instance's time on last step
 operationMergeLastRequest = 0;
 operationMergeLastRequestCount = 0;
+/// @type {Enum.OPERATION_TYPE} 
+operationMergeLastRequestType = undefined;  // Used for special operation type.
 
 // Methods
 
