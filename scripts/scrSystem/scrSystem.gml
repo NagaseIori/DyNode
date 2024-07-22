@@ -1247,6 +1247,14 @@ function load_config() {
 	global.offsetCorrection = max(0, global.offsetCorrection)
 	global.autoSaveTime = max(1, global.autoSaveTime);
 	vars_init();
+
+	// Version check.
+	if(_con[$ "version"] != VERSION) {
+		if(version_cmp(VERSION, _con[$ "version"]) > 0)
+			announcement_play("version_higher", VERSION);
+		else
+			announcement_play("version_lower", VERSION);
+	}
 	
 	return md5_file(pth);
 }
