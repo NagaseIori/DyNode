@@ -250,13 +250,13 @@ function start_update() {
 		return;
 	_update_status = UPDATE_STATUS.CHECKING_I;
 	_update_download_event_handle = http_get_file(SOURCE_IORI + _update_filename, UPDATE_TARGET_FILE);
-	announcement_play("开始获取更新文件。");
+	announcement_play("autoupdate_process_2");
 }
 
 function fallback_update() {
 	_update_status = UPDATE_STATUS.CHECKING_II;
 	_update_download_event_handle = http_get_file(_update_github_url, UPDATE_TARGET_FILE);
-	announcement_play("从首选源获取更新文件失败。开始从 Github 源获取更新文件。");
+	announcement_play("autoupdate_process_3");
 }
 
 function start_update_unzip() {
@@ -267,7 +267,7 @@ function start_update_unzip() {
 function update_ready() {
 	_update_status = UPDATE_STATUS.READY;
 
-	announcement_play("已准备好更新。稍后可关闭 DyNode 以继续进行更新。");
+	announcement_play("autoupdate_process_4");
 }
 
 // Check For Update

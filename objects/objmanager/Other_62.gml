@@ -36,7 +36,7 @@ if (async_load[? "id"] == _update_download_event_handle) {
 	var status = async_load[? "status"];
 	if (status == 1) {
 		if(_update_status != UPDATE_STATUS.DOWNLOADING) {
-			announcement_play("开始进行更新。");
+			announcement_play("autoupdate_process_1");
 			_update_status = UPDATE_STATUS.DOWNLOADING;
 		}
 		_update_size = async_load[? "contentLength"];
@@ -49,7 +49,7 @@ if (async_load[? "id"] == _update_download_event_handle) {
 		if(_update_status == UPDATE_STATUS.CHECKING_I)
 			fallback_update();
 		else {
-			announcement_error("下载过程出现错误。更新中止。");
+			announcement_error("autoupdate_process_err_1");
 			_update_status = UPDATE_STATUS.FAILED;
 		}
 	}
