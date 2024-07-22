@@ -11,7 +11,7 @@
 #macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
 #macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
-#macro VIDEO_UPDATE_FREQUENCY 120			// in hz
+#macro VIDEO_FREQUENCY (global.VIDEO_UPDATE_FREQUENCY)			// in hz
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
@@ -19,6 +19,7 @@
 #macro NULL_FUN function() {}
 #macro MAX_SELECTION_LIMIT 4000
 #macro KPS_MEASURE_WINDOW 400
+#macro AUTOSAVE_TIME (global.autoSaveTime)	// in seconds
 math_set_epsilon(0.00000001);				// 1E-8
 
 // Global Configs
@@ -42,6 +43,8 @@ global.graphics = {
 global.dropAdjustError = 0.125;
 global.offsetCorrection = 2;
 global.lastCheckedVersion = "";
+global.VIDEO_UPDATE_FREQUENCY = 60;
+global.autoSaveTime = 60 * 3;
 
 // Themes Init
 
@@ -182,7 +185,7 @@ else
 			project_save();
 		announcement_play("autosave_complete");
 	}
-	tsAutosave = time_source_create(time_source_game, 60*5, time_source_units_seconds, _auto_save, [], -1);
+	tsAutosave = time_source_create(time_source_game, AUTOSAVE_TIME, time_source_units_seconds, _auto_save, [], -1);
 	if(global.autosave) {
 		global.autosave = false;
 		switch_autosave();

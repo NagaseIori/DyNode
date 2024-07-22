@@ -1241,8 +1241,11 @@ function load_config() {
 	_check_set(_con, "dropAdjustError");
 	_check_set(_con, "lastCheckedVersion");
 	_check_set(_con, "offsetCorrection");
+	_check_set(_con, "VIDEO_UPDATE_FREQUENCY");
+	_check_set(_con, "autoSaveTime");
 	// Clamp the offset correction.
 	global.offsetCorrection = max(0, global.offsetCorrection)
+	global.autoSaveTime = max(1, global.autoSaveTime);
 	vars_init();
 	
 	return md5_file(pth);
@@ -1269,7 +1272,10 @@ function save_config() {
 		musicDelay: global.musicDelay,
 		dropAdjustError: global.dropAdjustError,
 		lastCheckedVersion: global.lastCheckedVersion,
-		offsetCorrection: global.offsetCorrection
+		offsetCorrection: global.offsetCorrection,
+		VIDEO_UPDATE_FREQUENCY: global.VIDEO_UPDATE_FREQUENCY,
+		autoSaveTime: global.autoSaveTime,
+		
 	}, true));
 	
 }
