@@ -61,10 +61,11 @@ if(_fmoderr < 0) {
     show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
 }
 
-if(keycheck_down(vk_f10)) {
-	load_config();
-	announcement_play("anno_reload_config");
-}
+//! Deprecated.
+// if(keycheck_down(vk_f10)) {
+// 	load_config();
+// 	announcement_play("anno_reload_config");
+// }
 
 if(keycheck_down_ctrl(vk_f11)) {
 	debugLayer = !debugLayer;
