@@ -19,6 +19,8 @@
     {"$GMExtensionFile":"","%Name":"DyCore.dll","constants":[],"copyToTargets":192,"filename":"DyCore.dll","final":"","functions":[
         {"$GMExtensionFunction":"","%Name":"DyCore_init","argCount":0,"args":[],"documentation":"","externalName":"DyCore_init","help":"DyCore_init()","hidden":false,"kind":1,"name":"DyCore_init","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":1,},
         {"$GMExtensionFunction":"","%Name":"DyCore_delaunator","argCount":0,"args":[1,],"documentation":"","externalName":"DyCore_delaunator","help":"DyCore_delaunator(json_array)","hidden":false,"kind":1,"name":"DyCore_delaunator","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":1,},
+        {"$GMExtensionFunction":"","%Name":"DyCore_update","argCount":0,"args":[1,],"documentation":"","externalName":"DyCore_update","help":"DyCore_update(program_directory)","hidden":false,"kind":1,"name":"DyCore_update","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
+        {"$GMExtensionFunction":"","%Name":"DyCore_cleanup_tmpfiles","argCount":0,"args":[1,],"documentation":"","externalName":"DyCore_cleanup_tmpfiles","help":"DyCore_cleanup_tmpfiles(program_directory)","hidden":false,"kind":1,"name":"DyCore_cleanup_tmpfiles","resourceType":"GMExtensionFunction","resourceVersion":"2.0","returnType":2,},
       ],"init":"","kind":1,"name":"DyCore.dll","order":[],"origname":"","ProxyFiles":[
         {"$GMProxyFile":"","%Name":"libDyCore.so","name":"libDyCore.so","resourceType":"GMProxyFile","resourceVersion":"2.0","TargetMask":7,},
       ],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},

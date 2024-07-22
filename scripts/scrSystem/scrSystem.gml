@@ -1357,6 +1357,12 @@ function stat_next() {
 	objMain.showStats %= MAX_STAT_TYPE;
 }
 
+function stat_visible() {
+	if(!instance_exists(objMain))
+		return false;
+	return objMain.showStats > 0;
+}
+
 /// @description Caculate the avg notes' count between [_time-_range, _time] (in ms)
 function stat_kps(_time, _range) {
 	if(objMain.chartNotesCount == 0)
