@@ -99,6 +99,7 @@
     {"$GMIncludedFile":"","%Name":"mDynamix.json","CopyToMask":-1,"filePath":"datafiles","name":"mDynamix.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scribble_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"scribble_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"sprMsdfNotoSans.json","CopyToMask":-1,"filePath":"datafiles","name":"sprMsdfNotoSans.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"zstd_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"zstd_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
   "LibraryEmitters":[],
