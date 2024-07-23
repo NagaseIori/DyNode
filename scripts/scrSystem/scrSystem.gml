@@ -833,7 +833,7 @@ function project_load(_file = "") {
     if(_file == "") return 0;
     
     var _buf = buffer_load(_file);
-    var _contents = json_parse(buffer_read(_buf, buffer_text));
+    var _contents = __dyn_read_buffer(_buf);
     buffer_delete(_buf);
     var _propath = filename_path(_file);
     
@@ -941,7 +941,9 @@ function project_save_as(_file = "") {
 		announcement_warning("复制音乐/背景/视频文件时出现错误。[scale, 0.7]\n"+string(e));
 	}
 	
-	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
+	var _buff = __dyn_gen_buffer(_contents)
+	objMain.savingProjectId = fast_file_save_buffer_async(_file, _buff);
+	buffer_delete(_buff);
 	
 	return 1;
 }
@@ -1430,6 +1432,55 @@ function global_add_delay(delay) {
 			nowTime -= delay;
 	save_config();
 	announcement_set("global_music_delay", global.musicDelay);
+}
+
+#endregion
+
+#region DYN File Format Functions
+
+/// @description Convert project struct to compressed buffer.
+/// @param {Struct} str The given struct.
+/// @returns {Id.Buffer} The compressed buffer.
+function __dyn_gen_buffer(str) {
+	if(!is_struct(str))
+		throw "Must be a struct!";
+
+	buffer_seek(global.__DyCore_Buffer, buffer_seek_start, 0);
+	var _json = json_stringify(str);
+	var _cSize = DyCore_compress_string(_json, buffer_get_address(global.__DyCore_Buffer), 11);
+
+	var _rBuff = buffer_create(_cSize, buffer_fixed, 1);
+	fast_buffer_copy(_rBuff, global.__DyCore_Buffer, _cSize);
+	
+	return _rBuff;
+}
+
+/// @description To check if the buffer is compressed.
+function __dyn_is_compressed_buffer(buffer) {
+	return DyCore_is_compressed(buffer_get_address(buffer), buffer_get_size(buffer));
+}
+
+/// @description Convert compressed/uncompressed buffer to project struct.
+/// @param {Id.Buffer} buffer The given buffer.
+/// @returns {Struct} The final struct.
+function __dyn_read_buffer(buffer) {
+	var _json = "";
+	if(__dyn_is_compressed_buffer(buffer) < 0) {
+		// Fallback to text format.
+		buffer_seek(buffer, buffer_seek_start, 0);
+		_json = buffer_read(buffer, buffer_text);
+	}
+	else {
+		_json = DyCore_decompress_string(buffer_get_address(buffer), buffer_get_size(buffer));
+		if(_json == "failed")
+			throw "Decompress failed.";
+	}
+
+	var _str = json_parse(_json);
+
+	if(!is_struct(_str))
+		throw "Parse failed.";
+	return _str;
 }
 
 #endregion

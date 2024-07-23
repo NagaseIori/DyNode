@@ -20,8 +20,10 @@
 #macro MAX_SELECTION_LIMIT 4000
 #macro KPS_MEASURE_WINDOW 400
 #macro AUTOSAVE_TIME (global.autoSaveTime)	// in seconds
+#macro DYCORE_BUFFER_SIZE (50*1024*1024)	// 50MB
+#macro DYCORE_COMPRESSION_LEVEL (11)		// max = 22
+#macro DYCORE_BUFFER_ADDRESS (buffer_get_address(global.__DyCore_Buffer))
 math_set_epsilon(0.00000001);				// 1E-8
-
 
 // Announcement init
 announcements = [];
@@ -121,6 +123,8 @@ display_reset(global.graphics.AA, global.graphics.VSync);
 if(DyCore_init() != "success") {
 	show_error("DyCore Initialized Failed.", false);
 }
+
+global.__DyCore_Buffer = buffer_create(DYCORE_BUFFER_SIZE, buffer_fixed, 1);
 
 // Input Initialization
 

@@ -378,7 +378,34 @@ function format_time_string_hhmmss(_time) {
 
 #endregion
 
-#region FAST FILE IO
+#region FAST IO
+
+/// @description Warning: This function wipes out all [dst] data.
+function fast_buffer_copy(dst, src, size) {
+	DyCore_buffer_copy(buffer_get_address(dst), buffer_get_address(src), size);
+
+	buffer_set_used_size(dst, size);
+}
+
+function fast_file_save_buffer_async(file, buffer) {
+	file = file_path_fix(file);
+	var _len = buffer_get_size(buffer);
+	var _buf = buffer_create(_len, buffer_fixed, 1);
+	fast_buffer_copy(_buf, buffer, _len);
+	var _id = buffer_save_async(_buf, file, 0, _len);
+	return {
+		id: _id,
+		buffer: _buf
+	};
+}
+
+function fast_file_save_buffer(file, buffer) {
+	file = file_path_fix(file);
+	buffer_seek(buffer, buffer_seek_start, 0);
+	print_buffer_hex(buffer);
+	buffer_save(buffer, file);
+	return;
+}
 
 function fast_file_save_async(file, str) {
 	file = file_path_fix(file);
@@ -782,4 +809,28 @@ function surface_clear(surface) {
 	surface_reset_target();
 
 	if(orig_target > 0) surface_set_target(surface);
+}
+
+function print_buffer_hex(buffer) {
+    var output = "";
+    var byte;
+    
+    var length = buffer_get_size(buffer);
+    var bytes_to_read = min(length, 100);
+    
+    for (var i = 0; i < bytes_to_read; i++) {
+        byte = buffer_peek(buffer, i, buffer_u8);
+        output += string(int64(byte));
+        if ((i + 1) % 16 == 0) {
+            output += "\n";
+        } else {
+            output += " "; 
+        }
+    }
+    
+    if (bytes_to_read % 16 != 0) {
+        output += "\n";
+    }
+    
+    show_debug_message(output);
 }
