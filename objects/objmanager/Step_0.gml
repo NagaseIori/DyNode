@@ -36,13 +36,13 @@ for(var i=0, l=array_length(announcements); i<l; i++) {
 
 // Caculate annos' Y
 var _h = 0;
-var _margin = 10;
+var _margin = 15;
 var _l = array_length(announcements);
 for(var i=array_length(announcements)-1; i>=0; i--) {
 	/// @self Id.Instance.objAnnouncement
 	with(announcements[i]) {
 		targetY = _h;
-		_h += element.get_height() + _margin;
+		_h += element.get_bbox().height + _margin;
 		
 		if(_l - i > objManager.annoThresholdNumber)
 			lastTime = min(lastTime, timer + objManager.annoThresholdTime);
