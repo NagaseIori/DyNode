@@ -4,8 +4,8 @@
   "content": {
     "title_new_project": "創建項目",
     "title_start_page": "開始頁面",
-    "title_about": "关于",
-    "button_about": "关于",
+    "title_about": "關於",
+    "button_about": "關於",
     "button_project_create": "新建項目",
     "button_project_open": "打開已有項目",
     "button_goback": "返回上一頁",
@@ -73,6 +73,7 @@
     "anno_graph_not_exists": "圖片文件不存在。\n[scale, 0.8]路徑: ",
     "anno_graph_load_err": "圖片文件讀取失敗。圖片可能過大或損壞。",
     "anno_music_load_err": "音樂文件加載失敗，可能原因為類型不支持或文件損壞。\nFMOD 錯誤信息: ",
+    "anno_music_not_exists": "音乐文件不存在。\n[scale, 0.8]路径: ",
     "anno_import_info_complete": "導入譜面信息完畢。",
     "box_set_chart_title": "請輸入新的譜面標題",
     "box_set_change_default_width": "請輸入你想設置的默認寬度值",
@@ -186,6 +187,7 @@
     "ops_name_settype": "修改音符类型",
     "ops_name_setwidth": "修改音符宽度",
     "ops_name_randomize": "随机化谱面",
+    "ops_name_duplicate": "复制音符",
     "version_higher": "DyNode 已更新到版本 $0。",
     "version_lower": "DyNode 已降级到版本 $0。\n回退到较旧版本的 DyNode 可能将丢失一些设置，且可能无法正常读取较新版本的谱面。"
   }
