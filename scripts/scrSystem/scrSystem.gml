@@ -1090,6 +1090,17 @@ function project_backup(project_path) {
 	var newPth = bckDir + project_backup_get_name(project_path);
 	file_copy(project_path, newPth);
 
+	// Also copy the current related files.
+	var _fn_copy = function(fr, bckDir) {
+		if(fr == "") return;
+		var to = bckDir + filename_name(fr);
+		if(file_exists(to)) return;
+		file_copy(fr, to);
+	}
+	_fn_copy(objManager.musicPath, bckDir);
+	_fn_copy(objManager.videoPath, bckDir);
+	_fn_copy(objManager.backgroundPath, bckDir);
+
 	// Check if successfully copied.
 	if(!file_exists(newPth))
 		show_debug_message("[ERROR] Backup failed.");
