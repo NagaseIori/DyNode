@@ -73,6 +73,7 @@
     "anno_graph_not_exists": "图片文件不存在。\n[scale, 0.8]路径: ",
     "anno_graph_load_err": "图片文件读取失败。图片可能过大或损坏。",
     "anno_music_load_err": "音乐文件加载失败，可能原因为类型不支持或文件损坏。\nFMOD 错误信息: ",
+    "anno_music_not_exists": "音乐文件不存在。\n[scale, 0.8]路径: ",
     "anno_import_info_complete": "导入谱面信息完毕。",
     "box_set_chart_title": "请输入新的谱面标题",
     "box_set_change_default_width": "请输入你想设置的默认宽度值",

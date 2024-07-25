@@ -431,7 +431,7 @@ function music_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        announcement_error("Music file " + _file + " doesnt exist.", false);
+        announcement_error(i18n_get("anno_music_not_exists") + _file);
         return;
     }
     
