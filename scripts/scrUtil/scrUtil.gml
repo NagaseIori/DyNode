@@ -309,6 +309,9 @@ function difficulty_num_to_char(_number) {
 function difficulty_char_to_num(_char) {
 	return string_last_pos(_char, global.difficultyString) - 1;
 }
+function difficulty_num_to_name(_number) {
+	return global.difficultyName[_number];
+}
 
 function note_type_num_to_string(_number) {
 	return global.noteTypeName[_number];

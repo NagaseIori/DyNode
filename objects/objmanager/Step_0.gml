@@ -136,6 +136,13 @@ if(keycheck_down(vk_escape)) {
 		game_end_confirm();
 }
 
+// Debug functions
+
+if(debug_mode) {
+	if(keycheck_down_ctrl(vk_numpad0))
+		project_auto_save();
+}
+
 // Update project time
 
 if(delta_time < 1000000)

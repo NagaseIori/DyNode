@@ -190,12 +190,8 @@ else
 	initVars = undefined;
 	initWithProject = false;
 	
-	var _auto_save = function () {
-		if(projectPath != "")
-			project_save();
-		announcement_play("autosave_complete");
-	}
-	tsAutosave = time_source_create(time_source_game, AUTOSAVE_TIME, time_source_units_seconds, _auto_save, [], -1);
+	autosaving = false;
+	tsAutosave = time_source_create(time_source_game, AUTOSAVE_TIME, time_source_units_seconds, project_auto_save, [], -1);
 	if(global.autosave) {
 		global.autosave = false;
 		switch_autosave();

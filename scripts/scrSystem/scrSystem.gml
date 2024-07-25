@@ -1059,6 +1059,44 @@ function project_new() {
 	room_goto(rProjectInit);
 }
 
+function project_auto_save() {
+	with(objManager) {
+		if(projectPath != "") {
+			autosaving = true;
+			project_backup(projectPath);
+			project_save();
+		}
+		else {
+			announcement_warning("autosave_ineffective");
+		}
+	}
+}
+
+function project_backup_get_name(project_path) {
+	var _ret = filename_name_no_ext(project_path)
+		 + "_" + DyCore_get_file_modification_time(project_path)
+		 + filename_ext(project_path);
+
+	return _ret;
+}
+
+function project_backup(project_path) {
+	var proDir = filename_dir(project_path);
+	var bckDir = proDir + "\\backups\\";
+
+	if(!directory_exists(bckDir))
+		directory_create(bckDir);
+
+	var newPth = bckDir + project_backup_get_name(project_path);
+	file_copy(project_path, newPth);
+
+	// Check if successfully copied.
+	if(!file_exists(newPth))
+		show_debug_message("[ERROR] Backup failed.");
+	else
+		show_debug_message("Backup successfully: " + newPth);
+}
+
 #endregion
 
 #region THEME FUNCTIONS
@@ -1320,11 +1358,11 @@ function switch_debug_info() {
 function switch_autosave(state = !global.autosave) {
 	with(objManager) {
 		if(state) {
-			announcement_play("autosave_enable", 2000);
+			announcement_play("autosave_enable", 2000, "autosave_switch");
 			time_source_start(tsAutosave);
 		}
 		else {
-			announcement_play("autosave_disable", 2000);
+			announcement_play("autosave_disable", 2000, "autosave_switch");
 			time_source_stop(tsAutosave);
 		}
 		global.autosave = state;
