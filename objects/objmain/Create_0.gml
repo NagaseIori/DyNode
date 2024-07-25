@@ -352,7 +352,7 @@ depth = 0;
 #region Methods
 
 // Set music's time to [time].
-// If [animated], there will be no transition animation when time is set.
+// If not [animated], there will be no transition animation when time is set.
 // If [inbound!=-1], the time being set will stay above targetline in [inbound] pixels
 function time_set(time, animated = true, inbound = -1) {
 	if(inbound > 0) {
@@ -360,7 +360,7 @@ function time_set(time, animated = true, inbound = -1) {
 		if(time > nowTime) 
 			time -= pix_to_note_time(global.resolutionH - targetLineBelow - inbound);
 		else
-			time -= pix_to_note_time(inbound);
+			time += pix_to_note_time(inbound);
 	}
 		
 	animTargetTime = time;
@@ -387,7 +387,7 @@ function time_inbound(time) {
 }
 
 // Make the specific time range inbound.
-function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
+function time_range_made_inbound(timeL, timeR, inbound = 300, animated = true) {
 	var _il = time_inbound(timeL);
 	var _ir = time_inbound(timeR);
 	if(!_il && !_ir) {
