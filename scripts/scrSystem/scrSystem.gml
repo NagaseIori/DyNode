@@ -1063,7 +1063,11 @@ function project_auto_save() {
 	with(objManager) {
 		if(projectPath != "") {
 			autosaving = true;
-			project_backup(projectPath);
+			try {
+				project_backup(projectPath);
+			} catch(e) {
+				announcement_error("Project backup failed. Info: "+string(e));
+			};
 			project_save();
 		}
 		else {
