@@ -73,6 +73,7 @@
     "anno_graph_not_exists": "Image file not found.\n[scale, 0.8]Path: ",
     "anno_graph_load_err": "Failed to read image file. The image may be too large or corrupted.",
     "anno_music_load_err": "Failed to load music file, possible reasons: unsupported format or file corruption.\nFMOD error message: ",
+    "anno_music_not_exists": "音乐文件不存在。\n[scale, 0.8]路径: ",
     "anno_import_info_complete": "Beatmap information imported.",
     "box_set_chart_title": "Please enter a new chart title",
     "box_set_change_default_width": "Please enter the default width value you want to set",
@@ -186,6 +187,7 @@
     "ops_name_settype": "修改音符类型",
     "ops_name_setwidth": "修改音符宽度",
     "ops_name_randomize": "随机化谱面",
+    "ops_name_duplicate": "复制音符",
     "version_higher": "DyNode 已更新到版本 $0。",
     "version_lower": "DyNode 已降级到版本 $0。\n回退到较旧版本的 DyNode 可能将丢失一些设置，且可能无法正常读取较新版本的谱面。"
   }
