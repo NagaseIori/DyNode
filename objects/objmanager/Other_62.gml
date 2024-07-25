@@ -35,7 +35,10 @@ if (async_load[? "id"] == _update_get_event_handle) {
 }
 
 if (async_load[? "id"] == _update_download_event_handle) {
+	if(_update_status == UPDATE_STATUS.FAILED)
+		return;
 	var status = async_load[? "status"];
+	var _err = false;
 	if (status == 1) {
 		if(_update_status != UPDATE_STATUS.DOWNLOADING) {
 			announcement_play("autoupdate_process_1");
@@ -45,9 +48,19 @@ if (async_load[? "id"] == _update_download_event_handle) {
 		_update_received = async_load[? "sizeDownloaded"];
 	}
 	else if(status == 0) {
-		start_update_unzip();
+		var _hstatus = string(async_load[? "http_status"]);
+		show_debug_message("Get https status:"+_hstatus);
+		if(string_char_at(_hstatus, 1) != "2")
+			_err = true;
+		else {
+			start_update_unzip();
+		}
 	}
 	else if(status < 0) {
+		_err = true;
+	}
+
+	if(_err) {
 		if(_update_status == UPDATE_STATUS.CHECKING_I)
 			fallback_update();
 		else {
