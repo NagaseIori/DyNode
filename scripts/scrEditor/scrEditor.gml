@@ -316,8 +316,10 @@ function edtior_note_quick_duplicate() {
 			var _prop = get_prop();
 			_prop.time += spacing;
 			build_note_withprop(_prop, true, true);
+			operation_merge_last_request(1, OPERATION_TYPE.DUPLICATE);
 		}
 	}
+	objMain.time_range_made_inbound(minTime + spacing, maxTime + spacing);
 }
 
 #region UNDO & REDO FUNCTION
@@ -369,6 +371,9 @@ function operation_get_name(opsType) {
 			break;
 		case OPERATION_TYPE.RANDOMIZE:
 			_result = "ops_name_randomize";
+			break;
+		case OPERATION_TYPE.DUPLICATE:
+			_result = "ops_name_duplicate";
 			break;
 	}
 	return i18n_get(_result);
