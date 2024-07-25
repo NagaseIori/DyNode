@@ -157,8 +157,11 @@ function editor_select_all() {
 		state = stateSelected;
 }
 
+function editor_snap_to_grid_time(_time, _side) {
+	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side);
+}
+
 function editor_snap_to_grid_y(_y, _side) {
-    
     var _nw = global.resolutionW, _nh = global.resolutionH;
     
     var _time = y_to_note_time(_y, _side);
@@ -305,6 +308,8 @@ function edtior_note_quick_duplicate() {
 		}
 	}
 	var spacing = maxTime - minTime + timing_point_get_at(maxTime).beatLength / editor_get_div();
+	// Spacing snapping correction
+	spacing = editor_snap_to_grid_time(minTime + spacing, 0).time - minTime;
 	with(objNote) {
 		if(state == stateSelected) if(noteType != 3) {
 			note_select_reset(true);
