@@ -295,6 +295,7 @@ function editor_get_note_attaching_center() {
 
 /// @description Target at all selected notes, duplicate them to the next divided beat.
 function edtior_note_quick_duplicate() {
+	if(timing_point_count() == 0) return;
 	var maxTime = -10000000;
 	var minTime = 0x7fffffff;
 	with(objNote) {
@@ -305,7 +306,7 @@ function edtior_note_quick_duplicate() {
 	}
 	var spacing = maxTime - minTime + timing_point_get_at(maxTime).beatLength / editor_get_div();
 	with(objNote) {
-		if(state == stateSelected) {
+		if(state == stateSelected) if(noteType != 3) {
 			note_select_reset(true);
 			var _prop = get_prop();
 			_prop.time += spacing;
