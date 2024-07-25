@@ -36,7 +36,7 @@ image_yscale = global.scaleYAdjust;
     nodeColor = c_blue;
     
     // For Hold & Sub
-    lastTime = 0;
+    lastTime = 0;                   // hold's length
     beginTime = 999999999;
     lastAlphaL = 0;
     lastAlphaR = 1;

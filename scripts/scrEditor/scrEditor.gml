@@ -293,6 +293,27 @@ function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
 
+/// @description Target at all selected notes, duplicate them to the next divided beat.
+function edtior_note_quick_duplicate() {
+	var maxTime = -10000000;
+	var minTime = 0x7fffffff;
+	with(objNote) {
+		if(state == stateSelected) {
+			maxTime = max(maxTime, time);
+			minTime = min(minTime, time);
+		}
+	}
+	var spacing = maxTime - minTime + timing_point_get_at(maxTime).beatLength / editor_get_div();
+	with(objNote) {
+		if(state == stateSelected) {
+			note_select_reset(true);
+			var _prop = get_prop();
+			_prop.time += spacing;
+			build_note_withprop(_prop, true, true);
+		}
+	}
+}
+
 #region UNDO & REDO FUNCTION
 
 function operation_get_name(opsType) {
@@ -720,18 +741,9 @@ function timing_fix(tpBefore, tpAfter) {
 	}
 }
 
-function timing_point_get_at(_time) {
-	with(objEditor) {
-		for(var i=0, l=array_length(timingPoints); i<l; i++)
-			if(abs(timingPoints[i].time-_time) <= 1)
-				return timingPoints[i];
-		return undefined;
-	}
-}
-
-// To get current bpm at [_time].
+// To get current timing at [_time].
 /// @returns {Struct.sTimingPoint} 
-function timing_point_get_in(_time) {
+function timing_point_get_at(_time) {
 	with(objEditor) {
 		return timingPoints[
 			max(array_upper_bound(
@@ -909,7 +921,7 @@ function advanced_expr() {
 
 // Advanced divisor setter
 function editor_set_div() {
-	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
+	var _div = get_string_i18n("box_set_div", string(editor_get_div()));
 	if(_div == "") return 0;
 	try {
 		_div = int64(_div);
@@ -924,6 +936,10 @@ function editor_set_div() {
 		return -1;
 	}
 	return 1;
+}
+
+function editor_get_div() {
+	return objEditor.get_div();
 }
 
 // error correction

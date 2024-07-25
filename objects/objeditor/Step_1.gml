@@ -221,6 +221,10 @@ editorSelectMultiple = editorSelectCount > 1;
             operation_merge_last_request(1, OPERATION_TYPE.SETTYPE);
 			announcement_play(i18n_get("notes_set_type", "CHAIN", string(editor_select_count())));
 	    }
+
+        if(keycheck_down_ctrl(ord("D"))) {
+            edtior_note_quick_duplicate();
+        }
     }
     
         
