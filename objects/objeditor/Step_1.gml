@@ -134,7 +134,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    		if(state == stateSelected) {
 	    			var prop = get_prop();
 	    			prop.position = 5 - prop.position;
-	    			note_select_reset(true);
+	    			note_select_reset(id);
 	    			build_note_withprop(prop, true, true);
 	    		}
 	    	}
@@ -169,7 +169,7 @@ editorSelectMultiple = editorSelectCount > 1;
 		    		if(side > 0) {
 		    			var prop = get_prop();
 			    		prop.side = 1 + (!(prop.side - 1));
-			    		note_select_reset(true);
+			    		note_select_reset(id);
 			    		build_note_withprop(prop, true, true);
 			    		_found ++;
 			    	}

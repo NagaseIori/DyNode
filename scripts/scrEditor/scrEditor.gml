@@ -312,7 +312,7 @@ function edtior_note_quick_duplicate() {
 	spacing = editor_snap_to_grid_time(minTime + spacing, 0, true).time - minTime;
 	with(objNote) {
 		if(state == stateSelected) if(noteType != 3) {
-			note_select_reset(true);
+			note_select_reset(id);
 			var _prop = get_prop();
 			_prop.time += spacing;
 			build_note_withprop(_prop, true, true);

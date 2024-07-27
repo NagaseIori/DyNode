@@ -278,8 +278,10 @@ function note_deactivate_flush() {
 	}
 }
 
-function note_select_reset(isself = false) {
-	with(isself?id:objNote)
+function note_select_reset(inst = undefined) {
+	if(inst == undefined) inst = objNote;
+	/// @self Id.Instance.objNote
+	with(inst)
 		if(state == stateSelected) {
 			state = stateNormal;
 			state();
