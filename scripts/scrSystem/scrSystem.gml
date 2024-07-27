@@ -1510,7 +1510,7 @@ function __dyn_gen_buffer(str) {
 
 /// @description To check if the buffer is compressed.
 function __dyn_is_compressed_buffer(buffer) {
-	return DyCore_is_compressed(buffer_get_address(buffer), buffer_get_size(buffer));
+	return DyCore_is_compressed(buffer_get_address(buffer), buffer_get_size(buffer)) >= 0;
 }
 
 /// @description Convert compressed/uncompressed buffer to project struct.
@@ -1518,7 +1518,7 @@ function __dyn_is_compressed_buffer(buffer) {
 /// @returns {Struct} The final struct.
 function __dyn_read_buffer(buffer) {
 	var _json = "";
-	if(__dyn_is_compressed_buffer(buffer) < 0) {
+	if(!__dyn_is_compressed_buffer(buffer)) {
 		// Fallback to text format.
 		buffer_seek(buffer, buffer_seek_start, 0);
 		_json = buffer_read(buffer, buffer_text);
