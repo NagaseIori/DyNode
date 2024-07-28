@@ -595,7 +595,6 @@ function map_export_xml(_export_to_dym) {
     	// Force reset all bar settings
     	timing_point_sync_with_chart_prop(true, true);
     }
-    // var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
 	var _fix_dec = false;
     var _fix_error = _export_to_dym? false:show_question(i18n_get("export_fix_error_question", global.offsetCorrection));
 
@@ -606,6 +605,7 @@ function map_export_xml(_export_to_dym) {
 		note_error_correction(global.offsetCorrection, _notes_array, false);
 	}
     
+	/// @param {Array<Id.Instance.objNote>} _array 
     var _gen_narray = function (_side, _dec, _dym, _array) {
     	var _ret = [];
     	var _bfun = _dym? time_to_bar_for_dym:time_to_bar;
@@ -862,23 +862,23 @@ function project_load(_file = "") {
     map_reset();
     
     with(objManager) {
-    	musicPath = _contents.musicPath;
-    	backgroundPath = _contents.backgroundPath;
-    	chartPath = _contents.chartPath;
+    	musicPath = _contents[$ "musicPath"];
+    	backgroundPath = _contents[$ "backgroundPath"];
+    	chartPath = _contents[$ "chartPath"];
     	if(variable_struct_exists(_contents, "videoPath"))
-    		videoPath = _contents.videoPath;
+    		videoPath = _contents[$ "videoPath"];
     	else
     		videoPath = "";
     	
     	if(variable_struct_exists(_contents, "charts")) {
 	    	objMain.animTargetTime = 0;
-	    	map_load(_contents.charts);
+	    	map_load(_contents[$ "charts"]);
 	    }
 	    else
 	    	map_load(chartPath);
 		
 		if(variable_struct_exists(_contents, "projectTime"))
-			projectTime = _contents.projectTime;
+			projectTime = _contents[$ "projectTime"];
 		else
 			projectTime = 0;
 
@@ -889,18 +889,18 @@ function project_load(_file = "") {
 	    	background_load(_path_deal(videoPath, _propath));
 	    	
 	    timing_point_reset();
-	    objEditor.timingPoints = _contents.timingPoints;
+	    objEditor.timingPoints = _contents[$ "timingPoints"];
 	    timing_point_sort();
 	    
 	    projectPath = _file;
 	    
 	    if(variable_struct_exists(_contents, "settings"))
-	    	project_set_settings(_contents.settings);
+	    	project_set_settings(_contents[$ "settings"]);
     }
     
     /// Old version workaround
     
-	    if(version_cmp(_contents.version, "v0.1.5") < 0) {
+	    if(version_cmp(_contents[$ "version"], "v0.1.5") < 0) {
 	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
 			if(_question)
 				map_add_offset(-64, true);

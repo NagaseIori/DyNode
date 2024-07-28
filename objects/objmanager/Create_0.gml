@@ -26,6 +26,7 @@
 math_set_epsilon(0.00000001);				// 1E-8
 
 // Announcement init
+/// @type {Array<Id.Instance.objAnnouncement>} 
 announcements = [];
 
 // Global Configs
