@@ -29,8 +29,16 @@ function _outscreen_check(_x, _y, _side) {
 	return _side == 0? !in_between(_x, 0, global.resolutionW) : !in_between(_y, 0, global.resolutionH);
 }
 
+function note_recac_stats() {
+	stat_reset();
+	var _arr = objMain.chartNotesArray
+	for(var i=0, l=array_length(_arr); i<l; i++)
+		if(_arr[i].time != INF) {
+			stat_count(_arr[i].side, _arr[i].noteType);
+		}
+}
+
 function note_sort_all() {
-	notes_array_update();
     var _f = function(_a, _b) {
         return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
@@ -49,6 +57,8 @@ function note_sort_all() {
     		chartNotesCount --;
     	}
     }
+
+	note_recac_stats();
 }
 
 function note_sort_request() {
@@ -100,7 +110,7 @@ function build_note(_id, _type, _time, _position, _width,
     }
     with(objMain) {
         array_push(chartNotesArray, _inst.get_prop(_fromxml, true));
-		DyCore_insert_note(json_stringify(_inst.get_prop(_fromxml, true)));
+		DyCore_insert_note(json_stringify(_inst.get_prop(_fromxml)));
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
@@ -193,13 +203,11 @@ function note_delete_all() {
 
 function notes_array_update() {
 	with(objMain) {
-		stat_reset();
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
 		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
 			chartNotesArray[i].inst.update_prop();
 			chartNotesArray[i].inst.arrayPos = i;
-			stat_count(chartNotesArray[i].side, chartNotesArray[i].noteType);
 		}
 	}
 	note_sort_request();

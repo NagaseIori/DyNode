@@ -253,7 +253,12 @@ image_yscale = global.scaleYAdjust;
     }
     
     function update_prop() {
-    	if(!is_struct(arrayPointer)) return;
+        if(!is_struct(arrayPointer)) {
+            if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub)
+                return;
+            show_debug_message("!Warning. Update property failed.");
+            return;
+        }
     	arrayPointer.time = time;
     	arrayPointer.side = side;
     	arrayPointer.width = width;
@@ -571,6 +576,7 @@ image_yscale = global.scaleYAdjust;
             if(editor_select_is_multiple() && noteType == 3)
                 state = stateNormal;
             
+            // Start dragging selected notes.
             if(!editor_select_is_dragging() && mouse_ishold_l() && _mouse_inbound_check(1)) {
                 var _select_self_or_fast_drag = 
                     objEditor.editorSelectedSingleInboundLast == id || objEditor.editorSelectedSingleInboundLast < 0;
@@ -591,6 +597,8 @@ image_yscale = global.scaleYAdjust;
                     }
                 }
             }
+
+            // Stop dragging selected notes.
             if(mouse_check_button_released(mb_left)) {
                 if(isDragging) {
                     isDragging = false;
@@ -601,6 +609,7 @@ image_yscale = global.scaleYAdjust;
                     with(objNote) {
                     	if(state == stateSelected) {
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+                            update_prop();
                     	}
                     	
                     	note_outscreen_check();
@@ -609,6 +618,7 @@ image_yscale = global.scaleYAdjust;
                     note_sort_request();
                 }
             }
+
             if(isDragging) {
                 var _delta_time;
                 var _delta_pos;
@@ -706,8 +716,10 @@ image_yscale = global.scaleYAdjust;
 		    	origProp = get_prop();
 		    time += _timechg;
 		    position += _poschg;
-		    if(_timechg != 0)
+		    if(_timechg != 0) {
+                update_prop();
 		    	note_sort_request();
+            }
 		    if(_timechg != 0 || _poschg != 0)
 		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		    	
