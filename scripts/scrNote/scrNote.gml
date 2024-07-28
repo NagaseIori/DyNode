@@ -100,6 +100,7 @@ function build_note(_id, _type, _time, _position, _width,
     }
     with(objMain) {
         array_push(chartNotesArray, _inst.get_prop(_fromxml, true));
+		DyCore_insert_note(json_stringify(_inst.get_prop(_fromxml, true)));
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);

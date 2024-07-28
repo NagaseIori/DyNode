@@ -37,6 +37,8 @@ function map_close() {
 			FMODGMS_Snd_Unload(music);
 			FMODGMS_Chan_RemoveChannel(channel);
 		}
+
+		DyCore_clear_notes();
 	}
 	
 	instance_destroy(objMain);

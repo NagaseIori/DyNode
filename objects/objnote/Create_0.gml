@@ -264,6 +264,8 @@ image_yscale = global.scaleYAdjust;
     	arrayPointer.sinst = sinst;
     	arrayPointer.beginTime = beginTime;
     	arrayPointer.lastAttachBar = lastAttachBar;
+
+        DyCore_modify_note(json_stringify(arrayPointer));
     }
 
     function pull_prop() {
