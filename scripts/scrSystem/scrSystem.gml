@@ -701,8 +701,6 @@ function map_export_xml(_export_to_dym) {
 }
 
 function map_get_struct_without_notes() {
-	var _arr = [];
-	
 	var _str = {
 		title: objMain.chartTitle,
 		bpm: objMain.chartBeatPerMin,
@@ -710,7 +708,7 @@ function map_get_struct_without_notes() {
 		difficulty: objMain.chartDifficulty,
 		sidetype: objMain.chartSideType,
 		barused: objMain.chartBarUsed,
-		notes: _arr
+		notes: []
 	}
 	
 	return _str;
@@ -959,10 +957,9 @@ function project_save_as(_file = "") {
 	} catch (e) {
 		announcement_warning("复制音乐/背景/视频文件时出现错误。[scale, 0.7]\n"+string(e));
 	}
-	
-	var _buff = __dyn_gen_buffer(_contents)
-	objMain.savingProjectId = fast_file_save_buffer_async(_file, _buff);
-	buffer_delete(_buff);
+
+	// Trigger an async saving project event.
+	DyCore_save_project(json_stringify(_contents), _file, DYCORE_COMPRESSION_LEVEL);
 	
 	return 1;
 }

@@ -13,7 +13,6 @@ if(async_load[? "id"] == savingProjectId.id) {
 	buffer_delete(savingProjectId.buffer);
 	savingProjectId.id = -1;
 }
-
 else if(async_load[? "id"] == savingExportId.id) {
 	if(async_load[? "status"])
 		announcement_play("anno_export_complete");

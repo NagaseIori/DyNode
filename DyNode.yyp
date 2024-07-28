@@ -277,6 +277,7 @@
     {"id":{"name":"kawase_get_width","path":"scripts/kawase_get_width/kawase_get_width.yy",},},
     {"id":{"name":"object_get_depth","path":"scripts/object_get_depth/object_get_depth.yy",},},
     {"id":{"name":"scrConstructor","path":"scripts/scrConstructor/scrConstructor.yy",},},
+    {"id":{"name":"scrDyCore","path":"scripts/scrDyCore/scrDyCore.yy",},},
     {"id":{"name":"scrEditor","path":"scripts/scrEditor/scrEditor.yy",},},
     {"id":{"name":"scrExpr","path":"scripts/scrExpr/scrExpr.yy",},},
     {"id":{"name":"scrGUI","path":"scripts/scrGUI/scrGUI.yy",},},

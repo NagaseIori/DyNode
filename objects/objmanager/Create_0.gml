@@ -129,6 +129,7 @@ if(DyCore_init() != "success") {
 }
 
 global.__DyCore_Buffer = buffer_create(DYCORE_BUFFER_SIZE, buffer_fixed, 1);
+global.__DyCore_Manager = new DyCoreManager();
 
 // Input Initialization
 
