@@ -14,7 +14,9 @@ image_yscale = global.scaleYAdjust;
     time = 0;
     nid = -1;						// Note id
     sid = -1;						// Sub id
+    /// @type {Id.Instance.objHoldSub} 
     sinst = -999;					// Sub instance id
+    /// @type {Id.Instance.objHold} 
     finst = -999;					// Father instance id
     noteType = 0;					// 0 Note 1 Chain 2 Hold
     arrayPos = -1;					// Position in chartNotesArray
@@ -103,6 +105,7 @@ image_yscale = global.scaleYAdjust;
         
         noteprop_set_xy(position, time, side);
     }
+    _prop_hold_update = function() {}   // Place holder.
 
     function _emit_particle(_num, _type, _force = false) {
         

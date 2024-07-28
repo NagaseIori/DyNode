@@ -88,6 +88,7 @@ function build_note(_id, _type, _time, _position, _width,
         default:
             return;
     }
+	/// @type {Id.Instance.objNote} 
     var _inst = instance_create_depth(0, 0, 0, _obj);
     _inst.width = real(_width);
     _inst.side = real(_side);
