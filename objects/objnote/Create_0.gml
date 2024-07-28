@@ -254,9 +254,6 @@ image_yscale = global.scaleYAdjust;
     
     function update_prop() {
         if(!is_struct(arrayPointer)) {
-            if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub)
-                return;
-            show_debug_message("!Warning. Update property failed.");
             return;
         }
     	arrayPointer.time = time;

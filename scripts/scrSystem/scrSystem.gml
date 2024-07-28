@@ -700,6 +700,23 @@ function map_export_xml(_export_to_dym) {
 	note_activation_reset();
 }
 
+function map_get_struct_without_notes() {
+	var _arr = [];
+	
+	var _str = {
+		title: objMain.chartTitle,
+		bpm: objMain.chartBeatPerMin,
+		barpm: objMain.chartBarPerMin,
+		difficulty: objMain.chartDifficulty,
+		sidetype: objMain.chartSideType,
+		barused: objMain.chartBarUsed,
+		notes: _arr
+	}
+	
+	return _str;
+}
+
+//! Deprecating
 function map_get_struct() {
 	var _arr = [];
 	
@@ -926,7 +943,7 @@ function project_save_as(_file = "") {
 			charts: [],
 			settings: project_get_settings()
 		};
-		_contents.charts = map_get_struct();
+		_contents.charts = map_get_struct_without_notes();
 	
 		objManager.projectPath = _file;
 	} catch (e) {
@@ -1494,7 +1511,7 @@ function global_add_delay(delay) {
 #region DYN File Format Functions
 
 /// @description Convert project struct to compressed buffer.
-/// @param {Struct} str The given struct.
+/// @param {Struct} str The given incompleted struct.
 /// @returns {Id.Buffer} The compressed buffer.
 function __dyn_gen_buffer(str) {
 	if(!is_struct(str))
@@ -1502,7 +1519,7 @@ function __dyn_gen_buffer(str) {
 
 	buffer_seek(global.__DyCore_Buffer, buffer_seek_start, 0);
 	var _json = json_stringify(str);
-	var _cSize = DyCore_compress_string(_json, buffer_get_address(global.__DyCore_Buffer), 11);
+	var _cSize = DyCore_get_project_buffer(_json, buffer_get_address(global.__DyCore_Buffer), 11);
 
 	var _rBuff = buffer_create(_cSize, buffer_fixed, 1);
 	fast_buffer_copy(_rBuff, global.__DyCore_Buffer, _cSize);
