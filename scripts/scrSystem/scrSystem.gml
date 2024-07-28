@@ -984,9 +984,17 @@ function project_file_duplicate(_project) {
 		if(file_exists(_file)) {
 			if(!file_exists(_nfile))
 				file_copy(_file, _nfile);
-			else if(md5_file(_nfile) != md5_file(_file)) {
-				_nfile = filename_path(_nfile)+filename_name_no_ext(_nfile)+"_"+random_id(4)+filename_ext(_nfile);
-				file_copy(_file, _nfile);
+			else { // Compare file's binary size is more efficent.
+				var _f = file_bin_open(_file, 0);
+				var _nf = file_bin_open(_nfile, 0);
+				var _fs = file_bin_size(_f);
+				var _nfs = file_bin_size(_nf);
+				file_bin_close(_f);
+				file_bin_close(_nf);
+				if(_fs != _nfs) {
+					_nfile = filename_path(_nfile)+filename_name_no_ext(_nfile)+"_"+random_id(4)+filename_ext(_nfile);
+					file_copy(_file, _nfile);
+				}
 			}
 			_nfile = filename_name(_nfile);
 			variable_struct_set(_pro, _varname, _nfile);
