@@ -924,6 +924,7 @@ function advanced_expr() {
 			
 		editorLastExpr = _expr;
 		
+		notes_array_update();
 		note_sort_all();
 		if(_global)
 			note_activation_reset();
