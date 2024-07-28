@@ -1515,23 +1515,6 @@ function global_add_delay(delay) {
 
 #region DYN File Format Functions
 
-/// @description Convert project struct to compressed buffer.
-/// @param {Struct} str The given incompleted struct.
-/// @returns {Id.Buffer} The compressed buffer.
-function __dyn_gen_buffer(str) {
-	if(!is_struct(str))
-		throw "Must be a struct!";
-
-	buffer_seek(global.__DyCore_Buffer, buffer_seek_start, 0);
-	var _json = json_stringify(str);
-	var _cSize = DyCore_get_project_buffer(_json, buffer_get_address(global.__DyCore_Buffer), 11);
-
-	var _rBuff = buffer_create(_cSize, buffer_fixed, 1);
-	fast_buffer_copy(_rBuff, global.__DyCore_Buffer, _cSize);
-	
-	return _rBuff;
-}
-
 /// @description To check if the buffer is compressed.
 function __dyn_is_compressed_buffer(buffer) {
 	return DyCore_is_compressed(buffer_get_address(buffer), buffer_get_size(buffer)) >= 0;
