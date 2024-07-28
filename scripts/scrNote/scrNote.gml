@@ -167,7 +167,7 @@ function note_delete(_inst, _record = false) {
 	        var i = _inst.arrayPos;
 	        if(chartNotesArray[i].inst == _inst) {
 	        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
-				DyCore_delete_note(chartNotesArray[i]);
+				DyCore_delete_note(json_stringify(chartNotesArray[i]));
 	        	if(_record)
 	        		operation_step_add(OPERATION_TYPE.REMOVE, 
 	        						   SnapDeepCopy(chartNotesArray[i]), -1);
