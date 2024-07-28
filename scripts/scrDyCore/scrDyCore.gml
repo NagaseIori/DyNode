@@ -14,7 +14,8 @@ function DyCoreManager() constructor {
             case DYCORE_ASYNC_EVENT_TYPE.PROJECT_SAVING:
                 if(event[$ "status"] == 0) {
                     if(objManager.autosaving) {
-                        announcement_play("autosave_complete");
+                        if(editor_get_editmode() != 5)  // Ignore announcement when edit mode is playback.
+                            announcement_play("autosave_complete");
                         objManager.autosaving = false;
                     }
                     else
