@@ -198,6 +198,7 @@ function note_delete_all() {
 		instance_activate_all();
 		with(objNote) arrayPos = -1;
 		instance_destroy(objNote);
+		DyCore_clear_notes();
 	}
 }
 
