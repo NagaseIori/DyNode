@@ -70,7 +70,7 @@ if(editor_get_editmode() <= 4){
 		animTargetInfoA = 0;
 	}
 
-    if(alt_ishold())
+    if(ralt_ishold())
         animTargetInfoA = 1;
 	
 	if(animTargetNodeA > 0)

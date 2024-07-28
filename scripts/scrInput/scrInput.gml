@@ -246,13 +246,16 @@ function input_direct_state_lock_get() {
 }
 
 function ctrl_ishold() {
-    return keyboard_check_direct(vk_control);
+    return keyboard_check(vk_control);
 }
 function alt_ishold() {
-    return keyboard_check_direct(vk_alt);
+    return keyboard_check(vk_alt);
+}
+function ralt_ishold() {
+    return keyboard_check(vk_ralt);
 }
 function shift_ishold() {
-    return keyboard_check_direct(vk_shift);
+    return keyboard_check(vk_shift);
 }
 function nofunkey_ishold() {
     return !(ctrl_ishold()) && !(alt_ishold()) && !(shift_ishold());
