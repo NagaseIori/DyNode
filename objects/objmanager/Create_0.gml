@@ -179,10 +179,10 @@ else
 
 #region Project Properties
 
+	// chartPath is deprecated in version v0.1.16
 	projectPath = "";
 	backgroundPath = "";
 	musicPath = "";
-	chartPath = "";
 	videoPath = "";
 	projectTime = 0;		// in ms
 	
