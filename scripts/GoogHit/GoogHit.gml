@@ -9,6 +9,8 @@
 
 function GoogHit()
 {
+    if(global.analytics == false) return;
+
     //Build an array of events in the format Google expects from the arguments passed into the function
     var _eventArray = array_create(argument_count div 2);
     var _i = 0;

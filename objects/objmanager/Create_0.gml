@@ -52,6 +52,7 @@ global.offsetCorrection = 2;
 global.lastCheckedVersion = "";
 global.VIDEO_UPDATE_FREQUENCY = 60;
 global.autoSaveTime = 60 * 3;
+global.analytics = true;
 
 // Themes Init
 

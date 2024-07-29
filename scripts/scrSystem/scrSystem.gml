@@ -1322,6 +1322,7 @@ function load_config() {
 	_check_set(_con, "offsetCorrection");
 	_check_set(_con, "VIDEO_UPDATE_FREQUENCY");
 	_check_set(_con, "autoSaveTime");
+	_check_set(_con, "analytics");
 	// Clamp the offset correction.
 	global.offsetCorrection = max(0, global.offsetCorrection)
 	global.autoSaveTime = max(1, global.autoSaveTime);
@@ -1362,7 +1363,7 @@ function save_config() {
 		offsetCorrection: global.offsetCorrection,
 		VIDEO_UPDATE_FREQUENCY: global.VIDEO_UPDATE_FREQUENCY,
 		autoSaveTime: global.autoSaveTime,
-		
+		analytics: global.analytics,
 	}, true));
 	
 }
