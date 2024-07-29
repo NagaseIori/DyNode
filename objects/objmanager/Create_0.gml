@@ -166,7 +166,10 @@ randomize();
 
 // Init finished
 
-GoogHit("login", {version: VERSION}); // Analytics: Version
+GoogHit("login", {
+	version: VERSION, 
+	session_id: random_id(16),
+	engagement_time_msec: "100"}); // Analytics: Version
 
 if(debug_mode) test_at_start();
 
