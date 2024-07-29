@@ -22,6 +22,7 @@ enum OPERATION_TYPE {
     SETTYPE, // special
     RANDOMIZE, // special
     DUPLICATE, // special
+    EXPR, // special
 }
 
 function sOperation(_type, _from, _to) constructor {

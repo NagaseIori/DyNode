@@ -375,6 +375,9 @@ function operation_get_name(opsType) {
 		case OPERATION_TYPE.DUPLICATE:
 			_result = "ops_name_duplicate";
 			break;
+		case OPERATION_TYPE.EXPR:
+			_result = "ops_name_expr";
+			break;
 	}
 	return i18n_get(_result);
 }
