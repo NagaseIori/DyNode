@@ -585,16 +585,11 @@ function map_export_xml(_export_to_dym) {
     
     // For Compatibility
     notes_reallocate_id();
-    instance_activate_object(objNote);  // Temporarily activate all notes
     note_extra_sub_removal();
 	notes_array_update();				// Sync main notes array
-    
-    if(!objMain.chartBarUsed && !_export_to_dym)
-    	timing_point_sync_with_chart_prop();
-    if(_export_to_dym) {
-    	// Force reset all bar settings
-    	timing_point_sync_with_chart_prop(true, true);
-    }
+	// Force reset all bar settings
+	timing_point_sync_with_chart_prop();
+
 	var _fix_dec = false;
     var _fix_error = _export_to_dym? false:show_question(i18n_get("export_fix_error_question", global.offsetCorrection));
 

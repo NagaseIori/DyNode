@@ -217,7 +217,6 @@ function notes_array_update() {
 
 function notes_reallocate_id() {
 	with(objMain) {
-		instance_activate_object(objNote);
 		var i=0, l=chartNotesCount;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
@@ -234,7 +233,6 @@ function notes_reallocate_id() {
 			else
 				_inst.sid = "-1";
 		}
-		note_activation_reset();
 	}
 }
 
@@ -312,12 +310,16 @@ function note_activation_reset() {
 // Prevent extra sub notes.
 function note_extra_sub_removal() {
 	var _dcnt = 0;
-	with(objNote) {
-		if(noteType == 3 && finst<0) {
-			instance_destroy();
-			_dcnt ++;
+	for(var i=0, l=array_length(objMain.chartNotesArray); i<l; i++)
+		if(objMain.chartNotesArray[i].inst > 0) {
+			/// @self Id.Instance.objNote
+			with(objMain.chartNotesArray[i].inst) {
+				if(noteType == 3 && finst<0) {
+					instance_destroy();
+					_dcnt ++;
+				}
+			}
 		}
-	}
 	if(_dcnt > 0) {
 		announcement_warning(i18n_get("extra_sub_fix", string(_dcnt)));
 		note_sort_all();
