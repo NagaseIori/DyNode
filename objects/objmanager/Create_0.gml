@@ -165,6 +165,8 @@ randomize();
 
 // Init finished
 
+GoogHit("login", {version: VERSION}); // Analytics: Version
+
 if(debug_mode) test_at_start();
 
 if(debug_mode) room_goto(rMain);

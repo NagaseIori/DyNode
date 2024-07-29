@@ -69,3 +69,6 @@ if (async_load[? "id"] == _update_download_event_handle) {
 		}
 	}
 }
+
+// Analytics Async Events.
+GoogAsyncHTTPEvent()
