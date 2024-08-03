@@ -895,6 +895,11 @@ function project_load(_file = "") {
 	    }
 		
 	///
+
+	// Version update backup
+	if(_contents[$ "version"] != VERSION) {
+		project_backup(objManager.projectPath);
+	}
     
     announcement_play("anno_project_load_complete");
     
