@@ -360,7 +360,7 @@ function time_set(time, animated = true, inbound = -1) {
 		if(time > nowTime) 
 			time -= pix_to_note_time(global.resolutionH - targetLineBelow - inbound);
 		else
-			time += pix_to_note_time(inbound);
+			time -= pix_to_note_time(inbound);
 	}
 		
 	animTargetTime = time;
