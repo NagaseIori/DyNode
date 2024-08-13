@@ -7,7 +7,7 @@ function GoogAsyncHTTPEvent()
     var _id = async_load[? "id"];
     if (ds_map_exists(global.__GoogHTTPResponseMap, _id))
     {
-        if(async_load[? "status"] != 0) return;
+        if(async_load[? "status"] == 1) return;
         if (global.__GoogUsingAsyncEvent == undefined)
         {
             if (GOOG_DEBUG) __GoogTrace("Confirmed use of GoogAsyncHTTPEvent()");
