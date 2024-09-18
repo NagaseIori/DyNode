@@ -192,6 +192,7 @@ function note_delete_all() {
 	with(objMain) {
 		chartNotesArray = [];
 		chartNotesArrayAt = 0;
+		chartNotesCount = 0;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
 		ds_map_clear(chartNotesMap[2]);
