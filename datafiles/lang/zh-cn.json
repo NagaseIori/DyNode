@@ -190,6 +190,7 @@
     "ops_name_duplicate": "复制音符",
     "ops_name_expr": "执行表达式",
     "version_higher": "DyNode 已更新到版本 $0。",
-    "version_lower": "DyNode 已降级到版本 $0。\n回退到较旧版本的 DyNode 可能将丢失一些设置，且可能无法正常读取较新版本的谱面。"
+    "version_lower": "DyNode 已降级到版本 $0。\n回退到较旧版本的 DyNode 可能将丢失一些设置，且可能无法正常读取较新版本的谱面。",
+    "clear_all_notes": "已清除全部音符。"
   }
 }

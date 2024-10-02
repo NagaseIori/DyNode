@@ -204,6 +204,14 @@ function note_delete_all() {
 	}
 }
 
+function note_delete_all_manually(_record = true) {
+	instance_activate_all();
+	with(objNote) {
+		recordRequest = _record;
+		instance_destroy();
+	}
+}
+
 function notes_array_update() {
 	with(objMain) {
 		chartNotesCount = array_length(chartNotesArray);
