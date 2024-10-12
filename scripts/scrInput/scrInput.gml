@@ -5,6 +5,7 @@ function InputManager() constructor {
     #macro INPUT_MOUSE_DOUBLE_CLICK_THRESHOLD 500
     #macro INPUT_MOUSE_HOLD_DISTANCE_THRESHOLD 15 // Pixels to judge if the mouse inputs a hold
     #macro INPUT_IO_RESET_TIME_THRESHOLD 75
+    #macro INPUT_LOCK_RESET_TIME_THRESHOLD 250
     
     // In-functions
 
@@ -49,9 +50,11 @@ function InputManager() constructor {
 
     static _direct_state_lock = function() {
         directStateLock = true;
+        directStateLockTimer = 0;
     }
     static _direct_state_unlock = function() {
         directStateLock = false;
+        directStateLockTimer = 0;
     }
     
     last_mouse_x = 0;
@@ -84,12 +87,15 @@ function InputManager() constructor {
 
     // For Direct State Lock
     directStateLock = false;
+    directStateLockTimer = 0;
 
     _ioclear();
     
     static step = function () {
-        if(!keyboard_check_direct(vk_anykey))
+        if(!keyboard_check(vk_anykey) || directStateLockTimer > INPUT_LOCK_RESET_TIME_THRESHOLD)
             input_direct_state_unlock();
+        if(directStateLock)
+            directStateLockTimer += delta_time / 1000;
 
         windowNFocusTime = delta_time / 1000;
 
