@@ -158,7 +158,7 @@ function editor_select_all() {
 }
 
 function editor_snap_to_grid_time(_time, _side, _ignore_boundary = false) {
-	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side);
+	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side, _ignore_boundary);
 }
 
 function editor_snap_to_grid_y(_y, _side, _ignore_boundary = false) {
