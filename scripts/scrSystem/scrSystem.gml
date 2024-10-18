@@ -123,7 +123,7 @@ function map_import_dym(_file, _direct = false) {
 	}
 	static _arg_parser = function(_dy_format, arg) {
 		if(_dy_format)
-			return arg;
+			return string(arg);
 		else
 			return arg.text;
 	}
