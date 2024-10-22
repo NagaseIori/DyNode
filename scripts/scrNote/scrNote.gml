@@ -207,8 +207,10 @@ function note_delete_all() {
 function note_delete_all_manually(_record = true) {
 	instance_activate_all();
 	with(objNote) {
-		recordRequest = _record;
-		instance_destroy();
+		if(noteType != 3) {
+			recordRequest = _record;
+			instance_destroy();
+		}
 	}
 }
 
