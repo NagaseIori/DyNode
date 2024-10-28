@@ -125,6 +125,12 @@ projectTime += round(delta_time / 1000);
 		stat_next();
     }
 
+	if(keycheck(vk_delete) && keycheck(vk_backspace)) {
+		io_clear();
+		note_delete_all_manually();
+		announcement_play("clear_all_notes");
+	}
+
 #endregion
   
 #region Scoreboard Update

@@ -158,7 +158,7 @@ function editor_select_all() {
 }
 
 function editor_snap_to_grid_time(_time, _side, _ignore_boundary = false) {
-	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side);
+	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side, _ignore_boundary);
 }
 
 function editor_snap_to_grid_y(_y, _side, _ignore_boundary = false) {
@@ -628,22 +628,20 @@ function timing_point_add(_t, _l, _b, record = false) {
 }
 
 function timing_point_create(record = false) {
-	var _time = undefined;
+	var _time = objMain.nowTime;
 	if(editor_select_count() == 1) {
 		var _ntime = 0;
 		with(objNote)
 			if(state == stateSelected)
 				_ntime = time;
-		var _ptp = timing_point_get_at(_ntime);
+		var _ptp = timing_point_get_at(_ntime, true);
 		if(_ptp != undefined) {
 			timing_point_change(_ptp, record);
 			return;
 		}
-		var _que = show_question_i18n(i18n_get("tpc_extra_question", string_format(_ntime, 1, 3)));
-		if(_que) _time = _ntime;
+		_time = _ntime;
 	}
-	if(is_undefined(_time))
-		_time = string_digits(get_string_i18n("tpc_q1", ""));
+	_time = string_digits(get_string_i18n("tpc_q1", string_format(_time, 1, 0)));
 	if(_time == "") return;
 	var _bpm = string_real(get_string_i18n("tpc_q2", ""));
 	if(_bpm == "") return;
@@ -757,14 +755,21 @@ function timing_fix(tpBefore, tpAfter) {
 
 // To get current timing at [_time].
 /// @returns {Struct.sTimingPoint} 
-function timing_point_get_at(_time) {
+function timing_point_get_at(_time, _precise = false) {
 	with(objEditor) {
-		return timingPoints[
+		if(array_length(timingPoints) == 0) return undefined;
+		/// @self Struct.sTimingPoint
+		var _ret = timingPoints[
 			max(array_upper_bound(
 				timingPoints,
 				_time,
 				function(array, at) { return array[at].time; }) - 1, 0)
 			];
+		
+		if(!_precise || abs(_time - _ret.time) < 5)
+			return _ret;
+		else
+			return undefined;
 	}
 }
 

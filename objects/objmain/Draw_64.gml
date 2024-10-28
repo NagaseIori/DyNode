@@ -20,9 +20,9 @@ if(topBarTimeA > 0) {
 
 if(showStats > 0) {
 	if(objMain.nowPlaying)
-		statKPS = lerp_a(statKPS, stat_kps(objMain.nowTime, KPS_MEASURE_WINDOW), 0.15);
+		statKPS = stat_kps(objMain.nowTime, KPS_MEASURE_WINDOW);
 	else
-		statKPS = lerp_a(statKPS, stat_kps(objMain.nowTime + KPS_MEASURE_WINDOW, KPS_MEASURE_WINDOW), 0.15);
+		statKPS = stat_kps(objMain.nowTime + KPS_MEASURE_WINDOW, KPS_MEASURE_WINDOW);
 
 	var _stat_str = "";
 	// Current BPM

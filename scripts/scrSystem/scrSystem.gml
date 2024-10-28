@@ -123,7 +123,7 @@ function map_import_dym(_file, _direct = false) {
 	}
 	static _arg_parser = function(_dy_format, arg) {
 		if(_dy_format)
-			return arg;
+			return string(arg);
 		else
 			return arg.text;
 	}
@@ -399,7 +399,9 @@ function map_import_dyn(_file) {
 	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = show_question_i18n("box_q_import_bpm");
     
-    var _str = json_parse(SnapStringFromFile(_file));
+	var _buf = buffer_load(_file);
+    var _str = __dyn_read_buffer(_buf);
+	buffer_delete(_buf);
     
     if(!is_struct(_str))
     	show_error("Load failed.", true);
@@ -895,6 +897,11 @@ function project_load(_file = "") {
 	    }
 		
 	///
+
+	// Version update backup
+	if(_contents[$ "version"] != VERSION) {
+		project_backup(objManager.projectPath);
+	}
     
     announcement_play("anno_project_load_complete");
     

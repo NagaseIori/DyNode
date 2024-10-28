@@ -192,6 +192,7 @@ function note_delete_all() {
 	with(objMain) {
 		chartNotesArray = [];
 		chartNotesArrayAt = 0;
+		chartNotesCount = 0;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
 		ds_map_clear(chartNotesMap[2]);
@@ -200,6 +201,16 @@ function note_delete_all() {
 		with(objNote) arrayPos = -1;
 		instance_destroy(objNote);
 		DyCore_clear_notes();
+	}
+}
+
+function note_delete_all_manually(_record = true) {
+	instance_activate_all();
+	with(objNote) {
+		if(noteType != 3) {
+			recordRequest = _record;
+			instance_destroy();
+		}
 	}
 }
 
