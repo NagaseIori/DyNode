@@ -121,7 +121,7 @@ var _music_resync_request = false;
             }
         
         // If music ends then stop
-        if(FMODGMS_Chan_Is_Playing(channel)<=0 && nowPlaying) {
+        if((FMODGMS_Chan_Is_Playing(channel)<=0 || nowTime >= musicLength) && nowPlaying) {
         	
             // Channel gets invalid, create another one.
             _create_channel();
