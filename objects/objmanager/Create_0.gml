@@ -62,10 +62,6 @@ theme_init();
 
 i18n_init();
 
-// Borderless Fullscreen Init
-
-window_enable_borderless_fullscreen(true);
-
 // Load Settings
 
 if(debug_mode) save_config();
@@ -160,7 +156,8 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 // Window Init
 
 windowDisplayRatio = 0.7;
-window_set_borderless_fullscreen(global.fullscreen);
+window_enable_borderless_fullscreen(true);
+window_set_fullscreen(global.fullscreen);
 if(os_type == os_windows)
 	window_command_hook(window_command_close);
 
