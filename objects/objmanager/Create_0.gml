@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.16.5"
+#macro VERSION "v0.1.16.6"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
