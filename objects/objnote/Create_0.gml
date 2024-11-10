@@ -523,7 +523,10 @@ image_yscale = global.scaleYAdjust;
                         (2.5 * mouse_get_delta_last_y_l() / 150)
                         ) > dropWidthError) {
                     mouse_set_last_pos_l();
-                    dropWidthAdjustable = true;
+                    with(objNote) {
+                        if(state == stateDrop)
+                            dropWidthAdjustable = true;
+                    }
                 }
                 if(dropWidthAdjustable) {
                     if(side == 0)
