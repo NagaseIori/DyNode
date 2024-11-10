@@ -62,6 +62,10 @@ theme_init();
 
 i18n_init();
 
+// Borderless Fullscreen Init
+
+window_enable_borderless_fullscreen(true);
+
 // Load Settings
 
 if(debug_mode) save_config();

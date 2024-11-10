@@ -5,9 +5,8 @@
 if(os_type == os_windows) {
 	if(keycheck_down(vk_f7)) {
 		global.fullscreen = !global.fullscreen;
-		window_set_borderless_fullscreen(global.fullscreen);
+		window_set_fullscreen(global.fullscreen);
 	}
-	
 	
 	if(window_command_check(window_command_close)) {
 		game_end_confirm();
