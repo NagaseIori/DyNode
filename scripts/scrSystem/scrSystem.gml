@@ -1077,6 +1077,7 @@ function project_new() {
 }
 
 function project_auto_save() {
+	if(!instance_exists(objMain)) return;
 	with(objManager) {
 		if(projectPath != "") {
 			autosaving = true;
