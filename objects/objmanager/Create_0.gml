@@ -92,11 +92,6 @@ display_set_gui_size(global.resolutionW, global.resolutionH);
 // Graphics settings init
 gpu_set_tex_filter(true);
 display_reset(global.graphics.AA, global.graphics.VSync);
-// if Vsync is on, force setting fps to refresh rate
-if(global.graphics.VSync) {
-	global.fps = display_get_frequency();
-}
-
 
 // FMODGMS Initialization
 
