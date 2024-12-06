@@ -371,7 +371,10 @@ editorSelectMultiple = editorSelectCount > 1;
                 }
             }
             
-            var _chg = keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
+            // Change the attaching notes' center.
+            var _chg = 0;
+            _chg += keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
+            _chg += alt_ishold() * (mouse_wheel_up() - mouse_wheel_down());
             var _len = array_length(editorNoteAttaching);
             editorNoteAttachingCenter = (editorNoteAttachingCenter + _chg + _len) % _len; 
             if(copyMultipleSides && !editorLRSide)
