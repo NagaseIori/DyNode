@@ -83,6 +83,7 @@ depth = 0;
     mixerShadow[0].image_angle = 270;
     mixerShadow[1].image_angle = 90;
 
+    /// @description Return struct with x and time.
     function mixer_get_next_x(side) {
     	var found = false, beginTime = 0, result = 0, accum = 0;
         for(var i=chartNotesArrayAt; i<chartNotesCount
@@ -100,7 +101,7 @@ depth = 0;
         	}
         if(!found) return undefined;
         result /= accum;
-        return note_pos_to_x(result, side);
+        return {x: note_pos_to_x(result, side), time: beginTime};
     }
 
 #endregion
