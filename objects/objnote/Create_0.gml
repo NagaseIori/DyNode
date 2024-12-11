@@ -430,7 +430,6 @@ image_yscale = global.scaleYAdjust;
         function stateAttach() {
             stateString = "ATCH";
             animTargetA = 0.5;
-            animTargetInfoA = 1.0;
             
             if(editor_get_note_attaching_center() == id) {
             	if(side == 0) {

@@ -63,7 +63,16 @@ if(editor_get_editmode() <= 4){
     }
 	if(state == stateAttach || state == stateAttachSub || state == stateDrop || state == stateDropSub) {
 		animTargetNodeA = 0.0;
-		animTargetInfoA = 1;
+
+        if(alt_ishold()) {
+            animTargetInfoA = 1;
+        }
+        else {
+            if(id == editor_get_note_attaching_center())
+                animTargetInfoA = 1;
+            else
+                animTargetInfoA = 0.5;
+        }
 	}
 	if((state == stateLast && noteType == 2) || state == stateOut) {
 		animTargetNodeA = 0;
