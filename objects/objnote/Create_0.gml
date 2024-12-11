@@ -459,6 +459,9 @@ image_yscale = global.scaleYAdjust;
 	            	}
 	            }
             }
+            else {
+                lastAttachBar = undefined;
+            }
             
             if(mouse_check_button_pressed(mb_left) && !_outbound_check(x, y, side)
             	&& id == editor_get_note_attaching_center()) {
