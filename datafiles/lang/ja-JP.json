@@ -89,7 +89,7 @@
     "box_q_import_bpm": "Timing情報（BPM、Offsetなど）をインポートしますか？",
     "anno_import_chart_complete": "譜面のインポートが完了しました。",
     "confirm_close": "終了しますか？未保存の進行状況は失われます。",
-    "anno_editside_switch": "編集中の側面を切り替えました：",
+    "anno_editside_switch": "編集中の側面を切り替えました",
     "editside_down": "正面",
     "editside_left": "左側",
     "editside_right": "右側",
