@@ -18,14 +18,35 @@ if(topBarTimeA > 0) {
 
 // Chart stats
 
-if(showStats > 0)
-scribble("[sprNote] "+stat_string(showStats, 0)
-	+" [scale,0.5][sprChain][/s] "+stat_string(showStats, 1)
-	+" [scale,0.5][sprHoldEdge][/s] "+stat_string(showStats, 2)
-	+ " Total " + stat_string(showStats, 3))
-	.starting_format("fMono16", c_white)
-	.align(fa_center, fa_bottom)
-	.draw(global.resolutionW/2, global.resolutionH-3);
+if(showStats > 0) {
+	if(objMain.nowPlaying)
+		statKPS = stat_kps(objMain.nowTime, KPS_MEASURE_WINDOW);
+	else
+		statKPS = stat_kps(objMain.nowTime + KPS_MEASURE_WINDOW, KPS_MEASURE_WINDOW);
+
+	var _stat_str = "";
+	// Current BPM
+	if(timing_point_count() > 0)
+		_stat_str += "BPM " + string_format(mspb_to_bpm(timing_point_get_at(objMain.nowTime).beatLength), 0, 2) + "\n";
+	// Note's stats
+	if(showStats < 3)
+		_stat_str += "[sprNote] "+stat_note_string(showStats, 0)
+		+" [scale,0.5][sprChain][/s] "+stat_note_string(showStats, 1)
+		+" [scale,0.5][sprHoldEdge][/s] "+stat_note_string(showStats, 2)
+		+ " Total " + stat_note_string(showStats, 3);
+	else if(showStats < 4) {
+		_stat_str += "Project Time " + format_time_string_hhmmss(objManager.projectTime);
+	}
+	else if(showStats < 5) {
+		_stat_str += "KPS " + string_format(statKPS, 3, 2);
+	}
+
+	// Draw the stat string.
+	scribble(_stat_str)
+		.starting_format("fMono16", c_white)
+		.align(fa_center, fa_bottom)
+		.draw(global.resolutionW/2, global.resolutionH-3);
+}
 
 // Debug
 

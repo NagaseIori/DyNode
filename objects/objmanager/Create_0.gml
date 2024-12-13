@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.13.4"
+#macro VERSION "v0.1.16.8"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -10,16 +10,24 @@
 #macro MAXIMUM_UNDO_STEPS 3000
 #macro EPS 0.01
 #macro MIXER_REACTION_RANGE 0.35			// Mixer's reaction pixel range's ratio of resolutionW
-#macro NOTE_DEACTIVATION_TIME 20			// Every fixed time than deactivated notes in queue
-#macro NOTE_DEACTIVATION_LIMIT 100			// If notes' being deactivated number exceeds the limit than excecute immediately
 #macro SYSFIX "\\\\?\\"						// Old system prefix workaround for win's file path
-#macro VIDEO_UPDATE_FREQUENCY 120			// in hz
+#macro VIDEO_FREQUENCY (global.VIDEO_UPDATE_FREQUENCY)			// in hz
 #macro EXPORT_XML_EPS 6
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
 #macro USE_DSP_PITCHSHIFT (objMain.usingPitchShift)
 #macro NULL_FUN function() {}
+#macro MAX_SELECTION_LIMIT 4000
+#macro KPS_MEASURE_WINDOW 400
+#macro AUTOSAVE_TIME (global.autoSaveTime)	// in seconds
+#macro DYCORE_BUFFER_SIZE (50*1024*1024)	// 50MB
+#macro DYCORE_COMPRESSION_LEVEL (11)		// max = 22
+#macro DYCORE_BUFFER_ADDRESS (buffer_get_address(global.__DyCore_Buffer))
 math_set_epsilon(0.00000001);				// 1E-8
+
+// Announcement init
+/// @type {Array<Id.Instance.objAnnouncement>} 
+announcements = [];
 
 // Global Configs
 
@@ -42,6 +50,9 @@ global.graphics = {
 global.dropAdjustError = 0.125;
 global.offsetCorrection = 2;
 global.lastCheckedVersion = "";
+global.VIDEO_UPDATE_FREQUENCY = 60;
+global.autoSaveTime = 60 * 3;
+global.analytics = true;
 
 // Themes Init
 
@@ -78,8 +89,7 @@ global.sprHoldBG = generate_hold_sprite(global.resolutionW + 4*sprite_get_height
 surface_resize(application_surface, global.resolutionW, global.resolutionH);
 display_set_gui_size(global.resolutionW, global.resolutionH);
 
-// Smoother
-
+// Graphics settings init
 gpu_set_tex_filter(true);
 display_reset(global.graphics.AA, global.graphics.VSync);
 
@@ -115,6 +125,9 @@ if(DyCore_init() != "success") {
 	show_error("DyCore Initialized Failed.", false);
 }
 
+global.__DyCore_Buffer = buffer_create(DYCORE_BUFFER_SIZE, buffer_fixed, 1);
+global.__DyCore_Manager = new DyCoreManager();
+
 // Input Initialization
 
 global.__InputManager = new InputManager();
@@ -138,7 +151,8 @@ scribble_font_bake_outline_8dir("fDynamix16", "fDynamix16o", c_white, true);
 // Window Init
 
 windowDisplayRatio = 0.7;
-window_set_borderless_fullscreen(global.fullscreen);
+window_enable_borderless_fullscreen(true);
+window_set_fullscreen(global.fullscreen);
 if(os_type == os_windows)
 	window_command_hook(window_command_close);
 
@@ -146,13 +160,12 @@ if(os_type == os_windows)
 
 randomize();
 
-// Check For Update
-
-if(global.autoupdate && !debug_mode)
-	_update_get = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
-_update_url = "";
-
 // Init finished
+
+GoogHit("login", {
+	version: VERSION, 
+	session_id: random_id(16),
+	engagement_time_msec: "100"}); // Analytics: Version
 
 if(debug_mode) test_at_start();
 
@@ -162,18 +175,17 @@ else
 
 #region Project Properties
 
+	// chartPath is deprecated in version v0.1.16
 	projectPath = "";
 	backgroundPath = "";
 	musicPath = "";
-	chartPath = "";
 	videoPath = "";
+	projectTime = 0;		// in ms
 	
 #endregion
 
 #region Inner Variables
 
-	// For Announcement
-	announcements = [];
 	annoThresholdNumber = 7;
 	annoThresholdTime = 400;
 	annosY = [];
@@ -182,12 +194,8 @@ else
 	initVars = undefined;
 	initWithProject = false;
 	
-	var _auto_save = function () {
-		if(projectPath != "")
-			project_save();
-		announcement_play("autosave_complete");
-	}
-	tsAutosave = time_source_create(time_source_game, 60*5, time_source_units_seconds, _auto_save, [], -1);
+	autosaving = false;
+	tsAutosave = time_source_create(time_source_game, AUTOSAVE_TIME, time_source_units_seconds, project_auto_save, [], -1);
 	if(global.autosave) {
 		global.autosave = false;
 		switch_autosave();
@@ -210,3 +218,89 @@ else
 	debugLayer = false;
 
 #endregion
+
+#region Updater Init / Variables
+
+#macro SOURCE_IORI "https://g.iorinn.moe/dyn/"
+#macro UPDATE_TARGET_FILE (program_directory + "update.zip")
+#macro UPDATE_TEMP_DIR (program_directory + "tmp/")
+
+// Event handles
+_update_get_event_handle = undefined;
+_update_download_event_handle = undefined;
+_update_unzip_event_handle = undefined;
+
+_update_version = "";
+_update_url = "";
+_update_filename = "";
+_update_github_url = "";
+
+enum UPDATE_STATUS {
+	IDLE,
+	CHECKING_I,
+	CHECKING_II,
+	DOWNLOADING,
+	UNZIP,
+	READY,
+	FAILED
+};
+
+/// @type {Enum.UPDATE_STATUS} 
+_update_status = UPDATE_STATUS.IDLE;
+
+// For download progress bar
+_update_received = 0;
+_update_size = 0;
+
+// Update functions
+function update_cleanup() {
+	var _status = DyCore_cleanup_tmpfiles(program_directory);
+	if(_status < 0)
+		show_debug_message("Cleanup error.");
+}
+
+function start_update() {
+	if(_update_status != UPDATE_STATUS.IDLE)
+		return;
+	_update_status = UPDATE_STATUS.CHECKING_I;
+	_update_download_event_handle = http_get_file(SOURCE_IORI + _update_filename, UPDATE_TARGET_FILE);
+	announcement_play("autoupdate_process_2");
+}
+
+function fallback_update() {
+	_update_status = UPDATE_STATUS.CHECKING_II;
+	_update_download_event_handle = http_get_file(_update_github_url, UPDATE_TARGET_FILE);
+	announcement_play("autoupdate_process_3");
+}
+
+function start_update_unzip() {
+	_update_status = UPDATE_STATUS.UNZIP;
+	_update_unzip_event_handle = zip_unzip_async(UPDATE_TARGET_FILE, UPDATE_TEMP_DIR);
+}
+
+function update_ready() {
+	_update_status = UPDATE_STATUS.READY;
+
+	announcement_play("autoupdate_process_4");
+}
+
+function skip_update() {
+	global.lastCheckedVersion = _update_version;
+
+	announcement_play("autoupdate_skip");
+}
+
+function stop_autoupdate() {
+	if(global.autoupdate) {
+		global.autoupdate = false;
+		announcement_play("autoupdate_remove");
+	}
+}
+
+// Check For Update
+update_cleanup();
+if(global.autoupdate)
+	_update_get_event_handle = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
+
+#endregion
+

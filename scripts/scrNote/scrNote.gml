@@ -29,8 +29,16 @@ function _outscreen_check(_x, _y, _side) {
 	return _side == 0? !in_between(_x, 0, global.resolutionW) : !in_between(_y, 0, global.resolutionH);
 }
 
+function note_recac_stats() {
+	stat_reset();
+	var _arr = objMain.chartNotesArray
+	for(var i=0, l=array_length(_arr); i<l; i++)
+		if(_arr[i].time != INF) {
+			stat_count(_arr[i].side, _arr[i].noteType);
+		}
+}
+
 function note_sort_all() {
-	notes_array_update();
     var _f = function(_a, _b) {
         return sign(_a.time == _b.time ? int64(_a.inst) - int64(_b.inst) : _a.time - _b.time);
     }
@@ -49,6 +57,8 @@ function note_sort_all() {
     		chartNotesCount --;
     	}
     }
+
+	note_recac_stats();
 }
 
 function note_sort_request() {
@@ -78,6 +88,7 @@ function build_note(_id, _type, _time, _position, _width,
         default:
             return;
     }
+	/// @type {Id.Instance.objNote} 
     var _inst = instance_create_depth(0, 0, 0, _obj);
     _inst.width = real(_width);
     _inst.side = real(_side);
@@ -100,6 +111,7 @@ function build_note(_id, _type, _time, _position, _width,
     }
     with(objMain) {
         array_push(chartNotesArray, _inst.get_prop(_fromxml, true));
+		DyCore_insert_note(json_stringify(_inst.get_prop(_fromxml)));
         if(ds_map_exists(chartNotesMap[_inst.side], _id)) {
             show_error_async("Duplicate Note ID " + _id + " in side " 
                 + string(_side), false);
@@ -156,6 +168,7 @@ function note_delete(_inst, _record = false) {
 	        var i = _inst.arrayPos;
 	        if(chartNotesArray[i].inst == _inst) {
 	        	chartNotesArray[i] = chartNotesArray[i].inst.get_prop();
+				DyCore_delete_note(json_stringify(chartNotesArray[i]));
 	        	if(_record)
 	        		operation_step_add(OPERATION_TYPE.REMOVE, 
 	        						   SnapDeepCopy(chartNotesArray[i]), -1);
@@ -179,6 +192,7 @@ function note_delete_all() {
 	with(objMain) {
 		chartNotesArray = [];
 		chartNotesArrayAt = 0;
+		chartNotesCount = 0;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
 		ds_map_clear(chartNotesMap[2]);
@@ -186,18 +200,27 @@ function note_delete_all() {
 		instance_activate_all();
 		with(objNote) arrayPos = -1;
 		instance_destroy(objNote);
+		DyCore_clear_notes();
+	}
+}
+
+function note_delete_all_manually(_record = true) {
+	instance_activate_all();
+	with(objNote) {
+		if(noteType != 3) {
+			recordRequest = _record;
+			instance_destroy();
+		}
 	}
 }
 
 function notes_array_update() {
 	with(objMain) {
-		stat_reset();
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
 		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
 			chartNotesArray[i].inst.update_prop();
 			chartNotesArray[i].inst.arrayPos = i;
-			stat_count(chartNotesArray[i].side, chartNotesArray[i].noteType);
 		}
 	}
 	note_sort_request();
@@ -205,7 +228,6 @@ function notes_array_update() {
 
 function notes_reallocate_id() {
 	with(objMain) {
-		instance_activate_object(objNote);
 		var i=0, l=chartNotesCount;
 		ds_map_clear(chartNotesMap[0]);
 		ds_map_clear(chartNotesMap[1]);
@@ -222,7 +244,6 @@ function notes_reallocate_id() {
 			else
 				_inst.sid = "-1";
 		}
-		note_activation_reset();
 	}
 }
 
@@ -251,16 +272,15 @@ function note_check_and_activate(_posistion_in_array) {
 	return 0;
 }
 
-function note_deactivate_request(inst) {
-	objMain.deactivationQueue[? inst] = true;
+function note_deactivate(inst) {
+	instance_deactivate_object(inst);
 }
 
 function note_activate(inst) {
 	instance_activate_object(inst);
-	if(ds_map_exists(objMain.deactivationQueue, inst))
-		ds_map_delete(objMain.deactivationQueue, inst);
 }
 
+//! Deprecated
 function note_deactivate_flush() {
 	// return;
 	with(objMain) {
@@ -279,8 +299,10 @@ function note_deactivate_flush() {
 	}
 }
 
-function note_select_reset(isself = false) {
-	with(isself?id:objNote)
+function note_select_reset(inst = undefined) {
+	if(inst == undefined) inst = objNote;
+	/// @self Id.Instance.objNote
+	with(inst)
 		if(state == stateSelected) {
 			state = stateNormal;
 			state();
@@ -299,12 +321,16 @@ function note_activation_reset() {
 // Prevent extra sub notes.
 function note_extra_sub_removal() {
 	var _dcnt = 0;
-	with(objNote) {
-		if(noteType == 3 && finst<0) {
-			instance_destroy();
-			_dcnt ++;
+	for(var i=0, l=array_length(objMain.chartNotesArray); i<l; i++)
+		if(objMain.chartNotesArray[i].inst > 0) {
+			/// @self Id.Instance.objNote
+			with(objMain.chartNotesArray[i].inst) {
+				if(noteType == 3 && finst<0) {
+					instance_destroy();
+					_dcnt ++;
+				}
+			}
 		}
-	}
 	if(_dcnt > 0) {
 		announcement_warning(i18n_get("extra_sub_fix", string(_dcnt)));
 		note_sort_all();

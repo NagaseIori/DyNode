@@ -13,11 +13,14 @@ originalHeight = sprite_get_height(sprHoldEdge);
 pHeight = originalHeight; // Height in Pixels base on sprHoldEdge
 
 sprite = sprHoldEdge2;
+
+subFading = false;		// Whether the hold is reaching its sub.
+
 _prop_init();
 
 // In-Function
 
-    function _prop_hold_update() {
+	_prop_hold_update = function () {
         if(sinst > 0 || (sid != -1 && ds_map_exists(objMain.chartNotesMap[side], sid))) {
             if(sinst <= 0)
 		        sinst = objMain.chartNotesMap[side][? sid]
@@ -43,11 +46,12 @@ _prop_init();
 		    sinst.beginTime = time;
 		    sinst.update_prop();
     
-    		
+    		subFading = false;
 		    pHeight = max(0, objMain.playbackSpeed * 
 		    	(sinst.time - max(time, selectTolerance?0:objMain.nowTime)))
 		        + dFromBottom + uFromTop;
 		    if(!global.simplify) {
+				subFading = pHeight < originalHeight && state == stateLast;
 		    	pHeight = max(pHeight, originalHeight);
 		    }
 		    lastTime = sinst.time - time;
@@ -60,6 +64,8 @@ _prop_init();
     
     function draw_event (_draw_edge) {
 		if(!drawVisible) return;
+
+		if(subFading && objMain.nowPlaying) return;
 		
 		// Get Position
 		    
@@ -150,7 +156,6 @@ _prop_init();
 				        	_sclx, (side == 1 ? 1 : -1) * _th / _h,
 				        	270, c_green, lastAlpha * image_alpha * bgLightness);
 			        gpu_set_blendmode(bm_normal);
-			        
 			    }
 		    }
 		}

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"SnapToLooseJSON",
   "isCompatibility":false,
   "isDnD":false,

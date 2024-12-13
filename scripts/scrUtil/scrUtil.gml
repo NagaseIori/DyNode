@@ -309,6 +309,9 @@ function difficulty_num_to_char(_number) {
 function difficulty_char_to_num(_char) {
 	return string_last_pos(_char, global.difficultyString) - 1;
 }
+function difficulty_num_to_name(_number) {
+	return global.difficultyName[_number];
+}
 
 function note_type_num_to_string(_number) {
 	return global.noteTypeName[_number];
@@ -356,6 +359,7 @@ function format_time_ms(_time) {
 	return string_format(_time, 1, 1) + "ms";
 }
 
+// Convert time (in ms) to standard string format
 function format_time_string(_time) {
 	var _min = floor(_time / 1000 / 60);
 	var _sec = floor((_time - _min * 60000)/1000);
@@ -365,9 +369,46 @@ function format_time_string(_time) {
 	return _str;
 }
 
+// Convert time (in ms) to standard string format in hh:mm:ss
+function format_time_string_hhmmss(_time) {
+    var _hour = floor(_time / 1000 / 60 / 60);
+    var _min = floor((_time - _hour * 3600000) / 1000 / 60);
+    var _sec = floor((_time - _hour * 3600000 - _min * 60000) / 1000);
+    var _str = string_format(_hour, 2, 0) + ":" + string_format(_min, 2, 0) + ":" + string_format(_sec, 2, 0);
+    _str = string_replace_all(_str, " ", "0");
+    return _str;
+}
+
 #endregion
 
-#region FAST FILE IO
+#region FAST IO
+
+/// @description Warning: This function wipes out all [dst] data.
+function fast_buffer_copy(dst, src, size) {
+	DyCore_buffer_copy(buffer_get_address(dst), buffer_get_address(src), size);
+
+	buffer_set_used_size(dst, size);
+}
+
+function fast_file_save_buffer_async(file, buffer) {
+	file = file_path_fix(file);
+	var _len = buffer_get_size(buffer);
+	var _buf = buffer_create(_len, buffer_fixed, 1);
+	fast_buffer_copy(_buf, buffer, _len);
+	var _id = buffer_save_async(_buf, file, 0, _len);
+	return {
+		id: _id,
+		buffer: _buf
+	};
+}
+
+function fast_file_save_buffer(file, buffer) {
+	file = file_path_fix(file);
+	buffer_seek(buffer, buffer_seek_start, 0);
+	print_buffer_hex(buffer);
+	buffer_save(buffer, file);
+	return;
+}
 
 function fast_file_save_async(file, str) {
 	file = file_path_fix(file);
@@ -665,15 +706,32 @@ function filename_name_no_ext(file_name) {
 	return string_replace(filename_name(file_name), filename_ext(file_name), "");
 }
 
-function array_lower_bound(array, lim) {
+function array_lower_bound(array, lim, fetch_function=undefined) {
+	if(fetch_function == undefined)
+		fetch_function = function(array, at) { return array[at]; };
+
 	var l = 0, r = array_length(array), mid;
 	while(l!=r) {
 		mid = (l+r)>>1;
-		if(array[mid] < lim) l = mid+1;
+		if(fetch_function(array, mid) < lim) l = mid+1;
 		else r = mid;
 	}
 	return l;
 }
+
+function array_upper_bound(array, lim, fetch_function=undefined) {
+	if(fetch_function == undefined)
+		fetch_function = function(array, at) { return array[at]; };
+
+	var l = 0, r = array_length(array), mid;
+	while(l!=r) {
+		mid = (l+r)>>1;
+		if(fetch_function(array, mid) <= lim) l = mid+1;
+		else r = mid;
+	}
+	return l;
+}
+
 
 /**
  * @description Converts a MIME+Base64 encoded string to a file in the temporary directory.
@@ -754,4 +812,28 @@ function surface_clear(surface) {
 	surface_reset_target();
 
 	if(orig_target > 0) surface_set_target(surface);
+}
+
+function print_buffer_hex(buffer) {
+    var output = "";
+    var byte;
+    
+    var length = buffer_get_size(buffer);
+    var bytes_to_read = min(length, 100);
+    
+    for (var i = 0; i < bytes_to_read; i++) {
+        byte = buffer_peek(buffer, i, buffer_u8);
+        output += string(int64(byte));
+        if ((i + 1) % 16 == 0) {
+            output += "\n";
+        } else {
+            output += " "; 
+        }
+    }
+    
+    if (bytes_to_read % 16 != 0) {
+        output += "\n";
+    }
+    
+    show_debug_message(output);
 }

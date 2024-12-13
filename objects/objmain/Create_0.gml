@@ -24,10 +24,6 @@ depth = 0;
 	timesourceResumeDelay =
 		time_source_create(time_source_game, resumeDelay/1000,
 		time_source_units_seconds, _tsFun, [], 1, time_source_expire_after);
-	timesourceDeactivateFlush =
-		time_source_create(time_source_game, NOTE_DEACTIVATION_TIME/1000,
-		time_source_units_seconds, function() {note_deactivate_flush();}, [], -1, time_source_expire_after);
-	time_source_start(timesourceDeactivateFlush);
 	timesourceSyncVideo = 
 		time_source_create(time_source_game, 0.1,
 		time_source_units_seconds, function() {
@@ -87,6 +83,7 @@ depth = 0;
     mixerShadow[0].image_angle = 270;
     mixerShadow[1].image_angle = 90;
 
+    /// @description Return struct with x and time.
     function mixer_get_next_x(side) {
     	var found = false, beginTime = 0, result = 0, accum = 0;
         for(var i=chartNotesArrayAt; i<chartNotesCount
@@ -104,7 +101,7 @@ depth = 0;
         	}
         if(!found) return undefined;
         result /= accum;
-        return note_pos_to_x(result, side);
+        return {x: note_pos_to_x(result, side), time: beginTime};
     }
 
 #endregion
@@ -163,7 +160,7 @@ depth = 0;
     volumeHit = 1.0;            // Hit sound volume
     
     showDebugInfo = debug_mode;
-    showStats = false;
+    showStats = 0;
     showBar = false;
     fadeOtherNotes = false;
     
@@ -180,6 +177,9 @@ depth = 0;
     animTargetTitleAlpha = titleAlphaL;
     
     standardAlpha = 0; // For editmode switch usage
+
+    // Stat vars
+    statKPS = 0;
     
     // Bottom
         bottomDim = 0.5;
@@ -353,7 +353,7 @@ depth = 0;
 #region Methods
 
 // Set music's time to [time].
-// If [animated], there will be no transition animation when time is set.
+// If not [animated], there will be no transition animation when time is set.
 // If [inbound!=-1], the time being set will stay above targetline in [inbound] pixels
 function time_set(time, animated = true, inbound = -1) {
 	if(inbound > 0) {
@@ -388,7 +388,7 @@ function time_inbound(time) {
 }
 
 // Make the specific time range inbound.
-function time_range_made_inbound(timeL, timeR, inbound, animated = true) {
+function time_range_made_inbound(timeL, timeR, inbound = 300, animated = true) {
 	var _il = time_inbound(timeL);
 	var _ir = time_inbound(timeR);
 	if(!_il && !_ir) {

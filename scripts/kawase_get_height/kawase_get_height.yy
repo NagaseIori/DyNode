@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"kawase_get_height",
   "isCompatibility":false,
   "isDnD":false,

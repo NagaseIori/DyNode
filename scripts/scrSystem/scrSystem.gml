@@ -1,4 +1,10 @@
 
+#region Macros
+
+#macro MAX_STAT_TYPE 5
+
+#endregion
+
 #region MAP FUNCTIONS
 
 function map_close() {
@@ -15,7 +21,6 @@ function map_close() {
 		instance_destroy(objTopBar);
 		
 		time_source_destroy(timesourceResumeDelay);
-		time_source_destroy(timesourceDeactivateFlush);
 		part_emitter_destroy_all(partSysNote);
 		part_system_destroy(partSysNote);
 		part_type_destroy(partTypeNoteDL);
@@ -32,6 +37,8 @@ function map_close() {
 			FMODGMS_Snd_Unload(music);
 			FMODGMS_Chan_RemoveChannel(channel);
 		}
+
+		DyCore_clear_notes();
 	}
 	
 	instance_destroy(objMain);
@@ -116,7 +123,7 @@ function map_import_dym(_file, _direct = false) {
 	}
 	static _arg_parser = function(_dy_format, arg) {
 		if(_dy_format)
-			return arg;
+			return string(arg);
 		else
 			return arg.text;
 	}
@@ -392,7 +399,9 @@ function map_import_dyn(_file) {
 	var _import_info = show_question_i18n("box_q_import_info");
     var _import_tp = show_question_i18n("box_q_import_bpm");
     
-    var _str = json_parse(SnapStringFromFile(_file));
+	var _buf = buffer_load(_file);
+    var _str = __dyn_read_buffer(_buf);
+	buffer_delete(_buf);
     
     if(!is_struct(_str))
     	show_error("Load failed.", true);
@@ -426,7 +435,7 @@ function music_load(_file = "") {
     if(_file == "") return;
     
     if(!file_exists(_file)) {
-        announcement_error("Music file " + _file + " doesnt exist.", false);
+        announcement_error(i18n_get("anno_music_not_exists") + _file);
         return;
     }
     
@@ -562,7 +571,7 @@ function map_export_xml(_export_to_dym) {
 	}
 	
     var _file = "";
-    var _mapid = "_map_" + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
+    var _mapid = (_export_to_dym?"_dym_":"_map_") + map_get_alt_title() + "_" + difficulty_num_to_char(objMain.chartDifficulty);
     var _default_file_name = _mapid + "-";
     _default_file_name += string(current_year) + "-";
     _default_file_name += string(current_month) + "-";
@@ -571,24 +580,18 @@ function map_export_xml(_export_to_dym) {
     _default_file_name += string(current_minute) + "-";
     _default_file_name += string(current_second);
 
-	var _file_title = _export_to_dym ? "Export Dynamaker-modified Chart as XML File 导出 DyM 谱面文件" : "Export Dynamix Chart as XML File 导出 XML 谱面文件";
+	var _file_title = _export_to_dym ? "Export Dynamaker-modified Chart as XML File 导出 DyM 谱面文件" : "Export Dynamix Chart as XML File 导出实机 XML 谱面文件";
     _file = get_save_filename_ext("XML File (*.xml)|*.xml", _default_file_name + ".xml", program_directory, _file_title);
     
     if(_file == "") return;
     
     // For Compatibility
     notes_reallocate_id();
-    instance_activate_object(objNote);  // Temporarily activate all notes
     note_extra_sub_removal();
 	notes_array_update();				// Sync main notes array
-    
-    if(!objMain.chartBarUsed && !_export_to_dym)
-    	timing_point_sync_with_chart_prop();
-    if(_export_to_dym) {
-    	// Force reset all bar settings
-    	timing_point_sync_with_chart_prop(true, true);
-    }
-    // var _fix_dec = _export_to_dym? false:show_question_i18n("export_fix_decimal_question");
+	// Force reset all bar settings
+	timing_point_sync_with_chart_prop();
+
 	var _fix_dec = false;
     var _fix_error = _export_to_dym? false:show_question(i18n_get("export_fix_error_question", global.offsetCorrection));
 
@@ -599,6 +602,7 @@ function map_export_xml(_export_to_dym) {
 		note_error_correction(global.offsetCorrection, _notes_array, false);
 	}
     
+	/// @param {Array<Id.Instance.objNote>} _array 
     var _gen_narray = function (_side, _dec, _dym, _array) {
     	var _ret = [];
     	var _bfun = _dym? time_to_bar_for_dym:time_to_bar;
@@ -688,17 +692,28 @@ function map_export_xml(_export_to_dym) {
 	objMain.savingExportId = 
 		fast_file_save_async(_file, SnapToXML(_str));
 	
-	objManager.chartPath = _file;
-	
 	note_activation_reset();
 }
 
+function map_get_struct_without_notes() {
+	var _str = {
+		title: objMain.chartTitle,
+		bpm: objMain.chartBeatPerMin,
+		barpm: objMain.chartBarPerMin,
+		difficulty: objMain.chartDifficulty,
+		sidetype: objMain.chartSideType,
+		barused: objMain.chartBarUsed,
+		notes: []
+	}
+	
+	return _str;
+}
+
+//! Deprecating
 function map_get_struct() {
 	var _arr = [];
 	
 	with(objMain) {
-		instance_activate_all();
-		notes_array_update();
 		var i=0, l=chartNotesCount, _inst;
 		for(; i<l; i++) {
 			var _str = chartNotesArray[i];
@@ -723,8 +738,6 @@ function map_get_struct() {
 		barused: objMain.chartBarUsed,
 		notes: _arr
 	}
-	
-	note_activation_reset();
 	
 	return _str;
 }
@@ -832,7 +845,7 @@ function project_load(_file = "") {
     if(_file == "") return 0;
     
     var _buf = buffer_load(_file);
-    var _contents = json_parse(buffer_read(_buf, buffer_text));
+    var _contents = __dyn_read_buffer(_buf);
     buffer_delete(_buf);
     var _propath = filename_path(_file);
     
@@ -844,21 +857,21 @@ function project_load(_file = "") {
     map_reset();
     
     with(objManager) {
-    	musicPath = _contents.musicPath;
-    	backgroundPath = _contents.backgroundPath;
-    	chartPath = _contents.chartPath;
+    	musicPath = _contents[$ "musicPath"];
+    	backgroundPath = _contents[$ "backgroundPath"];
     	if(variable_struct_exists(_contents, "videoPath"))
-    		videoPath = _contents.videoPath;
+    		videoPath = _contents[$ "videoPath"];
     	else
     		videoPath = "";
-    	
-    	if(variable_struct_exists(_contents, "charts")) {
-	    	objMain.animTargetTime = 0;
-	    	map_load(_contents.charts);
-	    }
-	    else
-	    	map_load(chartPath);
-	    
+
+		objMain.animTargetTime = 0;
+		map_load(_contents[$ "charts"]);
+		
+		if(variable_struct_exists(_contents, "projectTime"))
+			projectTime = _contents[$ "projectTime"];
+		else
+			projectTime = 0;
+
 	    music_load(_path_deal(musicPath, _propath));
 	    if(backgroundPath != "")
 	    	background_load(_path_deal(backgroundPath, _propath));
@@ -866,24 +879,29 @@ function project_load(_file = "") {
 	    	background_load(_path_deal(videoPath, _propath));
 	    	
 	    timing_point_reset();
-	    objEditor.timingPoints = _contents.timingPoints;
+	    objEditor.timingPoints = _contents[$ "timingPoints"];
 	    timing_point_sort();
 	    
 	    projectPath = _file;
 	    
 	    if(variable_struct_exists(_contents, "settings"))
-	    	project_set_settings(_contents.settings);
+	    	project_set_settings(_contents[$ "settings"]);
     }
     
     /// Old version workaround
     
-	    if(version_cmp(_contents.version, "v0.1.5") < 0) {
+	    if(version_cmp(_contents[$ "version"], "v0.1.5") < 0) {
 	    	var _question = show_question_i18n(i18n_get("old_version_warn_1"));
 			if(_question)
 				map_add_offset(-64, true);
 	    }
 		
 	///
+
+	// Version update backup
+	if(_contents[$ "version"] != VERSION) {
+		project_backup(objManager.projectPath);
+	}
     
     announcement_play("anno_project_load_complete");
     
@@ -911,13 +929,13 @@ function project_save_as(_file = "") {
 			version : VERSION,
 			musicPath: objManager.musicPath,
 			backgroundPath: objManager.backgroundPath,
-			chartPath: objManager.chartPath,
 			videoPath: objManager.videoPath,
+			projectTime: objManager.projectTime,
 			timingPoints: objEditor.timingPoints,
 			charts: [],
 			settings: project_get_settings()
 		};
-		_contents.charts = map_get_struct();
+		_contents.charts = map_get_struct_without_notes();
 	
 		objManager.projectPath = _file;
 	} catch (e) {
@@ -933,8 +951,9 @@ function project_save_as(_file = "") {
 	} catch (e) {
 		announcement_warning("复制音乐/背景/视频文件时出现错误。[scale, 0.7]\n"+string(e));
 	}
-	
-	objMain.savingProjectId = fast_file_save_async(_file, json_stringify(_contents));
+
+	// Trigger an async saving project event.
+	DyCore_save_project(json_stringify(_contents), _file, DYCORE_COMPRESSION_LEVEL);
 	
 	return 1;
 }
@@ -956,9 +975,17 @@ function project_file_duplicate(_project) {
 		if(file_exists(_file)) {
 			if(!file_exists(_nfile))
 				file_copy(_file, _nfile);
-			else if(md5_file(_nfile) != md5_file(_file)) {
-				_nfile = filename_path(_nfile)+filename_name_no_ext(_nfile)+"_"+random_id(4)+filename_ext(_nfile);
-				file_copy(_file, _nfile);
+			else { // Compare file's binary size is more efficent.
+				var _f = file_bin_open(_file, 0);
+				var _nf = file_bin_open(_nfile, 0);
+				var _fs = file_bin_size(_f);
+				var _nfs = file_bin_size(_nf);
+				file_bin_close(_f);
+				file_bin_close(_nf);
+				if(_fs != _nfs) {
+					_nfile = filename_path(_nfile)+filename_name_no_ext(_nfile)+"_"+random_id(4)+filename_ext(_nfile);
+					file_copy(_file, _nfile);
+				}
 			}
 			_nfile = filename_name(_nfile);
 			variable_struct_set(_pro, _varname, _nfile);
@@ -1041,13 +1068,66 @@ function project_new() {
 	with(objManager) {
 		musicPath = "";
 		backgroundPath = "";
-		chartPath = "";
 		projectPath = "";
 	}
 	
 	map_close();
 	
 	room_goto(rProjectInit);
+}
+
+function project_auto_save() {
+	if(!instance_exists(objMain)) return;
+	with(objManager) {
+		if(projectPath != "") {
+			autosaving = true;
+			try {
+				project_backup(projectPath);
+			} catch(e) {
+				announcement_error("Project backup failed. Info: "+string(e));
+			};
+			project_save();
+		}
+		else {
+			announcement_warning("autosave_ineffective");
+		}
+	}
+}
+
+function project_backup_get_name(project_path) {
+	var _ret = filename_name_no_ext(project_path)
+		 + "_" + DyCore_get_file_modification_time(project_path)
+		 + filename_ext(project_path);
+
+	return _ret;
+}
+
+function project_backup(project_path) {
+	var proDir = filename_dir(project_path);
+	var bckDir = proDir + "\\backups\\";
+
+	if(!directory_exists(bckDir))
+		directory_create(bckDir);
+
+	var newPth = bckDir + project_backup_get_name(project_path);
+	file_copy(project_path, newPth);
+
+	// Also copy the current related files.
+	var _fn_copy = function(fr, bckDir) {
+		if(fr == "") return;
+		var to = bckDir + filename_name(fr);
+		if(file_exists(to)) return;
+		file_copy(fr, to);
+	}
+	_fn_copy(objManager.musicPath, bckDir);
+	_fn_copy(objManager.videoPath, bckDir);
+	_fn_copy(objManager.backgroundPath, bckDir);
+
+	// Check if successfully copied.
+	if(!file_exists(newPth))
+		show_debug_message("[ERROR] Backup failed.");
+	else
+		show_debug_message("Backup successfully: " + newPth);
 }
 
 #endregion
@@ -1234,9 +1314,21 @@ function load_config() {
 	_check_set(_con, "dropAdjustError");
 	_check_set(_con, "lastCheckedVersion");
 	_check_set(_con, "offsetCorrection");
+	_check_set(_con, "VIDEO_UPDATE_FREQUENCY");
+	_check_set(_con, "autoSaveTime");
+	_check_set(_con, "analytics");
 	// Clamp the offset correction.
 	global.offsetCorrection = max(0, global.offsetCorrection)
+	global.autoSaveTime = max(1, global.autoSaveTime);
 	vars_init();
+
+	// Version check.
+	if(_con[$ "version"] != VERSION) {
+		if(version_cmp(VERSION, _con[$ "version"]) > 0)
+			announcement_play(i18n_get("version_higher", VERSION));
+		else
+			announcement_warning(i18n_get("version_lower", VERSION));
+	}
 	
 	return md5_file(pth);
 }
@@ -1262,7 +1354,10 @@ function save_config() {
 		musicDelay: global.musicDelay,
 		dropAdjustError: global.dropAdjustError,
 		lastCheckedVersion: global.lastCheckedVersion,
-		offsetCorrection: global.offsetCorrection
+		offsetCorrection: global.offsetCorrection,
+		VIDEO_UPDATE_FREQUENCY: global.VIDEO_UPDATE_FREQUENCY,
+		autoSaveTime: global.autoSaveTime,
+		analytics: global.analytics,
 	}, true));
 	
 }
@@ -1297,11 +1392,11 @@ function switch_debug_info() {
 function switch_autosave(state = !global.autosave) {
 	with(objManager) {
 		if(state) {
-			announcement_play("autosave_enable", 2000);
+			announcement_play("autosave_enable", 2000, "autosave_switch");
 			time_source_start(tsAutosave);
 		}
 		else {
-			announcement_play("autosave_disable", 2000);
+			announcement_play("autosave_disable", 2000, "autosave_switch");
 			time_source_stop(tsAutosave);
 		}
 		global.autosave = state;
@@ -1310,7 +1405,7 @@ function switch_autosave(state = !global.autosave) {
 
 #endregion
 
-#region Stat
+#region Stat Functions
 
 function stat_reset() {
 	objMain.statCount = [
@@ -1333,7 +1428,7 @@ function stat_count(side, type) {
 	}
 }
 
-function stat_string(stype, ntype) {
+function stat_note_string(stype, ntype) {
 	with(objMain)
 		if(stype == 1) {
 			return string(statCount[3][ntype]);
@@ -1343,6 +1438,28 @@ function stat_string(stype, ntype) {
 								 statCount[0][ntype],"/",
 								 statCount[2][ntype]);
 		}
+}
+
+function stat_next() {
+	objMain.showStats ++;
+	objMain.showStats %= MAX_STAT_TYPE;
+}
+
+function stat_visible() {
+	if(!instance_exists(objMain))
+		return false;
+	return objMain.showStats > 0;
+}
+
+/// @description Caculate the avg notes' count between [_time-_range, _time] (in ms)
+function stat_kps(_time, _range) {
+	if(objMain.chartNotesCount == 0)
+		return 0;
+
+	var ff = function(array, at) { return array[at].time; }
+	var ub = array_upper_bound(objMain.chartNotesArray, _time, ff);
+	var lb = array_lower_bound(objMain.chartNotesArray, _time - _range, ff);
+	return (ub - lb) * 1000 / _range;
 }
 
 #endregion
@@ -1387,6 +1504,38 @@ function global_add_delay(delay) {
 			nowTime -= delay;
 	save_config();
 	announcement_set("global_music_delay", global.musicDelay);
+}
+
+#endregion
+
+#region DYN File Format Functions
+
+/// @description To check if the buffer is compressed.
+function __dyn_is_compressed_buffer(buffer) {
+	return DyCore_is_compressed(buffer_get_address(buffer), buffer_get_size(buffer)) >= 0;
+}
+
+/// @description Convert compressed/uncompressed buffer to project struct.
+/// @param {Id.Buffer} buffer The given buffer.
+/// @returns {Struct} The final struct.
+function __dyn_read_buffer(buffer) {
+	var _json = "";
+	if(!__dyn_is_compressed_buffer(buffer)) {
+		// Fallback to text format.
+		buffer_seek(buffer, buffer_seek_start, 0);
+		_json = buffer_read(buffer, buffer_text);
+	}
+	else {
+		_json = DyCore_decompress_string(buffer_get_address(buffer), buffer_get_size(buffer));
+		if(_json == "failed")
+			throw "Decompress failed.";
+	}
+
+	var _str = json_parse(_json);
+
+	if(!is_struct(_str))
+		throw "Parse failed.";
+	return _str;
 }
 
 #endregion

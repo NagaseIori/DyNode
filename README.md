@@ -1,6 +1,6 @@
 <p align="center"><img src="https://user-images.githubusercontent.com/31349569/191138861-2cf74238-67f6-49b3-9b75-e8fe7e192827.png" style="display:block; margin:auto; width:300px"></p>
 
-<h1 align="center">DyNode 0.1.13.4</h1>
+<h1 align="center">DyNode 0.1.16.8</h1>
 <p align="center">Yet another Dynamix charting tool.</b></p>
 <br>
 <br>
@@ -65,6 +65,8 @@ SNAP (under MIT License) Copyright (c) 2020 Juju Adams
 [delaunator-cpp](https://github.com/abellgithub/delaunator-cpp/blob/master/LICENSE)  (under MIT License) Copyright (c) 2018 Volodymyr Bilonenko
 
 FMODGMS (under [BSD 2-Clause "Simplified" License](https://github.com/mstop4/FMODGMS/blob/master/LICENSE)) Copyright (c) 2016-2017, M.S.T.O.P.
+
+Zstandard (under BSD License) Copyright (c) Meta Platforms, Inc. and affiliates
 
 -------------------
 

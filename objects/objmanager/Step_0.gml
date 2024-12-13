@@ -5,9 +5,8 @@
 if(os_type == os_windows) {
 	if(keycheck_down(vk_f7)) {
 		global.fullscreen = !global.fullscreen;
-		window_set_borderless_fullscreen(global.fullscreen);
+		window_set_fullscreen(global.fullscreen);
 	}
-	
 	
 	if(window_command_check(window_command_close)) {
 		game_end_confirm();
@@ -36,13 +35,13 @@ for(var i=0, l=array_length(announcements); i<l; i++) {
 
 // Caculate annos' Y
 var _h = 0;
-var _margin = 10;
+var _margin = 15;
 var _l = array_length(announcements);
 for(var i=array_length(announcements)-1; i>=0; i--) {
 	/// @self Id.Instance.objAnnouncement
 	with(announcements[i]) {
 		targetY = _h;
-		_h += element.get_height() + _margin;
+		_h += element.get_bbox().height + _margin;
 		
 		if(_l - i > objManager.annoThresholdNumber)
 			lastTime = min(lastTime, timer + objManager.annoThresholdTime);
@@ -61,10 +60,11 @@ if(_fmoderr < 0) {
     show_error("FMOD ERROR:\n"+FMODGMS_Util_GetErrorMessage(), false);
 }
 
-if(keycheck_down(vk_f10)) {
-	load_config();
-	announcement_play("anno_reload_config");
-}
+//! Deprecated.
+// if(keycheck_down(vk_f10)) {
+// 	load_config();
+// 	announcement_play("anno_reload_config");
+// }
 
 if(keycheck_down_ctrl(vk_f11)) {
 	debugLayer = !debugLayer;
@@ -76,8 +76,12 @@ if(keycheck_down_ctrl(vk_f11)) {
 if(room == rMain) {
 	if(keycheck_down(vk_f2))
     	map_load();
-    if(keycheck_down_ctrl(ord("S")))
-    	project_save();
+    if(keycheck_down_ctrl(ord("S"))) {
+		if(!shift_ishold())
+    		project_save();
+		else if(shift_ishold() && !alt_ishold())
+			project_save_as();
+	}
 	if(keycheck_down(vk_f1))
 	    project_load();
 	if(keycheck_down_ctrl(ord("N")))
@@ -130,3 +134,15 @@ if(keycheck_down(vk_escape)) {
 	if(!instance_exists(objEditor))
 		game_end_confirm();
 }
+
+// Debug functions
+
+if(debug_mode) {
+	if(keycheck_down_ctrl(vk_numpad0))
+		project_auto_save();
+}
+
+// Update project time
+
+if(delta_time < 1000000)
+	projectTime += delta_time / 1000;

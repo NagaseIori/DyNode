@@ -152,13 +152,16 @@ function editor_select_reset() {
 
 function editor_select_all() {
 	if(editor_get_editmode() != 4) return;
-	instance_activate_all();
+
 	with(objNote)
 		state = stateSelected;
 }
 
-function editor_snap_to_grid_y(_y, _side) {
-    
+function editor_snap_to_grid_time(_time, _side, _ignore_boundary = false) {
+	return editor_snap_to_grid_y(note_time_to_y(_time, _side), _side, _ignore_boundary);
+}
+
+function editor_snap_to_grid_y(_y, _side, _ignore_boundary = false) {
     var _nw = global.resolutionW, _nh = global.resolutionH;
     
     var _time = y_to_note_time(_y, _side);
@@ -218,16 +221,16 @@ function editor_snap_to_grid_y(_y, _side) {
         
         if(_side == 0) {
             // if(_ry >= 0 && _ry <= _nh - targetLineBelow && _rt + _eps <= _nexttime)
-            if(in_between(_ry, 0, _nh - targetLineBelow) && _rt + _eps <= _nexttime)
+            if((in_between(_ry, 0, _nh - targetLineBelow) || _ignore_boundary) && _rt + _eps <= _nexttime)
                 _ret = _f_genret(_ry, _rd, _rt);
             // else if(_rby >= 0 && _rby <= _nh - targetLineBelow && _rbt + _eps <= _nexttime)
-            else if(in_between(_rby, 0, _nh - targetLineBelow) && _rbt + _eps <= _nexttime)
+            else if((in_between(_rby, 0, _nh - targetLineBelow) || _ignore_boundary) && _rbt + _eps <= _nexttime)
                 _ret = _f_genret(_rby, _rbd, _rbt);
         }
         else {
-            if(in_between(_ry, targetLineBeside, _nw/2) && _rt + _eps <= _nexttime)
+            if((in_between(_ry, targetLineBeside, _nw/2) || _ignore_boundary) && _rt + _eps <= _nexttime)
                 _ret = _f_genret(note_time_to_y(_rt, _side), _rd, _rt);
-            else if(in_between(_rby, targetLineBeside, _nw/2) && _rbt + _eps <= _nexttime)
+            else if((in_between(_rby, targetLineBeside, _nw/2) || _ignore_boundary) && _rbt + _eps <= _nexttime)
                 _ret = _f_genret(note_time_to_y(_rbt, _side), _rbd, _rbt);
         }
     }
@@ -293,7 +296,91 @@ function editor_get_note_attaching_center() {
 	return objEditor.editorNoteAttaching[objEditor.editorNoteAttachingCenter];
 }
 
+/// @description Target at all selected notes, duplicate them to the next divided beat.
+function edtior_note_quick_duplicate() {
+	if(timing_point_count() == 0) return;
+	var maxTime = -10000000;
+	var minTime = 0x7fffffff;
+	with(objNote) {
+		if(state == stateSelected) {
+			maxTime = max(maxTime, time);
+			minTime = min(minTime, time);
+		}
+	}
+	var spacing = maxTime - minTime + timing_point_get_at(maxTime).beatLength / editor_get_div();
+	// Spacing snapping correction
+	spacing = editor_snap_to_grid_time(minTime + spacing, 0, true).time - minTime;
+	with(objNote) {
+		if(state == stateSelected) if(noteType != 3) {
+			note_select_reset(id);
+			var _prop = get_prop();
+			_prop.time += spacing;
+			build_note_withprop(_prop, true, true);
+			operation_merge_last_request(1, OPERATION_TYPE.DUPLICATE);
+		}
+	}
+	objMain.time_range_made_inbound(minTime + spacing, maxTime + spacing);
+}
+
 #region UNDO & REDO FUNCTION
+
+function operation_get_name(opsType) {
+	var _result = "";
+	switch(opsType) {
+		case OPERATION_TYPE.MOVE:
+			_result = "ops_name_move";
+			break;
+		case OPERATION_TYPE.ADD:
+			_result = "ops_name_add";
+			break;
+		case OPERATION_TYPE.REMOVE:
+			_result = "ops_name_remove";
+			break;
+		case OPERATION_TYPE.TPADD:
+			_result = "ops_name_tpadd";
+			break;
+		case OPERATION_TYPE.TPCHANGE:
+			_result = "ops_name_tpchange";
+			break;
+		case OPERATION_TYPE.TPREMOVE:
+			_result = "ops_name_tpremove";
+			break;
+		case OPERATION_TYPE.OFFSET:
+			_result = "ops_name_offset";
+			break;
+		case OPERATION_TYPE.ATTACH:
+			_result = "ops_name_attach";
+			break;
+		case OPERATION_TYPE.CUT:
+			_result = "ops_name_cut";
+			break;
+		case OPERATION_TYPE.MIRROR:
+			_result = "ops_name_mirror";
+			break;
+		case OPERATION_TYPE.ROTATE:
+			_result = "ops_name_rotate";
+			break;
+		case OPERATION_TYPE.PASTE:
+			_result = "ops_name_paste";
+			break;
+		case OPERATION_TYPE.SETTYPE:
+			_result = "ops_name_settype";
+			break;
+		case OPERATION_TYPE.SETWIDTH:
+			_result = "ops_name_setwidth";
+			break;
+		case OPERATION_TYPE.RANDOMIZE:
+			_result = "ops_name_randomize";
+			break;
+		case OPERATION_TYPE.DUPLICATE:
+			_result = "ops_name_duplicate";
+			break;
+		case OPERATION_TYPE.EXPR:
+			_result = "ops_name_expr";
+			break;
+	}
+	return i18n_get(_result);
+}
 
 function operation_synctime_set(time) {
 	with(objEditor) {
@@ -316,10 +403,16 @@ function operation_step_add(_type, _from, _to) {
 	}
 }
 
+/// @param {Struct.sOperation} _array 
 function operation_step_flush(_array) {
 	with(objEditor) {
+		var _operation_pack = {
+			type: _array[0].opType,
+			ops: _array
+		}
+
 		array_resize(operationStack, operationPointer + 1);
-		array_push(operationStack, _array);
+		array_push(operationStack, _operation_pack);
 		operationPointer ++;
 		operationCount = operationPointer + 1;
 		// show_debug_message_safe($"New operation: {_array}");
@@ -327,7 +420,7 @@ function operation_step_flush(_array) {
 		if(operationMergeLastRequest > 0) {
 			operationMergeLastRequestCount ++;
 			if(operationMergeLastRequest == operationMergeLastRequestCount) {
-				operation_merge_last(operationMergeLastRequest);
+				operation_merge_last(operationMergeLastRequest, operationMergeLastRequestType);
 				operationMergeLastRequest = 0;
 				operationMergeLastRequestCount = 0;
 			}
@@ -335,7 +428,7 @@ function operation_step_flush(_array) {
 	}
 }
 
-function operation_do(_type, _from, _to = -1) {
+function operation_do(_type, _from, _to = -1, _safe_ = false) {
 	if(_to != -1)
 		operation_synctime_set(_to.time);
 	else if(is_struct(_from))
@@ -348,7 +441,8 @@ function operation_do(_type, _from, _to = -1) {
 			note_activate(_from.inst);
 			_from.inst.set_prop(_to);
 			_from.inst.note_outscreen_check();
-			_from.inst.select();
+			if(!_safe_)
+				_from.inst.select();
 			break;
 		case OPERATION_TYPE.REMOVE:
 			note_activate(_from.inst);
@@ -375,7 +469,7 @@ function operation_do(_type, _from, _to = -1) {
 function operation_refresh_inst(_origi, _nowi) {
 	with(objEditor) {
 		for(var i=0, l=array_length(operationStack); i<l; i++) {
-			var _ops = operationStack[i];
+			var _ops = operationStack[i].ops;
 			for(var ii=0, ll=array_length(_ops); ii<ll; ii++) if(variable_struct_exists(_ops[ii].fromProp, "inst")) {
 				if(_ops[ii].fromProp.inst == _origi)
 					_ops[ii].fromProp.inst = _nowi;
@@ -394,13 +488,14 @@ function operation_refresh_inst(_origi, _nowi) {
 function operation_undo() {
 	with(objEditor) {
 		if(operationPointer == -1) return;
-		var _ops = operationStack[operationPointer];
+		var _ops = operationStack[operationPointer].ops;
+		var _type = operationStack[operationPointer].type;
 		
 		note_select_reset();
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
-					operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp);
+					operation_do(OPERATION_TYPE.MOVE, _ops[i].toProp, _ops[i].fromProp, l > MAX_SELECTION_LIMIT);
 					break;
 				case OPERATION_TYPE.ADD:
 					operation_do(OPERATION_TYPE.REMOVE, _ops[i].fromProp);
@@ -429,7 +524,7 @@ function operation_undo() {
 		
 		operationPointer--;
 		
-		announcement_play(i18n_get("undo", string(array_length(_ops))));
+		announcement_play(i18n_get("undo", operation_get_name(_type), string(array_length(_ops))));
 		note_sort_request();
 		// show_debug_message_safe("POINTER: "+ string(operationPointer));
 	}
@@ -440,13 +535,14 @@ function operation_redo() {
 	with(objEditor) {
 		if(operationPointer + 1 == operationCount) return;
 		operationPointer ++;
-		var _ops = operationStack[operationPointer];
+		var _ops = operationStack[operationPointer].ops;
+		var _type = operationStack[operationPointer].type;
 		note_select_reset();
 		for(var i=0, l=array_length(_ops); i<l; i++) {
 			switch(_ops[i].opType) {
 				case OPERATION_TYPE.MOVE:
 				case OPERATION_TYPE.TPCHANGE:
-					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp);
+					operation_do(_ops[i].opType, _ops[i].fromProp, _ops[i].toProp, l > MAX_SELECTION_LIMIT);
 					break;
 				case OPERATION_TYPE.ADD:
 					var _inst = operation_do(OPERATION_TYPE.ADD, _ops[i].fromProp);
@@ -464,40 +560,37 @@ function operation_redo() {
 			}
 		}
 		
-		announcement_play(i18n_get("redo", string(array_length(_ops))));
+		announcement_play(i18n_get("redo", operation_get_name(_type), string(array_length(_ops))));
 		note_sort_request();
 	}
 }
 
 /// @description Merge last operations to one operation.
 /// @param {Real} count The number of last operations to merge.
-function operation_merge_last(count) {
-	// show_debug_message($"Merge last {count} operations.");
-	if(count <= 1) {
-		show_debug_message("[Warning] At least merge 2 operations.");
-		return;
-	}
+/// @param {Enum.OPERATION_TYPE} type The type of the merged operations.
+function operation_merge_last(count, type) {
 	with(objEditor) {
 		var _new_ops = [];
 		for(var i=0; i<count; i++) {
-			_new_ops = array_concat(_new_ops, operationStack[operationPointer - i]);
+			_new_ops = array_concat(_new_ops, operationStack[operationPointer - i].ops);
 		}
 		operationPointer -= count - 1;
 		operationCount = operationPointer + 1;
-		operationStack[operationPointer] = _new_ops;
+		operationStack[operationPointer] = {
+			type: type,
+			ops: _new_ops
+		};
 	}
 }
 
 /// @description Send requests to merge the last new operations from now on.
 /// @param {Real} count The number of last operations to merge.
-function operation_merge_last_request(count) {
-	if(count <= 1) {
-		show_debug_message("[Warning] At least merge 2 operations.");
-		return;
-	}
+/// @param {Enum.OPERATION_TYPE} type The type of the merged operations.
+function operation_merge_last_request(count, type) {
 	with(objEditor) {
 		operationMergeLastRequestCount = 0;
 		operationMergeLastRequest = count;
+		operationMergeLastRequestType = type;
 	}
 }
 
@@ -510,6 +603,11 @@ function operation_merge_last_request_revoke() {
 #endregion
 
 #region TIMING POINT FUNCTION
+
+// The number of timing points' count.
+function timing_point_count() {
+	return array_length(objEditor.timingPoints);
+}
 
 // Sort the "timingPoints" array
 function timing_point_sort() {
@@ -530,22 +628,20 @@ function timing_point_add(_t, _l, _b, record = false) {
 }
 
 function timing_point_create(record = false) {
-	var _time = undefined;
+	var _time = objMain.nowTime;
 	if(editor_select_count() == 1) {
 		var _ntime = 0;
 		with(objNote)
 			if(state == stateSelected)
 				_ntime = time;
-		var _ptp = timing_point_get_at(_ntime);
+		var _ptp = timing_point_get_at(_ntime, true);
 		if(_ptp != undefined) {
 			timing_point_change(_ptp, record);
 			return;
 		}
-		var _que = show_question_i18n(i18n_get("tpc_extra_question", string_format(_ntime, 1, 3)));
-		if(_que) _time = _ntime;
+		_time = _ntime;
 	}
-	if(is_undefined(_time))
-		_time = string_digits(get_string_i18n("tpc_q1", ""));
+	_time = string_digits(get_string_i18n("tpc_q1", string_format(_time, 1, 0)));
 	if(_time == "") return;
 	var _bpm = string_real(get_string_i18n("tpc_q2", ""));
 	if(_bpm == "") return;
@@ -657,12 +753,23 @@ function timing_fix(tpBefore, tpAfter) {
 	}
 }
 
-function timing_point_get_at(_time) {
+// To get current timing at [_time].
+/// @returns {Struct.sTimingPoint} 
+function timing_point_get_at(_time, _precise = false) {
 	with(objEditor) {
-		for(var i=0, l=array_length(timingPoints); i<l; i++)
-			if(abs(timingPoints[i].time-_time) <= 1)
-				return timingPoints[i];
-		return undefined;
+		if(array_length(timingPoints) == 0) return undefined;
+		/// @self Struct.sTimingPoint
+		var _ret = timingPoints[
+			max(array_upper_bound(
+				timingPoints,
+				_time,
+				function(array, at) { return array[at].time; }) - 1, 0)
+			];
+		
+		if(!_precise || abs(_time - _ret.time) < 5)
+			return _ret;
+		else
+			return undefined;
 	}
 }
 
@@ -759,7 +866,7 @@ function chart_randomize() {
 			width = random_range(0.5, 5);
 			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 		}
-		
+		operation_merge_last_request(1, OPERATION_TYPE.RANDOMIZE);
 	}
 	notes_array_update();
 	note_activation_reset();
@@ -825,6 +932,7 @@ function advanced_expr() {
 			
 		editorLastExpr = _expr;
 		
+		notes_array_update();
 		note_sort_all();
 		if(_global)
 			note_activation_reset();
@@ -833,7 +941,7 @@ function advanced_expr() {
 
 // Advanced divisor setter
 function editor_set_div() {
-	var _div = get_string_i18n("box_set_div", string(objEditor.get_div()));
+	var _div = get_string_i18n("box_set_div", string(editor_get_div()));
 	if(_div == "") return 0;
 	try {
 		_div = int64(_div);
@@ -848,6 +956,10 @@ function editor_set_div() {
 		return -1;
 	}
 	return 1;
+}
+
+function editor_get_div() {
+	return objEditor.get_div();
 }
 
 // error correction

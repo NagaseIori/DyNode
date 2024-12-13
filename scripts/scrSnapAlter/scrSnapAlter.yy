@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scrSnapAlter",
   "isCompatibility":false,
   "isDnD":false,

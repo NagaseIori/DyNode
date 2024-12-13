@@ -70,6 +70,7 @@
             with(objNote) if(state == stateSelected) {
                 operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
             }
+            operation_merge_last_request(1, OPERATION_TYPE.SETWIDTH);
         }
     }
     editorWidthAdjustTime = min(editorWidthAdjustTime, 10000);

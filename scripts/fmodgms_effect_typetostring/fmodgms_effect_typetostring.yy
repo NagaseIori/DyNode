@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"FMODGMS_Effect_TypeToString",
   "isCompatibility":false,
   "isDnD":false,

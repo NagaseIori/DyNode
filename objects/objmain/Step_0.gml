@@ -37,7 +37,7 @@ projectTime += round(delta_time / 1000);
     	background_reset();
     if(keycheck_down(vk_f5))
     	map_export_xml(false);
-    if(keycheck_down_ctrl(vk_f5))
+    if(keycheck_down_ctrl(vk_f5) || keycheck_down(vk_f6))
     	map_export_xml(true);
     if(keycheck_down(vk_f11))
     	switch_debug_info();
@@ -122,9 +122,14 @@ projectTime += round(delta_time / 1000);
     }
     
     if(mouse_check_button_pressed(mb_middle)) {
-    	showStats ++;
-    	showStats %= 3;
+		stat_next();
     }
+
+	if(keycheck(vk_delete) && keycheck(vk_backspace)) {
+		io_clear();
+		note_delete_all_manually();
+		announcement_play("clear_all_notes");
+	}
 
 #endregion
   

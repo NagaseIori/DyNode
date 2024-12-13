@@ -126,6 +126,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
 	    	}
+            operation_merge_last_request(1, OPERATION_TYPE.MIRROR);
 	    	announcement_play(i18n_get("notes_mirror", string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("M"))) {
@@ -133,10 +134,11 @@ editorSelectMultiple = editorSelectCount > 1;
 	    		if(state == stateSelected) {
 	    			var prop = get_prop();
 	    			prop.position = 5 - prop.position;
-	    			note_select_reset(true);
+	    			note_select_reset(id);
 	    			build_note_withprop(prop, true, true);
 	    		}
 	    	}
+            operation_merge_last_request(1, OPERATION_TYPE.MIRROR);
 	    	announcement_play(i18n_get("notes_mirror_copy", string(editor_select_count())));
 	    }
 	    if(keycheck_down(ord("R"))) {
@@ -151,6 +153,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	}
 	    	}
 	    	if(_found>0) {
+                operation_merge_last_request(1, OPERATION_TYPE.ROTATE);
 	    		announcement_play(i18n_get("notes_rotate", string(_found)));
                 if(!editor_lrside_get() && !objEditor.copyMultipleSides)
 	    		    editorSide = 1 + (!(editorSide - 1));
@@ -166,12 +169,13 @@ editorSelectMultiple = editorSelectCount > 1;
 		    		if(side > 0) {
 		    			var prop = get_prop();
 			    		prop.side = 1 + (!(prop.side - 1));
-			    		note_select_reset(true);
+			    		note_select_reset(id);
 			    		build_note_withprop(prop, true, true);
 			    		_found ++;
 			    	}
 	    	}
 	    	if(_found>0) {
+                operation_merge_last_request(1, OPERATION_TYPE.ROTATE);
 	    		announcement_play(i18n_get("notes_rotate_copy", string(_found)));
                 if(!editor_lrside_get() && !objEditor.copyMultipleSides)
 	    		    editorSide = 1 + (!(editorSide - 1));
@@ -187,6 +191,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    	width = editor_get_default_width();
 			    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 	    		}
+            operation_merge_last_request(1, OPERATION_TYPE.SETWIDTH);
 	    	announcement_play(i18n_get("notes_set_width", string_format(editor_get_default_width(), 1, 2),
 	    		string(editor_select_count())));
 	    }
@@ -200,6 +205,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		_prop.noteType = 0;
 			    		build_note_withprop(_prop, true, true);
 			    	}
+            operation_merge_last_request(1, OPERATION_TYPE.SETTYPE);
 			announcement_play(i18n_get("notes_set_type", "NOTE", string(editor_select_count())));
 	    }
 	    if(keycheck_down_ctrl(ord("2"))) {
@@ -212,8 +218,13 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		_prop.noteType = 1;
 			    		build_note_withprop(_prop, true, true);
 			    	}
+            operation_merge_last_request(1, OPERATION_TYPE.SETTYPE);
 			announcement_play(i18n_get("notes_set_type", "CHAIN", string(editor_select_count())));
 	    }
+
+        if(keycheck_down_ctrl(ord("D"))) {
+            edtior_note_quick_duplicate();
+        }
     }
     
         
@@ -360,7 +371,10 @@ editorSelectMultiple = editorSelectCount > 1;
                 }
             }
             
-            var _chg = keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
+            // Change the attaching notes' center.
+            var _chg = 0;
+            _chg += keycheck_down_ctrl(vk_right) - keycheck_down_ctrl(vk_left);
+            _chg += alt_ishold() * (mouse_wheel_up() - mouse_wheel_down());
             var _len = array_length(editorNoteAttaching);
             editorNoteAttachingCenter = (editorNoteAttachingCenter + _chg + _len) % _len; 
             if(copyMultipleSides && !editorLRSide)
@@ -410,13 +424,15 @@ editorSelectMultiple = editorSelectCount > 1;
         }
         else {
         	copyStack = _newCopyStack;
-        	if(cutRequest)
+        	if(cutRequest) {
 	            announcement_play(i18n_get("cut_notes", string(_cnt)));
+                operation_merge_last_request(1, OPERATION_TYPE.CUT);
+            }
 	        else if(copyRequest)
 	            announcement_play(i18n_get("copy_notes", string(_cnt)));
 	        else if(attachRequest) {
 	            editor_set_editmode(0);
-	            operation_merge_last_request(2);
+	            operation_merge_last_request(2, OPERATION_TYPE.ATTACH);
 	        }
         }
         

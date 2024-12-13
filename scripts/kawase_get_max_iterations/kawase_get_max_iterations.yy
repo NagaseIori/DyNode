@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"kawase_get_max_iterations",
   "isCompatibility":false,
   "isDnD":false,

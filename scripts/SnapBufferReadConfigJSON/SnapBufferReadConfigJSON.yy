@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"SnapBufferReadConfigJSON",
   "isCompatibility":false,
   "isDnD":false,

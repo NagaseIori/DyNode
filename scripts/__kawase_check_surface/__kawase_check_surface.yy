@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"__kawase_check_surface",
   "isCompatibility":false,
   "isDnD":false,

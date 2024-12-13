@@ -12,7 +12,17 @@ enum OPERATION_TYPE {
     TPADD,
     TPREMOVE,
     TPCHANGE,
-    OFFSET
+    OFFSET,
+    CUT, // special
+    ATTACH, // special
+    MIRROR, // special
+    ROTATE, // special
+    PASTE, // special
+    SETWIDTH, // special
+    SETTYPE, // special
+    RANDOMIZE, // special
+    DUPLICATE, // special
+    EXPR, // special
 }
 
 function sOperation(_type, _from, _to) constructor {

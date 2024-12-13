@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scrTrianglify",
   "isCompatibility":false,
   "isDnD":false,

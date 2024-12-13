@@ -1,0 +1,3 @@
+[submodule "DyCore"]
+	path = DyCore
+	url = https://github.com/NagaseIori/DyCore

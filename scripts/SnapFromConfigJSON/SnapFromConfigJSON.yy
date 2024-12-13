@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"SnapFromConfigJSON",
   "isCompatibility":false,
   "isDnD":false,

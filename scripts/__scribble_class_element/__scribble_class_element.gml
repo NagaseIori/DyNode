@@ -1,3 +1,4 @@
+// Feather disable all
 /// @param string
 /// @param uniqueID
 
@@ -257,7 +258,7 @@ function __scribble_class_element(_string, _unique_id) constructor
     
     /// @param halign
     /// @param valign
-    static align = function(_halign, _valign)
+    static align = function(_halign = __starting_halign, _valign = __starting_valign)
     {
         if (_halign == "pin_left"  ) _halign = __SCRIBBLE_PIN_LEFT;
         if (_halign == "pin_centre") _halign = __SCRIBBLE_PIN_CENTRE;
@@ -268,12 +269,16 @@ function __scribble_class_element(_string, _unique_id) constructor
         if (_halign != __starting_halign)
         {
             __model_cache_name_dirty = true;
+            __bbox_dirty             = true;
+            
             __starting_halign = _halign;
         }
         
         if (_valign != __starting_valign)
         {
             __model_cache_name_dirty = true;
+            __bbox_dirty             = true;
+            
             __starting_valign = _valign;
         }
         
@@ -395,6 +400,7 @@ function __scribble_class_element(_string, _unique_id) constructor
         if (__pre_scale != _scale)
         {
             __model_cache_name_dirty = true;
+            __bbox_dirty             = true;
             
             __pre_scale = _scale;
         }
@@ -638,7 +644,9 @@ function __scribble_class_element(_string, _unique_id) constructor
     
     static region_detect = function(_element_x, _element_y, _pointer_x, _pointer_y)
     {
-        var _model        = __get_model(true);
+        var _model = __get_model(true);
+        if (!is_struct(_model)) return undefined;
+        
         var _page         = _model.__pages_array[__page];
         var _region_array = _page.__region_array;
         
@@ -687,7 +695,9 @@ function __scribble_class_element(_string, _unique_id) constructor
             return;
         }
         
-        var _model        = __get_model(true);
+        var _model = __get_model(true);
+        if (!is_struct(_model)) return undefined;
+        
         var _page         = _model.__pages_array[__page];
         var _region_array = _page.__region_array;
         
@@ -1826,6 +1836,7 @@ function __scribble_class_element(_string, _unique_id) constructor
         __scale_to_box_dirty = false;
         
         var _model = __get_model(true);
+        if (!is_struct(_model)) return undefined;
         
         var _xscale = 1.0;
         var _yscale = 1.0;

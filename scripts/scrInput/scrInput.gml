@@ -4,11 +4,23 @@ function InputManager() constructor {
     #macro INPUT_MOUSE_HOLD_THRESHOLD 300 // Time Threshold to judge if the mouse inputs a hold
     #macro INPUT_MOUSE_DOUBLE_CLICK_THRESHOLD 500
     #macro INPUT_MOUSE_HOLD_DISTANCE_THRESHOLD 15 // Pixels to judge if the mouse inputs a hold
+    #macro INPUT_IO_RESET_TIME_THRESHOLD 75
+    #macro INPUT_LOCK_RESET_TIME_THRESHOLD 250
     
     // In-functions
+
+    static _io_fix = function() {
+        // Fix function keys not recognized when io is reset
+        var keyToFix = [vk_lcontrol, vk_rcontrol, vk_lalt, vk_ralt, vk_lshift, vk_rshift];
+        for(var i=0; i<array_length(keyToFix); i++)
+            if(keyboard_check_direct(keyToFix[i]))
+                keyboard_key_press(keyToFix[i])
+    }
     
     static _ioclear = function () {
         io_clear();
+        _io_fix();
+        _direct_state_unlock();
         last_mouse_x = 0;
         last_mouse_y = 0;
         
@@ -35,6 +47,15 @@ function InputManager() constructor {
         mouseHoldClear = true;
         array_fill(mouseHoldTime, 0, 0, 2);
     }
+
+    static _direct_state_lock = function() {
+        directStateLock = true;
+        directStateLockTimer = 0;
+    }
+    static _direct_state_unlock = function() {
+        directStateLock = false;
+        directStateLockTimer = 0;
+    }
     
     last_mouse_x = 0;
     last_mouse_y = 0;
@@ -58,19 +79,27 @@ function InputManager() constructor {
     
     // For Input Reset
     windowNFocusTime = 0;
-    windowNFocusTimeThreshold = 75;
     lowFrameRateFix = false;
     
     // For Input Group
     inputGroup = "default";     // used for changing a code block's input group
     checkGroup = "default";     // the focusing group
 
+    // For Direct State Lock
+    directStateLock = false;
+    directStateLockTimer = 0;
+
     _ioclear();
     
     static step = function () {
+        if(!keyboard_check(vk_anykey) || directStateLockTimer > INPUT_LOCK_RESET_TIME_THRESHOLD)
+            input_direct_state_unlock();
+        if(directStateLock)
+            directStateLockTimer += delta_time / 1000;
+
         windowNFocusTime = delta_time / 1000;
 
-        if(windowNFocusTime > windowNFocusTimeThreshold) {
+        if(windowNFocusTime > INPUT_IO_RESET_TIME_THRESHOLD) {
             if(!lowFrameRateFix) {
                 io_clear_diag();
                 
@@ -219,32 +248,54 @@ function mouse_clear_click() {
     global.__InputManager._pressclear();
 }
 
+function input_direct_state_lock() {
+    global.__InputManager._direct_state_lock();
+}
+
+function input_direct_state_unlock() {
+    global.__InputManager._direct_state_unlock();
+}
+
+function input_direct_state_lock_get() {
+    return global.__InputManager.directStateLock;
+}
+
 function ctrl_ishold() {
-    return keyboard_check_direct(vk_control);
+    return keyboard_check(vk_control);
 }
 function alt_ishold() {
-    return keyboard_check_direct(vk_alt);
+    return keyboard_check(vk_alt);
+}
+function ralt_ishold() {
+    return keyboard_check(vk_ralt);
 }
 function shift_ishold() {
-    return keyboard_check_direct(vk_shift);
+    return keyboard_check(vk_shift);
 }
 function nofunkey_ishold() {
     return !(ctrl_ishold()) && !(alt_ishold()) && !(shift_ishold());
 }
 function keycheck_ctrl(key) {
+    if(input_direct_state_lock_get()) return false;
     return ctrl_ishold() && keyboard_check(key);
 }
 function keycheck_down_ctrl(key) {
-    return ctrl_ishold() && keyboard_check_pressed(key);
+    var _result = ctrl_ishold() && keyboard_check_pressed(key);
+    if(_result) input_direct_state_lock();
+    return _result;
 }
 function keycheck_shift(key) {
+    if(input_direct_state_lock_get()) return false;
     return shift_ishold() && keyboard_check(key);
 }
 function keycheck_down_shift(key) {
-    return shift_ishold() && keyboard_check_pressed(key);
+    var _result = shift_ishold() && keyboard_check_pressed(key);
+    if(_result) input_direct_state_lock();
+    return _result;
 }
 
 function keycheck(key, nofun = true) {
+    if(input_direct_state_lock_get()) return false;
     return (nofunkey_ishold() || !nofun) && keyboard_check(key);
 }
 function keycheck_down(key, nofun = true) {

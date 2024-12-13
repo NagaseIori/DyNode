@@ -3,9 +3,9 @@ function safe_video_init() {
     with(objMain) {
         bgVideoSurf = surface_create(global.resolutionW, global.resolutionH);
         surface_clear(bgVideoSurf);
-        if(room_speed > VIDEO_UPDATE_FREQUENCY) {
+        if(room_speed > VIDEO_FREQUENCY) {
             timesourceUpdateVideo =
-        		time_source_create(time_source_game, 1/VIDEO_UPDATE_FREQUENCY, 
+        		time_source_create(time_source_game, 1/VIDEO_FREQUENCY, 
         		time_source_units_seconds,
         		function() {
         			if(bgVideoAlpha > EPS && nowPlaying && bgVideoDisplay)
