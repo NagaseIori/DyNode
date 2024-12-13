@@ -24,6 +24,7 @@ function i18n_init() {
     i18n_load("zh-cn");
     i18n_load("zh-tw");
     i18n_load("en-us");
+    i18n_load("ja-jp");
     
     i18n_set_lang("zh-cn");
 }

@@ -96,6 +96,7 @@
     {"$GMIncludedFile":"","%Name":"NotoSansCJKkr-Black.otf","CopyToMask":3035426170322551022,"filePath":"datafiles/fonts","name":"NotoSansCJKkr-Black.otf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"inigo quilez 2d sdf license.txt","CopyToMask":-1,"filePath":"datafiles","name":"inigo quilez 2d sdf license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"en-US.json","CopyToMask":-1,"filePath":"datafiles/lang","name":"en-US.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"ja-JP.json","CopyToMask":-1,"filePath":"datafiles/lang","name":"ja-JP.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"zh-cn.json","CopyToMask":-1,"filePath":"datafiles/lang","name":"zh-cn.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"zh-TW.json","CopyToMask":-1,"filePath":"datafiles/lang","name":"zh-TW.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"mDynamix.json","CopyToMask":-1,"filePath":"datafiles","name":"mDynamix.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
