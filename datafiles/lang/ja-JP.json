@@ -59,7 +59,7 @@
     "anno_music_speed": "音楽再生速度",
     "anno_note_speed": "ノート落下速度",
     "anno_note_speed_warn": "現在の落下速度は x0.2 です。あまりに低い速度はパフォーマンス問題を引き起こす可能性があります。",
-    "anno_switch_theme_to": "テーマを切り替えました：",
+    "anno_switch_theme_to": "テーマを切り替えました",
     "anno_export_complete": "譜面のエクスポートが完了しました。",
     "anno_export_failed": "譜面のエクスポートに失敗しました。",
     "anno_music_load_complete": "音楽読み込みが完了しました。",
