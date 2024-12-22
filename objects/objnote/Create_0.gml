@@ -184,6 +184,7 @@ image_yscale = global.scaleYAdjust;
 	        }
 	        var _shadow = objShadow;
 	        
+            /// @self Id.Instance.objShadow
 	        var _inst = instance_create_depth(_x, _y, -100, _shadow), _scl = 1;
 	        _inst.nowWidth = pWidth;
 	        _inst.visible = true;
