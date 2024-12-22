@@ -280,25 +280,6 @@ function note_activate(inst) {
 	instance_activate_object(inst);
 }
 
-//! Deprecated
-function note_deactivate_flush() {
-	// return;
-	with(objMain) {
-		var q=deactivationQueue;
-		var k=ds_map_find_first(q), s=ds_map_size(q);
-		if(s)
-			show_debug_message_safe("DEACTIVATED "+string(s)+" NOTES.");
-		for(; s>0; s--) {
-			if(instance_exists(k.sinst))
-				instance_deactivate_object(k.sinst);
-			instance_deactivate_object(k);
-			k=ds_map_find_next(q, k);
-		}
-		
-		ds_map_clear(q);
-	}
-}
-
 function note_select_reset(inst = undefined) {
 	if(inst == undefined) inst = objNote;
 	/// @self Id.Instance.objNote
