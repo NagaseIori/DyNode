@@ -303,7 +303,7 @@ function edtior_note_quick_duplicate() {
 	var minTime = 0x7fffffff;
 	with(objNote) {
 		if(state == stateSelected) {
-			maxTime = max(maxTime, time);
+			maxTime = max(maxTime, time + lastTime);
 			minTime = min(minTime, time);
 		}
 	}
