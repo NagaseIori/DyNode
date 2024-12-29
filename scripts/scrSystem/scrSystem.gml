@@ -1019,7 +1019,7 @@ function project_get_settings() {
 }
 
 function project_set_settings(str) {
-	editor_set_editmode(str.editmode);
+	editor_set_editmode(str.editmode == 0 ? 3: str.editmode);
 	if(str.editmode < 5)
 		editor_set_editside(str.editside);
 	with(objEditor) {
@@ -1078,6 +1078,7 @@ function project_new() {
 
 function project_auto_save() {
 	if(!instance_exists(objMain)) return;
+	if(editor_get_editmode() == 0) return;		// If in copy mode, skip this autosave.
 	with(objManager) {
 		if(projectPath != "") {
 			autosaving = true;

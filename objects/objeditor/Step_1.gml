@@ -231,11 +231,13 @@ editorSelectMultiple = editorSelectCount > 1;
     editorGridWidthEnabled = !ctrl_ishold();
     
     // Editor Side Switch
-    if(keycheck_down(vk_up)) {
+    if(keycheck_down(vk_up)) {      // Now only switch between front and dual-sides
         if(editorLRSide)
             editor_set_editside(0);
+        else if(editor_get_editside() != 0)
+            editor_set_editside(0);
         else
-            editor_set_editside((editor_get_editside() + 1) % 4);
+            editor_set_editside(3);
     }
     if(editorLRSide && !editorLRSideLock && !editor_select_is_area()) {
         editorSide = mouse_x*2 < global.resolutionW? 1:2;
