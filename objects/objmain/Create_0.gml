@@ -144,8 +144,6 @@ depth = 0;
     adtimeSpeed = 50.0; // Use AD to Adjust Time ms per frame
     scrolltimeSpeed = 120.0; // Use mouse scroll to Adjust Time ms per frame
     
-    particlesEnabled = true;
-    
     animSpeed = 0.3;
     animTargetTime = 0;
     animTargetPlaybackSpeed = playbackSpeed;
