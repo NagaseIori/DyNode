@@ -112,7 +112,7 @@ image_yscale = global.scaleYAdjust;
         if(!objMain.nowPlaying && !_force)
             return;
         
-        if(!objMain.particlesEnabled)
+        if(!global.particleEffects)
             return;
         
         // Emit Particles

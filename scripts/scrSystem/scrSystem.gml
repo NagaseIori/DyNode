@@ -1013,7 +1013,6 @@ function project_get_settings() {
 		mainvol: objMain.volume_get_main(),
 		pitchshift: objMain.usingPitchShift,
 		beatlineAlpha: objEditor.animBeatlineTargetAlpha,
-		particlesEnabled: objMain.particlesEnabled,
 		editorSelectMultiSidesBinding: objEditor.editorSelectMultiSidesBinding
 	};
 }
@@ -1051,9 +1050,6 @@ function project_set_settings(str) {
 	}
 	if(variable_struct_exists(str, "beatlineAlpha")) {
 		objEditor.animBeatlineTargetAlpha = str.beatlineAlpha;
-	}
-	if(variable_struct_exists(str, "particlesEnabled")) {
-		objMain.particlesEnabled = str.particlesEnabled;
 	}
 	if(variable_struct_exists(str, "editorSelectMultiSidesBinding")) {
 		objEditor.editorSelectMultiSidesBinding = str.editorSelectMultiSidesBinding;
@@ -1318,6 +1314,7 @@ function load_config() {
 	_check_set(_con, "VIDEO_UPDATE_FREQUENCY");
 	_check_set(_con, "autoSaveTime");
 	_check_set(_con, "analytics");
+	_check_set(_con, "particleEffects");
 	// Clamp the offset correction.
 	global.offsetCorrection = max(0, global.offsetCorrection)
 	global.autoSaveTime = max(1, global.autoSaveTime);
@@ -1359,6 +1356,7 @@ function save_config() {
 		VIDEO_UPDATE_FREQUENCY: global.VIDEO_UPDATE_FREQUENCY,
 		autoSaveTime: global.autoSaveTime,
 		analytics: global.analytics,
+		particleEffects: global.particleEffects
 	}, true));
 	
 }

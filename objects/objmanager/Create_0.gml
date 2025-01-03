@@ -53,6 +53,7 @@ global.lastCheckedVersion = "";
 global.VIDEO_UPDATE_FREQUENCY = 60;
 global.autoSaveTime = 60 * 3;
 global.analytics = true;
+global.particleEffects = true;
 
 // Themes Init
 
