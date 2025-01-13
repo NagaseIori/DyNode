@@ -247,11 +247,7 @@ function map_import_dym(_file, _direct = false) {
     // Initialize global bar info
     if(_import_tp) {
     	with(objMain) {
-    		chartBarPerMin = _barpm;
-    		chartBeatPerMin = _barpm * 4;
-    		chartBarOffset = _offset;
     		chartTimeOffset = bar_to_time(_offset);
-    		chartBarUsed = true;
     	}
     }
     
@@ -400,6 +396,7 @@ function map_import_dyn(_file) {
     var _import_tp = show_question_i18n("box_q_import_bpm");
     
 	var _buf = buffer_load(_file);
+	/// @type {Any} 
     var _str = __dyn_read_buffer(_buf);
 	buffer_delete(_buf);
     
@@ -589,8 +586,8 @@ function map_export_xml(_export_to_dym) {
     notes_reallocate_id();
     note_extra_sub_removal();
 	notes_array_update();				// Sync main notes array
-	// Force reset all bar settings
-	timing_point_sync_with_chart_prop();
+	// Init the xml export variables.
+	_setup_xml_compability_variables();
 
 	var _fix_dec = false;
     var _fix_error = _export_to_dym? false:show_question(i18n_get("export_fix_error_question", global.offsetCorrection));
@@ -698,45 +695,9 @@ function map_export_xml(_export_to_dym) {
 function map_get_struct_without_notes() {
 	var _str = {
 		title: objMain.chartTitle,
-		bpm: objMain.chartBeatPerMin,
-		barpm: objMain.chartBarPerMin,
 		difficulty: objMain.chartDifficulty,
 		sidetype: objMain.chartSideType,
-		barused: objMain.chartBarUsed,
 		notes: []
-	}
-	
-	return _str;
-}
-
-//! Deprecating
-function map_get_struct() {
-	var _arr = [];
-	
-	with(objMain) {
-		var i=0, l=chartNotesCount, _inst;
-		for(; i<l; i++) {
-			var _str = chartNotesArray[i];
-			if(_str.noteType != 3)
-				array_push(_arr, {
-					width : _str.width,
-					side : _str.side,
-					noteType : _str.noteType,
-					position : _str.position,
-					time : _str.time,
-					lastTime : _str.lastTime,
-				});
-		}
-	}
-	
-	var _str = {
-		title: objMain.chartTitle,
-		bpm: objMain.chartBeatPerMin,
-		barpm: objMain.chartBarPerMin,
-		difficulty: objMain.chartDifficulty,
-		sidetype: objMain.chartSideType,
-		barused: objMain.chartBarUsed,
-		notes: _arr
 	}
 	
 	return _str;
@@ -750,14 +711,6 @@ function map_load_struct(_str, _import_info = true, _import_tp = true) {
 			chartTitle = _str.title;
 			chartDifficulty = _str.difficulty;
 			chartSideType = _str.sidetype;
-		}
-		
-		if(_import_tp) {
-			chartBeatPerMin = _str.bpm;
-			chartBarPerMin = _str.barpm;
-			
-			if(variable_struct_exists(_str, "barused"))
-				chartBarUsed = _str.barused;
 		}
 	}
 	
@@ -935,6 +888,7 @@ function project_save_as(_file = "") {
 			charts: [],
 			settings: project_get_settings()
 		};
+		// DyCore will add the notes array to the contents.
 		_contents.charts = map_get_struct_without_notes();
 	
 		objManager.projectPath = _file;

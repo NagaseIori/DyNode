@@ -109,11 +109,10 @@ depth = 0;
 #region Chart Vars
 
     chartTitle = "Last Train at 25 O'Clock"
-    chartBeatPerMin = 180;
-    chartBarPerMin = 180/4;
-    chartBarOffset = 0;
-    chartTimeOffset = 0;
-    chartBarUsed = false;
+    chartBeatPerMin = 180;      // For xml export.
+    chartBarPerMin = 180/4;     // For xml export.
+    chartBarOffset = 0;         // For xml export.
+    chartTimeOffset = 0;        // For xml export.
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";

@@ -823,33 +823,17 @@ function timing_point_reset() {
 }
 
 // For Compatibility
-function timing_point_sync_with_chart_prop(_force_sync = true, _force_reset = true) {
+function _setup_xml_compability_variables() {
 	if(array_length(objEditor.timingPoints) == 0)
 		return false;
 	with(objMain) {
-		var _q = _force_reset? true:show_question_i18n("bar_calibration_question");
-		
-		if(_force_sync || _q) {
-			chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
-			chartBarPerMin = chartBeatPerMin / 4;
-		}
-		
-		if(_q) {
-			chartTimeOffset = -objEditor.timingPoints[0].time;
-			chartBarOffset = time_to_bar(chartTimeOffset);
-			chartBarUsed = true;
+		// These variables only for xml export.
+		chartBeatPerMin = mspb_to_bpm(objEditor.timingPoints[0].beatLength);
+		chartBarPerMin = chartBeatPerMin / 4;
+		chartTimeOffset = -objEditor.timingPoints[0].time;
+		chartBarOffset = time_to_bar(chartTimeOffset);
 			
-			// Deprecated
-			// announcement_play(i18n_get("bar_calibration_complete", chartBarPerMin, chartBarOffset));
-			
-			return true;
-		}
-		else if(_force_sync) {
-			chartTimeOffset = 0;
-			chartBarOffset = 0;
-		}
-		
-		return false;
+		return true;
 	}
 }
 
