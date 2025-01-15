@@ -32,8 +32,6 @@
                 animBeatlineTargetAlpha[i] = 0;
             beatlineAlpha[i] = lerp_a(beatlineAlpha[i], min(animBeatlineTargetAlpha[i], 1), animSpeed);
         }
-            
-        
         
         for(var i=0; i<=28; i++)
             beatlineEnabled[i] = 0;
