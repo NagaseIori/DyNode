@@ -47,7 +47,8 @@ if(editor_get_editmode() <= 4){
     }
     if(state == stateSelected) {
         var _selected_single_inbound = objEditor.editorSelectedSingleInbound == id;
-    	if((editor_select_is_area() && editor_select_inbound(x, y, side, noteType)) || _selected_single_inbound)
+        var _unselection_hint = _selected_single_inbound && objEditor.editorSelectSingleTargetInbound < 0;
+    	if((editor_select_is_area() && editor_select_inbound(x, y, side, noteType)) || _unselection_hint)
     		_col = scribble_rgb_to_bgr(0xff1744);
     	else 
         	_col = c_white;

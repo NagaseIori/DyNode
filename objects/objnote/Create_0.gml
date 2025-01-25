@@ -728,13 +728,6 @@ image_yscale = global.scaleYAdjust;
             }
 		    if(_timechg != 0 || _poschg != 0)
                 operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-            
-            // If single click then unselect self.
-            if(mouse_isclick_l() && _mouse_inbound_check() && ctrl_ishold()) {
-                state = stateNormal;
-                state();
-                return;
-            }
         }
         
         function draw_event() {

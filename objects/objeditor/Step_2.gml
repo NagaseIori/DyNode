@@ -2,7 +2,19 @@
 
 if(editorMode == 4) {
     // If the note being selected selectable
-    var _selectable = instance_exists(editorSelectSingleTarget) && !editorSelectInbound;
+    var _selectable = instance_exists(editorSelectSingleTarget);
+    if(_selectable) {
+        with(editorSelectSingleTarget)
+            _selectable = _selectable && state != stateSelected;
+    }
+
+    // If the single note being unselected unselectable1
+    var _unselectable = instance_exists(editorSelectedSingleInbound) && mouse_isclick_l() && ctrl_ishold() && !_selectable;
+    if(_unselectable) {
+        with(editorSelectedSingleInbound)
+            _unselectable = _unselectable && state == stateSelected && _mouse_inbound_check();
+    }
+
     // Detect if the mouse is dragging to enable selecting area
     if(!instance_exists(editorSelectSingleTarget) && !editorSelectArea 
         && mouse_ishold_l() && !editorSelectInbound && !editorSelectDragOccupied && !editorSelectSingleTargetInbound) {
@@ -39,9 +51,16 @@ if(editorMode == 4) {
     
     // Select a note
     if(_selectable)
-        /// @self Id.Instance.objNote
         with(editorSelectSingleTarget) {
             state = stateSelected;
+            mouse_clear_click();
+            state();
+        }
+    
+    // Unselect a note
+    if(_unselectable)
+        with(editorSelectedSingleInbound) {
+            state = stateNormal;
             mouse_clear_click();
             state();
         }
