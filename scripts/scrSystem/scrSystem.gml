@@ -1269,6 +1269,7 @@ function load_config() {
 	_check_set(_con, "autoSaveTime");
 	_check_set(_con, "analytics");
 	_check_set(_con, "particleEffects");
+	_check_set(_con, "PROJECT_COMPRESSION_LEVEL");
 	// Clamp the offset correction.
 	global.offsetCorrection = max(0, global.offsetCorrection)
 	global.autoSaveTime = max(1, global.autoSaveTime);
@@ -1310,7 +1311,8 @@ function save_config() {
 		VIDEO_UPDATE_FREQUENCY: global.VIDEO_UPDATE_FREQUENCY,
 		autoSaveTime: global.autoSaveTime,
 		analytics: global.analytics,
-		particleEffects: global.particleEffects
+		particleEffects: global.particleEffects,
+		PROJECT_COMPRESSION_LEVEL: global.PROJECT_COMPRESSION_LEVEL
 	}, true));
 	
 }
