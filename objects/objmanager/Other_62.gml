@@ -53,7 +53,13 @@ if (async_load[? "id"] == _update_download_event_handle) {
 		if(string_char_at(_hstatus, 1) != "2")
 			_err = true;
 		else {
-			start_update_unzip();
+			var _bfile = file_bin_open(UPDATE_TARGET_FILE, 0);
+			var _filesize = file_bin_size(_bfile);
+			// Check the file integrity to prevent corrupted file.
+			if(_filesize < 100)
+				_err = true;
+			else
+				start_update_unzip();
 		}
 	}
 	else if(status < 0) {
