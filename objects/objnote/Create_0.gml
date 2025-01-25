@@ -719,7 +719,7 @@ image_yscale = global.scaleYAdjust;
 		    var _timechg = (keycheck_down_ctrl(vk_up) - keycheck_down_ctrl(vk_down)) * (shift_ishold() ? 5: 1);
 		    
 		    if(_timechg != 0 || _poschg != 0)
-		    	origProp = get_prop();
+                origProp = get_prop();
 		    time += _timechg;
 		    position += _poschg;
 		    if(_timechg != 0) {
@@ -727,8 +727,14 @@ image_yscale = global.scaleYAdjust;
 		    	note_sort_request();
             }
 		    if(_timechg != 0 || _poschg != 0)
-		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-		    	
+                operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+            
+            // If single click then unselect self.
+            if(mouse_isclick_l() && _mouse_inbound_check() && ctrl_ishold()) {
+                state = stateNormal;
+                state();
+                return;
+            }
         }
         
         function draw_event() {

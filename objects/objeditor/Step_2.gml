@@ -39,8 +39,10 @@ if(editorMode == 4) {
     
     // Select a note
     if(_selectable)
+        /// @self Id.Instance.objNote
         with(editorSelectSingleTarget) {
             state = stateSelected;
+            mouse_clear_click();
             state();
         }
     
@@ -58,7 +60,6 @@ if(editorMode == 4) {
                     }
             }
         }
-        
     }
 }
 
