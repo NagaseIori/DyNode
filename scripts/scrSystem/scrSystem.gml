@@ -704,8 +704,6 @@ function map_get_struct_without_notes() {
 }
 
 function map_load_struct(_str, _import_info = true, _import_tp = true) {
-	note_delete_all();
-	
 	with(objMain) {
 		if(_import_info) {
 			chartTitle = _str.title;
