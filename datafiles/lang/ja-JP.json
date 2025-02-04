@@ -191,6 +191,7 @@
     "ops_name_expr": "式実行",
     "version_higher": "DyNodeはバージョン $0 に更新されました。",
     "version_lower": "DyNodeはバージョン $0 にダウングレードされました。\n古いバージョンへのロールバックでは一部設定が失われたり、新バージョン譜面が正しく読み込めない可能性があります。",
-    "clear_all_notes": "すべてのノートを削除しました。"
+    "clear_all_notes": "すべてのノートを削除しました。",
+    "anno_dycore_error": "程序核心出现错误。\n错误信息: $0"
   }
 }
