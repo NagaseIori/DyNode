@@ -191,6 +191,7 @@
     "ops_name_expr": "執行表達式",
     "version_higher": "DyNode 已更新至版本 $0。",
     "version_lower": "DyNode 已降級至版本 $0。\n回退至較舊版本可能會導致部分設定遺失，且可能無法正常讀取較新版本的譜面。",
-    "clear_all_notes": "已清除全部音符。"
+    "clear_all_notes": "已清除全部音符。",
+    "anno_dycore_error": "程序核心出现错误。\n错误信息: $0"
   }
 }
