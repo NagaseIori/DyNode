@@ -697,6 +697,10 @@ function map_get_struct_without_notes() {
 		title: objMain.chartTitle,
 		difficulty: objMain.chartDifficulty,
 		sidetype: objMain.chartSideType,
+		
+		bpm: 0,			// ! Deprecated
+		barpm: 0,		// ! Deprecated
+		barused: 0,		// ! Deprecated
 		notes: []
 	}
 	
