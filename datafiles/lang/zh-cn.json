@@ -42,7 +42,7 @@
     "autoupdate_process_err_2": "解压更新文件时出错。更新中止。",
     "anno_project_load_complete": "打开项目完毕。",
     "anno_project_save_complete": "项目保存完毕。",
-    "anno_project_save_failed": "项目保存失败。",
+    "anno_project_save_failed": "项目保存失败。错误信息: $0",
     "anno_prefix_warn": "警告",
     "anno_prefix_err": "错误",
     "anno_adjust_enabled": "开启",

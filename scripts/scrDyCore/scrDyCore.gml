@@ -22,7 +22,7 @@ function DyCoreManager() constructor {
                         announcement_play("anno_project_save_complete");
                 }
                 else {
-                    announcement_error("anno_project_save_failed");
+                    announcement_error(i18n_get("anno_project_save_failed", event[$ "message"]));
                 }
                 break;
             default:
