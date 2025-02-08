@@ -200,6 +200,13 @@ function map_import_dym(_file, _direct = false) {
 			_note_width = _arg_parser(_dy_format, _arr[i].m_width);
 			_note_subid = _arg_parser(_dy_format, _arr[i].m_subId);
 
+			_note_id = $"{_note_id}_{_side}";
+			_note_subid = $"{_note_subid}_{_side}";
+
+			if(struct_exists(_temp_note_map, _note_id)) {
+				throw $"Duplicate note id found. Note ID_Side: {_note_id}";
+				return;
+			}
 			_temp_note_map[$ _note_id] = {
 				type: _note_type,
 				bar: real(_note_time),
@@ -220,7 +227,7 @@ function map_import_dym(_file, _direct = false) {
 		show_debug_message(string(e));
 		return;
 	}
-	
+
 	var _imp_dym = false;
 	if(variable_struct_exists(_main, "m_argument")) {
 		if(variable_struct_exists(_main.m_argument, "m_bpmchange") && variable_struct_exists(_main.m_argument.m_bpmchange, "CBpmchange")) {
@@ -280,6 +287,7 @@ function map_import_dym(_file, _direct = false) {
     // Fix every note's & tp's time
     _offset = bar_to_time(_offset, _barpm);
 	var _note_ids = struct_get_names(_temp_note_map);
+	show_debug_message_safe($"Found {array_length(_note_ids)} notes.");
 	for(var j=0, _l=array_length(_note_ids); j<_l; j++) {
 		var _note = _temp_note_map[$ _note_ids[j]];
 		if(array_length(_tp_lists) > 1) {
