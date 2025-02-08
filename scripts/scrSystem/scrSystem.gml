@@ -140,6 +140,23 @@ function map_import_dym(_file, _direct = false) {
         _note_position, _note_width, _note_subid;
     var _barpm, _offset;
     var _tp_lists = [], _nbpm;
+
+	var _temp_note_map = {}, chartStruct = {
+		charts: {
+			title: "",
+			difficulty: 0,
+			sidetype: ["PAD", "PAD"],
+			notes: []
+		},
+		timingPoints: [],
+	};
+
+	var _noteType_conversion = function (_type) {
+		if(_type == "NORMAL") return 0;
+		if(_type == "CHAIN") return 1;
+		if(_type == "HOLD") return 2;
+		if(_type == "SUB") return 3;
+	}
     
     // Import Information & bpm
 	if(variable_struct_exists(_str, "DynamixMap")) {
@@ -150,25 +167,24 @@ function map_import_dym(_file, _direct = false) {
 		announcement_error("bad_xml_chart_format");
 		return;
 	}
+
+	// Acquire basic map infos.
     var _main = _str.CMap;
-    if(_import_info) {
-    	objMain.chartTitle = _arg_parser(_dy_format, _main.m_path);
-		if(variable_struct_exists(_main, "m_leftRegion"))
-    		objMain.chartSideType[0] = _arg_parser(_dy_format, _main.m_leftRegion);
-		else
-			objMain.chartSideType[0] = "PAD";
-		if(variable_struct_exists(_main, "m_rightRegion"))
-    		objMain.chartSideType[1] = _arg_parser(_dy_format, _main.m_rightRegion);
-		else
-			objMain.chartSideType[1] = "PAD";
-    	objMain.chartID = _arg_parser(_dy_format, _main.m_mapID);
-    }
+	chartStruct.charts.title = _arg_parser(_dy_format, _main.m_path);
+	if(variable_struct_exists(_main, "m_leftRegion"))
+		chartStruct.charts.sidetype[0] = _arg_parser(_dy_format, _main.m_leftRegion);
+	else
+		chartStruct.charts.sidetype[0] = "PAD";
+	if(variable_struct_exists(_main, "m_rightRegion"))
+		chartStruct.charts.sidetype[1] = _arg_parser(_dy_format, _main.m_rightRegion);
+	else
+		chartStruct.charts.sidetype[1] = "PAD";
+	var chartID = _arg_parser(_dy_format, _main.m_mapID);
     _barpm = real(_arg_parser(_dy_format, _main.m_barPerMin));
 	_offset = real(_arg_parser(_dy_format, _main.m_timeOffset));
 	
-	// Import 3 sides Notes
-	
-	var _import_fun = function (_dy_format, _arg_parser, _arr, _side) {
+	// Import 3 sides Notes.
+	var _import_fun = function (_dy_format, _arg_parser, _arr, _side, _temp_note_map) {
 		if(!variable_struct_exists(_arr, "m_notes"))
 			return;
 		_arr = _arr.m_notes;
@@ -183,22 +199,22 @@ function map_import_dym(_file, _direct = false) {
 			_note_position = _arg_parser(_dy_format, _arr[i].m_position);
 			_note_width = _arg_parser(_dy_format, _arr[i].m_width);
 			_note_subid = _arg_parser(_dy_format, _arr[i].m_subId);
-			
-			if(_note_subid != "-1")
-				_note_subid += "_imported";
-			_note_id += "_imported";
-	
-			var _err = build_note(_note_id, _note_type, _note_time,
-	            _note_position, _note_width, _note_subid,
-	            _side, true);
-	        if(_err < 0) return;
+
+			_temp_note_map[$ _note_id] = {
+				type: _note_type,
+				bar: real(_note_time),
+				position: real(_note_position) + real(_note_width) / 2,		// Position fix
+				width: real(_note_width),
+				subid: _note_subid,
+				side: _side
+			};
 		}
 	}
 	
 	try {
-		_import_fun(_dy_format, _arg_parser, _main.m_notes, 0);
-		_import_fun(_dy_format, _arg_parser, _main.m_notesLeft, 1);
-		_import_fun(_dy_format, _arg_parser, _main.m_notesRight, 2);
+		_import_fun(_dy_format, _arg_parser, _main.m_notes, 0, _temp_note_map);
+		_import_fun(_dy_format, _arg_parser, _main.m_notesLeft, 1, _temp_note_map);
+		_import_fun(_dy_format, _arg_parser, _main.m_notesRight, 2, _temp_note_map);
 	} catch (e) {
 		announcement_error("error_dym_note_load_failed");
 		show_debug_message(string(e));
@@ -229,77 +245,83 @@ function map_import_dym(_file, _direct = false) {
 			}
 		}
 	}
-	
-    if(_import_info) {
-    	with(objMain) {
-	        // Reset to the beginning
-	        nowTime = 0;
-	        animTargetTime = nowTime;
-	        
-	        // Sort Notes Array base on time
-	        note_sort_all();
-	        
-	        // Get the chart's difficulty
-	        chartDifficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
-    	}
-    }
-    
-    // Initialize global bar info
-    if(_import_tp) {
-    	with(objMain) {
-    		chartTimeOffset = bar_to_time(_offset);
-    	}
-    }
+
+	chartStruct.charts.difficulty = difficulty_char_to_num(string_char_at(chartID, string_length(chartID)));
     
     // Import timing points info
-    if(_import_tp) {
-    	if(_imp_dym) {
-	    	var _rtime = bar_to_time(-_offset, _barpm);
-	    	for(var i=0, l=array_length(_tp_lists); i<l; i++) {
-	    		var _ntime = _tp_lists[i].time;
-	    		if(i>0)
-	    			_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
-	    		else
-	    			_ntime = _rtime;
-	    		_rtime = _ntime;
-	    		
-	    		timing_point_add(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4);
-	    	}
-	    }
-	    else {
-	    	timing_point_add(
-	            bar_to_time(-_offset, _barpm), bpm_to_mspb(_barpm*4), 4);
-	    }
-	    timing_point_sort();
-    }
+	if(_imp_dym) {
+		var _rtime = bar_to_time(-_offset, _barpm);
+		for(var i=0, l=array_length(_tp_lists); i<l; i++) {
+			var _ntime = _tp_lists[i].time;
+			if(i>0)
+				_ntime = bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm) + _rtime;
+			else
+				_ntime = _rtime;
+			_rtime = _ntime;
+			
+			array_push(
+				chartStruct.timingPoints,
+				new sTimingPoint(_ntime, bpm_to_mspb(_tp_lists[i].barpm*4), 4)
+			);
+		}
+	}
+	else {
+		array_push(
+			chartStruct.timingPoints,
+			new sTimingPoint(
+				bar_to_time(-_offset, _barpm),
+				bpm_to_mspb(_barpm*4),
+				4
+			)
+		);
+	}
+	timing_point_sort();
     
     // Fix every note's & tp's time
     _offset = bar_to_time(_offset, _barpm);
-    if(instance_exists(objNote)) {
-        with(objNote) {
-        	if(string_last_pos("_imported", nid) > 0) {
-        		
-        		if(array_length(_tp_lists) > 1) {
-        			var _ntime = bar;
-        			var _rtime = 0;
-	        		for(var i=1, l=array_length(_tp_lists); i<=l; i++) {
-	        			if(i == l || _tp_lists[i].time > _ntime) {
-	        				_rtime += bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
-	        				break;
-	        			}
-        				_rtime += bar_to_time(_tp_lists[i].time - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
-	        		}
-	        		time = _rtime;
-        		}
-        		else
-        			time = bar_to_time(bar, _barpm);    	 // Bar to Chart Time in ms
-        		
-	            time = time_to_mtime(time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)	            
-	            if(noteType == 2)
-	            	_prop_hold_update();			// Hold prop init
-        	}
-        }
-    }
+	var _note_ids = struct_get_names(_temp_note_map);
+	for(var j=0, _l=array_length(_note_ids); j<_l; j++) {
+		var _note = _temp_note_map[$ _note_ids[j]];
+		if(array_length(_tp_lists) > 1) {
+			var _ntime = _note.bar;
+			var _rtime = 0;
+			for(var i=1, l=array_length(_tp_lists); i<=l; i++) {
+				if(i == l || _tp_lists[i].time > _ntime) {
+					_rtime += bar_to_time(_ntime - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+					break;
+				}
+				_rtime += bar_to_time(_tp_lists[i].time - _tp_lists[i-1].time, _tp_lists[i-1].barpm);
+			}
+			_note.time = _rtime;
+		}
+		else
+			_note.time = bar_to_time(_note.bar, _barpm);    	 // Bar to Chart Time in ms
+		
+		_note.time = time_to_mtime(_note.time, _offset);         // Chart Time to Music Time in ms (Fix the offset to 0)
+	}
+
+	// Convert note maps to dyn format's note array.
+	for(var i=0, l=array_length(_note_ids); i<l; i++)
+	if(_temp_note_map[$ _note_ids[i]].type != "SUB")
+	{
+		var _note = _temp_note_map[$ _note_ids[i]];
+		_note.type = _noteType_conversion(_note.type);
+		var _convertedNote = {
+			side: _note.side,
+			time: _note.time,
+			noteType: _note.type,
+			lastTime: 0,
+			width: _note.width,
+			position: _note.position
+		};
+		if(_note.type == 2) {
+			_convertedNote.lastTime = _temp_note_map[$ _note.subid].time - _note.time;
+		}
+		array_push(chartStruct.charts.notes, _convertedNote);
+	}
+
+	// Import dyn format's chart struct.
+	map_import_dyn_struct(chartStruct, _import_info, _import_tp);
     
 	// Read background & image from .dy format.
     if(_import_info && _dy_format) {
@@ -400,15 +422,21 @@ function map_import_dyn(_file) {
     var _str = __dyn_read_buffer(_buf);
 	buffer_delete(_buf);
     
-    if(!is_struct(_str))
+    if(!is_struct(_str)) {
     	show_error("Load failed.", true);
+		return;
+	}
     
-    if(_import_tp) {
-    	objEditor.timingPoints = array_concat(objEditor.timingPoints, _str.timingPoints);
-    	timing_point_sort();
-    }
-    
-    map_load_struct(_str.charts, _import_info, _import_tp);
+	map_import_dyn_struct(_str, _import_info, _import_tp);
+}
+
+function map_import_dyn_struct(_str, _import_info, _import_tp) {
+	if(_import_tp) {
+		objEditor.timingPoints = array_concat(objEditor.timingPoints, _str.timingPoints);
+		timing_point_sort();
+	}
+	
+	map_load_struct(_str.charts, _import_info, _import_tp);
 }
 
 function map_set_title() {
