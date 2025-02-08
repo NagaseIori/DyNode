@@ -7,7 +7,11 @@ if((drawVisible || nodeAlpha > EPS || infoAlpha > EPS) && editor_get_editmode() 
 	if(nodeAlpha>EPS) {
 		CleanRectangleXYWH(x, y, nodeRadius, nodeRadius)
 			.Rounding(5)
-			.Blend(merge_color(nodeColor, c_fuchsia, nodeBorderAlpha * 0.8), nodeAlpha)
+			.Blend(merge_color(
+				nodeColor, 
+				unselectHint ? scribble_rgb_to_bgr(0xff1744) : c_fuchsia,
+				nodeBorderAlpha * 0.8), 
+				nodeAlpha)
 			.Draw();
 	}
     
