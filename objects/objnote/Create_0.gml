@@ -254,10 +254,10 @@ image_yscale = global.scaleYAdjust;
     	if(record)
     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
     	
-    	update_prop();
+    	push_prop();
     }
     
-    function update_prop() {
+    function push_prop() {
         if(!is_struct(arrayPointer)) {
             return;
         }
@@ -275,7 +275,7 @@ image_yscale = global.scaleYAdjust;
         DyCore_modify_note(json_stringify(arrayPointer));
     }
 
-    function pull_prop() {
+    function fetch_prop() {
         if(!is_struct(arrayPointer)) return;
     	time = arrayPointer.time;
     	side = arrayPointer.side;
@@ -283,7 +283,6 @@ image_yscale = global.scaleYAdjust;
     	position = arrayPointer.position;
     	lastTime = arrayPointer.lastTime;
     	noteType = arrayPointer.noteType;
-    	inst = arrayPointer.id;
     	sinst = arrayPointer.sinst;
     	beginTime = arrayPointer.beginTime;
     	lastAttachBar = arrayPointer.lastAttachBar;
@@ -616,7 +615,7 @@ image_yscale = global.scaleYAdjust;
                     with(objNote) {
                     	if(state == stateSelected) {
                     		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-                            update_prop();
+                            push_prop();
                     	}
                     	
                     	note_outscreen_check();
@@ -680,6 +679,8 @@ image_yscale = global.scaleYAdjust;
                             sinst.time = (ctrl_ishold() || editor_select_is_multiple()) ? time + origLength : origSubTime;
                             _prop_hold_update();
                         }
+
+                        push_prop();        // Sync to backend.
                     }
                 }
             } else {
@@ -724,7 +725,7 @@ image_yscale = global.scaleYAdjust;
 		    time += _timechg;
 		    position += _poschg;
 		    if(_timechg != 0) {
-                update_prop();
+                push_prop();
 		    	note_sort_request();
             }
 		    if(_timechg != 0 || _poschg != 0)

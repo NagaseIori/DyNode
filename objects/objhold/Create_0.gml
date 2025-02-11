@@ -44,7 +44,7 @@ _prop_init();
 		    	sinst.time = time + fixedLastTime;
 		    
 		    sinst.beginTime = time;
-		    sinst.update_prop();
+		    sinst.push_prop();
     
     		subFading = false;
 		    pHeight = max(0, objMain.playbackSpeed * 
@@ -56,7 +56,7 @@ _prop_init();
 		    }
 		    lastTime = sinst.time - time;
 		    lastTime = max(lastTime, 1);
-			update_prop();
+			push_prop();
         }
     }
     

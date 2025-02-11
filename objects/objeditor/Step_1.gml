@@ -124,6 +124,7 @@ editorSelectMultiple = editorSelectCount > 1;
 	    			origProp = get_prop();
 	    			position = 5 - position;
 	    			operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
+                    push_prop();
 	    		}
 	    	}
             operation_merge_last_request(1, OPERATION_TYPE.MIRROR);
@@ -150,6 +151,7 @@ editorSelectMultiple = editorSelectCount > 1;
 			    		side = 1 + (!(side - 1));
 			    		operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
 			    		_found ++;
+                        push_prop();
 			    	}
 	    	}
 	    	if(_found>0) {

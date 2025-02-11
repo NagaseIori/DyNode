@@ -1,3 +1,5 @@
+fetch_prop();
+
 _prop_init();
 
 if(state == undefined)
@@ -13,7 +15,7 @@ selectInbound = editor_select_is_area() && editor_select_inbound(x, y, side, not
 selectTolerance = selectInbound || state == stateSelected;
 
 state();
-update_prop();
+push_prop();
 
 selectUnlock = false;
 

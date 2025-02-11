@@ -3,4 +3,4 @@
 event_inherited();
 
 _prop_hold_update();
-update_prop();
+push_prop();

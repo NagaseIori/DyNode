@@ -219,7 +219,7 @@ function notes_array_update() {
 		chartNotesCount = array_length(chartNotesArray);
 		var i=0, l=chartNotesCount;
 		for(; i<l; i++) if(chartNotesArray[i].time != INF) {
-			chartNotesArray[i].inst.update_prop();
+			chartNotesArray[i].inst.push_prop();
 			chartNotesArray[i].inst.arrayPos = i;
 		}
 	}
