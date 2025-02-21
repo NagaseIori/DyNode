@@ -866,8 +866,13 @@ function advanced_expr() {
 		var _using_bar = string_last_pos(_expr, "bar");
 		var _success = 1;
 		
+		/// @type {Array<Id.Instance.objNote>} 
+		var _target_notes = [];
+
 		if(_global)
-			instance_activate_all();
+			_target_notes = objMain.chartNotesArray;
+		else
+			_target_notes = objEditor.editorSelectedNotesArray;
 		
 		with(objNote) {
 			if(noteType != 3)

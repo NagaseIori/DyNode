@@ -10,10 +10,15 @@ editorSelectDragOccupied = false;
 editorSelectInbound = false;
 
 editorSelectCount = 0;
+
+array_resize(editorSelectedNotesArray, 0);
+
 var _note_found = false;
 with(objNote) {
     var _hl = false;
     if(state == stateSelected) {
+        array_push(objEditor.editorSelectedNotesArray, id);
+
         objEditor.editorSelectCount ++;
         objEditor.editorSelectInbound |= _mouse_inbound_check() || _mouse_inbound_check(1);
         objEditor.editorSelectOccupied = 1;

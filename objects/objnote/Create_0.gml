@@ -256,6 +256,11 @@ image_yscale = global.scaleYAdjust;
     	
     	push_prop();
     }
+
+    /// @param {Struct.sNote} prop Binding note class.
+    function bind_prop(prop) {
+        arrayPointer = prop;
+    }
     
     function push_prop() {
         if(!is_struct(arrayPointer)) {
@@ -268,7 +273,6 @@ image_yscale = global.scaleYAdjust;
     	arrayPointer.lastTime = lastTime;
     	arrayPointer.noteType = noteType;
     	arrayPointer.inst = id;
-    	arrayPointer.sinst = sinst;
     	arrayPointer.beginTime = beginTime;
     	arrayPointer.lastAttachBar = lastAttachBar;
 
@@ -283,7 +287,6 @@ image_yscale = global.scaleYAdjust;
     	position = arrayPointer.position;
     	lastTime = arrayPointer.lastTime;
     	noteType = arrayPointer.noteType;
-    	sinst = arrayPointer.sinst;
     	beginTime = arrayPointer.beginTime;
     	lastAttachBar = arrayPointer.lastAttachBar;
     }

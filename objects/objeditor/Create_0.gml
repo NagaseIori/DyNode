@@ -49,6 +49,10 @@ editorSelectResetRequest = false;
 editorSelectedSingleInbound = -999;         // Selected single note mouse inbound checker
 /// @type {Id.Instance.objNote} 
 editorSelectedSingleInboundLast = -999;         // Selected single note mouse inbound checker
+
+/// @type {Array<Id.Instance.objNote>}
+editorSelectedNotesArray = [];              // Selected notes pointer array.
+
 editorNoteSortRequest = false;
 
 editorHighlightLine = false;
