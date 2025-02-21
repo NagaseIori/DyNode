@@ -109,11 +109,10 @@ depth = 0;
 #region Chart Vars
 
     chartTitle = "Last Train at 25 O'Clock"
-    chartBeatPerMin = 180;
-    chartBarPerMin = 180/4;
-    chartBarOffset = 0;
-    chartTimeOffset = 0;
-    chartBarUsed = false;
+    chartBeatPerMin = 180;      // For xml export.
+    chartBarPerMin = 180/4;     // For xml export.
+    chartBarOffset = 0;         // For xml export.
+    chartTimeOffset = 0;        // For xml export.
     chartDifficulty = 0;
     chartSideType = ["MIXER", "MULTI"];
     chartID = "";
@@ -241,7 +240,7 @@ depth = 0;
             
             part_type_speed(_pt, _scl * 10 * global.fpsAdjust
                             , _scl * 30 * global.fpsAdjust,
-                            _scl * -0.5 * global.fpsAdjust, 0);
+                            _scl * -1.375 * global.fpsAdjust * global.fpsAdjust, 0);
             part_type_color3(_pt, _theme.partColA, _theme.partColB, themeColor);
             //part_type_color2(_pt, 0x652dba, themeColor);
             part_type_size(_pt, 0.5, 0.8, -0.01 * global.fpsAdjust, 0);
@@ -267,7 +266,7 @@ depth = 0;
             	part_type_alpha3(_pt, 1, 0.6, 0);
             part_type_speed(_pt, _scl * 15 * global.fpsAdjust
                             , _scl * 20 * global.fpsAdjust,
-                            _scl * -0.3 * global.fpsAdjust, 0);
+                            _scl * -0.825 * global.fpsAdjust * global.fpsAdjust, 0);
             part_type_color2(_pt, _theme.partColHA, _theme.partColHB);
             // part_type_color2(_pt, 0x89ffff, 0xffffe5)
             part_type_size(_pt, 0.8, 1.2, -0.02 * global.fpsAdjust, 0);

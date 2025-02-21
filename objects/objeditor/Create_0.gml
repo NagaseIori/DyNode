@@ -33,7 +33,9 @@ editorDefaultWidthModeName = [
 editorDefaultWidthMode = 0;
 
 editorSelectMultiSidesBinding = true;       // multiple sides selected notes' properties' binding
+/// @type {Id.Instance.objNote} 
 editorSelectSingleTarget = -999;            // instance for single selection target
+/// @type {Id.Instance.objNote} 
 editorSelectSingleTargetInbound = -999;
 editorSelectOccupied = false;               // selecting note
 editorSelectCount = 0;  
@@ -43,7 +45,9 @@ editorSelectArea = false;                   // selecting area
 editorSelectAreaPosition = undefined;
 editorSelectInbound = false;                // if at least mouse is inbound one selected note
 editorSelectResetRequest = false;
+/// @type {Id.Instance.objNote} 
 editorSelectedSingleInbound = -999;         // Selected single note mouse inbound checker
+/// @type {Id.Instance.objNote} 
 editorSelectedSingleInboundLast = -999;         // Selected single note mouse inbound checker
 editorNoteSortRequest = false;
 

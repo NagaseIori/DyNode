@@ -1,6 +1,6 @@
 /// DyCore Interface.
 
-enum DYCORE_ASYNC_EVENT_TYPE { PROJECT_SAVING };
+enum DYCORE_ASYNC_EVENT_TYPE { PROJECT_SAVING, GENERAL_ERROR };
 function DyCoreManager() constructor {
     // DyCore Step function.
     static step = function() {
@@ -22,8 +22,11 @@ function DyCoreManager() constructor {
                         announcement_play("anno_project_save_complete");
                 }
                 else {
-                    announcement_error("anno_project_save_failed");
+                    announcement_error(i18n_get("anno_project_save_failed", event[$ "message"]));
                 }
+                break;
+            case DYCORE_ASYNC_EVENT_TYPE.GENERAL_ERROR:
+                announcement_error(i18n_get("anno_dycore_error", event[$ "message"]));
                 break;
             default:
                 show_debug_message("!Warning: Unknown dycore async event type.");

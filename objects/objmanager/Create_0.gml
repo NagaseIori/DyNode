@@ -2,7 +2,7 @@
 
 // Macros
 
-#macro VERSION "v0.1.16.10"
+#macro VERSION "v0.1.17-dev"
 #macro BASE_RES_W 1920
 #macro BASE_RES_H 1080
 #macro BASE_FPS 60
@@ -16,12 +16,11 @@
 #macro LERP_EPS 0.001
 #macro INF 0x7fffffff
 #macro USE_DSP_PITCHSHIFT (objMain.usingPitchShift)
-#macro NULL_FUN function() {}
 #macro MAX_SELECTION_LIMIT 4000
 #macro KPS_MEASURE_WINDOW 400
 #macro AUTOSAVE_TIME (global.autoSaveTime)	// in seconds
 #macro DYCORE_BUFFER_SIZE (50*1024*1024)	// 50MB
-#macro DYCORE_COMPRESSION_LEVEL (11)		// max = 22
+#macro DYCORE_COMPRESSION_LEVEL (global.PROJECT_COMPRESSION_LEVEL)		// max = 22
 #macro DYCORE_BUFFER_ADDRESS (buffer_get_address(global.__DyCore_Buffer))
 math_set_epsilon(0.00000001);				// 1E-8
 
@@ -30,15 +29,12 @@ math_set_epsilon(0.00000001);				// 1E-8
 announcements = [];
 
 // Global Configs
-
 global.resolutionW = 1920
 global.resolutionH = 1080
 global.fps = display_get_frequency();
 global.autosave = false;
 global.autoupdate = true;
 global.fullscreen = false;
-global.FMOD_MP3_DELAY = 0;
-global.ANNOUNCEMENT_MAX_LIMIT = 7;
 global.simplify = false;
 global.updatechannel = "STABLE";		// STABLE / BETA (not working for now)
 global.beatlineStyle = BeatlineStyles.BS_DEFAULT;
@@ -50,10 +46,15 @@ global.graphics = {
 global.dropAdjustError = 0.125;
 global.offsetCorrection = 2;
 global.lastCheckedVersion = "";
-global.VIDEO_UPDATE_FREQUENCY = 60;
 global.autoSaveTime = 60 * 3;
 global.analytics = true;
 global.particleEffects = true;
+
+// Advanced settings
+global.FMOD_MP3_DELAY = 0;
+global.ANNOUNCEMENT_MAX_LIMIT = 7;
+global.VIDEO_UPDATE_FREQUENCY = 60;
+global.PROJECT_COMPRESSION_LEVEL = 11;		// zstd compression level. (0~22)
 
 // Themes Init
 

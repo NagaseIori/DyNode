@@ -63,6 +63,7 @@ _debug_str += "NCNT: " + string(chartNotesCount)+"\n";
 // _debug_str += "MUSICTIME: " + string(FMODGMS_Chan_Get_Position(channel)) + "\n";
 // _debug_str += "MUSICDELAY: " + string(sfmod_channel_get_position(channel, sampleRate) - nowTime) + "\n";
 _debug_str += "FMOD CPU Usage: " + string(FMODGMS_Sys_Get_CPUUsage()) + "\n";
+_debug_str += "Project Compression Level: " + string(DYCORE_COMPRESSION_LEVEL) + "\n";
 
 // var _stat = gc_get_stats();
 // _debug_str += "T_TIME: " + string(_stat.traversal_time) + "\n";

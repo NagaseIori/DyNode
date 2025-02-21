@@ -46,14 +46,17 @@ if(editor_get_editmode() <= 4){
         else animTargetNodeA = 0;
     }
     if(state == stateSelected) {
-    	if(editor_select_is_area() && editor_select_inbound(x, y, side, noteType))
-    		_col = scribble_rgb_to_bgr(0xff1744);
+        var _selected_single_inbound = objEditor.editorSelectedSingleInbound == id;
+        var _unselection_hint = _selected_single_inbound && objEditor.editorSelectSingleTargetInbound < 0 && ctrl_ishold();
+    	if((editor_select_is_area() && editor_select_inbound(x, y, side, noteType)) || _unselection_hint)
+            unselectHint = true;
     	else 
-        	_col = c_white;
+            unselectHint = false;
+        _col = c_white;
         animTargetNodeA = 1.0;
         animTargetInfoA = 1;
 
-        if(objEditor.editorSelectedSingleInbound == id || isDragging)
+        if(_selected_single_inbound || isDragging)
             animTargetNodeBorderA = 1;
         else
             animTargetNodeBorderA = 0;

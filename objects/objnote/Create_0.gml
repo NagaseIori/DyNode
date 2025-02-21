@@ -50,12 +50,13 @@ image_yscale = global.scaleYAdjust;
     // For edit
     selected = false;
     selBlendColor = 0x4fd5ff;
-    nodeAlpha = 0;
-    nodeBorderAlpha = 0;
+    nodeAlpha = 0;                  // For colored square
+    nodeBorderAlpha = 0;            // For colored square
     infoAlpha = 0;
-    animTargetNodeA = 0;
-    animTargetNodeBorderA = 0;
-    animTargetInfoA = 0;
+    animTargetNodeA = 0;            // For colored square
+    animTargetNodeBorderA = 0;      // For colored square
+    animTargetInfoA = 0;            // For colored square
+    unselectHint = false;           // For colored square
     recordRequest = false;
     selectInbound = false;			// If time inbound multi selection
     selectUnlock = false;			// If the state in last step is select
@@ -719,7 +720,7 @@ image_yscale = global.scaleYAdjust;
 		    var _timechg = (keycheck_down_ctrl(vk_up) - keycheck_down_ctrl(vk_down)) * (shift_ishold() ? 5: 1);
 		    
 		    if(_timechg != 0 || _poschg != 0)
-		    	origProp = get_prop();
+                origProp = get_prop();
 		    time += _timechg;
 		    position += _poschg;
 		    if(_timechg != 0) {
@@ -727,8 +728,7 @@ image_yscale = global.scaleYAdjust;
 		    	note_sort_request();
             }
 		    if(_timechg != 0 || _poschg != 0)
-		    	operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
-		    	
+                operation_step_add(OPERATION_TYPE.MOVE, origProp, get_prop());
         }
         
         function draw_event() {

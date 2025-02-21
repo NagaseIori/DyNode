@@ -60,6 +60,7 @@ if (async_load[? "id"] == _update_download_event_handle) {
 				_err = true;
 			else
 				start_update_unzip();
+			file_bin_close(_bfile);
 		}
 	}
 	else if(status < 0) {
