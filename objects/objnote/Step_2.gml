@@ -56,7 +56,7 @@ if(editor_get_editmode() <= 4){
         animTargetNodeA = 1.0;
         animTargetInfoA = 1;
 
-        if(_selected_single_inbound || isDragging)
+        if(_selected_single_inbound || isDragging || unselectHint)
             animTargetNodeBorderA = 1;
         else
             animTargetNodeBorderA = 0;
