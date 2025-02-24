@@ -5,7 +5,7 @@
 <br>
 <br>
 <p align="center">
-<a href="https://github.com/NagaseIori/DyNode/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NagaseIori/DyNode?style=flat"></a> 
+<a href="https://github.com/NordLandeW/DyNode/blob/main/LICENSE"><img src="https://img.shields.io/github/license/NordLandeW/DyNode?style=flat"></a> 
 <a href="https://crowdin.com/project/dynode"><img src="https://badges.crowdin.net/dynode/localized.svg"></a>
   
 <br>
@@ -26,9 +26,9 @@
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://acxblog.site"><img src="https://avatars.githubusercontent.com/u/31349569?v=4?s=100" width="100px;" alt="NordLandeW"/><br /><sub><b>NordLandeW</b></sub></a><br /><a href="#projectManagement-NagaseIori" title="Project Management">📆</a> <a href="https://github.com/NagaseIori/DyNode/commits?author=NagaseIori" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://acxblog.site"><img src="https://avatars.githubusercontent.com/u/31349569?v=4?s=100" width="100px;" alt="NordLandeW"/><br /><sub><b>NordLandeW</b></sub></a><br /><a href="#projectManagement-NagaseIori" title="Project Management">📆</a> <a href="https://github.com/NordLandeW/DyNode/commits?author=NagaseIori" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.paypal.com/paypalme/jmakxd"><img src="https://avatars.githubusercontent.com/u/80338394?v=4?s=100" width="100px;" alt="jmakxd"/><br /><sub><b>jmakxd</b></sub></a><br /><a href="#ideas-jmakxd" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/iam6668"><img src="https://avatars.githubusercontent.com/u/68184937?v=4?s=100" width="100px;" alt="iam6668"/><br /><sub><b>iam6668</b></sub></a><br /><a href="#ideas-iam6668" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/NagaseIori/DyNode/commits?author=iam6668" title="Tests">⚠️</a> <a href="https://github.com/NagaseIori/DyNode/issues?q=author%3Aiam6668" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/iam6668"><img src="https://avatars.githubusercontent.com/u/68184937?v=4?s=100" width="100px;" alt="iam6668"/><br /><sub><b>iam6668</b></sub></a><br /><a href="#ideas-iam6668" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/NordLandeW/DyNode/commits?author=iam6668" title="Tests">⚠️</a> <a href="https://github.com/NordLandeW/DyNode/issues?q=author%3Aiam6668" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

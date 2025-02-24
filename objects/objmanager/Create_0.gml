@@ -302,7 +302,7 @@ function stop_autoupdate() {
 // Check For Update
 update_cleanup();
 if(global.autoupdate)
-	_update_get_event_handle = http_get("https://api.github.com/repos/NagaseIori/DyNode/releases/latest");
+	_update_get_event_handle = http_get("https://api.github.com/repos/NordLandeW/DyNode/releases/latest");
 
 #endregion
 
