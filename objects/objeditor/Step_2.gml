@@ -53,7 +53,6 @@ if(editorMode == 4) {
     if(_selectable)
         with(editorSelectSingleTarget) {
             state = stateSelected;
-            mouse_clear_click();
             state();
         }
     
