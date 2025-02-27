@@ -9,7 +9,8 @@ if(editorMode == 4) {
     }
 
     // If the single note being unselected unselectable1
-    var _unselectable = instance_exists(editorSelectedSingleInbound) && mouse_isclick_l() && ctrl_ishold() && !_selectable;
+    var _unselectable = instance_exists(editorSelectedSingleInbound) && mouse_isclick_l() 
+                        && ctrl_ishold() && !_selectable && !mouse_isclick_double(0);
     if(_unselectable) {
         with(editorSelectedSingleInbound)
             _unselectable = _unselectable && state == stateSelected && _mouse_inbound_check();
